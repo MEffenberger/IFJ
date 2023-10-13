@@ -1,0 +1,27 @@
+name: is_it_ok
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  is_it_ok:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: change mode
+      run: chmod +x is_it_ok.sh
+    
+    - name: create testdir
+      run: mkdir testdir
+
+    - name: pack the project
+      run: cd src && make pack
+      
+    - name: execute zbyňa's script 
+      run: ./is_it_ok.sh xeffen00.zip testdir
+      
