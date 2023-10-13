@@ -6,7 +6,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 #### Rogalo 🪁:
-- Marek Effenberger <xeffen00>
-- Adam Valík <xvalik05>
-- Domink Horut <xhorut01>
-- Samuel Hejníček <xhejni00>
+- xeffen00 Marek Effenberger
+- xvalik05 Adam Valík
+- xhorut01 Domink Horut
+- xhejni00 Samuel Hejníček
