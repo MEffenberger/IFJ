@@ -17,12 +17,12 @@
 #include <stdlib.h>
 
 
-#define VECTOR_LENGTH 8
+#define VECTOR_LENGTH 8 //default size of dynamic array
 
 typedef struct string_vector {
     char* array; //array of strings
     int size; //size of the vector
-    int size_of_alloc; //allocation size
+    int size_of_alloc; //size of allocated chars
 } vector;
 
 /**
