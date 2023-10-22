@@ -51,7 +51,9 @@ bool vector_append(vector* v, char c){
 
 bool vector_str_append(vector* v, char* c){
     for(unsigned int i = 0; i < strlen(c); i++){
-        vector_append(v, c[i]);
+        if(!(vector_append(v, c[i]))){
+            return false;
+        }
     }
     return true;
 }
