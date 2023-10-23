@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "string_vector.h"
 
 // Error codes
 typedef enum error_code {
@@ -39,10 +40,16 @@ typedef enum error_code {
     ERROR_INTERNAL = 99
 } error_code_t;
 
-
+// Data types for allocated pointers
+typedef enum data_type {
+    BASIC,
+    VECTOR,
+    TOKEN
+} DataType;
 
 // Structure to represent a node in the stack of allocated pointers
 typedef struct AllocatedPointer {
+    DataType type;
     void *ptr;
     struct AllocatedPointer *next;
 } alloc_ptr_t;
@@ -54,8 +61,9 @@ extern alloc_ptr_t *allocated_pointers;
  * @brief Function to push an allocated pointer onto the stack
  * 
  * @param ptr to newly allocated memory
+ * @param data_type type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
  */
-void push_alloc_ptr(void *ptr);
+void push_alloc_ptr(void *ptr, DataType data_type);
 
 
 /**

@@ -11,11 +11,12 @@
 
 #include "error.h"
 
-void push_alloc_ptr(void *ptr) {
+void push_alloc_ptr(void *ptr, DataType type) {
     alloc_ptr_t *new = (alloc_ptr_t *)malloc(sizeof(alloc_ptr_t));
     if (new == NULL) {
         error_exit(ERROR_INTERNAL, "MALLOC", "Memory allocation for stack node failed.");
     }
+    new->type = type;
     new->ptr = ptr;
     new->next = allocated_pointers;
     allocated_pointers = new;
@@ -24,9 +25,22 @@ void push_alloc_ptr(void *ptr) {
 void free_alloc_memory() {
     while (allocated_pointers != NULL) {
         alloc_ptr_t *tmp = allocated_pointers;
-            // TODO: if allocated_pointers is token_t, needs special free of its contents ?
+        switch (tmp->type) {
+            case BASIC:
+                free(tmp->ptr);
+                tmp->ptr = NULL;
+                break;
+            case VECTOR:
+                vector_dispose(tmp->ptr);
+                break;
+            case TOKEN:
+                // token_dispose(tmp->ptr);
+                break;
+            //case: // tbd other types
+            default:
+                break;
+        }
         allocated_pointers = allocated_pointers->next;
-        free(tmp->ptr);
         free(tmp);
     }
 }
