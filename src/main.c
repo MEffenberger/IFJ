@@ -14,7 +14,7 @@
 //#include "parser.h"
 #include "error.h"
 
-struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allocated pointers
+alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 
 
 int main() { 

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "string_vector.h"
+#include "symtable.h"
 
 // Error codes
 typedef enum error_code {
@@ -44,18 +45,19 @@ typedef enum error_code {
 typedef enum data_type {
     BASIC,
     VECTOR,
-    TOKEN
-} DataType;
+    TOKEN,
+    SYMTABLE
+} data_type;
 
 // Structure to represent a node in the stack of allocated pointers
-typedef struct AllocatedPointer {
-    DataType type;
+typedef struct allocated_pointer {
+    data_type type;
     void *ptr;
-    struct AllocatedPointer *next;
-} alloc_ptr_t;
+    struct allocated_pointer *next;
+} alloc_ptr;
 
 // Global top of the stack for allocated pointers
-extern alloc_ptr_t *allocated_pointers;
+extern alloc_ptr *allocated_pointers;
 
 /**
  * @brief Function to push an allocated pointer onto the stack
@@ -63,7 +65,7 @@ extern alloc_ptr_t *allocated_pointers;
  * @param ptr to newly allocated memory
  * @param data_type type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
  */
-void push_alloc_ptr(void *ptr, DataType data_type);
+void push_alloc_ptr(void *ptr, data_type data_type);
 
 
 /**

@@ -11,8 +11,8 @@
 
 #include "error.h"
 
-void push_alloc_ptr(void *ptr, DataType type) {
-    alloc_ptr_t *new = (alloc_ptr_t *)malloc(sizeof(alloc_ptr_t));
+void push_alloc_ptr(void *ptr, data_type type) {
+    alloc_ptr *new = malloc(sizeof(alloc_ptr));
     if (new == NULL) {
         error_exit(ERROR_INTERNAL, "MALLOC", "Memory allocation for stack node failed.");
     }
@@ -24,7 +24,7 @@ void push_alloc_ptr(void *ptr, DataType type) {
 
 void free_alloc_memory() {
     while (allocated_pointers != NULL) {
-        alloc_ptr_t *tmp = allocated_pointers;
+        alloc_ptr *tmp = allocated_pointers;
         switch (tmp->type) {
             case BASIC:
                 free(tmp->ptr);
@@ -36,6 +36,8 @@ void free_alloc_memory() {
             case TOKEN:
                 // token_dispose(tmp->ptr);
                 break;
+            case SYMTABLE:
+                symtable_dispose(tmp->ptr);
             //case: // tbd other types
             default:
                 break;
@@ -47,6 +49,6 @@ void free_alloc_memory() {
 
 void error_exit(error_code_t error_code, const char* module, const char* message) { 
     fprintf(stderr, "%s: %s\n", module, message);
-    free_alloc_memory(); // Free all allocated memory
+    free_alloc_memory(); // free all allocated memory
     exit(error_code);
 }
