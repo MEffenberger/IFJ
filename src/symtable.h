@@ -13,14 +13,78 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+// typedef struct function_params {
+//     data_type_t param_type;
+//     char *param_name;
+//     struct function_params* param_next;
+// } function_params_t;
+
+typedef enum e_data_type {
+    T_VOID,
+    T_INT,
+    T_DOUBLE,
+    T_STRING,
+    T_INT_Q,
+    T_DOUBLE_Q,
+    T_STRING_Q,
+    T_NIL
+} data_type;
+
+typedef enum e_var_type {
+    NONE,
+    VAR,
+    LET
+} var_type;
+
+typedef struct s_parameter {
+    const char *param_name;
+    const char *param_id;
+    data_type param_type;
+    struct s_parameter *param_next;
+} parameter;
 
 typedef struct symbol_data {
-    //TODO
+    bool declared;
+    bool defined; // initialized
+
+    bool is_var;
+
+    var_type var_type;
+    data_type data_type;
+    int int_value;
+    double double_value;
+    char *string_value;
+
+    bool is_func;
+
+    unsigned int param_count;
+    parameter *params;
+    data_type return_type;
+
 } sym_data;
+
+// sym_data_init()
+//
+//     bool declared = true;
+//     bool defined = false; // (initialized)
+
+//     bool is_var = false;
+//     var_type var_type = NONE;
+//     data_type data_type = T_VOID;
+//
+//
+//
+
+//     bool is_func = false;
+
+
+
+
+// } sym_data;
 
 
 typedef struct avl_tree {
-    char *key;          // name of the variable
+    char *key;          // name of the symbol
     sym_data data;
     struct avl_tree *left;
     struct avl_tree *right;

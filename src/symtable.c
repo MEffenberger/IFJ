@@ -88,11 +88,7 @@ void left_rotate(AVL_tree **tree) {
 
 void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
     if (*tree == NULL) { // insert first to an empty tree
-        *tree = malloc(sizeof(AVL_tree));
-        push_alloc_ptr(*tree, SYMTABLE);
-        if (*tree == NULL) {
-            error_exit(ERROR_INTERNAL, "MALLOC", "Memory allocation for tree node failed.");
-        }
+        *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
         (*tree)->key = key;
         (*tree)->data = data;
         (*tree)->left = NULL;
