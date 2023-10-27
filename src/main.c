@@ -22,16 +22,19 @@ int main() {
     token_t** token_array;
     token_array = malloc(20*sizeof(token_t*));
 
-    for(int i = 0; i < 19; i++){
+    for(int i = 0; i < 20; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 19; i++)
+    for (int i = 0; i < 20; i++)
     {
         printf("\n, %d, \n", token_array[i]->type);
     }
     
+    printf("%s\n", token_array[17]->value.vector->array);
+    printf("%s\n", token_array[18]->value.vector->array);
+    printf("%s\n", token_array[19]->value.vector->array);
 
 
     /*if(token_array[0]->type == TOKEN_LPAR){
@@ -40,7 +43,19 @@ int main() {
     if(token_array[1]->type == TOKEN_EOF){
         printf("Spravne");
     }*/
-    //free(token_array[0]);
+    vector_dispose(token_array[17]->value.vector);
+    vector_dispose(token_array[18]->value.vector);
+    vector_dispose(token_array[19]->value.vector);
+
+
+    for (int i = 0; i < 20; i++)
+    {
+        free(token_array[i]);
+    }
+    free(token_array);
+
+    
+    
     //free(token_array[1]);
     //free(token_array);
     //free_alloc_memory(); // Free all allocated memory

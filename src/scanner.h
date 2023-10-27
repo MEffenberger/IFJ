@@ -6,7 +6,7 @@
  * @brief Lexical analysis for IFJ23 compiler
  *
  * @author Dominik Horut <xhorut01>
- * @author Samuel Hejnicek
+ * @author Samuel Hejnicek <xhejni00>
  */
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
@@ -91,6 +91,7 @@ typedef enum keyword{
     KW_STRING,  // String
     KW_VAR,     // var
     KW_WHILE,   // while
+    //TODO dopsat funkce jako write, double
 
     // In built functions
 
