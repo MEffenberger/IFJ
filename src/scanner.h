@@ -43,7 +43,9 @@ typedef enum token_types {
     TOKEN_STRING,
     TOKEN_ML_STRING,
     TOKEN_KEYWORD,
-    TOKEN_UNDERSCORE
+    TOKEN_UNDERSCORE,
+    TOKEN_LEFT_BRACKET,
+    TOKEN_RIGHT_BRACKET
 } token_type_t;
 
 typedef enum state{
@@ -76,6 +78,19 @@ typedef enum state{
     S_NUM_E_SIGN,
     S_DEC, 
     S_EXP,
+
+    S_START_QUOTES, //"
+    S_END_QUOTES,    //"
+    S_START_ESC_SENTENCE, // /
+    S_START_HEX, // u
+    S_LEFT_BRACKET, // {
+    S_FIRST_HEX, //0-Z
+    S_SECOND_HEX, //0-Z
+    S_RIGHT_BRACKET, // }
+
+    S_THREE_QUOTES, // """
+    S_START_MULTILINE //EOL
+
 }automat_state_t;
 
 typedef enum keyword{

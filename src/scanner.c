@@ -107,7 +107,21 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         return token;
 
-                    } else if(readchar == '>'){
+                    } else if(readchar == '{'){
+                        a_state = S_START;
+                        token->question_mark = false;
+                        token->type = TOKEN_LEFT_BRACKET;
+                        vector_dispose(buffer);
+                        return token;
+
+                    } else if(readchar == '}'){
+                        a_state = S_START;
+                        token->question_mark = false;
+                        token->type = TOKEN_RIGHT_BRACKET;
+                        vector_dispose(buffer);
+                        return token;
+
+                    }else if(readchar == '>'){
                         token->question_mark = false;
                         token->type = TOKEN_GREAT;
 
