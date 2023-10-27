@@ -6,7 +6,7 @@
  * @brief Lexical analysis for IFJ23 compiler
  *
  * @author Dominik Horut <xhorut01>
- * @author Samuel Hejnicek
+ * @author Samuel Hejnicek <xhejni00>
  */
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H

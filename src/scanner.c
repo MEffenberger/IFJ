@@ -1,3 +1,13 @@
+/**
+ * @file scanner.c
+ * 
+ * IFJ23 compiler
+ * 
+ * @brief Scanner implementation
+ *
+ * @author Samuel Hejnicek <xhejni00>
+ * @author Dominik Horut <xhorut01>
+ */
 #include "scanner.h"
 #include <ctype.h>
 
