@@ -19,6 +19,24 @@ void symtable_init(AVL_tree **tree) {
     *tree = NULL;
 }
 
+void data_init(sym_data *data){
+    data->declared = true;
+    data->defined = false; // initialized
+
+    data->is_var = false;
+    data->var_type = NONE;
+    data->data_type = T_NIL;
+    data->int_value = 0;
+    data->double_value = 0.0;
+    data->string_value = NULL;
+
+    data->is_func = false;
+    data->return_type = T_NIL;
+
+    data->is_param = false;
+    data->param_name = NULL;
+    data->param_type = T_NIL;
+}
 
 sym_data *symtable_lookup(AVL_tree *tree, char *key) {
     if (tree == NULL || key == NULL) {
@@ -216,5 +234,15 @@ void symtable_dispose(AVL_tree **tree) {
             free(*tree);
             *tree = NULL;
         }
+    }
+}
+
+void inorder(AVL_tree **tree) { 
+    if (*tree != NULL) {
+        inorder(&((*tree)->left));
+        printf("key: %s\n", (*tree)->key);
+        printf("declared: %d\n", (*tree)->data.declared);
+        printf("defined: %d\n\n", (*tree)->data.defined);
+        inorder(&((*tree)->right));
     }
 }

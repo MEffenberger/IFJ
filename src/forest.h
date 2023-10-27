@@ -18,13 +18,24 @@
 typedef struct s_forest_node {
     struct s_forest_node *parent;
     struct s_forest_node **children;
+    int children_count;
     AVL_tree *symtable;
     // add key to represent the node's type
 } forest_node;
 
+
+
 void forest_init(forest_node **root);
 
-void forest_dispose(forest_node *root);
+forest_node *forest_insert_global();
+
+
+
+
+
+
+
+void forest_dispose(forest_node **root);
 
 void forest_insert_first(forest_node **forest);
 
