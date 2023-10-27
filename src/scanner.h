@@ -11,7 +11,7 @@
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
 #include "error.h"
-
+//#include "token.h"
 
 typedef enum token_types {
     TOKEN_WHITESPACE,
@@ -40,7 +40,8 @@ typedef enum token_types {
     TOKEN_EXP,
     TOKEN_DEC,
     TOKEN_STRING,
-    TOKEN_ML_STRING
+    TOKEN_ML_STRING,
+    TOKEN_KEYWORD
 } token_type_t;
 
 typedef enum state{
@@ -73,8 +74,6 @@ typedef enum state{
     S_NUM_E_SIGN,
     S_DEC, 
     S_EXP,
-
-    
 }state_t;
 
 typedef enum keyword{
@@ -92,5 +91,23 @@ typedef enum keyword{
     KW_WHILE,   // while
 
 }keyword_t;
+
+typedef union token_value
+{
+    int integer;
+    double type_double;
+    vector* vector;
+    keyword_t keyword;
+} value_type_t;
+
+
+typedef struct token {
+    value_type_t value;
+    token_type_t type;
+    int line;
+    bool question_mark;
+} token_t;
+
+token_t* get_me_token();
 
 #endif

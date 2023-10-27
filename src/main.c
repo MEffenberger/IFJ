@@ -12,14 +12,15 @@
  */
 
 //#include "parser.h"
-#include "error.h"
+#include "scanner.h"
 
 struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allocated pointers
 
 
 int main() { 
     //parser();
+    token_t* token = get_me_token();
 
-    free_alloc_memory(); // Free all allocated memory
+    //free_alloc_memory(); // Free all allocated memory
     return 0;
 }
