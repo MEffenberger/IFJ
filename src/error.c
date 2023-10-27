@@ -38,6 +38,9 @@ void free_alloc_memory() {
             case SYMTABLE:
                 symtable_dispose(tmp->ptr);
                 break;
+            case FOREST:
+                forest_dispose(tmp->ptr);
+                break;
             //case: // tbd other types
             default:
                 break;
