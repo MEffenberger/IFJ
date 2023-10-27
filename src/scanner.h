@@ -92,6 +92,20 @@ typedef enum keyword{
     KW_VAR,     // var
     KW_WHILE,   // while
 
+    // In built functions
+
+    KW_RD_STR,   // readString()
+    KW_RD_INT,   // readInt()
+    KW_RD_DBL,   // readDouble()
+    KW_WRT,      // write()
+    KW_INT_2_DBL,// Int2Double()
+    KW_DBL_2_INT,// Double2Int()
+    KW_LENGHT,   // lenght()
+    KW_SUBSTR,   // substring()
+    KW_ORD,      // ord()
+    KW_CHR,      // chr()
+
+
 }keyword_t;
 
 typedef union token_value
