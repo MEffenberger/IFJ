@@ -238,6 +238,10 @@ token_t* get_me_token(){
                         a_state = S_ID;
                         vector_append(buffer, readchar);
                         break;
+                    } else if(isdigit(readchar)){
+                        a_state = S_NUM;
+                        vector_append(buffer, readchar);
+                        break;
                     }
 
             case(S_QM):
@@ -254,6 +258,7 @@ token_t* get_me_token(){
             case(S_ID):
                 if(isalpha(readchar) || isdigit(readchar) || readchar == '_'){
                     vector_append(buffer, readchar);
+                    break;
 
                 } else if(readchar == '?'){
                     keyword_t key = compare_keyword(buffer);
@@ -264,14 +269,14 @@ token_t* get_me_token(){
                         token->value.vector = buffer;
                         return token;
                     } else if (key > 3 && key != 1000){
-                        ungetc('?', stdin);
+                        ungetc(readchar, stdin);
                         a_state = S_QM;
                         token->type = TOKEN_KEYWORD;
                         token->value.keyword = key;
                         token->value.vector = buffer;
                         return token;
                     } else  {
-                        ungetc('?', stdin);
+                        ungetc(readchar, stdin);
                         a_state = S_QM;
                         token->type = TOKEN_ID;
                         token->value.vector = buffer;
@@ -290,6 +295,85 @@ token_t* get_me_token(){
                         token->value.vector = buffer;
                         return token;
                     }
+                }
+            
+            case(S_NUM):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    break;
+                } else if(readchar == '.'){
+                    vector_append(buffer, readchar);
+                    a_state = S_NUM_DOT;
+                    break;
+                } else if(readchar == 'e' || readchar == 'E'){
+                    vector_append(buffer, readchar);
+                    a_state = S_NUM_E;
+                    break;
+                } else {
+                    ungetc(readchar, stdin);
+                    token->type = TOKEN_NUM;
+                    token->value.vector = buffer;
+                    return token;
+                }
+
+            case(S_NUM_DOT):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    a_state = S_DEC;
+                    break;
+                } else {
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            
+            case(S_DEC):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    break;
+                } else if(readchar == 'e' || readchar == 'E'){
+                    vector_append(buffer, readchar);
+                    a_state = S_NUM_E;
+                    break;
+                } else {
+                    ungetc(readchar, stdin);
+                    token->type = TOKEN_DEC;
+                    token->value.vector = buffer;
+                    return token;
+                }
+            case(S_NUM_E):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    a_state = S_EXP;
+                    break;
+                } else if(readchar == '+' || readchar == '-'){
+                    vector_append(buffer, readchar);
+                    a_state = S_NUM_E_SIGN;
+                    break;
+                } else {
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_NUM_E_SIGN):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    a_state = S_EXP;
+                    break; 
+                } else {
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_EXP):
+                if(isdigit(readchar)){
+                    vector_append(buffer, readchar);
+                    break;
+                } else {
+                    ungetc(readchar, stdin);
+                    token->type = TOKEN_EXP;
+                    token->value.vector = buffer;
+                    return token;
                 }
             default:
                 if((int) readchar == EOF){
