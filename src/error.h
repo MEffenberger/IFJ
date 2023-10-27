@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "string_vector.h"
+#include "scanner.h"
 
 // Error codes
 typedef enum error_code {

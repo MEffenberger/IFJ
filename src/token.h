@@ -2,20 +2,25 @@
 // Created by marek on 20.10.2023.
 //
 
+#include "error.h"
+
+
+
 #ifndef IFJ_TOKEN_H
 #define IFJ_TOKEN_H
 
-typedef enum types {
+typedef union value_t
+{
+    int integer;
+    double type_double;
+    vector* vector;
+    keyword_t keyword;
+};
 
-} type_t;
 
-typedef enum states {
-
-} state_t;
-
-Typedef Struct token {
+typedef struct token {
     char *value;
-    char *type;
+    type_t type;
     int line;
 
 } token_t;

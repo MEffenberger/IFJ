@@ -8,6 +8,41 @@
  * @author Dominik Horut <xhorut01>
  */
 
+#include "error.h"
+
+
+typedef enum types {
+    S_START,
+    S_MINUS,
+    S_PLUS,
+    S_MULTIPLY,
+
+    S_LESS,
+    S_LESS_EQ,
+    S_GREAT,
+    S_GREAT_EQ,
+    S_LPAR,
+    S_RPAR,
+    S_EQ,
+    S_EQEQ,
+    S_EXCLAM,
+    S_EXCLAMEQ,
+    S_COMMA,
+    S_COLON,
+    S_DOUBLE_QM,
+    S_RET_TYPE, //->
+    S_ID,
+    S_ID_QM, //ID?
+    S_NUM,
+    S_EXP,
+    S_DEC
+} type_t;
+
+typedef enum states {
+
+} state_t;
+
+
 typedef enum keyword{
 
     KW_DOUBLE,  // Double
@@ -26,31 +61,6 @@ typedef enum keyword{
 
 typedef enum state{
 
-    // Finite states
-
-    S_START,
-    S_TYPE_DECL,    // id type declaration
-    S_COMMA,
-    S_DOUBLE_QM,    // ?? operator
-    S_GTR,
-    S_GTR_EQ,
-    S_LESS,
-    S_LESS_EQ,
-    S_ASSIGN,
-    S_EQ,
-    S_EXCL_MARK,
-    S_NOT_EQ,
-    S_ASTERISK,
-    S_PLUS,
-    S_MINUS,
-    S_RET_TYPE,     // -> returned type
-    S_LPAR,
-    S_RPAR,
-    S_ID, 
-    S_T_RECOG,      // String? type recognition
-    S_NUM,
-    S_EXP,
-    
     // Not finite states
 
     S_SINGLE_QM,    // first question mark in ?? operator        
