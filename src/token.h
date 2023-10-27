@@ -4,12 +4,10 @@
 
 #include "error.h"
 
-
-
 #ifndef IFJ_TOKEN_H
 #define IFJ_TOKEN_H
 
-typedef union value_t
+typedef union value_type_t
 {
     int integer;
     double type_double;
@@ -19,10 +17,10 @@ typedef union value_t
 
 
 typedef struct token {
-    char *value;
-    type_t type;
+    value_type_t value;
+    token_type_t type;
     int line;
-
+    bool question_mark;
 } token_t;
 
 

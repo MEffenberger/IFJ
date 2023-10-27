@@ -6,42 +6,76 @@
  * @brief Lexical analysis for IFJ23 compiler
  *
  * @author Dominik Horut <xhorut01>
+ * @author Samuel Hejnicek
  */
-
+#ifndef IFJ_SCANNER_H
+#define IFJ_SCANNER_H
 #include "error.h"
 
 
-typedef enum types {
-    S_START,
-    S_MINUS,
-    S_PLUS,
-    S_MULTIPLY,
+typedef enum token_types {
+    TOKEN_WHITESPACE,
+    TOKEN_TAB,
+    TOKEN_EOL,
+    TOKEN_MINUS,
+    TOKEN_PLUS,
+    TOKEN_MULTIPLY,
+    TOKEN_LESS,
+    TOKEN_LESS_EQ,
+    TOKEN_GREAT,
+    TOKEN_GREAT_EQ,
+    TOKEN_LPAR,
+    TOKEN_RPAR,
+    TOKEN_EQ,
+    TOKEN_EQEQ,
+    TOKEN_EXCLAM,
+    TOKEN_EXCLAMEQ,
+    TOKEN_COMMA,
+    TOKEN_COLON,
+    TOKEN_DOUBLE_QM,
+    TOKEN_RET_TYPE, //->
+    TOKEN_ID,
+    TOKEN_ID_QM, //ID?
+    TOKEN_NUM,
+    TOKEN_EXP,
+    TOKEN_DEC,
+    TOKEN_STRING,
+    TOKEN_ML_STRING
+} token_type_t;
 
+typedef enum state{
+
+    S_START,
+    S_COLON,    // id type declaration
+    S_COMMA,
+    S_QM,
+    S_DOUBLE_QM,    // ?? operator
+    S_GTR,
+    S_GTR_EQ,
     S_LESS,
     S_LESS_EQ,
-    S_GREAT,
-    S_GREAT_EQ,
-    S_LPAR,
-    S_RPAR,
     S_EQ,
-    S_EQEQ,
+    S_EQEQ,        
     S_EXCLAM,
     S_EXCLAMEQ,
-    S_COMMA,
-    S_COLON,
-    S_DOUBLE_QM,
-    S_RET_TYPE, //->
-    S_ID,
-    S_ID_QM, //ID?
+    S_MULTIPLY,
+    S_PLUS,
+    S_MINUS,
+    S_RET_TYPE,     // -> returned type
+    S_LPAR,
+    S_RPAR,
+    S_UNDERSCORE,
+    S_ID, 
+    S_ID_QM,      // String?
     S_NUM,
+    S_NUM_DOT,
+    S_NUM_E,
+    S_NUM_E_SIGN,
+    S_DEC, 
     S_EXP,
-    S_DEC
-} type_t;
 
-typedef enum states {
-
-} state_t;
-
+    
+}state_t;
 
 typedef enum keyword{
 
@@ -59,22 +93,4 @@ typedef enum keyword{
 
 }keyword_t;
 
-typedef enum state{
-
-    // Not finite states
-
-    S_SINGLE_QM,    // first question mark in ?? operator        
-    S_UNDERSCORE,   // _ underscore
-    S_DOT,
-    S_E,            // exponent e or E
-    S_E_SIGN,       // e+ or e- in exponent
-    
-    // not sure abt
-    /*************/
-
-    S_STR_START,     // first quotation mark "
-    S_STR_SIMPLE,    // just two quotation marks
-    S_
-
-    
-}state_t;
+#endif
