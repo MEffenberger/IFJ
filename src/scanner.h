@@ -17,6 +17,7 @@ typedef enum token_types {
     TOKEN_WHITESPACE,
     TOKEN_TAB,
     TOKEN_EOL,
+    TOKEN_EOF,
     TOKEN_MINUS,
     TOKEN_PLUS,
     TOKEN_MULTIPLY,
@@ -74,7 +75,7 @@ typedef enum state{
     S_NUM_E_SIGN,
     S_DEC, 
     S_EXP,
-}state_t;
+}automat_state_t;
 
 typedef enum keyword{
 

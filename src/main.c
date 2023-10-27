@@ -19,8 +19,23 @@ struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allo
 
 int main() { 
     //parser();
-    token_t* token = get_me_token();
+    token_t** token_array;
+    token_array = malloc(4*sizeof(token_t*));
 
+    for(int i = 0; i < 2; i++){
+        token_t* token = get_me_token();
+        token_array[i] = token;
+    }
+
+    if(token_array[0]->type == TOKEN_LPAR){
+        printf("YEP\n");
+    }
+    if(token_array[1]->type == TOKEN_EOF){
+        printf("Spravne");
+    }
+    free(token_array[0]);
+    free(token_array[1]);
+    free(token_array);
     //free_alloc_memory(); // Free all allocated memory
     return 0;
 }
