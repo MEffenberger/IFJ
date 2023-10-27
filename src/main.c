@@ -22,12 +22,12 @@ int main() {
     token_t** token_array;
     token_array = malloc(20*sizeof(token_t*));
 
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 21; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 21; i++)
     {
         printf("\n, %d, \n", token_array[i]->type);
     }
@@ -54,7 +54,7 @@ int main() {
     vector_dispose(token_array[19]->value.vector);
 
     
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 21; i++)
     {
         free(token_array[i]);
     }

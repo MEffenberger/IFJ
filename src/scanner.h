@@ -36,7 +36,7 @@ typedef enum token_types {
     TOKEN_DOUBLE_QM,
     TOKEN_RET_TYPE, //->
     TOKEN_ID,
-    TOKEN_ID_QM, //ID?
+    TOKEN_KEYWORD_QM, //ID?
     TOKEN_NUM,
     TOKEN_EXP,
     TOKEN_DEC,
@@ -81,14 +81,14 @@ typedef enum state{
 typedef enum keyword{
 
     KW_DOUBLE,  // Double
+    KW_INT,     // Int
+    KW_STRING,  // String
     KW_ELSE,    // else 
     KW_FUNC,    // func
     KW_IF,      // if
-    KW_INT,     // Int
     KW_LET,     // let
     KW_NIL,     // nil
     KW_RETURN,  // return
-    KW_STRING,  // String
     KW_VAR,     // var
     KW_WHILE,   // while
     //TODO dopsat funkce jako write, double

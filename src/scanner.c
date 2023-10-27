@@ -255,6 +255,28 @@ token_t* get_me_token(){
                 if(isalpha(readchar) || isdigit(readchar) || readchar == '_'){
                     vector_append(buffer, readchar);
 
+                } else if(readchar == '?'){
+                    keyword_t key = compare_keyword(buffer);
+                    if(key < 3){
+                        vector_append(buffer, readchar);
+                        token->type = TOKEN_KEYWORD_QM;
+                        token->value.keyword = key;
+                        token->value.vector = buffer;
+                        return token;
+                    } else if (key > 3 && key != 1000){
+                        ungetc('?', stdin);
+                        a_state = S_QM;
+                        token->type = TOKEN_KEYWORD;
+                        token->value.keyword = key;
+                        token->value.vector = buffer;
+                        return token;
+                    } else  {
+                        ungetc('?', stdin);
+                        a_state = S_QM;
+                        token->type = TOKEN_ID;
+                        token->value.vector = buffer;
+                        return token;
+                    }
                 } else {
                     ungetc(readchar, stdin);
                     keyword_t key = compare_keyword(buffer);
@@ -268,10 +290,7 @@ token_t* get_me_token(){
                         token->value.vector = buffer;
                         return token;
                     }
-                } /*else if(next_char == '?'){
-                    //Doplnit funkci na porovnani
-                    vector_append(buffer, next_char);
-                }*/
+                }
             default:
                 if((int) readchar == EOF){
                 token->type = TOKEN_EOF;
