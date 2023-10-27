@@ -91,6 +91,7 @@ typedef enum keyword{
     KW_STRING,  // String
     KW_VAR,     // var
     KW_WHILE,   // while
+    //TODO dopsat funkce jako write, double
 
 }keyword_t;
 
