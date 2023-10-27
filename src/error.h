@@ -18,7 +18,7 @@
 #include "symtable.h"
 
 // Error codes
-typedef enum error_code {
+typedef enum e_error_code {
     // Error related to lexical analysis, bad structure of the lexeme
     ERROR_LEX = 1,
     // Error related to syntax analysis, wrong syntax of the source code, missing header, etc.
@@ -42,16 +42,16 @@ typedef enum error_code {
 } error_code_t;
 
 // Data types for allocated pointers
-typedef enum data_type {
+typedef enum e_alloc_type {
+    NONE,
     BASIC,
     VECTOR,
-    TOKEN,
     SYMTABLE
-} data_type;
+} alloc_type;
 
 // Structure to represent a node in the stack of allocated pointers
 typedef struct allocated_pointer {
-    data_type type;
+    alloc_type type;
     void *ptr;
     struct allocated_pointer *next;
 } alloc_ptr;
@@ -63,9 +63,9 @@ extern alloc_ptr *allocated_pointers;
  * @brief Function to push an allocated pointer onto the stack
  * 
  * @param ptr to newly allocated memory
- * @param data_type type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
+ * @param type type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
  */
-void push_alloc_ptr(void *ptr, data_type data_type);
+void push_alloc_ptr(void *ptr, alloc_type type);
 
 
 /**
@@ -73,6 +73,17 @@ void push_alloc_ptr(void *ptr, data_type data_type);
  * 
  */
 void free_alloc_memory();
+
+/**
+ * @brief Function to allocate memory, check for malloc errors and push it onto the stack
+ * 
+ * @note example: AVL_tree *tree = (AVL_tree *) allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
+ * @param size Size of the memory to be allocated
+ * @param whats_allocated String describing what is being allocated
+ * @param type Type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
+ * @return void* Pointer to the allocated memory
+ */
+void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type);
 
 
 /**
