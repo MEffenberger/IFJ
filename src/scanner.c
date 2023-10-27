@@ -1,5 +1,5 @@
 #include "scanner.h"
-
+#include <ctype.h>
 
 token_t* get_me_token(){
     token_t* token = malloc(sizeof(token_t));
@@ -7,7 +7,9 @@ token_t* get_me_token(){
     char readchar, next_char;
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
+
     while ((readchar = (char) getc(stdin))){
+
         switch(a_state)
         {
             case (S_START):
