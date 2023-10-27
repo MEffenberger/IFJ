@@ -70,9 +70,7 @@ void vector_dispose(vector* v){
         free(v->array);
     }
     v->array = NULL;
-    if(v){
-        free(v);
-    }
+    free(v);
     v = NULL;
 }
 

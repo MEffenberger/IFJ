@@ -67,6 +67,7 @@ token_t* get_me_token(){
     char readchar, next_char;
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
+    token->value.vector = NULL;
 
     while ((readchar = (char) getc(stdin))){
 
@@ -312,7 +313,8 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_NUM;
-                    token->value.vector = buffer;
+                    sscanf(buffer->array, "%d", &token->value.integer);
+                    vector_dispose(buffer);
                     return token;
                 }
 
@@ -338,7 +340,8 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_DEC;
-                    token->value.vector = buffer;
+                    sscanf(buffer->array, "%lf", &token->value.type_double);
+                    vector_dispose(buffer);
                     return token;
                 }
             case(S_NUM_E):
@@ -372,7 +375,8 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_EXP;
-                    token->value.vector = buffer;
+                    sscanf(buffer->array, "%lf", &token->value.type_double);
+                    vector_dispose(buffer);
                     return token;
                 }
             default:

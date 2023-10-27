@@ -31,7 +31,10 @@ int main() {
     {
         printf("\n, %d, \n", token_array[i]->type);
     }
-    //printf("%s\n", token_array[0]->value.vector->array);
+    //printf("%d\n", token_array[0]->value.integer);
+    //printf("%lf\n", token_array[1]->value.type_double);
+    //printf("%lf\n", token_array[2]->value.type_double);
+
     //printf("%s\n", token_array[17]->value.vector->array);
     //printf("%d\n", token_array[17]->value.keyword);
     //printf("%d\n", token_array[17]->type);
@@ -53,8 +56,20 @@ int main() {
     //vector_dispose(token_array[18]->value.vector);
     //vector_dispose(token_array[19]->value.vector);
 
+    printf("%d", token_array[6]->value.integer);
+    if(token_array[6]->value.vector){
+        vector_dispose(token_array[6]->value.vector);
+    }
+    if(token_array[7]->value.vector){
+        vector_dispose(token_array[7]->value.vector);
+    }
+
     
-    for (int i = 0; i < 21; i++)
+
+
+
+    
+    for (int i = 0; i < 30; i++)
     {
         free(token_array[i]);
     }
