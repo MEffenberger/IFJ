@@ -109,12 +109,12 @@ typedef enum keyword{
 
 }keyword_t;
 
-typedef union token_value
+typedef struct token_value
 {
     int integer;
     double type_double;
-    vector* vector;
     keyword_t keyword;
+    vector* vector;
 } value_type_t;
 
 

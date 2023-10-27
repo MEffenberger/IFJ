@@ -33,8 +33,14 @@ int main() {
     }
     
     printf("%s\n", token_array[17]->value.vector->array);
+    printf("%d\n", token_array[17]->value.keyword);
+    printf("%d\n", token_array[17]->type);
     printf("%s\n", token_array[18]->value.vector->array);
+    //printf("%d\n", token_array[18]->value.keyword);
+    printf("%d\n", token_array[18]->type);
     printf("%s\n", token_array[19]->value.vector->array);
+    //printf("%d\n", token_array[19]->value.keyword);
+    printf("%d\n", token_array[19]->type);
 
 
     /*if(token_array[0]->type == TOKEN_LPAR){
@@ -47,7 +53,7 @@ int main() {
     vector_dispose(token_array[18]->value.vector);
     vector_dispose(token_array[19]->value.vector);
 
-
+    
     for (int i = 0; i < 20; i++)
     {
         free(token_array[i]);
