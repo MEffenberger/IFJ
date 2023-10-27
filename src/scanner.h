@@ -42,7 +42,8 @@ typedef enum token_types {
     TOKEN_DEC,
     TOKEN_STRING,
     TOKEN_ML_STRING,
-    TOKEN_KEYWORD
+    TOKEN_KEYWORD,
+    TOKEN_UNDERSCORE
 } token_type_t;
 
 typedef enum state{

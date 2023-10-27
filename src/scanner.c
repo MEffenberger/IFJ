@@ -119,11 +119,38 @@ token_t* get_me_token(){
                             vector_dispose(buffer);
                             return token;
 
-                        default:
-                            if((int) readchar == EOF){
-                            token->type = TOKEN_EOF;
+                       case('-'):
+                            token->question_mark = false;
+                            token->type = TOKEN_MINUS;
+
+                            if((next_char = (char) getc(stdin)) == '>'){
+                                a_state = S_START;
+                                token->question_mark = false;
+                                token->type = TOKEN_RET_TYPE;
+                                return token;
+                            } else {
+                                ungetc(next_char, stdin);
+                            }
                             vector_dispose(buffer);
                             return token;
+
+                        case(' '):
+                            continue;
+
+                        case('\t'):
+                            continue;
+
+                        case('\n'):
+                            token->question_mark = false;
+                            token->type = TOKEN_EOL;
+                            vector_dispose(buffer);
+                            return token;
+
+                        default:
+                            if((int) readchar == EOF){
+                                token->type = TOKEN_EOF;
+                                vector_dispose(buffer);
+                                return token;
                             }
                             break;
                     }

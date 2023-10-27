@@ -20,14 +20,14 @@ struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allo
 int main() { 
     //parser();
     token_t** token_array;
-    token_array = malloc(8*sizeof(token_t*));
+    token_array = malloc(20*sizeof(token_t*));
 
-    for(int i = 0; i < 9; i++){
+    for(int i = 0; i < 19; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 19; i++)
     {
         printf("\n, %d, \n", token_array[i]->type);
     }
