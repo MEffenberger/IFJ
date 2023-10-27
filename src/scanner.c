@@ -54,6 +54,7 @@ token_t* get_me_token(){
                             a_state = S_START;
                             token->question_mark = false;
                             token->type = TOKEN_GREAT_EQ;
+                            vector_dispose(buffer);
                             return token;
                         } else {
                             ungetc(next_char, stdin);
@@ -69,6 +70,7 @@ token_t* get_me_token(){
                             a_state = S_START;
                             token->question_mark = false;
                             token->type = TOKEN_LESS_EQ;
+                            vector_dispose(buffer);
                             return token;
                         } else {
                             ungetc(next_char, stdin);
@@ -84,6 +86,7 @@ token_t* get_me_token(){
                             a_state = S_START;
                             token->question_mark = false;
                             token->type = TOKEN_EQEQ;
+                            vector_dispose(buffer);
                             return token;
                         } else {
                             ungetc(next_char, stdin);
@@ -99,6 +102,7 @@ token_t* get_me_token(){
                             a_state = S_START;
                             token->question_mark = false;
                             token->type = TOKEN_EXCLAMEQ;
+                            vector_dispose(buffer);
                              return token;
                         } else {
                             ungetc(next_char, stdin);
@@ -145,6 +149,7 @@ token_t* get_me_token(){
                             a_state = S_START;
                             token->question_mark = false;
                             token->type = TOKEN_RET_TYPE;
+                            vector_dispose(buffer);
                             return token;
                         } else {
                             ungetc(next_char, stdin);
@@ -168,7 +173,7 @@ token_t* get_me_token(){
                         token->type = TOKEN_EOF;
                         vector_dispose(buffer);
                         return token;
-                        
+
                     } else if(isalpha(readchar)){
                         a_state = S_ID;
                         vector_append(buffer, readchar);

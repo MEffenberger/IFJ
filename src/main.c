@@ -43,7 +43,19 @@ int main() {
     if(token_array[1]->type == TOKEN_EOF){
         printf("Spravne");
     }*/
-    //free(token_array[0]);
+    vector_dispose(token_array[17]->value.vector);
+    vector_dispose(token_array[18]->value.vector);
+    vector_dispose(token_array[19]->value.vector);
+
+
+    for (int i = 0; i < 20; i++)
+    {
+        free(token_array[i]);
+    }
+    free(token_array);
+
+    
+    
     //free(token_array[1]);
     //free(token_array);
     //free_alloc_memory(); // Free all allocated memory
