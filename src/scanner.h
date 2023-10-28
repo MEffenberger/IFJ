@@ -96,7 +96,8 @@ typedef enum state{
 
     S_STR_EMPTY,
     S_IS_MULTILINE,
-    S_END_MULTILINE
+    S_END_MULTILINE,
+    S_FAKE_END_MULTILINE
 
 } automat_state_t;
 
