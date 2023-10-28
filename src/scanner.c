@@ -69,6 +69,8 @@ token_t* get_me_token(){
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
     token->value.vector = NULL;
+    token->value.integer = 0;
+    token->value.type_double = 0.0;
 
     while ((readchar = (char) getc(stdin))){
 
@@ -422,7 +424,17 @@ token_t* get_me_token(){
                     break;
                 } else if(readchar == '"'){
                     a_state = S_END_QUOTES;
+                    token->type = TOKEN_STRING;
+                    token->value.vector = buffer;
                     return token;
+                } else if(readchar == '\\'){
+                    a_state = S_START_ESC_SENTENCE;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
                 }
             default:
                 if((int) readchar == EOF){
