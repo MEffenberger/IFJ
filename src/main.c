@@ -94,7 +94,9 @@ int main() {
             printf("\n LEFT_BRACKET \n");
         }else if(token_array[i]->type == 31){
             printf("\n RIGHT_BRACKET \n");
-    }
+        } else if(token_array[i]->type == 32){
+            printf("\n DIVIDE \n");
+        }
     }
 
     //printf("%d\n", token_array[0]->value.integer);

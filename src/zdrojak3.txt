@@ -1,2 +1,4 @@
-let String b = "ahoj\\kamocoahoj\u{FFFFFF7e}cus"
-let String b = ""
+var a = (a/b)
+//hfianhfukesnvenigu
+//cau
+var a = 53.1
