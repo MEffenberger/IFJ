@@ -429,7 +429,7 @@ token_t* get_me_token(){
                     return token;
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
-                    vector_append(buffer, readchar);
+                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -451,6 +451,10 @@ token_t* get_me_token(){
                     free(token);
                     token = NULL;
                     exit(ERROR_LEX);
+                }
+            case(S_START_HEX):
+                if(readchar == '{'){
+                    a_state = S_FIRST_HEX;
                 }
             default:
                 if((int) readchar == EOF){
