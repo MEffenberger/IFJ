@@ -94,7 +94,9 @@ typedef enum state{
     S_NESTED_COM,
     S_NESTED_END,
 
-    S_STR_EMPTY
+    S_STR_EMPTY,
+    S_IS_MULTILINE,
+    S_END_MULTILINE
 
 } automat_state_t;
 

@@ -76,6 +76,10 @@ token_t* get_me_token(){
     int cnt_open = 0;
     int cnt_close = 0;
 
+    int cnt_array_size = 0;
+    int cnt_array_alloc_size = 8;
+    int* cnt_array = NULL;
+
     while ((readchar = (char) getc(stdin))){
 
         switch(a_state)
@@ -633,6 +637,10 @@ token_t* get_me_token(){
                     next_char = (char) getc(stdin);
                     if(next_char == '\n'){
                         a_state = S_START_MULTILINE;
+                        cnt_array = malloc(8*sizeof(int));
+                        for(int i =0; i < 8; i++){
+                            cnt_array[i] = 0;
+                        }
                         break;
                     } else {
                     vector_dispose(buffer);
@@ -641,6 +649,63 @@ token_t* get_me_token(){
                     exit(ERROR_LEX);
                     }
                 }
+
+            case(S_START_MULTILINE):
+                if(readchar == ' '){
+                    cnt_array[cnt_array_size]++;
+                    vector_append(buffer, readchar);
+                    break;
+                } else if(readchar == '"'){
+                    next_char = (char) getc (stdin);
+                    if(next_char == '"'){
+                        a_state = S_END_MULTILINE;
+                        break;
+                    } else {
+                        free(cnt_array);
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+                } else if ((int) readchar == EOF) {
+                    free(cnt_array);
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                } else {
+                    a_state = S_IS_MULTILINE;
+                    vector_append(buffer, readchar);
+                    break;
+                }
+
+            case(S_IS_MULTILINE):
+                if(readchar != '\n'){
+                    vector_append(buffer, readchar);
+                    break;
+                } else {
+                    vector_append(buffer,'\n');
+                    a_state = S_START_MULTILINE;
+                    break;
+                }
+
+            case(S_END_MULTILINE):
+                if(readchar == '"'){
+                    a_state = S_START;
+                    token->type = TOKEN_ML_STRING;
+                    token->value.vector = buffer;
+                    free(cnt_array);
+                    return token;
+                } else if(readchar == '\n'){
+                    a_state = S_START_MULTILINE;
+                    vector_append(buffer, '\n');
+                    break;
+                } else {
+                    a_state = S_IS_MULTILINE;
+                    vector_append(buffer, readchar);
+                    break;
+                }
+                
             default:
                 if((int) readchar == EOF){
                 token->type = TOKEN_EOF;

@@ -87,7 +87,7 @@ int main() {
         }else if(token_array[i]->type == 26){
             printf("\n STRING \n %s \n", token_array[i]->value.vector->array);
         }else if(token_array[i]->type == 27){
-            printf("\n ML_STRING \n");
+            printf("\n ML STRING \n %s \n", token_array[i]->value.vector->array);
         }else if(token_array[i]->type == 28){ //keyword
             if(strcmp(token_array[i]->value.vector->array,"Double") == 0){
                 printf("\n KEYWORD Double\n");
