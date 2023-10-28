@@ -209,6 +209,7 @@ token_t* get_me_token(){
                     } else if(readchar == '/'){
                         next_char = (char) getc(stdin);
                         if(next_char == '*'){
+                            cnt_open++;
                             a_state = S_NESTED_COM;
                             break;
                         } else if(next_char == '/'){
@@ -564,9 +565,8 @@ token_t* get_me_token(){
                     break;
                 }
             case(S_NESTED_COM):
-                cnt_open++;
 
-                if((int) readchar == EOF && cnt_open != cnt_close){
+                if(((int) readchar == EOF) && (cnt_open != cnt_close)){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
@@ -597,7 +597,24 @@ token_t* get_me_token(){
                 }
 
             case(S_NESTED_END):
-                
+                if(cnt_open == cnt_close){
+                    a_state = S_START;
+                    break;
+                } else if(readchar == '*'){
+                    next_char = (char) getc (stdin);
+                    if(next_char == '/'){
+                        cnt_close++;
+                        break;
+                    } else {
+                        ungetc(next_char, stdin);
+                        a_state = S_NESTED_COM;
+                        break;
+                    }
+                } else {
+                    a_state = S_NESTED_COM;
+                    break;
+                }
+
             default:
                 if((int) readchar == EOF){
                 token->type = TOKEN_EOF;
