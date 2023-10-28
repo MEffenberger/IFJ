@@ -62,6 +62,17 @@ keyword_t compare_keyword(vector* v){
     }
 }
 
+bool check_indent(int* cnt_array, int size){
+    for(int i = 0; i < size ; i++){
+        if(cnt_array[i] < cnt_array[size]){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 token_t* get_me_token(){
     token_t* token = malloc(sizeof(token_t));
     //push_alloc_ptr(token, TOKEN);
@@ -686,16 +697,25 @@ token_t* get_me_token(){
                 } else {
                     vector_append(buffer,'\n');
                     a_state = S_START_MULTILINE;
+                    cnt_array_size++;
                     break;
                 }
 
             case(S_END_MULTILINE):
                 if(readchar == '"'){
+                    if(check_indent(cnt_array, cnt_array_size)){
                     a_state = S_START;
                     token->type = TOKEN_ML_STRING;
                     token->value.vector = buffer;
                     free(cnt_array);
                     return token;
+                    } else {
+                        free(cnt_array);
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     vector_append(buffer, '\n');
