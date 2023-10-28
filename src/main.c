@@ -84,7 +84,7 @@ int main() {
         }else if(token_array[i]->type == 25){
             printf("\n DEC \t%lf \n", token_array[i]->value.type_double);
         }else if(token_array[i]->type == 26){
-            printf("\n STRING %s \n", token_array[i]->value.vector->array);
+            printf("\n STRING \n %s \n", token_array[i]->value.vector->array);
         }else if(token_array[i]->type == 27){
             printf("\n ML_STRING \n");
         }else if(token_array[i]->type == 28){ //keyword
