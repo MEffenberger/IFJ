@@ -693,6 +693,19 @@ token_t* get_me_token(){
                 }
 
             case(S_START_MULTILINE):
+                
+                if(cnt_array_size + 1 == cnt_array_alloc_size){
+                    int *new_vec = realloc(cnt_array, cnt_array_alloc_size * 2 * sizeof(int));
+                    if(!(new_vec)){
+                        return false;
+                    }
+                    cnt_array = new_vec;
+                    cnt_array_alloc_size *= 2;
+                    for(int i = cnt_array_size +1; i < cnt_array_alloc_size; i++){
+                        cnt_array[i] = 0;
+                    }
+                }
+
                 if(readchar == ' '){
                     cnt_array[cnt_array_size]++;
                     vector_append(buffer, readchar);
