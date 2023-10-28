@@ -1,2 +1,2 @@
-var a = 50
-let String b = "\u{00000022}"
+let String b = "ahoj\\kamocoahoj\u{FFFFFF7e}cus"
+let String b = ""

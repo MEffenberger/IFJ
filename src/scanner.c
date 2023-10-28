@@ -517,13 +517,11 @@ token_t* get_me_token(){
                     a_state = S_FIRST_HEX;
                     break;
                 } else if(readchar == '}'){
-                    a_state = S_START_QUOTES;
-                    int hex_num;
+                    int hex_num = 0;
                     if(sscanf(hex, "%x", &hex_num) != EOF){
                         char* c = (char*) &hex_num;
-                        for(int i = 0; i < sizeof(int); i++){
-                            vector_append(buffer, c[i]);
-                        }
+                        vector_append(buffer, c[0]);
+                        a_state = S_START_QUOTES;
                         break;
                     } else {
                         vector_dispose(buffer);
@@ -531,6 +529,7 @@ token_t* get_me_token(){
                         token = NULL;
                         exit(ERROR_LEX);
                     }
+
                 } else {
                     vector_dispose(buffer);
                     free(token);
