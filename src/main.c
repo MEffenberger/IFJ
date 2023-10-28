@@ -22,14 +22,14 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 int main() { 
     //parser();
     token_t** token_array;
-    token_array = malloc(15*sizeof(token_t*));
+    token_array = malloc(100*sizeof(token_t*));
 
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < 100; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 100; i++)
     {
         //printf("\n, %d, \n", token_array[i]->type);
         if(token_array[i]->type == 0){
@@ -123,7 +123,7 @@ int main() {
                 printf("\n KEYWORD Int2Double \n");
             } else if(strcmp(token_array[i]->value.vector->array,"Double2Int") == 0){
                 printf("\n KEYWORD Double2Int \n");
-            } else if(strcmp(token_array[i]->value.vector->array,"lenght") == 0){
+            } else if(strcmp(token_array[i]->value.vector->array,"length") == 0){
                 printf("\n KEYWORD lenght \n");
             } else if(strcmp(token_array[i]->value.vector->array,"substring") == 0){
                 printf("\n KEYWORD substring \n");
@@ -181,7 +181,7 @@ int main() {
 
 
     
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 100; i++)
     {   
         if(token_array[i]->value.vector){
         vector_dispose(token_array[i]->value.vector);
