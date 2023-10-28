@@ -1,3 +1,1 @@
-let a = "\rahoj\r"
-var b = "nazdar"
-var c = 5555
+let a = "ahoj\n \u9}"

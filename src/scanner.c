@@ -71,6 +71,7 @@ token_t* get_me_token(){
     token->value.vector = NULL;
     token->value.integer = 0;
     token->value.type_double = 0.0;
+    char hex[2] = {0};
 
     while ((readchar = (char) getc(stdin))){
 
@@ -470,7 +471,7 @@ token_t* get_me_token(){
                     }
                 } else if(readchar == 'u'){
                     a_state = S_START_HEX;
-                    vector_append(buffer, readchar);
+                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -480,7 +481,57 @@ token_t* get_me_token(){
                 }
             case(S_START_HEX):
                 if(readchar == '{'){
+                    a_state = S_LEFT_BRACKET;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_LEFT_BRACKET):
+                if(isdigit(readchar) || isalpha(readchar)){
+                    hex[0] = readchar;
                     a_state = S_FIRST_HEX;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_FIRST_HEX):
+                if(isdigit(readchar) || isalpha(readchar)){
+                    hex[1] = readchar;
+                    a_state = S_SECOND_HEX;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_SECOND_HEX):
+                if(readchar == '}'){
+                    a_state = S_START_QUOTES;
+                    int hex_num;
+                    if(sscanf(hex, "%x", &hex_num) != EOF){
+                        char* c = (char*) &hex_num;
+                        for(int i = 0; i < sizeof(int); i++){
+                            vector_append(buffer, c[i]);
+                        }
+                        break;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
                 }
             default:
                 if((int) readchar == EOF){
