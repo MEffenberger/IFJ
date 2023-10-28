@@ -6,6 +6,7 @@
  * @brief Symbol table using AVL tree: implementation
  *
  * @author Adam Valík <xvalik05>
+ * @author Marek Effenberger <xeffen00>
  */
 
 #include "symtable.h"
@@ -15,16 +16,16 @@
 #include <string.h>
 
 
-void symtable_init(AVL_tree **tree) {
-    *tree = NULL;
-}
+// void symtable_init(AVL_tree **tree) {
+//     *tree = NULL;
+// }
 
 void data_init(sym_data *data){
     data->declared = true;
     data->defined = false; // initialized
 
     data->is_var = false;
-    data->var_type = NONE;
+    data->var_type = VAR;
     data->data_type = T_NIL;
     data->int_value = 0;
     data->double_value = 0.0;
@@ -36,6 +37,48 @@ void data_init(sym_data *data){
     data->is_param = false;
     data->param_name = NULL;
     data->param_type = T_NIL;
+}
+
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value) {
+    data_init(&data);
+    data.defined = initialized;
+    data.data_type = data_type;
+    data.var_type = var_type;
+    data.int_value = int_value;
+    data.double_value = double_value;
+    data.string_value = string_value;
+    return data;
+}
+
+sym_data set_data_func(sym_data *data, bool defined, data_type return_type) {
+    data_init(data);
+    data->defined = defined;
+    data->return_type = return_type;
+    return *data;
+}
+
+sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) {
+    data_init(data);
+    data->param_type = param_type;
+    data->param_name = param_name;
+    return *data;
+}
+
+
+AVL_tree *symtable_search(AVL_tree *tree, char *key) {
+    if (tree == NULL || key == NULL) {
+        return NULL;
+    }
+    else if (strcmp(tree->key, key) == 0) {
+        printf("found %s\n", key);
+        return tree;
+    } 
+    else if (strcmp(tree->key, key) > 0) {
+        return symtable_search(tree->left, key);
+    }
+    else { // strcmp(tree->key, key) < 0
+        return symtable_search(tree->right, key);
+    }
 }
 
 sym_data *symtable_lookup(AVL_tree *tree, char *key) {
@@ -241,8 +284,6 @@ void inorder(AVL_tree **tree) {
     if (*tree != NULL) {
         inorder(&((*tree)->left));
         printf("key: %s\n", (*tree)->key);
-        printf("declared: %d\n", (*tree)->data.declared);
-        printf("defined: %d\n\n", (*tree)->data.defined);
         inorder(&((*tree)->right));
     }
 }

@@ -14,38 +14,52 @@
 
 #include "symtable.h"
 #include "error.h"
+#include "scanner.h"
 
+// A node in the forest
 typedef struct s_forest_node {
+    keyword_t keyword;
+    char *name;
     struct s_forest_node *parent;
-    struct s_forest_node **children;
-    int children_count;
-    AVL_tree *symtable;
-    // add key to represent the node's type
+    struct s_forest_node **children; // array of pointers to children
+    int children_count; // number of children (last index + 1)
+    AVL_tree *symtable; // pointer to the scope's symbol table
 } forest_node;
 
+// Global pointer to the active node in forest
+extern forest_node *active;
 
-
-void forest_init(forest_node **root);
-
+/**
+ * @brief Inserts a global node into the forest
+ * 
+ * @return forest_node* pointer to the global node
+ */
 forest_node *forest_insert_global();
 
+/**
+ * @brief Inserts a local node into the forest
+ * 
+ * @param parent Pointer to the parent node of the new node
+ * @param keyword 
+ * @param name 
+ * @param active Pointer to the active node in forest for correction
+ */
+void forest_insert(forest_node *parent, keyword_t keyword, char *name, forest_node **active);
 
+/**
+ * @brief Searches for a symbol in the symbol table of the node (and its parents if not found)
+ * 
+ * @param node Pointer to the node where to start searching
+ * @param key Key of the symbol to search for
+ * @return AVL_tree* Pointer to the symbol if found, NULL otherwise
+ */
+AVL_tree *forest_search_symbol(forest_node *node, char *key);
 
-
-
-
-
-void forest_dispose(forest_node **root);
-
-void forest_insert_first(forest_node **forest);
-
-forest_node *forest_get_child(forest_node *parent, int index);
-
-forest_node *forest_get_parent(forest_node *node);
-
-AVL_tree *forest_get_symtable(forest_node *node);
-
-
-
+/**
+ * @brief Forest dispose
+ * 
+ * @param global Pointer to the global node (root of the forest)
+ */
+void forest_dispose(forest_node *global);
 
 #endif //IFJ_FOREST_H

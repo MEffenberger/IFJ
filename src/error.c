@@ -39,7 +39,7 @@ void free_alloc_memory() {
                 symtable_dispose(tmp->ptr);
                 break;
             case FOREST:
-                //forest_dispose(tmp->ptr);
+                forest_dispose(tmp->ptr);
                 break;
             //case: // tbd other types
             default:
