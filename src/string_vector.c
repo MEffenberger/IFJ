@@ -4,7 +4,7 @@
  * IFJ compiler 2023
  * 
  * @brief String vector file 
- * @author Samuel Hejnicek
+ * @author Samuel Hejnicek <hejni00>
  * @date 2023-10-21
  */
 
@@ -66,7 +66,9 @@ void vector_clear(vector* v){
 void vector_dispose(vector* v){
     v->size = 0;
     v->size_of_alloc = 0;
-    free(v->array);
+    if(v->array){
+        free(v->array);
+    }
     v->array = NULL;
     free(v);
     v = NULL;

@@ -4,7 +4,7 @@
  * IFJ compiler 2023
  * 
  * @brief String vector header file 
- * @author Samuel Hejnicek
+ * @author Samuel Hejnicek <xhejni00>
  * @date 2023-10-21
  */
 #ifndef STRING_VECTOR_H
