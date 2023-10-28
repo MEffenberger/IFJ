@@ -429,6 +429,22 @@ token_t* get_me_token(){
                     return token;
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
+                    vector_append(buffer, readchar);
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_START_ESC_SENTENCE):
+                if(readchar == '"' || readchar == 'n'|| readchar == 't' || readchar == 'r' || readchar == '\\'){
+                    a_state = S_START_QUOTES;
+                    vector_append(buffer, readchar);
+                    break; 
+                } else if(readchar == 'u'){
+                    a_state = S_START_HEX;
+                    vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
