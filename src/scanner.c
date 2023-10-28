@@ -71,6 +71,10 @@ token_t* get_me_token(){
     token->value.vector = NULL;
     token->value.integer = 0;
     token->value.type_double = 0.0;
+    char hex[8] = {0};
+    int hex_counter = 0;
+    int cnt_open = 0;
+    int cnt_close = 0;
 
     while ((readchar = (char) getc(stdin))){
 
@@ -201,7 +205,21 @@ token_t* get_me_token(){
                         token->type = TOKEN_PLUS;
                         vector_dispose(buffer);
                         return token;
-
+                    
+                    } else if(readchar == '/'){
+                        next_char = (char) getc(stdin);
+                        if(next_char == '*'){
+                            a_state = S_NESTED_COM;
+                            break;
+                        } else if(next_char == '/'){
+                            a_state = S_SL_COM;
+                            break;
+                        } else {
+                            ungetc(next_char, stdin);
+                            token->type = TOKEN_DIVIDE;
+                            vector_dispose(buffer);
+                            return token;
+                        }
                     } else if(readchar == '_'){
                         a_state = S_START;
                         token->question_mark = false;
@@ -429,7 +447,7 @@ token_t* get_me_token(){
                     return token;
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
-                    vector_append(buffer, readchar);
+                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -438,13 +456,39 @@ token_t* get_me_token(){
                     exit(ERROR_LEX);
                 }
             case(S_START_ESC_SENTENCE):
-                if(readchar == '"' || readchar == 'n'|| readchar == 't' || readchar == 'r' || readchar == '\\'){
+                if(readchar == '"' || readchar == '\\'){
                     a_state = S_START_QUOTES;
                     vector_append(buffer, readchar);
-                    break; 
+                    break;
+                } else if(readchar == 'n'){
+                    a_state = S_START_QUOTES;
+                    vector_append(buffer, '\n');
+                    break;
+                } else if(readchar == 't'){
+                    a_state = S_START_QUOTES;
+                    vector_append(buffer, '\t');
+                    break;
+                } else if(readchar == 'r'){
+                    int buffer_size = vector_size(buffer);
+                    if(buffer_size == 0){
+                        a_state = S_START_QUOTES;
+                        break;
+                    } else if(buffer_size != 0){
+                        next_char = (char) getc(stdin);
+                        if(next_char == '"'){
+                            ungetc(next_char, stdin);
+                            a_state = S_START_QUOTES;
+                            break;
+                        } else {
+                            ungetc(next_char, stdin);
+                            a_state = S_START_QUOTES;
+                            vector_append(buffer, '\n');
+                            break;
+                        }
+                    }
                 } else if(readchar == 'u'){
                     a_state = S_START_HEX;
-                    vector_append(buffer, readchar);
+                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -452,6 +496,108 @@ token_t* get_me_token(){
                     token = NULL;
                     exit(ERROR_LEX);
                 }
+            case(S_START_HEX):
+                if(readchar == '{'){
+                    a_state = S_LEFT_BRACKET;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_LEFT_BRACKET):
+                if(isdigit(readchar) || isalpha(readchar)){
+                    hex[hex_counter] = readchar;
+                    hex_counter++;
+                    a_state = S_FIRST_HEX;
+                    break;
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            case(S_FIRST_HEX):
+                if(isdigit(readchar) || isalpha(readchar)){
+
+                    if(hex_counter == 8){
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+
+                    hex[hex_counter] = readchar;
+                    hex_counter++;
+                    a_state = S_FIRST_HEX;
+                    break;
+                } else if(readchar == '}'){
+                    int hex_num = 0;
+                    if(sscanf(hex, "%x", &hex_num) != EOF){
+                        char* c = (char*) &hex_num;
+                        vector_append(buffer, c[0]);
+                        a_state = S_START_QUOTES;
+                        break;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+
+                } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+            
+            case(S_SL_COM):
+                if(readchar == '\n'){
+                    a_state = S_START;
+                    break;
+                } else if((int) readchar == EOF){
+                    a_state = S_START;
+                    break;
+                } else {
+                    break;
+                }
+            case(S_NESTED_COM):
+                cnt_open++;
+
+                if((int) readchar == EOF && cnt_open != cnt_close){
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                }
+
+                if(readchar == '/'){
+                    next_char = (char) getc (stdin);
+                    if(next_char == '*'){
+                        cnt_open++;
+                        break;
+                    } else {
+                        ungetc(next_char, stdin);
+                        break;
+                    }
+                } else if(readchar == '*'){
+                    next_char = (char) getc (stdin);
+                    if(next_char == '/'){
+                        a_state = S_NESTED_END;
+                        cnt_close++;
+                        break;
+                    } else {
+                        ungetc(next_char, stdin);
+                        break;
+                    }
+                } else {
+                    break;
+                }
+
+            case(S_NESTED_END):
+                
             default:
                 if((int) readchar == EOF){
                 token->type = TOKEN_EOF;

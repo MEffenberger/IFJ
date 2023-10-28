@@ -1,3 +1,4 @@
-var a = 14.4
-var b = "nazdar"
-var c = 5555
+var a = (a/b)
+//hfianhfukesnvenigu
+//cau
+var a = 53.1

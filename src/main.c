@@ -21,14 +21,14 @@ struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allo
 int main() { 
     //parser();
     token_t** token_array;
-    token_array = malloc(20*sizeof(token_t*));
+    token_array = malloc(15*sizeof(token_t*));
 
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 15; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 15; i++)
     {
         //printf("\n, %d, \n", token_array[i]->type);
         if(token_array[i]->type == 0){
@@ -137,7 +137,9 @@ int main() {
             printf("\n LEFT_BRACKET \n");
         }else if(token_array[i]->type == 31){
             printf("\n RIGHT_BRACKET \n");
-    }
+        } else if(token_array[i]->type == 32){
+            printf("\n DIVIDE \n");
+        }
     }
 
     //printf("%d\n", token_array[0]->value.integer);
@@ -178,7 +180,7 @@ int main() {
 
 
     
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 15; i++)
     {   
         if(token_array[i]->value.vector){
         vector_dispose(token_array[i]->value.vector);

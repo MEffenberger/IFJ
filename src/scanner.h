@@ -45,7 +45,8 @@ typedef enum token_types {
     TOKEN_KEYWORD,
     TOKEN_UNDERSCORE,
     TOKEN_LEFT_BRACKET,
-    TOKEN_RIGHT_BRACKET
+    TOKEN_RIGHT_BRACKET,
+    TOKEN_DIVIDE
 } token_type_t;
 
 typedef enum state{
@@ -85,11 +86,13 @@ typedef enum state{
     S_START_HEX, // u
     S_LEFT_BRACKET, // {
     S_FIRST_HEX, //0-Z
-    S_SECOND_HEX, //0-Z
-    S_RIGHT_BRACKET, // }
 
     S_THREE_QUOTES, // """
-    S_START_MULTILINE //EOL
+    S_START_MULTILINE, //EOL
+
+    S_SL_COM,
+    S_NESTED_COM,
+    S_NESTED_END
 
 }automat_state_t;
 
