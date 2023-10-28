@@ -124,6 +124,8 @@ typedef enum keyword{
     KW_ORD,      // ord()
     KW_CHR,      // chr()
 
+    KW_GLOBAL,   // global (for global forest node)
+
 
 }keyword_t;
 
