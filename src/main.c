@@ -14,6 +14,7 @@
 //#include "parser.h"
 #include "scanner.h"
 
+
 struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allocated pointers
 
 
@@ -86,8 +87,50 @@ int main() {
             printf("\n STRING %s \n", token_array[i]->value.vector->array);
         }else if(token_array[i]->type == 27){
             printf("\n ML_STRING \n");
-        }else if(token_array[i]->type == 28){
-            printf("\n KEYWORD \n");
+        }else if(token_array[i]->type == 28){ //keyword
+            if(strcmp(token_array[i]->value.vector->array,"Double") == 0){
+                printf("\n KEYWORD Double\n");
+            } else if(strcmp(token_array[i]->value.vector->array,"Int") == 0){
+                printf("\n KEYWORD Int \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"String") == 0){
+                printf("\n KEYWORD String \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"else") == 0){
+                printf("\n KEYWORD else \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"func") == 0){
+                printf("\n KEYWORD func \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"if") == 0){
+                printf("\n KEYWORD if \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"let") == 0){
+                printf("\n KEYWORD let \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"nil") == 0){
+                printf("\n KEYWORD nil \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"return") == 0){
+                printf("\n KEYWORD return \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"var") == 0){
+                printf("\n KEYWORD var \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"while") == 0){
+                printf("\n KEYWORD while \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"readString") == 0){
+                printf("\n KEYWORD readString \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"readInt") == 0){
+                printf("\n KEYWORD readInt \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"readDouble") == 0){
+                printf("\n KEYWORD readDouble \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"write") == 0){
+                printf("\n KEYWORD write \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"Int2Double") == 0){
+                printf("\n KEYWORD Int2Double \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"Double2Int") == 0){
+                printf("\n KEYWORD Double2Int \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"lenght") == 0){
+                printf("\n KEYWORD lenght \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"substring") == 0){
+                printf("\n KEYWORD substring \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"ord") == 0){
+                printf("\n KEYWORD ord \n");
+            } else if(strcmp(token_array[i]->value.vector->array,"chr") == 0){
+                printf("\n KEYWORD chr \n");
+            }
         }else if(token_array[i]->type == 29){
             printf("\n UNDERSCORE \n");
         }else if(token_array[i]->type == 30){
