@@ -20,14 +20,14 @@ struct AllocatedPointer *allocated_pointers = NULL; // Top of the stack for allo
 int main() { 
     //parser();
     token_t** token_array;
-    token_array = malloc(150*sizeof(token_t*));
+    token_array = malloc(20*sizeof(token_t*));
 
-    for(int i = 0; i < 150; i++){
+    for(int i = 0; i < 20; i++){
         token_t* token = get_me_token();
         token_array[i] = token;
     }
 
-    for (int i = 0; i < 150; i++)
+    for (int i = 0; i < 20; i++)
     {
         //printf("\n, %d, \n", token_array[i]->type);
         if(token_array[i]->type == 0){
@@ -77,13 +77,13 @@ int main() {
         }else if(token_array[i]->type == 22){
             printf("\n ID_QM \n");
         }else if(token_array[i]->type == 23){
-            printf("\n NUM \n");
+            printf("\n NUM \t%d \n", token_array[i]->value.integer);
         }else if(token_array[i]->type == 24){
             printf("\n EXP \n");
         }else if(token_array[i]->type == 25){
-            printf("\n DEC \n");
+            printf("\n DEC \t%lf \n", token_array[i]->value.type_double);
         }else if(token_array[i]->type == 26){
-            printf("\n STRING \n");
+            printf("\n STRING %s \n", token_array[i]->value.vector->array);
         }else if(token_array[i]->type == 27){
             printf("\n ML_STRING \n");
         }else if(token_array[i]->type == 28){
@@ -135,7 +135,7 @@ int main() {
 
 
     
-    for (int i = 0; i < 150; i++)
+    for (int i = 0; i < 20; i++)
     {   
         if(token_array[i]->value.vector){
         vector_dispose(token_array[i]->value.vector);
