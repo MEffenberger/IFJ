@@ -438,10 +438,36 @@ token_t* get_me_token(){
                     exit(ERROR_LEX);
                 }
             case(S_START_ESC_SENTENCE):
-                if(readchar == '"' || readchar == 'n'|| readchar == 't' || readchar == 'r' || readchar == '\\'){
+                if(readchar == '"' || readchar == '\\'){
                     a_state = S_START_QUOTES;
                     vector_append(buffer, readchar);
-                    break; 
+                    break;
+                } else if(readchar == 'n'){
+                    a_state = S_START_QUOTES;
+                    vector_append(buffer, '\n');
+                    break;
+                } else if(readchar == 't'){
+                    a_state = S_START_QUOTES;
+                    vector_append(buffer, '\t');
+                    break;
+                } else if(readchar == 'r'){
+                    int buffer_size = vector_size(buffer);
+                    if(buffer_size == 0){
+                        a_state = S_START_QUOTES;
+                        break;
+                    } else if(buffer_size != 0){
+                        next_char = (char) getc(stdin);
+                        if(next_char == '"'){
+                            ungetc(next_char, stdin);
+                            a_state = S_START_QUOTES;
+                            break;
+                        } else {
+                            ungetc(next_char, stdin);
+                            a_state = S_START_QUOTES;
+                            vector_append(buffer, '\n');
+                            break;
+                        }
+                    }
                 } else if(readchar == 'u'){
                     a_state = S_START_HEX;
                     vector_append(buffer, readchar);

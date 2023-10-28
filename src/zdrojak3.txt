@@ -1,3 +1,3 @@
-let a = "cus\n"
+let a = "\rahoj\r"
 var b = "nazdar"
 var c = 5555
