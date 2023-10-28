@@ -1,1 +1,2 @@
-let a = "ahoj\n \u9}"
+var a = 50
+let String b = "\u{00000022}"

@@ -71,7 +71,8 @@ token_t* get_me_token(){
     token->value.vector = NULL;
     token->value.integer = 0;
     token->value.type_double = 0.0;
-    char hex[2] = {0};
+    char hex[8] = {0};
+    int hex_counter = 0;
 
     while ((readchar = (char) getc(stdin))){
 
@@ -491,7 +492,8 @@ token_t* get_me_token(){
                 }
             case(S_LEFT_BRACKET):
                 if(isdigit(readchar) || isalpha(readchar)){
-                    hex[0] = readchar;
+                    hex[hex_counter] = readchar;
+                    hex_counter++;
                     a_state = S_FIRST_HEX;
                     break;
                 } else {
@@ -502,17 +504,19 @@ token_t* get_me_token(){
                 }
             case(S_FIRST_HEX):
                 if(isdigit(readchar) || isalpha(readchar)){
-                    hex[1] = readchar;
-                    a_state = S_SECOND_HEX;
+
+                    if(hex_counter == 8){
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+
+                    hex[hex_counter] = readchar;
+                    hex_counter++;
+                    a_state = S_FIRST_HEX;
                     break;
-                } else {
-                    vector_dispose(buffer);
-                    free(token);
-                    token = NULL;
-                    exit(ERROR_LEX);
-                }
-            case(S_SECOND_HEX):
-                if(readchar == '}'){
+                } else if(readchar == '}'){
                     a_state = S_START_QUOTES;
                     int hex_num;
                     if(sscanf(hex, "%x", &hex_num) != EOF){
