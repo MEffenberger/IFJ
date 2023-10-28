@@ -20,7 +20,7 @@ CFLAGS = -std=c11 -Wall -Wextra
 
 .DEFAULT_GOAL := all
 
-all: $(EXEC)
+all: $(EXEC) 
 
 $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^

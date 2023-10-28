@@ -15,6 +15,8 @@
 #include "scanner.h"
 
 
+alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
+forest_node *active = NULL; // Pointer to the active node in the forest
 
 
 int main() { 

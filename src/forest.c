@@ -11,14 +11,14 @@
 
 
 #include "forest.h"
-#include "symtable.h"
-#include "error.h"
+
+
 
 
 forest_node *forest_insert_global() {
     forest_node *root = (forest_node*)allocate_memory(sizeof(forest_node), "global forest node", FOREST);
     root->name = "global";
-    root->keyword = KW_GLOBAL;
+    root->keyword = W_GLOBAL;
     root->parent = NULL;
     root->children = NULL;
     root->children_count = 0;
@@ -26,7 +26,7 @@ forest_node *forest_insert_global() {
     return root; 
 }
 
-void forest_insert(forest_node *parent, keyword_t keyword, char *name, forest_node **active) {
+void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_node **active) {
     if (parent != NULL) {
         forest_node *child = (forest_node*)allocate_memory(sizeof(forest_node), "forest node", FOREST);
         child->name = name;

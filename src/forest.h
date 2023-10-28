@@ -16,9 +16,19 @@
 #include "error.h"
 #include "scanner.h"
 
+typedef enum f_keyword {
+    W_GLOBAL,
+    W_FUNCTION,
+    W_IF,
+    W_ELSE,
+    W_FOR,
+    W_RETURN,
+    W_NONE
+} f_keyword_t;
+
 // A node in the forest
 typedef struct s_forest_node {
-    keyword_t keyword;
+    f_keyword_t keyword;
     char *name;
     struct s_forest_node *parent;
     struct s_forest_node **children; // array of pointers to children
@@ -44,7 +54,7 @@ forest_node *forest_insert_global();
  * @param name 
  * @param active Pointer to the active node in forest for correction
  */
-void forest_insert(forest_node *parent, keyword_t keyword, char *name, forest_node **active);
+void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_node **active);
 
 /**
  * @brief Searches for a symbol in the symbol table of the node (and its parents if not found)
