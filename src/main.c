@@ -29,8 +29,74 @@ int main() {
 
     for (int i = 0; i < 150; i++)
     {
-        printf("\n, %d, \n", token_array[i]->type);
+        //printf("\n, %d, \n", token_array[i]->type);
+        if(token_array[i]->type == 0){
+            printf("\n WHITESPACE \n");
+        } else if(token_array[i]->type == 1){
+            printf("\n TAB \n");
+        }else if(token_array[i]->type == 2){
+            printf("\n EOL \n");
+        }else if(token_array[i]->type == 3){
+            printf("\n EOF \n");
+        }else if(token_array[i]->type == 4){
+            printf("\n MINUS \n");
+        }else if(token_array[i]->type == 5){
+            printf("\n PLUS \n");
+        }else if(token_array[i]->type == 6){
+            printf("\n MULTIPLY \n");
+        }else if(token_array[i]->type == 7){
+            printf("\n LESS \n");
+        }else if(token_array[i]->type == 8){
+            printf("\n LESS_EQ \n");
+        }else if(token_array[i]->type == 9){
+            printf("\n GREAT \n");
+        }else if(token_array[i]->type == 10){
+            printf("\n GREAT_EQ \n");
+        }else if(token_array[i]->type == 11){
+            printf("\n LPAR \n");
+        }else if(token_array[i]->type == 12){
+            printf("\n RPAR \n");
+        }else if(token_array[i]->type == 13){
+            printf("\n EQ \n");
+        }else if(token_array[i]->type == 14){
+            printf("\n EQEQ \n");
+        }else if(token_array[i]->type == 15){
+            printf("\n EXCLAM \n");
+        }else if(token_array[i]->type == 16){
+            printf("\n EXCLAMEQ \n");
+        }else if(token_array[i]->type == 17){
+            printf("\n COMMA \n");
+        }else if(token_array[i]->type == 18){
+            printf("\n COLON \n");
+        }else if(token_array[i]->type == 19){
+            printf("\n DOUBLE_QM \n");
+        }else if(token_array[i]->type == 20){
+            printf("\n RET_TYPE \n");
+        }else if(token_array[i]->type == 21){
+            printf("\n ID \n");
+        }else if(token_array[i]->type == 22){
+            printf("\n ID_QM \n");
+        }else if(token_array[i]->type == 23){
+            printf("\n NUM \n");
+        }else if(token_array[i]->type == 24){
+            printf("\n EXP \n");
+        }else if(token_array[i]->type == 25){
+            printf("\n DEC \n");
+        }else if(token_array[i]->type == 26){
+            printf("\n STRING \n");
+        }else if(token_array[i]->type == 27){
+            printf("\n ML_STRING \n");
+        }else if(token_array[i]->type == 28){
+            printf("\n KEYWORD \n");
+        }else if(token_array[i]->type == 29){
+            printf("\n UNDERSCORE \n");
+        }else if(token_array[i]->type == 30){
+            printf("\n LEFT_BRACKET \n");
+        }else if(token_array[i]->type == 31){
+            printf("\n RIGHT_BRACKET \n");
     }
+    }
+
     //printf("%d\n", token_array[0]->value.integer);
     //printf("%lf\n", token_array[1]->value.type_double);
     //printf("%lf\n", token_array[2]->value.type_double);
