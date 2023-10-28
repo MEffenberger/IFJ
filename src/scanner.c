@@ -280,8 +280,15 @@ token_t* get_me_token(){
                         vector_append(buffer, readchar);
                         break;
                     } else if(readchar == '"'){
-                        a_state = S_START_QUOTES;
-                        break;
+                        next_char = (char) getc(stdin);
+                        if(next_char == '"'){
+                            a_state = S_STR_EMPTY;
+                            break;
+                        } else {
+                            ungetc(next_char, stdin);
+                            a_state = S_START_QUOTES;
+                            break;
+                        }
                     }
 
             case(S_QM):
@@ -614,7 +621,26 @@ token_t* get_me_token(){
                     a_state = S_NESTED_COM;
                     break;
                 }
-
+            case(S_STR_EMPTY):
+                if(readchar != '"'){
+                    //Syntax error nemuze byt nic po dvou uvozovkach?
+                    ungetc(readchar, stdin);
+                    a_state = S_START;
+                    token->type = TOKEN_STRING;
+                    token->value.vector = buffer;
+                    return token;
+                } else {
+                    next_char = (char) getc(stdin);
+                    if(next_char == '\n'){
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else {
+                    vector_dispose(buffer);
+                    free(token);
+                    token = NULL;
+                    exit(ERROR_LEX);
+                    }
+                }
             default:
                 if((int) readchar == EOF){
                 token->type = TOKEN_EOF;

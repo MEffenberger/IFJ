@@ -92,9 +92,11 @@ typedef enum state{
 
     S_SL_COM,
     S_NESTED_COM,
-    S_NESTED_END
+    S_NESTED_END,
 
-}automat_state_t;
+    S_STR_EMPTY
+
+} automat_state_t;
 
 typedef enum keyword{
 
