@@ -11,6 +11,7 @@
 #include "scanner.h"
 #include <ctype.h>
 
+#define ASCII_BEGIN 31
 
 keyword_t compare_keyword(vector* v){
     if(vector_str_cmp(v, "Double")){
@@ -257,6 +258,9 @@ token_t* get_me_token(){
                         a_state = S_NUM;
                         vector_append(buffer, readchar);
                         break;
+                    } else if(readchar == '"'){
+                        a_state = S_START_QUOTES;
+                        break;
                     }
 
             case(S_QM):
@@ -327,9 +331,15 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_NUM;
-                    sscanf(buffer->array, "%d", &token->value.integer);
-                    vector_dispose(buffer);
-                    return token;
+                    if(sscanf(buffer->array, "%d", &token->value.integer) != EOF){
+                        vector_dispose(buffer);
+                        return token;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
                 }
 
             case(S_NUM_DOT):
@@ -354,9 +364,15 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_DEC;
-                    sscanf(buffer->array, "%lf", &token->value.type_double);
-                    vector_dispose(buffer);
-                    return token;
+                    if(sscanf(buffer->array, "%lf", &token->value.type_double) != EOF){
+                        vector_dispose(buffer);
+                        return token;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
                 }
             case(S_NUM_E):
                 if(isdigit(readchar)){
@@ -389,8 +405,23 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     token->type = TOKEN_EXP;
-                    sscanf(buffer->array, "%lf", &token->value.type_double);
-                    vector_dispose(buffer);
+                    if(sscanf(buffer->array, "%lf", &token->value.type_double) != EOF){
+                        vector_dispose(buffer);
+                        return token;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        exit(ERROR_LEX);
+                    }
+
+                }
+            case(S_START_QUOTES):
+                if(readchar > ASCII_BEGIN && readchar != '\n' && readchar != '\\' && readchar != '"'){
+                    vector_append(buffer, readchar);
+                    break;
+                } else if(readchar == '"'){
+                    a_state = S_END_QUOTES;
                     return token;
                 }
             default:
