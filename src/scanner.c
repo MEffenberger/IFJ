@@ -72,6 +72,14 @@ bool check_indent(int* cnt_array, int size){
     return true;
 }
 
+void destroy_token(token_t* token){
+    if(token->value.vector){
+        vector_dispose(token->value.vector);
+    }
+    free(token);
+    token = NULL;
+}
+
 
 
 token_t* get_me_token(){

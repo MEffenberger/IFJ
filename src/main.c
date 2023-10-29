@@ -23,17 +23,19 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 int main() { 
     //parser();
     //token_t** token_array;
-    token_stack* stack;
-    init(stack);
+    token_stack stack;
+    init(&stack);
    // token_array = malloc(100*sizeof(token_t*));
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 20; i++){
         token_t* token = get_me_token();
-        push(stack, token);
-        printf("%d\n", stack->token_array[i]->type);
+        push(&stack, token);
+        printf("%d\n", stack.token_array[i]->type);
     }
+    printf("%d\n", stack.size);
+    printf("%d\n", stack.capacity);
 
-
+    dispose_stack(&stack);
 
     
     /*

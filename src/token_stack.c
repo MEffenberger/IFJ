@@ -52,7 +52,12 @@ bool is_empty(token_stack* token_stack) {
 }
 
 void dispose_stack(token_stack* token_stack) {
+    for(int i = 0; i < token_stack->size; i++){
+        destroy_token(token_stack->token_array[i]);
+    }
+
     free(token_stack->token_array);
-    free(token_stack);
-    token_stack = NULL;
+    token_stack->token_array = NULL;
+    //free(token_stack);
+    //token_stack = NULL;
 }

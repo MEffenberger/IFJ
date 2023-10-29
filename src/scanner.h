@@ -148,6 +148,9 @@ typedef struct token {
     token_type_t type;
 } token_t;
 
+keyword_t compare_keyword(vector* v);
+bool check_indent(int* cnt_array, int size);
+void destroy_token(token_t* token);
 token_t* get_me_token();
 
 #endif
