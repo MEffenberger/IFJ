@@ -146,8 +146,6 @@ typedef struct token_value
 typedef struct token {
     value_type_t value;
     token_type_t type;
-    int line;
-    bool question_mark;
 } token_t;
 
 token_t* get_me_token();

@@ -102,58 +102,49 @@ token_t* get_me_token(){
             case (S_START):
 
                     if(readchar == ':'){
-                        token->question_mark = false;
                         token->type = TOKEN_COLON;
                         vector_dispose(buffer);
                         return token;
 
                     } else if(readchar == ','){
-                        token->question_mark = false;
                         token->type = TOKEN_COMMA;
                         vector_dispose(buffer);
                         return token;
 
                     } else if(readchar == '?'){
                         a_state = S_QM;
-                        token->question_mark = false;
                         vector_dispose(buffer);
                         //break;
 
                     } else if(readchar == '('){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_LPAR;
                         vector_dispose(buffer);
                         
                         return token;
                     } else if(readchar == ')'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_RPAR;
                         vector_dispose(buffer);
                         return token;
 
                     } else if(readchar == '{'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_LEFT_BRACKET;
                         vector_dispose(buffer);
                         return token;
 
                     } else if(readchar == '}'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_RIGHT_BRACKET;
                         vector_dispose(buffer);
                         return token;
 
                     }else if(readchar == '>'){
-                        token->question_mark = false;
                         token->type = TOKEN_GREAT;
 
                         if((next_char = (char) getc(stdin)) == '='){
                             a_state = S_START;
-                            token->question_mark = false;
                             token->type = TOKEN_GREAT_EQ;
                             vector_dispose(buffer);
                             return token;
@@ -164,12 +155,10 @@ token_t* get_me_token(){
                         return token;
 
                     } else if(readchar == '<'){
-                        token->question_mark = false;
                         token->type = TOKEN_LESS;
 
                         if((next_char = (char) getc(stdin)) == '='){
                             a_state = S_START;
-                            token->question_mark = false;
                             token->type = TOKEN_LESS_EQ;
                             vector_dispose(buffer);
                             return token;
@@ -180,12 +169,10 @@ token_t* get_me_token(){
                         return token;
 
                     } else if(readchar == '='){
-                        token->question_mark = false;
                         token->type = TOKEN_EQ;
 
                         if((next_char = (char) getc(stdin)) == '='){
                             a_state = S_START;
-                            token->question_mark = false;
                             token->type = TOKEN_EQEQ;
                             vector_dispose(buffer);
                             return token;
@@ -196,12 +183,11 @@ token_t* get_me_token(){
                         return token;
 
                     } else if(readchar == '!'){
-                        token->question_mark = false;
                         token->type = TOKEN_EXCLAM;
 
                         if((next_char = (char) getc(stdin)) == '='){
                             a_state = S_START;
-                            token->question_mark = false;
+
                             token->type = TOKEN_EXCLAMEQ;
                             vector_dispose(buffer);
                              return token;
@@ -213,14 +199,12 @@ token_t* get_me_token(){
 
                     } else if(readchar == '*'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_MULTIPLY;
                         vector_dispose(buffer);
                         return token;
 
                     } else if(readchar == '+'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_PLUS;
                         vector_dispose(buffer);
                         return token;
@@ -242,12 +226,11 @@ token_t* get_me_token(){
                         }
                     } else if(readchar == '_'){
                         a_state = S_START;
-                        token->question_mark = false;
                         token->type = TOKEN_UNDERSCORE;
 
                         if((next_char = (char) getc(stdin)) == '_' || isalpha(next_char) || isdigit(next_char)){
                             a_state = S_ID;
-                            token->question_mark = false;
+
                             vector_append(buffer, readchar);
                             vector_append(buffer, next_char);
                             break;
@@ -258,12 +241,11 @@ token_t* get_me_token(){
                         return token;     
 
                     } else if(readchar == '-'){
-                        token->question_mark = false;
                         token->type = TOKEN_MINUS;
 
                         if((next_char = (char) getc(stdin)) == '>'){
                             a_state = S_START;
-                            token->question_mark = false;
+
                             token->type = TOKEN_RET_TYPE;
                             vector_dispose(buffer);
                             return token;
@@ -280,7 +262,6 @@ token_t* get_me_token(){
                         continue;
                         
                     } else if(readchar == '\n'){
-                        token->question_mark = false;
                         token->type = TOKEN_EOL;
                         vector_dispose(buffer);
                         return token;
@@ -313,7 +294,6 @@ token_t* get_me_token(){
             case(S_QM):
                 if((next_char = (char) getc(stdin)) == '?'){
                     a_state = S_START;
-                    token->question_mark = false;
                     token->type = TOKEN_DOUBLE_QM;
                     return token;
                 } else {
