@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include "./IFJ/src/scanner.h"
+#include "scanner.h"
 
 /**
  * @brief A stack data structure for tokens.
