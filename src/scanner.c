@@ -12,6 +12,7 @@
 #include <ctype.h>
 
 #define ASCII_BEGIN 31
+#define DEFAULT_TOKEN_VAL 1000
 
 keyword_t compare_keyword(vector* v){
     if(vector_str_cmp(v, "Double")){
@@ -58,7 +59,7 @@ keyword_t compare_keyword(vector* v){
     } else if (vector_str_cmp(v, "chr")){
         return KW_CHR;
     } else {
-        return 1000;
+        return DEFAULT_TOKEN_VAL;
     }
 }
 
@@ -82,6 +83,7 @@ token_t* get_me_token(){
     token->value.vector = NULL;
     token->value.integer = 0;
     token->value.type_double = 0.0;
+    token->value.keyword = DEFAULT_TOKEN_VAL;
     char hex[8] = {0};
     int hex_counter = 0;
     int cnt_open = 0;
@@ -332,7 +334,7 @@ token_t* get_me_token(){
                         token->value.keyword = key;
                         token->value.vector = buffer;
                         return token;
-                    } else if (key > 3 && key != 1000){
+                    } else if (key > 3 && key != DEFAULT_TOKEN_VAL){
                         ungetc(readchar, stdin);
                         a_state = S_QM;
                         token->type = TOKEN_KEYWORD;
@@ -349,7 +351,7 @@ token_t* get_me_token(){
                 } else {
                     ungetc(readchar, stdin);
                     keyword_t key = compare_keyword(buffer);
-                    if(key != 1000){
+                    if(key != DEFAULT_TOKEN_VAL){
                         token->type = TOKEN_KEYWORD;
                         token->value.keyword = key;
                         token->value.vector = buffer;
