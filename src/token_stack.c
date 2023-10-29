@@ -10,36 +10,41 @@
  */
 
 #include "token_stack.h"
+#define STACK_SIZE 4
 
-void init(token_stack* token_stack, int capacity) {
-    token_stack->token_array = malloc(capacity * sizeof(token_t));
+void init(token_stack* token_stack) {
+    
+    token_stack->token_array = (token_t**) malloc(STACK_SIZE * sizeof(token_t*));
     token_stack->size = 0;
-    token_stack->capacity = capacity;
+    token_stack->capacity = STACK_SIZE;
+    
 }
 
-void push(token_stack* token_stack, token_t token) {
+void push(token_stack* token_stack, token_t* token) {
 
     if (token_stack->size == token_stack->capacity-1) {
 
         token_stack->capacity *= 2;
-        token_stack->token_array = realloc(token_stack->token_array, token_stack->capacity * sizeof(token_t));
+        token_stack->token_array = realloc(token_stack->token_array, token_stack->capacity * sizeof(token_t*));
     }
 
     token_stack->token_array[token_stack->size++] = token;
 }
 
-token_t pop(token_stack* token_stack) {
+void pop(token_stack* token_stack) {
     if (token_stack->size == 0) {
      // or some other error value
+    return;
     }
-    return token_stack->token_array[--token_stack->size];
+    token_stack->size--;
 }
 
-token_t top(token_stack* token_stack) {
+token_t* top(token_stack* token_stack) {
     if (token_stack->size == 0) {
         // or some other error value
+        return NULL;
     }
-    return token_stack->token_array[token_stack->size - 1];
+    return token_stack->token_array[token_stack->size-1];
 }
 
 bool is_empty(token_stack* token_stack) {
@@ -48,4 +53,6 @@ bool is_empty(token_stack* token_stack) {
 
 void dispose_stack(token_stack* token_stack) {
     free(token_stack->token_array);
+    free(token_stack);
+    token_stack = NULL;
 }

@@ -21,7 +21,7 @@
  * along with the current size and capacity of the stack.
  */
 typedef struct {
-    token_t* token_array;
+    token_t** token_array;
     int size;
     int capacity;
 } token_stack;
@@ -35,9 +35,8 @@ typedef struct {
  * the size and capacity of the stack to 0 and the given capacity, respectively.
  * 
  * @param token_stack A pointer to the token stack to be initialized.
- * @param capacity The capacity of the token stack.
  */
-void init(token_stack* token_stack, int capacity);
+void init(token_stack* token_stack);
 
 /**
  * @brief Pushes a token onto the top of the stack.
@@ -48,7 +47,7 @@ void init(token_stack* token_stack, int capacity);
  * @param token_stack A pointer to the token stack.
  * @param token The token to be pushed onto the stack.
  */
-void push(token_stack* token_stack, token_t token);
+void push(token_stack* token_stack, token_t* token);
 
 /**
  * @brief Pops a token from the top of the stack.
@@ -59,7 +58,7 @@ void push(token_stack* token_stack, token_t token);
  * @param token_stack A pointer to the token stack.
  * @return The token popped from the top of the stack.
  */
-token_t pop(token_stack* token_stack);
+void pop(token_stack* token_stack);
 
 /**
  * @brief Returns the token at the top of the stack.
@@ -70,7 +69,7 @@ token_t pop(token_stack* token_stack);
  * @param token_stack A pointer to the token stack.
  * @return The token at the top of the stack.
  */
-token_t top(token_stack* token_stack);
+token_t* top(token_stack* token_stack);
 
 /**
  * @brief Checks if the stack is empty.

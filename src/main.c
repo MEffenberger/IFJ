@@ -13,6 +13,7 @@
 
 //#include "parser.h"
 #include "scanner.h"
+#include "token_stack.h"
 
 
 alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
@@ -21,14 +22,21 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 
 int main() { 
     //parser();
-    token_t** token_array;
-    token_array = malloc(100*sizeof(token_t*));
+    //token_t** token_array;
+    token_stack* stack;
+    init(stack);
+   // token_array = malloc(100*sizeof(token_t*));
 
-    for(int i = 0; i < 100; i++){
+    for(int i = 0; i < 10; i++){
         token_t* token = get_me_token();
-        token_array[i] = token;
+        push(stack, token);
+        printf("%d\n", stack->token_array[i]->type);
     }
 
+
+
+    
+    /*
     for (int i = 0; i < 100; i++)
     {
         //printf("\n, %d, \n", token_array[i]->type);
@@ -180,7 +188,7 @@ int main() {
 
 
 
-    
+    /*
     for (int i = 0; i < 100; i++)
     {   
         if(token_array[i]->value.vector){
@@ -190,7 +198,7 @@ int main() {
     }
     free(token_array);
 
-    
+    */
     
     //free(token_array[1]);
     //free(token_array);
