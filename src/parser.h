@@ -17,7 +17,12 @@
 #include "symtable.h"
 #include "forest.h"
 
+#define MAX_TOKENS 7
 
-void parser ();
+
+extern token_t *current_token; // Pointer to the current token
+extern token_t *token_buffer[MAX_TOKENS]; // Buffer for tokens
+extern token_buffer_cnt; // Index of the last token in the buffer
+
 
 #endif //IFJ_PARSER_H
