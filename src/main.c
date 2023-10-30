@@ -18,9 +18,6 @@
 alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 
 
-int main() { 
-    printf("MAIN:\n");
-    
-    
+int main() {     
     return parser_parse_please();
 }
