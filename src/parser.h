@@ -19,6 +19,9 @@
 #include "queue.h"
 
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
+#define BACK_TO_PARENT_IN_FOREST active = active->parent;
+
+
 
 /**
  * @brief info message
@@ -48,7 +51,6 @@ f_keyword_t convert_kw(keyword_t kw);
 char *get_name(keyword_t kw);
 
 
-void back_to_parent_in_forest();
 void peek();
 token_t* get_next_token();
 
@@ -138,7 +140,7 @@ void arg();
 void args_n();
 
 /**
- * @brief <condition> -> if <exp> { <body> } <else> { <body> } | if let id { <body> } <else> { <body> }
+ * @brief <condition> -> if <exp> { <body> } else { <body> } | if let id { <body> } else { <body> }
  */
 void condition();
 

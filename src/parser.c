@@ -57,15 +57,6 @@ data_type convert_dt(token_t* token) {
 }
 
 
-/**
- * @brief If the token is a right bracket, the forest is updated and the active node is changed
- */
-void back_to_parent_in_forest(){
-    if (current_token->type == TOKEN_RIGHT_BRACKET) {
-        active = active->parent;
-    }
-}
-
 
 /**
  * @brief Looks to another token in the input using get_me_token()
@@ -202,7 +193,7 @@ void func_def () {
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
-                        back_to_parent_in_forest();
+                        BACK_TO_PARENT_IN_FOREST;
                         
                         printf("-- returning...\n\n");
                         return;
@@ -422,7 +413,7 @@ void body() {
         peek();
         if (token_buffer->type == TOKEN_EQ) {
             // check if the id is in symtable, so the variable is declared
-            if (symtable_search(active->symtable, current_token->value.vector->array) == NULL) {
+            if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             assign();
@@ -466,9 +457,9 @@ void body() {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
     }
     
- // TODO: problém když skončí assign nebo var_def, tak v current_token je už další token (ukončí to expression)zatímco cycle, 
+ // TODO: problém když skončí assign nebo var_def, tak v current_token je už další token (ukončí to expression), zatímco cycle, 
  // condition a func_call končí závorkami, tudíž v current_token je RIGHT_BRACKET nebo RPAR a prog() pak načítá nový relevatní token
-    
+ // -- body tedy urcite ocekava uz nacteny prvni relevantni token, jde ale o to s cim v current_token bude končit
     printf("-- returning...\n\n");
     return;
 }
@@ -624,7 +615,7 @@ void args() {
             printf("-- returning...\n\n");
             return;
         }
-        else if (current_token->type = TOKEN_COMMA) {
+        else if (current_token->type == TOKEN_COMMA) {
             args_n();
         }
         else {
@@ -671,7 +662,7 @@ void args_n() {
         printf("-- returning...\n\n");
         return;
     }
-    else if (current_token->type = TOKEN_COMMA) {
+    else if (current_token->type == TOKEN_COMMA) {
         args_n();
     }
     else {
@@ -679,10 +670,14 @@ void args_n() {
     }
 }
 
+
 void condition() {
-    // <condition> -> if <exp> { <body> } <else> { <body> } | if let id { <body> } <else> { <body> }
+    // <condition> -> if <exp> { <body> } else { <body> } | if let id { <body> } else { <body> }
     printf("-- entering CONDITION --\n");
     print_debug(current_token, 2, debug_cnt);
+
+
+    MAKE_CHILDREN_IN_FOREST(W_IF, "if"); // TODO: name for the "if" scope? just "if" or should be unique("if_n")?
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -694,29 +689,71 @@ void condition() {
 
         if (current_token->type == TOKEN_ID) {
             // check if the id is in symtable, so the variable is declared
-            if (symtable_search(active->symtable, current_token->value.vector->array) == NULL) {
+            if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
         }
         else {
-            error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using \"let id\"");
+            error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using if \"let id\"");
         }
-
     }
     else {
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
     }
 
+
     if (current_token->type == TOKEN_LEFT_BRACKET) {
-        // body ocekava ze prvni token pro neho relevantni je v current
-        body();
         
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+
+        body();
+
+        if (current_token->type == TOKEN_RIGHT_BRACKET) {
+            // closing bracket of if statement, go back to parent in forest
+            BACK_TO_PARENT_IN_FOREST;
+
+            current_token = get_next_token();
+            print_debug(current_token, 1, debug_cnt++);
+
+            if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword == KW_ELSE) {
+                MAKE_CHILDREN_IN_FOREST(W_ELSE, "else"); // TODO: name for the "else" scope? just "else" or should be unique("else_n")?
+
+                current_token = get_next_token();
+                print_debug(current_token, 1, debug_cnt++);
+
+                if (current_token->type == TOKEN_LEFT_BRACKET) {
+                    current_token = get_next_token();
+                    print_debug(current_token, 1, debug_cnt++);
+
+                    body();
+
+                    if (current_token->type == TOKEN_RIGHT_BRACKET) {
+                        // closing bracket of else statement, go back to parent in forest
+                        BACK_TO_PARENT_IN_FOREST;
+                        printf("-- returning...\n\n");
+                        return;
+                    }
+                    else {
+                        error_exit(ERROR_SYN, "PARSER", "Missing right bracket in else statement");
+                    }
+                }
+                else {
+                    error_exit(ERROR_SYN, "PARSER", "Missing left bracket in else statement");
+                }
+            }
+            else {
+                error_exit(ERROR_SYN, "PARSER", "Missing else statement");
+            }
+        }
+        else {
+            error_exit(ERROR_SYN, "PARSER", "Missing right bracket in if statement");
+        }
     }
-
-
-
-    
+    else {
+        error_exit(ERROR_SYN, "PARSER", "Missing left bracket in if statement");
+    }
 }
 
 
@@ -726,6 +763,34 @@ void cycle() {
     printf("-- entering CYCLE --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    MAKE_CHILDREN_IN_FOREST(W_WHILE, "while"); // TODO: name for the "while" scope? just "while" or should be unique("while_n")?
+
+    current_token = get_next_token();
+    print_debug(current_token, 1, debug_cnt++);
+
+    //expression_parser(); calling with the first token of expression in current_token
+    //when expr-parser returns, current_token is first token after the expression
+
+    if (current_token->type == TOKEN_LEFT_BRACKET) {
+       
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+
+        body();
+
+        if (current_token->type == TOKEN_RIGHT_BRACKET) {
+            // closing bracket of while statement, go back to parent in forest
+            BACK_TO_PARENT_IN_FOREST;
+            printf("-- returning...\n\n");
+            return;
+        }
+        else {
+            error_exit(ERROR_SYN, "PARSER", "Missing right bracket in while statement");
+        }
+    }
+    else {
+        error_exit(ERROR_SYN, "PARSER", "Missing left bracket in while statement");
+    }
 }
 
 int parser_parse_please () {

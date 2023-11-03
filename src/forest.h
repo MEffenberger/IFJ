@@ -21,6 +21,7 @@ typedef enum f_keyword {
     W_FUNCTION,
     W_IF,
     W_ELSE,
+    W_WHILE,
     W_NONE
 } f_keyword_t;
 
