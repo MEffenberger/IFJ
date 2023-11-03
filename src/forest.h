@@ -54,6 +54,16 @@ forest_node *forest_insert_global();
  */
 void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_node **active);
 
+
+/**
+ * @brief Search if the function is already defined in the global scope
+ * 
+ * @param global Pointer to the global node (root of the forest)
+ * @param key Key of the function to search for
+ * @return forest_node* Pointer to the function if found, NULL otherwise
+ */
+forest_node* forest_search_function(forest_node *global, char *key);
+
 /**
  * @brief Searches for a symbol in the symbol table of the node (and its parents if not found)
  * 

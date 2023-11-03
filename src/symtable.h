@@ -33,7 +33,6 @@ typedef enum e_var_type {
 
 // Struct for the data of the symbol
 typedef struct symbol_data {
-    bool declared;
     bool defined; // initialized
 
     // Variable

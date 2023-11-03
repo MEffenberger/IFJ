@@ -17,6 +17,8 @@ token_t *token_buffer[2] = {NULL, NULL}; // Buffer for tokens
 int token_buffer_cnt = 0; // Index of the last token in the buffer
 queue_t *queue = NULL; // Queue for the expression parser
 sym_data data = {0};
+var_type letvar = -1;
+bool is_defined = false;
 
 
 
@@ -111,7 +113,7 @@ void peek() {
         token->prev_was_eol = true;
     }
 
-    token_buffer[token_buffer_cnt] = token;
+    token_buffer[0] = token;
     token_buffer_cnt++;
 }
 
@@ -223,7 +225,7 @@ void func_def () {
                     //// TODO: FUNCBODY AAAAA
                     func_body();
 
-                    //mam uz tu zavorku?
+                    //mam uz tu slozenou zavorku
                     
                     // ---------------
 
@@ -237,17 +239,14 @@ void func_def () {
                     else {
                         error_exit(ERROR_SYN, "PARSER", "Missing right bracket in function definition");
                     }
-
                 }
                 else {
                     error_exit(ERROR_SYN, "PARSER", "Missing left bracket in function definition");
                 }
-
             }
             else {
                 error_exit(ERROR_SYN, "PARSER", "Missing right paranthesis in function deinifition");
             }
-    
         }
         else {
             error_exit(ERROR_SYN, "PARSER", "Missing left paranthesis in function definition");
@@ -266,6 +265,7 @@ void params() {
 
     // void function
     if (current_token->type == TOKEN_RPAR) {
+        printf("-- returning...\n\n");
         return;
     }
     
@@ -421,6 +421,11 @@ void func_body() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
+    if (current_token->type == TOKEN_RIGHT_BRACKET) {
+        printf("-- returning...\n\n");
+        return;
+    }
+
     body();
 
     //
@@ -435,113 +440,107 @@ void body() {
     printf("-- entering BODY --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-
-    // if (current_token->type == TOKEN_EOL) { // if EOL: <body> = eps
-    // printf("-- returning...\n\n");
-    //     return;
-    // }
-
-
-    switch (current_token->type){
-        case TOKEN_ID:
-            
-            peek();
-            if (token_buffer[0]->type == TOKEN_EQ) {
-                assign();
+    if (current_token->type == TOKEN_ID) {
+        peek();
+        if (token_buffer[0]->type == TOKEN_EQ) {
+            // check if the id is in symtable, so the variable is declared
+            if (symtable_search(active->symtable, current_token->value.vector->array) == NULL) {
+                error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
-            else if (token_buffer[0]->type == TOKEN_LPAR) {
-                // current token je ID pri vstupu do func_call
-                func_call();
+            assign();
+        }
+        else if (token_buffer[0]->type == TOKEN_LPAR) {
+            // check if the id is forest, so the function is defined
+            if (true) { //// TODO: check if the function is defined 
+                error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
             }
-            else { // problem s EOLem auaua zahazovat nevim vubec
-                error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
-            }
-
-
-            
-
-
-        case TOKEN_KEYWORD:
-            switch (current_token->value.keyword) {
-                case KW_LET:
-                case KW_VAR:
-                    var_def();
-
-
-
-                    break;
-                case KW_IF:
-                    condition();
-                    break;
-                case KW_WHILE:
-
-                    //cycle();                       
-                    break;
-                default:
-                    break;
-            }
-
-
-
-        default:
+            func_call();
+        }
+        else {
             error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
-            break;
+        }
+    }
+    else if (current_token->type == TOKEN_KEYWORD) {
+        switch (current_token->value.keyword) {
+            case KW_LET:
+                letvar = LET;
+                var_def();
+                break;
 
+            case KW_VAR:
+                letvar = VAR;
+                var_def();
+                break;
+
+            case KW_IF:
+                condition();
+                break;
+
+            case KW_WHILE:
+                //cycle();                       
+                break;
+
+            default:
+                break;
+        }
+    }
+    else {
+        error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
     }
     
-
-
-
-
+    printf("-- returning...\n\n");
+    return;
 }
 
 void var_def() {
     // <var_def> -> let id <opt_var_def> | var id <opt_var_def>
     printf("-- entering VAR_DEF --\n");
     print_debug(current_token, 2, debug_cnt);
-
-
-    // zpracovat VAR nebo LET informaci do symbolu
    
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
+        if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
+        }
+        // store variable's name
+        queue_push(queue, current_token);
         opt_var_def();
+
+        // insert variable to symtable
+        //TODO:data = set_data_var(data, false, convert_dt(queue->first->token), letvar, 0, 0.0, NULL);
+        //TODO:symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
+        queue_dispose(queue);
+        return;
     }
     else {
         error_exit(ERROR_SYN, "PARSER", "Missing identifier in variable definition");
     }
-
-
 }
 
 void opt_var_def() {
     // <opt_var_def> -> : <type> | <assign> | : <type> <assign>
     printf("-- entering OPT_VAR_DEF --\n");
     print_debug(current_token, 2, debug_cnt);
-
     
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
-
-
-
+    peek();    
     if (token_buffer[0]->type == TOKEN_COLON) {
-        // kdyz bude ":" tak ho nacti a nacti ocekavany type na nim
+        
+        // get TOKEN_COLON from buffer
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
+        printf("herereer\n");
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
+        printf("hereresssser\n");
         type();
-        // current_token je ten type (Int)
 
-
+        peek();
         if (token_buffer[0]->type == TOKEN_EQ) {
-
+            is_defined = true;
             assign();
         }
         else {
@@ -549,10 +548,13 @@ void opt_var_def() {
             return;
         }
     }
-    else { // neni tam ":" (je tam "=" / ((((nebo neco jineho)))))
+    else if (token_buffer[0]->type == TOKEN_EQ) {
+        is_defined = true;
         assign();
     }
-
+    else {
+        error_exit(ERROR_SYN, "PARSER", "Unexpected token in variable definition");
+    }
 }
 
 void assign() {
@@ -560,16 +562,33 @@ void assign() {
     printf("-- entering ASSIGN --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-    // jsi v assign, nacti "=" a pokracuj
+    // get TOKEN_EQ from buffer 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
-    // id = / letvar id =   momentalne
+    // here: id = | var id = | let id = 
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
-    // musi byt ID (za =)
+
+    if (current_token->type == TOKEN_ID) {
+        peek();
+        if (token_buffer[0]->type == TOKEN_LPAR) {
+            if (true) //TODO
+            func_call();
+        }
+        else {
+            // expression parser call (first id is in current_token, second is in peek buffer)
+        }
+
+
+    }    
+
+
+
+
+
+
     if (current_token->type == TOKEN_ID) {
 
         // --------------------------------------------------------------------
@@ -582,7 +601,6 @@ void assign() {
         else {
             // expression parser call (first id is in current_token, second is in peek buffer)
         }
-
     }
     else {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token during assigning");
@@ -595,23 +613,16 @@ void func_call() {
     printf("-- entering FUNC_CALL --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    
-    // volam z body: current token je ID pri vstupu do func_call (v bufferu je LPAR)
-
-    // volam z assign:
-
-    // načtu leovu zavorku
+    // get TOKEN_LPAR from buffer
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
     args();
 
-    // načtu pravou zavorku
-    // current_token = get_next_token();
-    // print_debug(current_token, 1, debug_cnt++);
-    
-    // args se vrati a current token je prava zavorka
-    
+    // get TOKEN_RPAR from buffer
+    current_token = get_next_token();
+    print_debug(current_token, 1, debug_cnt++);
+
     if (current_token->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
@@ -630,7 +641,6 @@ void args() {
 
     peek();
     if (token_buffer[0]->type == TOKEN_RPAR) {
-        // <args> -> eps
         printf("-- returning...\n\n");
         return;
     }
@@ -648,8 +658,6 @@ void arg() {
     printf("-- entering ARG --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-    // nactem to neco co neni RPAR nebo carka
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
@@ -699,7 +707,7 @@ void args_n() {
         args();
     }
     else {
-        error_exit(ERROR_SYN, "PARSER", "Neni zavorka ani carka chyba pomoc");
+        error_exit(ERROR_SYN, "PARSER", "Unexpected token in function call");
     }
 }
 
@@ -761,6 +769,8 @@ int parser_parse_please () {
     printf("\n---------------------\n");
     printf("Parser parse please\n");
     printf("---------------------\n\n");
+
+    queue = (queue_t*)allocate_memory(sizeof(queue_t *), "queue", BASIC);
     init_queue(queue);
     forest_node *global = forest_insert_global();
     active = global;

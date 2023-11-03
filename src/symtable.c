@@ -21,7 +21,6 @@
 // }
 
 void data_init(sym_data *data){
-    data->declared = true;
     data->defined = false; // initialized
 
     data->is_var = false;

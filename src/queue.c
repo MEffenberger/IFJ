@@ -13,8 +13,8 @@
 #include "queue.h"
 
 void init_queue(queue_t *queue) {
-    q->first = NULL;
-    q->last = NULL;
+    queue->first = NULL;
+    queue->last = NULL;
 }
 
 void queue_push(queue_t *queue, token_t *token){
@@ -54,7 +54,7 @@ void queue_dispose(queue_t *queue) {
     queue->last = NULL;
 }
 
-/// CHCE TO VIC PROMYSLET ABY SE TO DALO OBECNE POUZIT
-void validate_and_insert (queue_t *queue){
+// /// CHCE TO VIC PROMYSLET ABY SE TO DALO OBECNE POUZIT
+// void validate_and_insert (queue_t *queue){
 
-}
+// }
