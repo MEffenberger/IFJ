@@ -41,6 +41,7 @@ void data_init(sym_data *data){
 
 sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value) {
     data_init(&data);
+    data.is_var = true;
     data.defined = initialized;
     data.data_type = data_type;
     data.var_type = var_type;
@@ -50,15 +51,17 @@ sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_
     return data;
 }
 
-sym_data set_data_func(sym_data *data, bool defined, data_type return_type) {
+sym_data set_data_func(sym_data *data, data_type return_type) {
     data_init(data);
-    data->defined = defined;
+    data->is_func = true;
+    data->defined = true;
     data->return_type = return_type;
     return *data;
 }
 
 sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) {
     data_init(data);
+    data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
     return *data;

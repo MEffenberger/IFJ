@@ -15,42 +15,74 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
 token_t *token_buffer[2] = {NULL, NULL}; // Buffer for tokens
 int token_buffer_cnt = 0; // Index of the last token in the buffer
+queue_t *queue = NULL; // Queue for the expression parser
+sym_data data = {0};
+
+
 
 int debug_cnt = 1;
 
 
-f_keyword_t convert_kw(keyword_t kw) {
-    switch (kw) {
-        case KW_GLOBAL:
-            return W_GLOBAL;
-        case KW_FUNC:
-            return W_FUNCTION;
-        case KW_IF:
-            return W_IF;
-        case KW_ELSE:
-            return W_ELSE;
-        default:
-            return W_NONE;
+// f_keyword_t convert_kw(keyword_t kw) {
+//     switch (kw) {
+//         case KW_FUNC:
+//             return W_FUNCTION;
+//         case KW_IF:
+//             return W_IF;
+//         case KW_ELSE:
+//             return W_ELSE;
+//         default:
+//             return W_NONE;
+//     }
+// }
+
+
+// char *get_name(keyword_t kw) {
+//     switch (kw) {
+//         case KW_FUNC:
+//             peek();
+//             return token_buffer[0]->value.vector->array;
+//         case KW_IF:
+//             return "if";
+//         case KW_ELSE:
+//             return "else";
+//         default:
+//             return "none";
+//     }
+// }
+
+data_type convert_dt(token_t* token) {
+    if (token->type == TOKEN_KEYWORD) {
+        switch (token->value.keyword) {
+            case KW_INT:
+                return T_INT;
+            case KW_DOUBLE:
+                return T_DOUBLE;
+            case KW_STRING:
+                return T_STRING;
+            case KW_NIL:
+                return T_NIL;
+            default:
+                return -1;
+        }
+    }
+    else if (token->type == TOKEN_KEYWORD_QM) {
+        switch (token->value.keyword) {
+            case KW_INT:
+                return T_INT_Q;
+            case KW_DOUBLE:
+                return T_DOUBLE_Q;
+            case KW_STRING:
+                return T_STRING_Q;
+            default:
+                return -1;
+        }
+    }
+    else {
+        return -1;
+    
     }
 }
-
-
-char *get_name(keyword_t kw) {
-    switch (kw) {
-        case KW_GLOBAL:
-            return "global";
-        case KW_FUNC:
-            peek();
-            return token_buffer[0]->value.vector->array;
-        case KW_IF:
-            return "if";
-        case KW_ELSE:
-            return "else";
-        default:
-            return "none";
-    }
-}
-
 
 
 /**
@@ -64,27 +96,38 @@ void back_to_parent_in_forest(){
 
 
 /**
- * @brief Looks to another token in the input using get_m e_token()
+ * @brief Looks to another token in the input using get_me_token()
  */
 void peek() {
     token_t *token = get_me_token();
+    
+    // mechanism for detecting EOLs
+    bool eol = false;
+    while (token->type == TOKEN_EOL) {
+        token = get_me_token();
+        eol = true;
+    }
+    if (eol) {
+        token->prev_was_eol = true;
+    }
+
     token_buffer[token_buffer_cnt] = token;
     token_buffer_cnt++;
 }
 
-/**
- * @brief Returns the index of the first non-NULL token in the buffer
- * 
- * @return int Index of the first non-NULL token in the buffer
- */
-int first_index_in_token_buffer() {
+// /**
+//  * @brief Returns the index of the first non-NULL token in the buffer
+//  * 
+//  * @return int Index of the first non-NULL token in the buffer
+//  */
+// int first_index_in_token_buffer() {
 
-    for (int i = 0; i < token_buffer_cnt; i++) {
-        if (token_buffer[i] != NULL) {
-            return i;
-        }
-    }
-}
+//     for (int i = 0; i < token_buffer_cnt; i++) {
+//         if (token_buffer[i] != NULL) {
+//             return i;
+//         }
+//     }
+// }
 
 
 
@@ -96,13 +139,23 @@ token_t* get_next_token() {
         if (current_token != NULL) {
             free(current_token); // token_delete();
         }
-        return get_me_token();
+        token_t* token = get_me_token();
+
+        // mechanism for detecting EOLs
+        bool eol = false;
+        while (token->type == TOKEN_EOL) {
+            token = get_me_token();
+            eol = true;
+        }
+        if (eol) {
+            token->prev_was_eol = true;
+        }
+
+        return token;
     } 
     else {
-
-
-        token_t* tmp = token_buffer[first_index_in_token_buffer()];
-        token_buffer[first_index_in_token_buffer()] = NULL;
+        token_t* tmp = token_buffer[0];
+        token_buffer[0] = NULL;
         return tmp;
 
     }
@@ -125,7 +178,6 @@ void prog () {
         return;
     }
     else if (current_token->value.keyword == KW_FUNC) {
-        //MAKE_CHILDREN_IN_FOREST();
         func_def();
         prog();
     }
@@ -144,27 +196,41 @@ void func_def () {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
+        MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
         current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+        print_debug(current_token, 1, debug_cnt++);
 
         if (current_token->type == TOKEN_LPAR) {
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
 
             params();
+
             if (current_token->type == TOKEN_RPAR) {
                 current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
+                print_debug(current_token, 1, debug_cnt++);
 
                 ret_type();
 
+                // insert function with its return type to symtable
+                data = set_data_func(&data, convert_dt(queue->first->token));
+                symtable_insert(&active->symtable, active->name, data);
+                queue_dispose(queue);
+
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
 
+                    // ---------------
+                    //// TODO: FUNCBODY AAAAA
                     func_body();
 
                     //mam uz tu zavorku?
                     
+                    // ---------------
+
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
+                        // func_def ends, go back to parent in forest
+                        back_to_parent_in_forest();
+                        
                         printf("-- returning...\n\n");
                         return;
                     }
@@ -179,12 +245,12 @@ void func_def () {
 
             }
             else {
-                error_exit(ERROR_SYN, "PARSER", "Missing right paranthesis");
+                error_exit(ERROR_SYN, "PARSER", "Missing right paranthesis in function deinifition");
             }
     
         }
         else {
-            error_exit(ERROR_SYN, "PARSER", "Missing left paranthesis");
+            error_exit(ERROR_SYN, "PARSER", "Missing left paranthesis in function definition");
         }
     }
     else {
@@ -198,14 +264,15 @@ void params() {
     printf("-- entering PARAMS --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-
+    // void function
+    if (current_token->type == TOKEN_RPAR) {
+        return;
+    }
     
     par_name();
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
-
     
     par_id();
 
@@ -223,8 +290,13 @@ void params() {
         error_exit(ERROR_SYN, "PARSER", "Missing colon in function's parameter");
     }
 
+    // insert parameter to function's symtable
+    data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array);
+    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array , data);
+    queue_dispose(queue);
+
     current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+    print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
@@ -246,6 +318,8 @@ void par_name() {
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
+        // store parameter's name
+        queue_push(queue, current_token);
         printf("-- returning...\n\n");
         return;
     }
@@ -262,6 +336,8 @@ void par_id() {
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
+        // store parameter's id
+        queue_push(queue, current_token);
         printf("-- returning...\n\n");
         return;
     }
@@ -277,7 +353,8 @@ void type() {
 
     if (current_token->type == TOKEN_KEYWORD || current_token->type == TOKEN_KEYWORD_QM) {
         if (current_token->value.keyword == KW_INT || current_token->value.keyword == KW_DOUBLE || current_token->value.keyword == KW_STRING || current_token->value.keyword == KW_NIL) {
-            //symbol info
+            // store type
+            queue_push(queue, current_token);
             printf("-- returning...\n\n");
             return;
         }
@@ -297,15 +374,15 @@ void params_n() {
     print_debug(current_token, 2, debug_cnt);
 
     
-        peek();
-        if (token_buffer[0]->type != TOKEN_ID) {
-            error_exit(ERROR_SYN, "PARSER", "Missing identifier of function's parameter");
-        }
-        else {
-            current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
-            params();
-        }
+    peek();
+    if (token_buffer[0]->type != TOKEN_ID) {
+        error_exit(ERROR_SYN, "PARSER", "Missing identifier of function's parameter");
+    }
+    else {
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+        params();
+    }
     
 }
 
@@ -314,25 +391,24 @@ void ret_type() {
     printf("-- entering RET_TYPE --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
     if (current_token->type == TOKEN_RET_TYPE) {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
+
         type();
+
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-printf("-- returning...\n\n");
+        printf("-- returning...\n\n");
         return;
     }
-    else { // void function
-        if (token_buffer[0]->type != TOKEN_LEFT_BRACKET) {
-            error_exit(ERROR_SYN, "PARSER", "Unexpected token in function's return type");
-        }
-        else {
-            printf("-- returning...\n\n");
-            return;
-        }
+    else if (current_token->type == TOKEN_LEFT_BRACKET) { // void function
+        printf("-- returning...\n\n");
+        return;
+    }
+    else {
+        error_exit(ERROR_SYN, "PARSER", "Unexpected token in function's return type");
     }
 }
 
@@ -342,10 +418,13 @@ void func_body() {
     printf("-- entering FUNC_BODY --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
+
+    body();
+
+    //
+
 
 
 }
@@ -358,10 +437,10 @@ void body() {
 
 
 
-    if (current_token->type == TOKEN_EOL) { // if EOL: <body> = eps
-    printf("-- returning...\n\n");
-        return;
-    }
+    // if (current_token->type == TOKEN_EOL) { // if EOL: <body> = eps
+    // printf("-- returning...\n\n");
+    //     return;
+    // }
 
 
     switch (current_token->type){
@@ -639,7 +718,7 @@ void condition() {
 
         if (current_token->type == TOKEN_ID) {
 
-            //zalezi co vraci expression parser
+            // zalezi co vraci expression parser
             // current_token = get_next_token();
             // print_debug(current_token, 1, debug_cnt++);
 
@@ -682,9 +761,9 @@ int parser_parse_please () {
     printf("\n---------------------\n");
     printf("Parser parse please\n");
     printf("---------------------\n\n");
-    // sym_data data = {0};
-    // forest_node *global = forest_insert_global();
-    // active = global;
+    init_queue(queue);
+    forest_node *global = forest_insert_global();
+    active = global;
 
     
     //volam prog
@@ -700,7 +779,7 @@ int parser_parse_please () {
 }
 
 
-
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 void print_debug(token_t *token, int mode, int cnt) {
     if (token != NULL) {

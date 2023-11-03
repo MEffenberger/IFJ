@@ -69,6 +69,7 @@ token_t* get_me_token(){
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
     token->value.vector = NULL;
+    token->prev_was_eol = false;
     token->value.integer = 0;
     token->value.type_double = 0.0;
     char hex[8] = {0};

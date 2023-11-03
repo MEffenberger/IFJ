@@ -143,6 +143,7 @@ typedef struct token {
     token_type_t type;
     int line;
     bool question_mark;
+    bool prev_was_eol;
 } token_t;
 
 token_t* get_me_token();

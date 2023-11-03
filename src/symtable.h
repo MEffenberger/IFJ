@@ -99,7 +99,7 @@ sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_
  * @param defined If the function is defined
  * @param return_type Return type of the function
  */
-sym_data set_data_func(sym_data *data, bool defined, data_type return_type);
+sym_data set_data_func(sym_data *data, data_type return_type);
 
 /**
  * @brief Set the parameter's data

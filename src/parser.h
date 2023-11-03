@@ -16,9 +16,9 @@
 #include "scanner.h"
 #include "symtable.h"
 #include "forest.h"
+#include "queue.h"
 
-
-#define MAKE_CHILDREN_IN_FOREST() forest_insert(active, convert_kw(current_token->value.keyword), get_name(current_token->value.keyword), &active);
+#define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 
 /**
  * @brief info message
