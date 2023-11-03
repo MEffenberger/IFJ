@@ -71,6 +71,10 @@ void back_to_parent_in_forest(){
  * @brief Looks to another token in the input using get_me_token()
  */
 void peek() {
+    if (token_buffer != NULL) {
+        printf("\nWARNING: peek() voláš podruhé a token_buffer se přepíše!!! exit(1)...\n");
+        exit(1);
+    }
     token_t *token = get_me_token();
     
     // mechanism for detecting EOLs
@@ -191,7 +195,6 @@ void func_def () {
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
 
                     // ---------------
-                    // TODO: 
                     func_body();
 
                     // current_token->type == TOKEN_RIGHT_BRACKET
@@ -380,7 +383,7 @@ void ret_type() {
 
 
 void func_body() {
-    // <func_body> -> <body> <ret> <body>
+    // <func_body> -> <body> <body> <body> ?!?!? <ret> <body>
     printf("-- entering FUNC_BODY --\n");
     print_debug(current_token, 2, debug_cnt);
 
@@ -392,11 +395,18 @@ void func_body() {
         return;
     }
 
+    // TODO: dodělat func_body, totiž body očekává první relevatní token v current_token, ale provede se jedno body, tj. jeden if
+    // nebo jeden var_def atd. takže asi body(); ve smyčce dokud není return nebo RIGHT_BRACKET, pak může body() ale ještě klidně 
+    // pokračovat omg (nebo void funkce), momentalně na toto schází mentální kapacita
+
     body();
 
-    //
+}
 
-
+void ret() {
+    // <ret> -> return <exp> | eps
+    printf("-- entering RET --\n");
+    print_debug(current_token, 2, debug_cnt);
 
 }
 
@@ -405,6 +415,8 @@ void body() {
     // <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call>
     printf("-- entering BODY --\n");
     print_debug(current_token, 2, debug_cnt);
+
+    // note: když je <body> -> eps, tak body() se vůbec nezavolá
 
     if (current_token->type == TOKEN_ID) {
         peek();
@@ -416,10 +428,10 @@ void body() {
             assign();
         }
         else if (token_buffer->type == TOKEN_LPAR) {
-            // check if the id is forest, so the function is defined
-            if (true) { //// TODO: check if the function is defined 
-                error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
-            }
+            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
+            // if (false) {  
+            //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
+            // }
             func_call();
         }
         else {
@@ -454,6 +466,9 @@ void body() {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
     }
     
+ // TODO: problém když skončí assign nebo var_def, tak v current_token je už další token (ukončí to expression)zatímco cycle, 
+ // condition a func_call končí závorkami, tudíž v current_token je RIGHT_BRACKET nebo RPAR a prog() pak načítá nový relevatní token
+    
     printf("-- returning...\n\n");
     return;
 }
@@ -475,8 +490,13 @@ void var_def() {
         opt_var_def();
 
         // insert variable to symtable
-        //TODO:data = set_data_var(data, false, convert_dt(queue->first->token), letvar, 0, 0.0, NULL);
-        //TODO:symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
+        if (queue->first->next == NULL) {
+            // TODO: set_data_var: data_type musi byt odvozen z hodnoty (není expicitně zadán)
+        }
+        else {
+            data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
+        }
+        symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
         return;
     }
@@ -496,27 +516,28 @@ void opt_var_def() {
         // get TOKEN_COLON from buffer
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
-        printf("herereer\n");
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-        printf("hereresssser\n");
         type();
+
+        // variable is declared
+        is_defined = false;
 
         peek();
         if (token_buffer->type == TOKEN_EQ) {
-            is_defined = true;
             assign();
+            // variable is defined
+            is_defined = true;
         }
-        else {
-            printf("-- returning...\n\n");
-            return;
-        }
+        printf("-- returning...\n\n");
     }
     else if (token_buffer->type == TOKEN_EQ) {
-        is_defined = true;
         assign();
+        // variable is defined
+        is_defined = true;
+        printf("-- returning...\n\n");
     }
     else {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in variable definition");
@@ -540,37 +561,21 @@ void assign() {
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_LPAR) {
-            if (true) //TODO
+            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
+            // if (false) {  
+            //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
+            // }
             func_call();
         }
         else {
-            // expression parser call (first id is in current_token, second is in peek buffer)
-        }
-
-
-    }    
-
-
-
-
-
-
-    if (current_token->type == TOKEN_ID) {
-
-        // --------------------------------------------------------------------
-        //  help: double peek?! how to recognize if it is func_call or exp?
-        // --------------------------------------------------------------------
-
-        if (token_buffer->type == TOKEN_LPAR) {
-            func_call();
-        }
-        else {
-            // expression parser call (first id is in current_token, second is in peek buffer)
+            //expression_parser(); calling with the first token of expression in current_token
+            //when expr-parser returns, current_token is first token after the expression
         }
     }
     else {
-        error_exit(ERROR_SYN, "PARSER", "Unexpected token during assigning");
-    }
+        //expression_parser(); calling with the first token of expression in current_token
+        //when expr-parser returns, current_token is first token after the expression
+    }    
 }
 
 
@@ -579,15 +584,16 @@ void func_call() {
     printf("-- entering FUNC_CALL --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    // store the function's name for later usage
+    // queue_push(queue, current_token); bacha ve var_def aby se to nebylo, možná druhou queue?
+
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
+    // TODO: hodně validation ze symtable dané funkce, jeslti všechno sedí dle definice
+    // jestli matchuje počet argumentů, jména a datové typy atd.
     args();
-
-    // get TOKEN_RPAR from buffer
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
@@ -613,9 +619,17 @@ void args() {
     else {
         // <args> -> <arg> <args_n>
         arg();
-        args_n();
-        printf("-- returning...\n\n");
-        return;
+
+        if (current_token->type == TOKEN_RPAR) {
+            printf("-- returning...\n\n");
+            return;
+        }
+        else if (current_token->type = TOKEN_COMMA) {
+            args_n();
+        }
+        else {
+            error_exit(ERROR_SYN, "PARSER", "Unexpected token in function call");
+        }
     }
 }
 
@@ -628,30 +642,22 @@ void arg() {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
+        // check if the name of the argument in function call matches the name of the parameter in function definition
+        //
+
         peek();
         if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
-            // načtu ":"
+            // get TOKEN_COLON from buffer
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
             
-            // načtu první věc exp
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
-
-            // expression parser call (first id is in current_token)
-        }
-        else {
-            // <arg> -> exp
-            // expression parser call (first id is in current_token)
         }
     }
-    else {
-        // <arg> -> exp
-        // expression parser call (first id is in current_token)
-    }
-
-
+    //expression_parser(); calling with the first token of expression in current_token
+    //when expr-parser returns, current_token is first token after the expression
 }
 
 void args_n() {
@@ -659,21 +665,17 @@ void args_n() {
     printf("-- entering ARGS_N --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    peek();
-    if (token_buffer->type == TOKEN_RPAR) {
-        // <args_n> -> eps
+    arg();
+
+    if (current_token->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
     }
-    else if (token_buffer->type == TOKEN_COMMA) {
-        // <args_n> -> , <args>
-        current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
-
-        args();
+    else if (current_token->type = TOKEN_COMMA) {
+        args_n();
     }
     else {
-        error_exit(ERROR_SYN, "PARSER", "Unexpected token in function call");
+        error_exit(ERROR_SYN, "PARSER", "Unexpected token in function call, missing right paranthesis or comma between arguments");
     }
 }
 
@@ -682,28 +684,28 @@ void condition() {
     printf("-- entering CONDITION --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword == KW_LET) {
+        // if let id { <body> } <else> { <body> }
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
         if (current_token->type == TOKEN_ID) {
-
-            // zalezi co vraci expression parser
-            // current_token = get_next_token();
-            // print_debug(current_token, 1, debug_cnt++);
-
+            // check if the id is in symtable, so the variable is declared
+            if (symtable_search(active->symtable, current_token->value.vector->array) == NULL) {
+                error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
+            }
         }
         else {
-            //error_exit chyba
+            error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using \"let id\"");
         }
 
     }
     else {
-        // expression parser call (first id is in current_token)
+        //expression_parser(); calling with the first token of expression in current_token
+        //when expr-parser returns, current_token is first token after the expression
     }
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
@@ -717,12 +719,7 @@ void condition() {
     
 }
 
-void ret() {
-    // <ret> -> return <exp> | eps
-    printf("-- entering RET --\n");
-    print_debug(current_token, 2, debug_cnt);
 
-}
 
 void cycle() {
     // <cycle -> while <exp> { <body> }

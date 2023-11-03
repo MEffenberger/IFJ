@@ -72,7 +72,6 @@ AVL_tree *symtable_search(AVL_tree *tree, char *key) {
         return NULL;
     }
     else if (strcmp(tree->key, key) == 0) {
-        printf("found %s\n", key);
         return tree;
     } 
     else if (strcmp(tree->key, key) > 0) {

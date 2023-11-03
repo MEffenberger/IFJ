@@ -23,7 +23,7 @@ typedef enum e_data_type {
     T_INT_Q,
     T_DOUBLE_Q,
     T_STRING_Q,
-    T_NIL
+    T_NIL // void function
 } data_type;
 
 typedef enum e_var_type {
