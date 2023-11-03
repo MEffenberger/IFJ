@@ -30,8 +30,6 @@
 void print_debug(token_t *token, int mode, int cnt);
 
 extern token_t *current_token; // Pointer to the current token
-extern token_t *token_buffer[2]; // Buffer for tokens
-extern int token_buffer_cnt; // Index of the last token in the buffer
 
 /**
  * @brief Converts token keyword to a forest related keyword

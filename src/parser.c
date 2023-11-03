@@ -13,45 +13,15 @@
 
 forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
-token_t *token_buffer[2] = {NULL, NULL}; // Buffer for tokens
-int token_buffer_cnt = 0; // Index of the last token in the buffer
+token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
 sym_data data = {0};
 var_type letvar = -1;
 bool is_defined = false;
-
-
-
 int debug_cnt = 1;
 
 
-// f_keyword_t convert_kw(keyword_t kw) {
-//     switch (kw) {
-//         case KW_FUNC:
-//             return W_FUNCTION;
-//         case KW_IF:
-//             return W_IF;
-//         case KW_ELSE:
-//             return W_ELSE;
-//         default:
-//             return W_NONE;
-//     }
-// }
 
-
-// char *get_name(keyword_t kw) {
-//     switch (kw) {
-//         case KW_FUNC:
-//             peek();
-//             return token_buffer[0]->value.vector->array;
-//         case KW_IF:
-//             return "if";
-//         case KW_ELSE:
-//             return "else";
-//         default:
-//             return "none";
-//     }
-// }
 
 data_type convert_dt(token_t* token) {
     if (token->type == TOKEN_KEYWORD) {
@@ -113,8 +83,7 @@ void peek() {
         token->prev_was_eol = true;
     }
 
-    token_buffer[0] = token;
-    token_buffer_cnt++;
+    token_buffer = token;
 }
 
 // /**
@@ -137,7 +106,7 @@ void peek() {
  * @brief Function to call when want to get a token to current
  */
 token_t* get_next_token() {
-    if (token_buffer_cnt == 0) {
+    if (token_buffer == NULL) {
         if (current_token != NULL) {
             free(current_token); // token_delete();
         }
@@ -156,8 +125,8 @@ token_t* get_next_token() {
         return token;
     } 
     else {
-        token_t* tmp = token_buffer[0];
-        token_buffer[0] = NULL;
+        token_t* tmp = token_buffer;
+        token_buffer = NULL;
         return tmp;
 
     }
@@ -375,7 +344,7 @@ void params_n() {
 
     
     peek();
-    if (token_buffer[0]->type != TOKEN_ID) {
+    if (token_buffer->type != TOKEN_ID) {
         error_exit(ERROR_SYN, "PARSER", "Missing identifier of function's parameter");
     }
     else {
@@ -442,14 +411,14 @@ void body() {
 
     if (current_token->type == TOKEN_ID) {
         peek();
-        if (token_buffer[0]->type == TOKEN_EQ) {
+        if (token_buffer->type == TOKEN_EQ) {
             // check if the id is in symtable, so the variable is declared
             if (symtable_search(active->symtable, current_token->value.vector->array) == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             assign();
         }
-        else if (token_buffer[0]->type == TOKEN_LPAR) {
+        else if (token_buffer->type == TOKEN_LPAR) {
             // check if the id is forest, so the function is defined
             if (true) { //// TODO: check if the function is defined 
                 error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
@@ -525,7 +494,7 @@ void opt_var_def() {
     print_debug(current_token, 2, debug_cnt);
     
     peek();    
-    if (token_buffer[0]->type == TOKEN_COLON) {
+    if (token_buffer->type == TOKEN_COLON) {
         
         // get TOKEN_COLON from buffer
         current_token = get_next_token();
@@ -539,7 +508,7 @@ void opt_var_def() {
         type();
 
         peek();
-        if (token_buffer[0]->type == TOKEN_EQ) {
+        if (token_buffer->type == TOKEN_EQ) {
             is_defined = true;
             assign();
         }
@@ -548,7 +517,7 @@ void opt_var_def() {
             return;
         }
     }
-    else if (token_buffer[0]->type == TOKEN_EQ) {
+    else if (token_buffer->type == TOKEN_EQ) {
         is_defined = true;
         assign();
     }
@@ -573,7 +542,7 @@ void assign() {
 
     if (current_token->type == TOKEN_ID) {
         peek();
-        if (token_buffer[0]->type == TOKEN_LPAR) {
+        if (token_buffer->type == TOKEN_LPAR) {
             if (true) //TODO
             func_call();
         }
@@ -595,7 +564,7 @@ void assign() {
         //  help: double peek?! how to recognize if it is func_call or exp?
         // --------------------------------------------------------------------
 
-        if (token_buffer[0]->type == TOKEN_LPAR) {
+        if (token_buffer->type == TOKEN_LPAR) {
             func_call();
         }
         else {
@@ -640,7 +609,7 @@ void args() {
     print_debug(current_token, 2, debug_cnt);
 
     peek();
-    if (token_buffer[0]->type == TOKEN_RPAR) {
+    if (token_buffer->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
     }
@@ -663,7 +632,7 @@ void arg() {
 
     if (current_token->type == TOKEN_ID) {
         peek();
-        if (token_buffer[0]->type == TOKEN_COLON) {
+        if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
             // načtu ":"
             current_token = get_next_token();
@@ -694,12 +663,12 @@ void args_n() {
     print_debug(current_token, 2, debug_cnt);
 
     peek();
-    if (token_buffer[0]->type == TOKEN_RPAR) {
+    if (token_buffer->type == TOKEN_RPAR) {
         // <args_n> -> eps
         printf("-- returning...\n\n");
         return;
     }
-    else if (token_buffer[0]->type == TOKEN_COMMA) {
+    else if (token_buffer->type == TOKEN_COMMA) {
         // <args_n> -> , <args>
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);

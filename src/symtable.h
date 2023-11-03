@@ -39,9 +39,10 @@ typedef struct symbol_data {
     bool is_var;
     var_type var_type;
     data_type data_type;
-    int int_value;
-    double double_value;
-    char *string_value;
+    // ukládat hodnoty proměnných do TS?
+    // int int_value;
+    // double double_value;
+    // char *string_value;
 
     // Function
     bool is_func;
@@ -95,7 +96,6 @@ sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_
  * @brief Set the function's data
  * 
  * @param data Data to be set
- * @param defined If the function is defined
  * @param return_type Return type of the function
  */
 sym_data set_data_func(sym_data *data, data_type return_type);

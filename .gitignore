@@ -2,3 +2,4 @@ src/*.o
 .DS_Store
 */.DS_Store
 compiler
+*.txt
