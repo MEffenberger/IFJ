@@ -26,9 +26,9 @@ void data_init(sym_data *data){
     data->is_var = false;
     data->var_type = VAR;
     data->data_type = T_NIL;
-    data->int_value = 0;
-    data->double_value = 0.0;
-    data->string_value = NULL;
+    // data->int_value = 0;
+    // data->double_value = 0.0;
+    // data->string_value = NULL;
 
     data->is_func = false;
     data->return_type = T_NIL;
@@ -38,15 +38,15 @@ void data_init(sym_data *data){
     data->param_type = T_NIL;
 }
 
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value) {
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { // int int_value, double double_value, char *string_value) {
     data_init(&data);
     data.is_var = true;
     data.defined = initialized;
     data.data_type = data_type;
     data.var_type = var_type;
-    data.int_value = int_value;
-    data.double_value = double_value;
-    data.string_value = string_value;
+    // data.int_value = int_value;
+    // data.double_value = double_value;
+    // data.string_value = string_value;
     return data;
 }
 

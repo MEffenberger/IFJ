@@ -130,7 +130,6 @@ token_t* get_next_token() {
         return tmp;
 
     }
-
 }
 
 void prog () {
@@ -168,6 +167,7 @@ void func_def () {
 
     if (current_token->type == TOKEN_ID) {
         MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
+        
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
@@ -191,11 +191,10 @@ void func_def () {
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
 
                     // ---------------
-                    //// TODO: FUNCBODY AAAAA
+                    // TODO: 
                     func_body();
 
-                    //mam uz tu slozenou zavorku
-                    
+                    // current_token->type == TOKEN_RIGHT_BRACKET
                     // ---------------
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
@@ -283,7 +282,6 @@ void par_name() {
     // <par_name> -> _ | id
     printf("-- entering PAR_NAME --\n");
     print_debug(current_token, 2, debug_cnt);
-    printf("par_name to store: %s\n", current_token->value.vector->array);
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
@@ -293,7 +291,7 @@ void par_name() {
         return;
     }
     else { // not _ or id
-        error_exit(ERROR_SEM_TYPE, "PARSER", "Error name not _ or id");
+        error_exit(ERROR_SEM_TYPE, "PARSER", "Parameter's name is not _ or id as expected");
     }
 }
 
@@ -301,7 +299,6 @@ void par_id() {
     // <par_id> -> _ | id
     printf("-- entering PAR_ID --\n");
     print_debug(current_token, 2, debug_cnt);  
-    printf("par_id to store: %s\n", current_token->value.vector->array);
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
@@ -311,7 +308,7 @@ void par_id() {
         return;
     }
     else { // not _ or id
-        error_exit(ERROR_SEM_TYPE, "PARSER", "Error id not _ or id");
+        error_exit(ERROR_SEM_TYPE, "PARSER", "Parameter's id is not _ or id as expected");
     }
 }
 
@@ -344,8 +341,8 @@ void params_n() {
 
     
     peek();
-    if (token_buffer->type != TOKEN_ID) {
-        error_exit(ERROR_SYN, "PARSER", "Missing identifier of function's parameter");
+    if (token_buffer->type != TOKEN_ID && token_buffer->type != TOKEN_UNDERSCORE) {
+        error_exit(ERROR_SYN, "PARSER", "Missing name of function's parameter");
     }
     else {
         current_token = get_next_token();

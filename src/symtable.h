@@ -90,7 +90,7 @@ void data_init(sym_data *data);
  * @param double_value Double value when T_DOUBLE(_Q)
  * @param string_value String value when T_STRING(_Q)
  */
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value);
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
 
 /**
  * @brief Set the function's data
