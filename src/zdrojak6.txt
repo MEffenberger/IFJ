@@ -1,6 +1,6 @@
 /* Program 3: Prace s retezci a vestavenymi funkcemi */
 var str1 = "Toto je nejaky text v programu jazyka IFJ23"
-let str2 = str1 + ", ktery jeste trochu obohatime"
+leta str2 = str1 + ", ktery jeste trochu obohatime"
 write(str1, "\n", str2, "\n")
 let i = length(str1)
 write("Pozice retezce \"text\" v str2: ", i, "\n")
