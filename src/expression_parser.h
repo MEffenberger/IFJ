@@ -33,4 +33,7 @@ typedef enum expression_rules{
 
 } expression_rules_t;
 
+int get_index(token_type_t token);
+void eval_expression();
+
 #endif
