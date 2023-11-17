@@ -46,7 +46,14 @@ typedef enum token_types {
     TOKEN_UNDERSCORE,
     TOKEN_LEFT_BRACKET,
     TOKEN_RIGHT_BRACKET,
-    TOKEN_DIVIDE
+    TOKEN_DIVIDE,
+
+    //Tokens for expression parser
+    TOKEN_DOLLAR, //$
+    TOKEN_SHIFT,  //<
+    TOKEN_REDUCE, //>
+    TOKEN_EXPRESSION //Ei
+
 } token_type_t;
 
 typedef enum state{
@@ -114,7 +121,6 @@ typedef enum keyword{
     KW_RETURN,  // return
     KW_VAR,     // var
     KW_WHILE,   // while
-    //TODO dopsat funkce jako write, double
 
     // In built functions
 
