@@ -83,31 +83,14 @@ void peek() {
     token_buffer = token;
 }
 
-// /**
-//  * @brief Returns the index of the first non-NULL token in the buffer
-//  * 
-//  * @return int Index of the first non-NULL token in the buffer
-//  */
-// int first_index_in_token_buffer() {
-
-//     for (int i = 0; i < token_buffer_cnt; i++) {
-//         if (token_buffer[i] != NULL) {
-//             return i;
-//         }
-//     }
-// }
-
-
 
 /**
  * @brief Function to call when want to get a token to current
  */
 token_t* get_next_token() {
     if (token_buffer == NULL) {
-        if (current_token != NULL) {
-            free(current_token); // token_delete();
-        }
-        token_t* token = get_me_token();
+
+        token_t *token = get_me_token();
 
         // mechanism for detecting EOLs
         bool eol = false;
@@ -125,7 +108,6 @@ token_t* get_next_token() {
         token_t* tmp = token_buffer;
         token_buffer = NULL;
         return tmp;
-
     }
 }
 
@@ -149,6 +131,7 @@ void built_in_functions() {
     symtable_insert(&active->symtable, "readDouble", data);
     BACK_TO_PARENT_IN_FOREST;
 
+    // tODO picovINA PRBLM
     // func write(term_1, term_2, ..., term_n)
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
     data = set_data_func(&data, T_NIL);
@@ -213,15 +196,18 @@ void built_in_functions() {
 void prog() {
     // <prog> -> EOF | <func_def> <prog> | <body> <prog>
     printf("-- entering PROG --\n");
-    
-    if (current_token != NULL) {
-        print_debug(current_token, 2, debug_cnt);
+    print_debug(current_token, 2, debug_cnt);
+
+
+    if (current_token->type == TOKEN_RIGHT_BRACKET || current_token->type == TOKEN_RPAR) {
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
     }
-    
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_EOF) {
+        printf("Printing global symtable in order:\n");
+        inorder(&(active->symtable));
+        printf("\n");
         printf("-- returning...\n\n");
         return;
     }
@@ -269,13 +255,21 @@ void func_def() {
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
 
                     // ---------------
-                    func_body();
+                    //func_body();
+                    //TODO
+                    while (current_token->type != TOKEN_RIGHT_BRACKET) {
+                        body();
+                    }
+
 
                     // current_token->type == TOKEN_RIGHT_BRACKET
                     // ---------------
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
+                        printf("Printing active->symtable in order:\n");
+                        inorder(&(active->symtable));
+                        printf("\n");
                         BACK_TO_PARENT_IN_FOREST;
                         
                         printf("-- returning...\n\n");
@@ -364,6 +358,7 @@ void par_name() {
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's name
         queue_push(queue, current_token);
+        queue_print(queue);
         printf("-- returning...\n\n");
         return;
     }
@@ -381,6 +376,7 @@ void par_id() {
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's id
         queue_push(queue, current_token);
+        queue_print(queue);
         printf("-- returning...\n\n");
         return;
     }
@@ -398,6 +394,7 @@ void type() {
         if (current_token->value.keyword == KW_INT || current_token->value.keyword == KW_DOUBLE || current_token->value.keyword == KW_STRING || current_token->value.keyword == KW_NIL) {
             // store type
             queue_push(queue, current_token);
+            queue_print(queue);
             printf("-- returning...\n\n");
             return;
         }
@@ -448,6 +445,7 @@ void ret_type() {
     }
     else if (current_token->type == TOKEN_LEFT_BRACKET) { // void function
         queue_push(queue, current_token);
+        queue_print(queue);
         printf("-- returning...\n\n");
         return;
     }
@@ -465,17 +463,16 @@ void func_body() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
-    if (current_token->type == TOKEN_RIGHT_BRACKET) {
-        printf("-- returning...\n\n");
-        return;
+    // dokud func_body nechce skončit (via '}'), tak dělej body
+    // TODO: what about return??
+    while (current_token->type != TOKEN_RIGHT_BRACKET) {
+        body();
     }
 
-    // TODO: dodělat func_body, totiž body očekává první relevatní token v current_token, ale provede se jedno body, tj. jeden if
-    // nebo jeden var_def atd. takže asi body(); ve smyčce dokud není return nebo RIGHT_BRACKET, pak může body() ale ještě klidně 
-    // pokračovat omg (nebo void funkce), momentalně na toto schází mentální kapacita
+    // TODO: problem kdyz se body koncici '}' vraci (do progu vs do func_body)
 
-    body();
-
+    printf("-- returning...\n\n");
+    return;
 }
 
 void ret() {
@@ -533,6 +530,46 @@ void body() {
                 //cycle();                       
                 break;
 
+            case KW_RD_STR: // func readString() -> String?
+
+                break;
+
+            case KW_RD_INT:
+
+                break;
+
+            case KW_RD_DBL:
+
+                break;
+
+            case KW_WRT:
+
+                break;
+
+            case KW_INT_2_DBL:
+
+                break;
+
+            case KW_DBL_2_INT:
+
+                break;
+
+            case KW_LENGHT:
+
+                break;
+
+            case KW_SUBSTR:
+
+                break;
+
+            case KW_ORD:
+
+                break;
+
+            case KW_CHR:
+
+                break;
+
             default:
                 break;
         }
@@ -541,11 +578,7 @@ void body() {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
     }
     
- // TODO: problém když skončí assign nebo var_def, tak v current_token je už další token (ukončí to expression), zatímco cycle, 
- // condition a func_call končí závorkami, tudíž v current_token je RIGHT_BRACKET nebo RPAR a prog() pak načítá nový relevatní token
- // -- body tedy urcite ocekava uz nacteny prvni relevantni token, jde ale o to s cim v current_token bude končit
     printf("-- returning...\n\n");
-    return;
 }
 
 void var_def() {
@@ -562,6 +595,7 @@ void var_def() {
         }
         // store variable's name
         queue_push(queue, current_token);
+        queue_print(queue);
         opt_var_def();
 
         // insert variable to symtable
@@ -573,6 +607,8 @@ void var_def() {
         }
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
+        
+        printf("-- returning...\n\n");
         return;
     }
     else {
@@ -605,6 +641,11 @@ void opt_var_def() {
             assign();
             // variable is defined
             is_defined = true;
+        }
+        else {
+            // let a : Int
+            current_token = get_next_token();
+            print_debug(current_token, 1, debug_cnt++);
         }
         printf("-- returning...\n\n");
     }
@@ -776,6 +817,11 @@ void condition() {
             if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
+            else {
+                // get TOKEN_LEFT_BRACKET
+                current_token = get_next_token();
+                print_debug(current_token, 1, debug_cnt++);
+            }
         }
         else {
             error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using if \"let id\"");
@@ -882,17 +928,26 @@ int parser_parse_please () {
     printf("Parser parse please\n");
     printf("---------------------\n\n");
 
-    queue = (queue_t*)allocate_memory(sizeof(queue_t *), "queue", BASIC);
+    queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
     forest_node *global = forest_insert_global();
     active = global;
-    built_in_functions(); // insert built-in functions to the global symtable
+    //built_in_functions(); // insert built-in functions to the global symtable
     
     //volam prog
+
+    current_token = get_next_token();
+    print_debug(current_token, 1, debug_cnt++);
 
     prog();
 
 
+
+    // print children of global forest node
+    printf("Global forest node children:\n");
+    for(int i = 0; i < global->children_count; i++) {
+        printf("%s\n", global->children[i]->name);
+    }
 
     printf("\n---------------------------\n");
     printf("PARSER: Parsed successfully\n");

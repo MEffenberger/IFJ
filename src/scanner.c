@@ -226,6 +226,8 @@ token_t* get_me_token(){
                         a_state = S_START;
                         token->question_mark = false;
                         token->type = TOKEN_UNDERSCORE;
+                        vector_append(buffer, readchar);
+                        token->value.vector = buffer;
 
                         if((next_char = (char) getc(stdin)) == '_' || isalpha(next_char) || isdigit(next_char)){
                             a_state = S_ID;
@@ -236,7 +238,6 @@ token_t* get_me_token(){
                         } else {
                             ungetc(next_char, stdin);
                         }
-                        vector_dispose(buffer);
                         return token;     
 
                     } else if(readchar == '-'){

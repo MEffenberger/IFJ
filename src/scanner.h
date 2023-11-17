@@ -129,8 +129,7 @@ typedef enum keyword{
 
 }keyword_t;
 
-typedef struct token_value
-{
+typedef struct token_value {
     int integer;
     double type_double;
     keyword_t keyword;

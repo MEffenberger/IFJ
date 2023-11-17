@@ -66,7 +66,7 @@ forest_node* forest_search_function(forest_node *global, char *key) {
 
 // search for a symbol in a symtable, if not found, search in the parent's symtable
 AVL_tree *forest_search_symbol(forest_node *node, char *key) {
-    printf("start\n");
+    printf("FOREST: Search symbol in the forest\n");
     if (node != NULL) {
         printf("searching in %s\n", node->name);
         if (node->symtable != NULL) {
