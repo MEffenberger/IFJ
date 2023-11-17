@@ -50,9 +50,11 @@ data_type convert_dt(token_t* token) {
                 return -1;
         }
     }
+    else if (token->type == TOKEN_LEFT_BRACKET) {
+        return T_VOID; // void function (absence of return type)
+    }
     else {
-        return -1;
-    
+        return -1; 
     }
 }
 
@@ -127,7 +129,88 @@ token_t* get_next_token() {
     }
 }
 
-void prog () {
+
+void built_in_functions() {
+    // func readString() -> String?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
+    data = set_data_func(&data, T_STRING_Q);
+    symtable_insert(&active->symtable, "readString", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func readInt() -> Int?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
+    data = set_data_func(&data, T_INT_Q);
+    symtable_insert(&active->symtable, "readInt", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func readDouble() -> Double?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
+    data = set_data_func(&data, T_DOUBLE_Q);
+    symtable_insert(&active->symtable, "readDouble", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func write(term_1, term_2, ..., term_n)
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
+    data = set_data_func(&data, T_NIL);
+    symtable_insert(&active->symtable, "write", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func Int2Double(_ term : Int) -> Double
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
+    data = set_data_func(&data, T_DOUBLE);
+    symtable_insert(&active->symtable, "Int2Double", data);
+    data = set_data_param(&data, T_INT, "_");
+    symtable_insert(&active->symtable, "term", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func Double2Int(_ term : Double) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "Double2Int", data);
+    data = set_data_param(&data, T_DOUBLE, "_");
+    symtable_insert(&active->symtable, "term", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func length(_ s : String) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "length", data);
+    data = set_data_param(&data, T_STRING, "_");
+    symtable_insert(&active->symtable, "s", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
+    data = set_data_func(&data, T_STRING_Q);
+    symtable_insert(&active->symtable, "substring", data);
+    data = set_data_param(&data, T_STRING, "of");
+    symtable_insert(&active->symtable, "s", data);
+    data = set_data_param(&data, T_INT, "startingAt");
+    symtable_insert(&active->symtable, "i", data);
+    data = set_data_param(&data, T_INT, "endingBefore");
+    symtable_insert(&active->symtable, "j", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func ord(_ c : String) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "ord", data);
+    data = set_data_param(&data, T_STRING, "_");
+    symtable_insert(&active->symtable, "c", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func chr(_ i : Int) -> String
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
+    data = set_data_func(&data, T_STRING);
+    symtable_insert(&active->symtable, "chr", data);
+    data = set_data_param(&data, T_INT, "_");
+    symtable_insert(&active->symtable, "i", data);
+    BACK_TO_PARENT_IN_FOREST;
+}
+
+
+
+void prog() {
     // <prog> -> EOF | <func_def> <prog> | <body> <prog>
     printf("-- entering PROG --\n");
     
@@ -152,7 +235,7 @@ void prog () {
     }
 }
 
-void func_def () {
+void func_def() {
     // <func_def> -> func id ( <params> ) <ret_type> { <func_body> }
     printf("-- entering FUNC_DEF --\n");
     print_debug(current_token, 2, debug_cnt);
@@ -254,7 +337,7 @@ void params() {
 
     // insert parameter to function's symtable
     data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array);
-    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array , data);
+    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, data);
     queue_dispose(queue);
 
     current_token = get_next_token();
@@ -364,6 +447,7 @@ void ret_type() {
         return;
     }
     else if (current_token->type == TOKEN_LEFT_BRACKET) { // void function
+        queue_push(queue, current_token);
         printf("-- returning...\n\n");
         return;
     }
@@ -802,7 +886,7 @@ int parser_parse_please () {
     init_queue(queue);
     forest_node *global = forest_insert_global();
     active = global;
-
+    built_in_functions(); // insert built-in functions to the global symtable
     
     //volam prog
 
