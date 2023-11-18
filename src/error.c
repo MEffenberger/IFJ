@@ -65,6 +65,6 @@ void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type)
 
 void error_exit(error_code_t error_code, const char* module, const char* message) { 
     fprintf(stderr, "%s: %s\n", module, message);
-    free_alloc_memory(); // free all allocated memory
+    //free_alloc_memory(); // free all allocated memory
     exit(error_code);
 }

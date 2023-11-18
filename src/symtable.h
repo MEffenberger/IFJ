@@ -23,7 +23,8 @@ typedef enum e_data_type {
     T_INT_Q,
     T_DOUBLE_Q,
     T_STRING_Q,
-    T_NIL
+    T_NIL, // void function
+    T_VOID
 } data_type;
 
 typedef enum e_var_type {
@@ -33,16 +34,16 @@ typedef enum e_var_type {
 
 // Struct for the data of the symbol
 typedef struct symbol_data {
-    bool declared;
     bool defined; // initialized
 
     // Variable
     bool is_var;
     var_type var_type;
     data_type data_type;
-    int int_value;
-    double double_value;
-    char *string_value;
+    // ukládat hodnoty proměnných do TS?
+    // int int_value;
+    // double double_value;
+    // char *string_value;
 
     // Function
     bool is_func;
@@ -90,16 +91,15 @@ void data_init(sym_data *data);
  * @param double_value Double value when T_DOUBLE(_Q)
  * @param string_value String value when T_STRING(_Q)
  */
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value);
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
 
 /**
  * @brief Set the function's data
  * 
  * @param data Data to be set
- * @param defined If the function is defined
  * @param return_type Return type of the function
  */
-sym_data set_data_func(sym_data *data, bool defined, data_type return_type);
+sym_data set_data_func(sym_data *data, data_type return_type);
 
 /**
  * @brief Set the parameter's data
