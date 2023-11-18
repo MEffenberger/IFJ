@@ -10,6 +10,7 @@
  */
 #include "expression_parser.h"
 #include "token_stack.h"
+#include "parser.h"
 
 
 #define TABLE_SIZE 16
@@ -131,7 +132,7 @@ void call_expr_parser(token_type_t return_type){
 
     //stack_push(&stack, current_token);
     int stack_index = get_index(stack_top(&stack)->type);
-    //int next_token_index = getindex(current_token->type);
+    int next_token_index = getindex(current_token->type);
     
     char result = precedence_table[stack_index][next_token_index];
     

@@ -156,6 +156,7 @@ typedef struct token_value
 typedef struct token {
     value_type_t value;
     token_type_t type;
+    bool prev_was_eol;
 } token_t;
 
 keyword_t compare_keyword(vector* v);

@@ -21,15 +21,14 @@
 // }
 
 void data_init(sym_data *data){
-    data->declared = true;
     data->defined = false; // initialized
 
     data->is_var = false;
     data->var_type = VAR;
     data->data_type = T_NIL;
-    data->int_value = 0;
-    data->double_value = 0.0;
-    data->string_value = NULL;
+    // data->int_value = 0;
+    // data->double_value = 0.0;
+    // data->string_value = NULL;
 
     data->is_func = false;
     data->return_type = T_NIL;
@@ -39,26 +38,29 @@ void data_init(sym_data *data){
     data->param_type = T_NIL;
 }
 
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type, int int_value, double double_value, char *string_value) {
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { // int int_value, double double_value, char *string_value) {
     data_init(&data);
+    data.is_var = true;
     data.defined = initialized;
     data.data_type = data_type;
     data.var_type = var_type;
-    data.int_value = int_value;
-    data.double_value = double_value;
-    data.string_value = string_value;
+    // data.int_value = int_value;
+    // data.double_value = double_value;
+    // data.string_value = string_value;
     return data;
 }
 
-sym_data set_data_func(sym_data *data, bool defined, data_type return_type) {
+sym_data set_data_func(sym_data *data, data_type return_type) {
     data_init(data);
-    data->defined = defined;
+    data->is_func = true;
+    data->defined = true;
     data->return_type = return_type;
     return *data;
 }
 
 sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) {
     data_init(data);
+    data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
     return *data;
@@ -70,7 +72,6 @@ AVL_tree *symtable_search(AVL_tree *tree, char *key) {
         return NULL;
     }
     else if (strcmp(tree->key, key) == 0) {
-        printf("found %s\n", key);
         return tree;
     } 
     else if (strcmp(tree->key, key) > 0) {
@@ -149,6 +150,7 @@ void left_rotate(AVL_tree **tree) {
 
 void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
     if (*tree == NULL) { // insert first to an empty tree
+        printf("SYMTABLE: Inserting %s\n", key);
         *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
         (*tree)->key = key;
         (*tree)->data = data;
@@ -283,7 +285,20 @@ void symtable_dispose(AVL_tree **tree) {
 void inorder(AVL_tree **tree) { 
     if (*tree != NULL) {
         inorder(&((*tree)->left));
-        printf("key: %s\n", (*tree)->key);
+        char *type;
+        if ((*tree)->data.is_var) {
+            type = "var";
+        }
+        else if ((*tree)->data.is_func) {
+            type = "func";
+        }
+        else if ((*tree)->data.is_param) {
+            type = "param";
+        }
+        else {
+            type = "unknown";
+        }
+        printf("key: %s - %s\n", (*tree)->key, type);
         inorder(&((*tree)->right));
     }
 }
