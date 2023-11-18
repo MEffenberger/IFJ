@@ -37,4 +37,4 @@ int get_index(token_type_t token);
 void place_shifter(token_stack* stack);
 token_t* token_create(token_type_t token_type);
 void call_expr_parser(token_type_t return_type);
-#endif
+#endif //IFJ_EXPRESSION_PARSER_H
