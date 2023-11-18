@@ -28,9 +28,9 @@ typedef enum e_error_code {
     ERROR_SEM_UNDEF_FUN = 3,
     // Error related to semantic analysis, wrong type of a variable, wrong number of parameters, wrong return value etc.
     ERROR_SEM_TYPE = 4,
-    // Error related to semantic analysis, use of undefined/ unicnitialized variable, etc.
+    // Error related to semantic analysis, use of undefined/uninitialized variable, etc.
     ERROR_SEM_UNDEF_VAR = 5,
-    // Error related to semantic analysis, missing/ redundant return value, etc.
+    // Error related to semantic analysis, missing/redundant return value, etc.
     ERROR_SEM_EXPR_RET = 6,
     // Error related to semantic analysis, type compatibility in expressions, etc.
     ERROR_SEM_EXPR_TYPE = 7,

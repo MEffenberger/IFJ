@@ -11,7 +11,6 @@
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
 #include "error.h"
-//#include "token.h"
 
 typedef enum token_types {
     TOKEN_WHITESPACE,
@@ -114,7 +113,6 @@ typedef enum keyword{
     KW_RETURN,  // return
     KW_VAR,     // var
     KW_WHILE,   // while
-    //TODO dopsat funkce jako write, double
 
     // In built functions
 
@@ -134,8 +132,7 @@ typedef enum keyword{
 
 }keyword_t;
 
-typedef struct token_value
-{
+typedef struct token_value {
     int integer;
     double type_double;
     keyword_t keyword;
@@ -146,6 +143,7 @@ typedef struct token_value
 typedef struct token {
     value_type_t value;
     token_type_t type;
+    bool prev_was_eol;
 } token_t;
 
 keyword_t compare_keyword(vector* v);
