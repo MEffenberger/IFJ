@@ -10,10 +10,6 @@
  */
 
 #include "symtable.h"
-#include "error.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 // void symtable_init(AVL_tree **tree) {

@@ -11,6 +11,7 @@
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
 #include "error.h"
+#include <ctype.h>
 //#include "token.h"
 
 typedef enum token_types {

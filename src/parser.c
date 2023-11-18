@@ -11,19 +11,6 @@
 
 #include "parser.h"
 
-forest_node *active = NULL; // Pointer to the active node in the forest
-token_t *current_token = NULL; // Pointer to the current token
-token_t *token_buffer = NULL; // Buffer for tokens
-queue_t *queue = NULL; // Queue for the expression parser
-sym_data data = {0};
-var_type letvar = -1;
-bool is_defined = false;
-int debug_cnt = 1;
-int ifelse_cnt = 1;
-int while_cnt = 1;
-
-
-
 
 data_type convert_dt(token_t* token) {
     if (token->type == TOKEN_KEYWORD) {

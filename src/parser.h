@@ -23,6 +23,19 @@
 
 
 
+extern forest_node *active; // Pointer to the active node in the forest
+extern token_t *current_token; // Pointer to the current token
+extern token_t *token_buffer; // Buffer for tokens
+extern queue_t *queue; // Queue for the expression parser
+extern sym_data data;
+extern var_type letvar;
+extern bool is_defined;
+extern int debug_cnt;
+extern int ifelse_cnt;
+extern int while_cnt;
+
+
+
 /**
  * @brief info message
  * 

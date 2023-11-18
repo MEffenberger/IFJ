@@ -22,7 +22,7 @@ void push_alloc_ptr(void *ptr, alloc_type type) {
     allocated_pointers = new;
 }
 
-void free_alloc_memory() {
+/*void free_alloc_memory() {
     while (allocated_pointers != NULL) {
         alloc_ptr *tmp = allocated_pointers;
         switch (tmp->type) {
@@ -48,7 +48,7 @@ void free_alloc_memory() {
         allocated_pointers = allocated_pointers->next;
         free(tmp);
     }
-}
+}*/
 
 
 void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type) {
@@ -65,6 +65,6 @@ void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type)
 
 void error_exit(error_code_t error_code, const char* module, const char* message) { 
     fprintf(stderr, "%s: %s\n", module, message);
-    free_alloc_memory(); // free all allocated memory
+    //free_alloc_memory(); // free all allocated memory
     exit(error_code);
 }

@@ -12,14 +12,20 @@
  */
 
 //#include "parser.h"
-#include "scanner.h"
-#include "token_stack.h"
+#include "parser.h"
 #include "expression_parser.h"
-
 
 alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 forest_node *active = NULL; // Pointer to the active node in the forest
-
+token_t *current_token = NULL; // Pointer to the current token
+token_t *token_buffer = NULL; // Buffer for tokens
+queue_t *queue = NULL; // Queue for the expression parser
+sym_data data = {0};
+var_type letvar = -1;
+bool is_defined = false;
+int debug_cnt = 1;
+int ifelse_cnt = 1;
+int while_cnt = 1;
 
 int main() { 
     //parser();
@@ -38,7 +44,10 @@ int main() {
 
     dispose_stack(&stack);*/
 
-
+    current_token = get_me_token();
+    if(current_token->type == 21){
+        printf("ID");
+    }
     call_expr_parser(TOKEN_BOOL);
     
     /*

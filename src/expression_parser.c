@@ -9,9 +9,6 @@
  * @author Samuel Hejnicek <xhejni00>
  */
 #include "expression_parser.h"
-#include "token_stack.h"
-#include "parser.h"
-
 
 #define TABLE_SIZE 16
 
@@ -99,17 +96,17 @@ int get_index(token_type_t token){
 }
 
 
-place_shifter(token_stack* stack){
+void place_shifter(token_stack* stack){
 
     token_t* shift = token_create(TOKEN_SHIFT);
 
-    token_t* token = stack_top(&stack);
+    token_t* token = stack_top(stack);
     if(token->type == TOKEN_EXPRESSION){
-        stack_pop(&stack);
-        stack_push(&stack, shift);
-        stack_push(&stack, token);
+        stack_pop(stack);
+        stack_push(stack, shift);
+        stack_push(stack, token);
     } else {
-        stack_push(&stack, shift);
+        stack_push(stack, shift);
     }
 }
 
@@ -120,6 +117,7 @@ token_t* token_create(token_type_t token_type){
     token->value.integer = 0;
     token->value.type_double = 0.0;
     token->type = token_type;
+    return token;
 }
 
 void call_expr_parser(token_type_t return_type){
@@ -132,7 +130,7 @@ void call_expr_parser(token_type_t return_type){
 
     //stack_push(&stack, current_token);
     int stack_index = get_index(stack_top(&stack)->type);
-    int next_token_index = getindex(current_token->type);
+    int next_token_index = get_index(current_token->type);
     
     char result = precedence_table[stack_index][next_token_index];
     
