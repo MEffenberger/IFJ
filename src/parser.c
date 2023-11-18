@@ -19,6 +19,8 @@ sym_data data = {0};
 var_type letvar = -1;
 bool is_defined = false;
 int debug_cnt = 1;
+int ifelse_cnt = 1;
+int while_cnt = 1;
 
 
 
@@ -198,12 +200,6 @@ void prog() {
     printf("-- entering PROG --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-    if (current_token->type == TOKEN_RIGHT_BRACKET || current_token->type == TOKEN_RPAR) {
-        current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
-    }
-
     if (current_token->type == TOKEN_EOF) {
         printf("Printing global symtable in order:\n");
         inorder(&(active->symtable));
@@ -222,7 +218,7 @@ void prog() {
 }
 
 void func_def() {
-    // <func_def> -> func id ( <params> ) <ret_type> { <func_body> }
+    // <func_def> -> func id ( <params> ) <ret_type> { <body> }
     printf("-- entering FUNC_DEF --\n");
     print_debug(current_token, 2, debug_cnt);
 
@@ -253,17 +249,11 @@ void func_def() {
                 queue_dispose(queue);
 
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
+                    // get next token, body expects first token of body
+                    current_token = get_next_token();
+                    print_debug(current_token, 1, debug_cnt++);
 
-                    // ---------------
-                    //func_body();
-                    //TODO
-                    while (current_token->type != TOKEN_RIGHT_BRACKET) {
-                        body();
-                    }
-
-
-                    // current_token->type == TOKEN_RIGHT_BRACKET
-                    // ---------------
+                    local_body();
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
@@ -271,6 +261,9 @@ void func_def() {
                         inorder(&(active->symtable));
                         printf("\n");
                         BACK_TO_PARENT_IN_FOREST;
+                        current_token = get_next_token();
+                        print_debug(current_token, 1, debug_cnt++);
+
                         
                         printf("-- returning...\n\n");
                         return;
@@ -284,7 +277,7 @@ void func_def() {
                 }
             }
             else {
-                error_exit(ERROR_SYN, "PARSER", "Missing right paranthesis in function deinifition");
+                error_exit(ERROR_SYN, "PARSER", "Missing right paranthesis in function definition");
             }
         }
         else {
@@ -295,6 +288,14 @@ void func_def() {
         error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Missing identifier of funciton");
     }
 
+}
+
+void local_body() {
+    // <local_body> -> <body> <local_body> | eps
+
+    while (current_token->type != TOKEN_RIGHT_BRACKET) {
+        body();
+    }
 }
 
 void params() {
@@ -455,32 +456,32 @@ void ret_type() {
 }
 
 
-void func_body() {
-    // <func_body> -> <body> <body> <body> ?!?!? <ret> <body>
-    printf("-- entering FUNC_BODY --\n");
-    print_debug(current_token, 2, debug_cnt);
+// void func_body() {
+//     // <func_body> -> <body> <body> <body> ?!?!? <ret> <body>
+//     printf("-- entering FUNC_BODY --\n");
+//     print_debug(current_token, 2, debug_cnt);
 
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+//     current_token = get_next_token();
+//     print_debug(current_token, 1, debug_cnt++);
 
-    // dokud func_body nechce skončit (via '}'), tak dělej body
-    // TODO: what about return??
-    while (current_token->type != TOKEN_RIGHT_BRACKET) {
-        body();
-    }
+//     // dokud func_body nechce skončit (via '}'), tak dělej body
+//     // TODO: what about return??
+//     while (current_token->type != TOKEN_RIGHT_BRACKET) {
+//         body();
+//     }
 
-    // TODO: problem kdyz se body koncici '}' vraci (do progu vs do func_body)
+//     // TODO: problem kdyz se body koncici '}' vraci (do progu vs do func_body)
 
-    printf("-- returning...\n\n");
-    return;
-}
+//     printf("-- returning...\n\n");
+//     return;
+// }
 
-void ret() {
-    // <ret> -> return <exp> | eps
-    printf("-- entering RET --\n");
-    print_debug(current_token, 2, debug_cnt);
+// void ret() {
+//     // <ret> -> return <exp> | eps
+//     printf("-- entering RET --\n");
+//     print_debug(current_token, 2, debug_cnt);
 
-}
+// }
 
 
 void body() {
@@ -712,6 +713,9 @@ void func_call() {
     args();
 
     if (current_token->type == TOKEN_RPAR) {
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+
         printf("-- returning...\n\n");
         return;
     }
@@ -797,7 +801,7 @@ void args_n() {
 
 
 void condition() {
-    // <condition> -> if <exp> { <body> } else { <body> } | if let id { <body> } else { <body> }
+    // <condition> -> if <exp> { <local_body> } else { <local_body> } | if let id { <local_body> } else { <local_body> }
     printf("-- entering CONDITION --\n");
     print_debug(current_token, 2, debug_cnt);
 
@@ -838,12 +842,11 @@ void condition() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-        body();
+        local_body();
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
             // closing bracket of if statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
-
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
 
@@ -857,11 +860,14 @@ void condition() {
                     current_token = get_next_token();
                     print_debug(current_token, 1, debug_cnt++);
 
-                    body();
+                    local_body();
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // closing bracket of else statement, go back to parent in forest
                         BACK_TO_PARENT_IN_FOREST;
+                        current_token = get_next_token();
+                        print_debug(current_token, 1, debug_cnt++);
+
                         printf("-- returning...\n\n");
                         return;
                     }
@@ -889,7 +895,7 @@ void condition() {
 
 
 void cycle() {
-    // <cycle -> while <exp> { <body> }
+    // <cycle -> while <exp> { <local_body> }
     printf("-- entering CYCLE --\n");
     print_debug(current_token, 2, debug_cnt);
 
@@ -906,11 +912,14 @@ void cycle() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-        body();
+        local_body();
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
             // closing bracket of while statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
+            current_token = get_next_token();
+            print_debug(current_token, 1, debug_cnt++);
+
             printf("-- returning...\n\n");
             return;
         }

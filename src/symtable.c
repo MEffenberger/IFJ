@@ -285,7 +285,20 @@ void symtable_dispose(AVL_tree **tree) {
 void inorder(AVL_tree **tree) { 
     if (*tree != NULL) {
         inorder(&((*tree)->left));
-        printf("key: %s\n", (*tree)->key);
+        char *type;
+        if ((*tree)->data.is_var) {
+            type = "var";
+        }
+        else if ((*tree)->data.is_func) {
+            type = "func";
+        }
+        else if ((*tree)->data.is_param) {
+            type = "param";
+        }
+        else {
+            type = "unknown";
+        }
+        printf("key: %s - %s\n", (*tree)->key, type);
         inorder(&((*tree)->right));
     }
 }

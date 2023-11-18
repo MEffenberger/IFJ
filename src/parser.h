@@ -70,6 +70,11 @@ void prog();
 void func_def();
 
 /**
+ * @brief <local_body> -> <body> <local_body> | eps
+ */
+void local_body();
+
+/**
  * @brief <params> -> eps | <par_name> <par_id> : <type> <params_n>
  */
 void params();
@@ -145,7 +150,7 @@ void arg();
 void args_n();
 
 /**
- * @brief <condition> -> if <exp> { <body> } else { <body> } | if let id { <body> } else { <body> }
+ * @brief <condition> -> if <exp> { <local_body> } else { <local_body> } | if let id { <local_body> } else { <local_body> }
  */
 void condition();
 
@@ -155,7 +160,7 @@ void condition();
 void ret();
 
 /**
- * @brief <cycle -> while <exp> { <body> }
+ * @brief <cycle -> while <exp> { <local_body> }
  */
 void cycle();
 
