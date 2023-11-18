@@ -24,12 +24,12 @@ int main() {
     //parser();
     //token_t** token_array;
     token_stack stack;
-    init(&stack);
+    stack_init(&stack);
    // token_array = malloc(100*sizeof(token_t*));
 
     for(int i = 0; i < 20; i++){
         token_t* token = get_me_token();
-        push(&stack, token);
+        stack_push(&stack, token);
         printf("%d\n", stack.token_array[i]->type);
     }
     printf("%d\n", stack.size);

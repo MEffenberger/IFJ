@@ -97,10 +97,14 @@ int get_index(token_type_t token){
 
 }
 
+void call_expr_parser(token_type_t return_type){
+    token_stack stack;
+    stack_init(&stack);
 
-void eval_expression(){
-
-    
-
-    
+    //Dollar at the bottom of the stack
+    token_t* stack_bottom = malloc(sizeof(token_t));
+    stack_bottom->value.vector = NULL;
+    stack_bottom->value.integer = 0;
+    stack_bottom->value.type_double = 0.0;
+    stack_bottom->type = TOKEN_DOLLAR;
 }

@@ -52,7 +52,11 @@ typedef enum token_types {
     TOKEN_DOLLAR, //$
     TOKEN_SHIFT,  //<
     TOKEN_REDUCE, //>
-    TOKEN_EXPRESSION //Ei
+    TOKEN_EXPRESSION, //Ei
+    TOKEN_LITERAL_INT,
+    TOKEN_LITERAL_DOUBLE,
+    TOKEN_LITERAL_STRING,
+    TOKEN_BOOL
 
 } token_type_t;
 
