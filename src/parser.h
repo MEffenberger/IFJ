@@ -17,6 +17,10 @@
 #include "symtable.h"
 #include "forest.h"
 #include "queue.h"
+#include "cnt_stack.h"
+#include <string.h>
+// #include "expression_parser.h"
+#include "codegen.h"
 
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
@@ -33,6 +37,8 @@
 void print_debug(token_t *token, int mode, int cnt);
 
 extern token_t *current_token; // Pointer to the current token
+extern int ifelse_cnt; // Count of get_next_token calls
+extern int while_cnt; // Count of get_next_token calls
 
 /**
  * @brief Converts token keyword to a forest related keyword

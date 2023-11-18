@@ -20,11 +20,11 @@
  * This struct represents a stack data structure for tokens. It contains a dynamically allocated array of tokens,
  * along with the current size and capacity of the stack.
  */
-typedef struct {
+typedef struct tokenstack{
     token_t** token_array;
     int size;
     int capacity;
-} token_stack;
+} token_stack_t;
 
 
 
@@ -36,7 +36,7 @@ typedef struct {
  * 
  * @param token_stack A pointer to the token stack to be initialized.
  */
-void init(token_stack* token_stack);
+void init(token_stack_t* token_stack);
 
 /**
  * @brief Pushes a token onto the top of the stack.
@@ -47,7 +47,7 @@ void init(token_stack* token_stack);
  * @param token_stack A pointer to the token stack.
  * @param token The token to be pushed onto the stack.
  */
-void push(token_stack* token_stack, token_t* token);
+void push(token_stack_t* token_stack, token_t* token);
 
 /**
  * @brief Pops a token from the top of the stack.
@@ -58,7 +58,7 @@ void push(token_stack* token_stack, token_t* token);
  * @param token_stack A pointer to the token stack.
  * @return The token popped from the top of the stack.
  */
-void pop(token_stack* token_stack);
+void pop(token_stack_t* token_stack);
 
 /**
  * @brief Returns the token at the top of the stack.
@@ -69,7 +69,7 @@ void pop(token_stack* token_stack);
  * @param token_stack A pointer to the token stack.
  * @return The token at the top of the stack.
  */
-token_t* top(token_stack* token_stack);
+token_t* top(token_stack_t* token_stack);
 
 /**
  * @brief Checks if the stack is empty.
@@ -79,7 +79,7 @@ token_t* top(token_stack* token_stack);
  * @param token_stack A pointer to the token stack.
  * @return True if the stack is empty, false otherwise.
  */
-bool is_empty(token_stack* token_stack);
+bool is_empty(token_stack_t* token_stack);
 
 /**
  * @brief Disposes of a token stack.
@@ -89,6 +89,6 @@ bool is_empty(token_stack* token_stack);
  * 
  * @param token_stack A pointer to the token stack to be disposed of.
  */
-void dispose_stack(token_stack* token_stack);
+void dispose_stack(token_stack_t* token_stack);
 
 #endif /* TOKEN_STACK_H */

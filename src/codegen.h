@@ -1,9 +1,9 @@
 /**
- * @file error.h
+ * @file codegen.h
  *
  * IFJ23 compiler
  *
- * @brief Error handling header file
+ * @brief 
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
@@ -18,23 +18,51 @@
 #include "scanner.h"
 #include "symtable.h"
 #include "forest.h"
-#include "queue.h"
+#include "token_stack.h"
+#include "parser.h"
+#include "cnt_stack.h"
+
+
+typedef enum instruction_name {
+    while_start,
+    while_end,
+    write
+} inst_name;
 
 
 // Instruction struct
-typedef struct Instruction {
-    char opcode; // Instruction opcode
-    void* operands[3]; // Operands (addresses, registers, or immediate values)
-    int numOperands; // Number of operands
-} Instruction;
+typedef struct instruction {
+    inst_name instruction_name; // Instruction opcode
+    void* operands; // Operands (addresses, registers, or immediate values)
+    int num_operands; // Number of operands
+} instruction;
 
 // Code block struct
-typedef struct CodeBlock {
-    struct CodeBlock* parent; // Pointer to parent code block
-    SymbolTable* symbolTable; // Symbol table for local variables
-    Instruction* instructions; // Vector or list of instructions
-    int numInstructions; // Number of instructions
-} CodeBlock;
+typedef struct codeblock {
+    instruction** instructions; // Vector or list of instructions
+    int num_instructions; // Number of instructions
+} code_block;
 
+
+
+
+
+
+
+
+
+void codegen_funcdef();
+void codegen_funcdef_end();
+void codegen_if();
+void codegen_else();
+void codegen_ifelse_end();
+void codegen_while_start();
+void codegen_while_end();
+
+
+
+
+
+void codegen_generate_code_please();
 
 #endif //IFJ_CODEGEN_H

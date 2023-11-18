@@ -23,6 +23,7 @@ forest_node *forest_insert_global() {
     root->children = NULL;
     root->children_count = 0;
     root->symtable = NULL;
+    root->cond_cnt = 0;
     return root; 
 }
 
@@ -33,6 +34,7 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         child->keyword = keyword;
         child->parent = parent;
         child->children = NULL;
+        child->cond_cnt = 0;
         if (parent->children == NULL) {
             parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)) , "forest node children", BASIC);
         } else {
@@ -97,5 +99,20 @@ void forest_dispose(forest_node *global) {
         }
         free(global);
         global = NULL;
+    }
+}
+
+void traverse_forest(forest_node *node) {
+    if (node == NULL) {
+        return;
+    }
+
+    // Process the current node
+    printf("Node Name: %s %p\n", node->name, node);
+    // You can perform any actions you need on the current node here
+
+    // Recursively traverse the children
+    for (int i = 0; i < node->children_count; i++) {
+        traverse_forest(node->children[i]);
     }
 }

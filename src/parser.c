@@ -19,8 +19,11 @@ sym_data data = {0};
 var_type letvar = -1;
 bool is_defined = false;
 int debug_cnt = 1;
-int ifelse_cnt = 1;
-int while_cnt = 1;
+int ifelse_cnt = 0;
+int while_cnt = 0;
+char node_name[20] = {0};
+cnt_stack_t *cnt_stack = NULL;
+int cnt = 0;
 
 
 
@@ -805,8 +808,13 @@ void condition() {
     printf("-- entering CONDITION --\n");
     print_debug(current_token, 2, debug_cnt);
 
-
-    MAKE_CHILDREN_IN_FOREST(W_IF, "if"); // TODO: name for the "if" scope? just "if" or should be unique("if_n")?
+    cnt_push(cnt_stack); // push ifelse_cnt to stack and increment
+    sprintf(node_name, "if_%d", ifelse_cnt);
+    char *node_name2 = malloc(sizeof(char) * 20);
+    node_name2 = strcpy(node_name2, node_name);
+    printf("node_name: %s\n", node_name);
+    MAKE_CHILDREN_IN_FOREST(W_IF, node_name2);
+    active->cond_cnt = ifelse_cnt;
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -822,9 +830,17 @@ void condition() {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             else {
+                // TODO: Místo pravdivostního výrazu výraz lze alternativně použít syntaxi: ’let id’, 
+                // kde id zastupuje dříve definovanou (nemodifikovatelnou) proměnnou. Je-li pak proměnná id
+                // hodnoty nil, vykoná se sekvence_příkazů2, jinak se vykoná sekvence_příkazů1, kde navíc bude typ 
+                // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
+                // (tj. např. proměnná původního typu String? bude v tomto bloku typu String).
                 // get TOKEN_LEFT_BRACKET
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
+
+
+                // TODO: vyřešit let id a PUSHS bool pro codegen
             }
         }
         else {
@@ -839,6 +855,9 @@ void condition() {
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
         
+        codegen_if();
+        ifelse_cnt++;
+
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
@@ -851,7 +870,16 @@ void condition() {
             print_debug(current_token, 1, debug_cnt++);
 
             if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword == KW_ELSE) {
-                MAKE_CHILDREN_IN_FOREST(W_ELSE, "else"); // TODO: name for the "else" scope? just "else" or should be unique("else_n")?
+
+                cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
+                sprintf(node_name, "else_%d", cnt);
+                char *node_name3 = malloc(sizeof(char) * 20);
+                node_name3 = strcpy(node_name3, node_name);
+                printf("node_name: %s\n", node_name);
+                MAKE_CHILDREN_IN_FOREST(W_ELSE, node_name3);
+                active->cond_cnt = cnt;
+
+                codegen_else();
 
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
@@ -867,6 +895,14 @@ void condition() {
                         BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
+
+                    
+                        active->cond_cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
+                        
+                        codegen_ifelse_end();  
+
+                        cnt_pop(cnt_stack); // pop ifelse_cnt from stack
+
 
                         printf("-- returning...\n\n");
                         return;
@@ -899,7 +935,9 @@ void cycle() {
     printf("-- entering CYCLE --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    MAKE_CHILDREN_IN_FOREST(W_WHILE, "while"); // TODO: name for the "while" scope? just "while" or should be unique("while_n")?
+    sprintf(node_name, "while_%d", while_cnt);  
+    while_cnt++;
+    MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name);
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -909,12 +947,17 @@ void cycle() {
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
+        codegen_while_start();
+
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
         local_body();
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
+
+            codegen_while_end();
+            
             // closing bracket of while statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
             current_token = get_next_token();
@@ -937,6 +980,8 @@ int parser_parse_please () {
     printf("Parser parse please\n");
     printf("---------------------\n\n");
 
+    cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
+    cnt_init(cnt_stack);
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
     forest_node *global = forest_insert_global();
@@ -952,11 +997,7 @@ int parser_parse_please () {
 
 
 
-    // print children of global forest node
-    printf("Global forest node children:\n");
-    for(int i = 0; i < global->children_count; i++) {
-        printf("%s\n", global->children[i]->name);
-    }
+    traverse_forest(global);
 
     printf("\n---------------------------\n");
     printf("PARSER: Parsed successfully\n");

@@ -34,6 +34,7 @@ typedef struct s_forest_node {
     struct s_forest_node **children; // array of pointers to children
     int children_count; // number of children (last index + 1)
     AVL_tree *symtable; // pointer to the scope's symbol table
+    int cond_cnt; // counter for if/else/while
 } forest_node;
 
 // Global pointer to the active node in forest
@@ -81,5 +82,8 @@ AVL_tree *forest_search_symbol(forest_node *node, char *key);
  * @param global Pointer to the global node (root of the forest)
  */
 void forest_dispose(forest_node *global);
+
+void traverse_forest(forest_node *node);
+
 
 #endif //IFJ_FOREST_H

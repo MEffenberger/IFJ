@@ -282,6 +282,7 @@ void symtable_dispose(AVL_tree **tree) {
     }
 }
 
+
 void inorder(AVL_tree **tree) { 
     if (*tree != NULL) {
         inorder(&((*tree)->left));
@@ -302,3 +303,4 @@ void inorder(AVL_tree **tree) {
         inorder(&((*tree)->right));
     }
 }
+
