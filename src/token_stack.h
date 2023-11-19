@@ -81,6 +81,13 @@ token_t* stack_top(token_stack* token_stack);
  */
 bool stack_is_empty(token_stack* token_stack);
 
+
+
+token_t* stack_top_nonterminal(token_stack* token_stack);
+
+token_t* stack_top_terminal(token_stack* token_stack);
+
+
 /**
  * @brief Disposes of a token stack.
  * 

@@ -52,7 +52,6 @@ typedef enum token_types {
     //Tokens for expression parser
     TOKEN_DOLLAR, //$
     TOKEN_SHIFT,  //<
-    TOKEN_REDUCE, //>
     TOKEN_EXPRESSION, //Ei
     TOKEN_LITERAL_INT,
     TOKEN_LITERAL_DOUBLE,
@@ -142,6 +141,13 @@ typedef enum keyword{
 
     KW_GLOBAL,   // global (for global forest node)
 
+    KW_EXP_ID_INT,
+    KW_EXP_ID_DOUBLE,
+    KW_EXP_ID_STRING,
+
+    KW_EXP_CONST_INT,
+    KW_EXP_CONST_DOUBLE,
+    KW_EXP_CONST_STRING,
 
 }keyword_t;
 

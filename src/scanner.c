@@ -9,7 +9,6 @@
  * @author Dominik Horut <xhorut01>
  */
 #include "scanner.h"
-#include <ctype.h>
 
 #define ASCII_BEGIN 31
 #define DEFAULT_TOKEN_VAL 1000

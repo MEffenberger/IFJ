@@ -5,6 +5,7 @@
         "forest.h": "c",
         "parser.h": "c",
         "scanner.h": "c",
-        "symtable.h": "c"
+        "symtable.h": "c",
+        "type_traits": "c"
     }
 }
