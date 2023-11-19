@@ -15,6 +15,7 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
 token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
+queue_t *fn_call_queue = NULL; // Queue for function calls
 sym_data data = {0};
 var_type letvar = -1;
 bool is_defined = false;
@@ -25,6 +26,7 @@ char node_name[20] = {0};
 cnt_stack_t *cnt_stack = NULL;
 token_stack_t *token_stack = NULL;
 int cnt = 0;
+int renamer3000 = 0;
 
 
 
@@ -510,6 +512,8 @@ void body() {
         }
         else if (token_buffer->type == TOKEN_LPAR) {
             // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
+            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls
+
             // if (false) {  
             //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
             // }
@@ -580,6 +584,7 @@ void body() {
                 break;
 
             default:
+                error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
                 break;
         }
     }
@@ -599,14 +604,13 @@ void var_def() {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
-        if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
-            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
-        }
-
-
-
+//        if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
+//            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
+//        }
+        //QUITE POSSIBLY NOT NEEDED
 
         // store variable's name
+        rename_keep_exit();
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
@@ -690,10 +694,12 @@ void assign() {
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_LPAR) {
-            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
+            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions //////////////////////////OSETRENO?
             // if (false) {  
             //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
             // }
+            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls //TOTO BY TO MOHLO RESIT
+
             func_call();
         }
         else {
@@ -1001,6 +1007,8 @@ int parser_parse_please () {
     token_init(token_stack);
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
+    fn_call_queue = (queue_t*)malloc(sizeof(queue_t));
+    init_queue(fn_call_queue);
     forest_node *global = forest_insert_global();
     active = global;
     //built_in_functions(); // insert built-in functions to the global symtable
@@ -1012,7 +1020,7 @@ int parser_parse_please () {
 
     prog();
 
-
+    validate_fn_calls();
 
     traverse_forest(global);
 
@@ -1242,6 +1250,55 @@ void print_debug(token_t *token, int mode, int cnt) {
         }
         else { 
             printf("PRINT_DEBUG: Unknown mode\n");
+        }
+    }
+}
+
+
+void rename_keep_exit(){
+
+        // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
+
+        if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
+            printf("active->symtable: %p\n", active->symtable);
+            printf("Printing active->symtable in order:\n");
+            inorder(&(active->symtable));
+            printf("\n");
+
+            // The node is not in any symtable above the current node, the name can be kept
+            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL)
+            {
+                printf("should be here");
+                return;
+            } else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
+            {
+                printf("ich here");
+                int value = renamer3000;
+                char bytes[5];
+
+                sprintf(bytes, "%d", value);
+
+                for (int i = 0; bytes[i] != '\0'; i++) {
+                    vector_append(current_token->value.vector, bytes[i]);
+                }
+
+                renamer3000++;
+                return;
+            }
+        }
+        error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+
+}
+
+// Used for fn_calls validation as function can be called before its own declaration (recursive function calls)
+void validate_fn_calls(){
+    while (!queue_is_empty(fn_call_queue)) {
+        token_t *token = queue_pop(fn_call_queue);
+        if (token == NULL) {
+            return;
+        }
+        if (forest_search_symbol(active, token->value.vector->array) == NULL) {
+            error_exit(ERROR_SYN, "PARSER", "Function is not defined");
         }
     }
 }

@@ -33,7 +33,7 @@ void queue_push(queue_t *queue, token_t *token);
 token_t *queue_pop(queue_t *queue);
 void queue_dispose(queue_t *queue);
 void queue_print(queue_t *queue);
-//void validate_and_insert (queue_t *queue);
+bool queue_is_empty(queue_t *queue);
 
 
 #endif //IFJ_QUEUE_H

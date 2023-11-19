@@ -39,6 +39,8 @@ void print_debug(token_t *token, int mode, int cnt);
 extern token_t *current_token; // Pointer to the current token
 extern int ifelse_cnt; // Count of get_next_token calls
 extern int while_cnt; // Count of get_next_token calls
+extern int renamer3000; // used for creation of unique variable names
+
 
 /**
  * @brief Converts token keyword to a forest related keyword
@@ -172,5 +174,10 @@ void cycle();
 
 
 int parser_parse_please ();
+
+void rename_keep_exit();
+
+void validate_fn_calls();
+
 
 #endif //IFJ_PARSER_H

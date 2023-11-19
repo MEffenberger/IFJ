@@ -41,6 +41,10 @@ void queue_push(queue_t *queue, token_t *token){
     }
 }
 
+bool queue_is_empty(queue_t *queue) {
+    return queue->first == NULL;
+}
+
 token_t *queue_pop(queue_t *queue) {
     if (queue->first == NULL) {
         return NULL;

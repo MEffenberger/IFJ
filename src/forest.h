@@ -15,6 +15,7 @@
 #include "symtable.h"
 #include "error.h"
 #include "scanner.h"
+//#include "parser.h"
 
 typedef enum f_keyword {
     W_GLOBAL,
@@ -84,6 +85,16 @@ AVL_tree *forest_search_symbol(forest_node *node, char *key);
 void forest_dispose(forest_node *global);
 
 void traverse_forest(forest_node *node);
+
+//void rename_keep_exit();
+
+
+///**
+// * @brief Converts the data type of a symbol from T_Q_STRING to T_STRING, T_Q_INT to T_INT, T_Q_FLOAT to T_FLOAT, used for if let redeclaration
+// *
+// * @param key Key of the symbol to convert
+// */
+//void forest_convert_to_nonq_data_type(char *key){};
 
 
 #endif //IFJ_FOREST_H
