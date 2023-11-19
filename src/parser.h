@@ -112,13 +112,9 @@ void params_n();
  */
 void ret_type();
 
-/**
- * @brief <func_body> -> <body> <ret> <body>
- */
-void func_body();
 
 /**
- * @brief <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call>
+ * @brief <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call> | <ret>
  */
 void body();
 
@@ -173,11 +169,19 @@ void ret();
 void cycle();
 
 
-int parser_parse_please ();
+int parser_parse_please();
 
 void rename_keep_exit();
 
 void validate_fn_calls();
+
+/**
+ * @brief When a return statement is encountered, check if it is somewhere in a function
+ * 
+ * @param node 
+ * @return forest_node* returns the function node if return statement is in a function, NULL otherwise
+ */
+forest_node* check_return_stmt(forest_node *node);
 
 
 #endif //IFJ_PARSER_H

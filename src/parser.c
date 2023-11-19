@@ -251,6 +251,8 @@ void func_def() {
 
                 ret_type();
 
+                printf("here\n");
+
                 // insert function with its return type to symtable
                 data = set_data_func(&data, convert_dt(queue->first->token));
                 symtable_insert(&active->symtable, active->name, data);
@@ -455,8 +457,7 @@ void ret_type() {
         return;
     }
     else if (current_token->type == TOKEN_LEFT_BRACKET) { // void function
-        queue_push(queue, current_token);
-        queue_print(queue);
+        queue_push(queue, current_token); 
         printf("-- returning...\n\n");
         return;
     }
@@ -466,36 +467,33 @@ void ret_type() {
 }
 
 
-// void func_body() {
-//     // <func_body> -> <body> <body> <body> ?!?!? <ret> <body>
-//     printf("-- entering FUNC_BODY --\n");
-//     print_debug(current_token, 2, debug_cnt);
+void ret() {
+    // <ret> -> return <exp> | eps
+    printf("-- entering RET --\n");
+    print_debug(current_token, 2, debug_cnt);
 
-//     current_token = get_next_token();
-//     print_debug(current_token, 1, debug_cnt++);
+    // checks whether the return is in the function as it should be, error otherwise
+    forest_node *tmp = check_return_stmt(active);
+    sym_data *tmp_data = symtable_lookup(tmp->symtable, tmp->name);
 
-//     // dokud func_body nechce skončit (via '}'), tak dělej body
-//     // TODO: what about return??
-//     while (current_token->type != TOKEN_RIGHT_BRACKET) {
-//         body();
-//     }
+    if (tmp_data->return_type == T_VOID) { // void function 
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
 
-//     // TODO: problem kdyz se body koncici '}' vraci (do progu vs do func_body)
+        printf("-- returning...\n\n");
+        return;
+    }
+    else { // non-void function
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
 
-//     printf("-- returning...\n\n");
-//     return;
-// }
-
-// void ret() {
-//     // <ret> -> return <exp> | eps
-//     printf("-- entering RET --\n");
-//     print_debug(current_token, 2, debug_cnt);
-
-// }
-
+        //expression_parser(); calling with the first token of expression in current_token
+        //when expr-parser returns, current_token is first token after the expression
+    }
+}
 
 void body() {
-    // <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call>
+    // <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call> | <ret>
     printf("-- entering BODY --\n");
     print_debug(current_token, 2, debug_cnt);
 
@@ -525,6 +523,10 @@ void body() {
     }
     else if (current_token->type == TOKEN_KEYWORD) {
         switch (current_token->value.keyword) {
+            case KW_RETURN:
+                ret();
+                break;
+
             case KW_LET:
                 letvar = LET;
                 var_def();
@@ -540,7 +542,7 @@ void body() {
                 break;
 
             case KW_WHILE:
-                //cycle();                       
+                cycle();                       
                 break;
 
             case KW_RD_STR: // func readString() -> String?
@@ -1255,7 +1257,7 @@ void print_debug(token_t *token, int mode, int cnt) {
 }
 
 
-void rename_keep_exit(){
+void rename_keep_exit() {
 
         // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
 
@@ -1291,7 +1293,7 @@ void rename_keep_exit(){
 }
 
 // Used for fn_calls validation as function can be called before its own declaration (recursive function calls)
-void validate_fn_calls(){
+void validate_fn_calls() {
     while (!queue_is_empty(fn_call_queue)) {
         token_t *token = queue_pop(fn_call_queue);
         if (token == NULL) {
@@ -1299,6 +1301,24 @@ void validate_fn_calls(){
         }
         if (forest_search_symbol(active, token->value.vector->array) == NULL) {
             error_exit(ERROR_SYN, "PARSER", "Function is not defined");
+        }
+    }
+}
+
+// when a return statement is encountered, check if it is somewhere in a function
+forest_node* check_return_stmt(forest_node *node) {
+
+    // function gets to the global scope, so it is not part of the function
+    if (node->parent == NULL) {
+        error_exit(ERROR_SYN, "PARSER", "Return statement is not in a function");
+        return NULL;
+    }
+    else {
+        if (node->keyword == W_FUNCTION) {
+            return node;
+        }
+        else {
+            return check_return_stmt(node->parent);
         }
     }
 }

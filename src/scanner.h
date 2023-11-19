@@ -45,7 +45,17 @@ typedef enum token_types {
     TOKEN_UNDERSCORE,
     TOKEN_LEFT_BRACKET,
     TOKEN_RIGHT_BRACKET,
-    TOKEN_DIVIDE
+    TOKEN_DIVIDE,
+
+    //Tokens for expression parser
+    TOKEN_DOLLAR, //$
+    TOKEN_SHIFT,  //<
+    TOKEN_EXPRESSION, //Ei
+    TOKEN_LITERAL_INT,
+    TOKEN_LITERAL_DOUBLE,
+    TOKEN_LITERAL_STRING,
+    TOKEN_BOOL
+
 } token_type_t;
 
 typedef enum state{

@@ -24,7 +24,7 @@ typedef enum e_data_type {
     T_INT_Q,
     T_DOUBLE_Q,
     T_STRING_Q,
-    T_NIL, // void function
+    T_NIL, 
     T_VOID
 } data_type;
 
@@ -41,10 +41,6 @@ typedef struct symbol_data {
     bool is_var;
     var_type var_type;
     data_type data_type;
-    // ukládat hodnoty proměnných do TS?
-    // int int_value;
-    // double double_value;
-    // char *string_value;
 
     // Function
     bool is_func;
