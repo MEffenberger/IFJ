@@ -64,6 +64,23 @@ forest_node* forest_search_function(forest_node *global, char *key) {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////?????
+void forest_convert_to_nonq_data_type(char *key){
+    AVL_tree *node = forest_search_symbol(active, key);
+    if (node != NULL) {
+            sym_data *data = symtable_lookup(node, key);
+            if (data != NULL) {
+                if (data->data_type == T_STRING_Q) {
+                    data->data_type = T_STRING;
+                } else if (data->data_type == T_INT_Q) {
+                    data->data_type = T_INT;
+                } else if (data->data_type == T_DOUBLE_Q) {
+                    data->data_type = T_DOUBLE;
+                }
+        }
+    }
+}
+
 
 
 // search for a symbol in a symtable, if not found, search in the parent's symtable

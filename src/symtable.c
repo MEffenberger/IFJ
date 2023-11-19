@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 // void symtable_init(AVL_tree **tree) {
 //     *tree = NULL;
 // }
@@ -68,6 +67,7 @@ sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) 
 
 
 AVL_tree *symtable_search(AVL_tree *tree, char *key) {
+    printf("SYMTABLE: Search %s\n", key);
     if (tree == NULL || key == NULL) {
         return NULL;
     }
