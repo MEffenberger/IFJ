@@ -13,7 +13,6 @@
 
 #include "codegen.h"
 
-token_stack_t *token_stack = NULL;
 
 // void codegen_write(instruction *inst) {
 //     for (int i = 0; i < inst->num_operands; i++) {
@@ -30,56 +29,60 @@ token_stack_t *token_stack = NULL;
 
 
 // function for generating code for function definition
-void codegen_funcdef() {
-    printf("CREATEFRAME\n");
-    printf("PUSHFRAME\n");
-    printf("LABEL %s\n", active->name);
-    for (int i = 0; i < token_stack->size; i++) {
-        if (token_stack->token_array[i]->type == TOKEN_ID) {
-            printf("DEFVAR LF@%s\n", token_stack->token_array[i]->value.vector->array);
-        }
+void codegen_func_def() {
+    // printf("\t\t\t\t\t\t\t\t\t\tCREATEFRAME\n");
+    // printf("\t\t\t\t\t\t\t\t\t\tPUSHFRAME\n");
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL %s\n", active->name);
+    while (!(token_is_empty(token_stack))) {
+        printf("\t\t\t\t\t\t\t\t\t\tDEFVAR LF@%s\n", token_top(token_stack)->value.vector->array);
+        printf("\t\t\t\t\t\t\t\t\t\tPOPS LF@%s\n", token_top(token_stack)->value.vector->array);
+        token_pop(token_stack);
     }
 }
 
 
-void codegen_funcdef_end() {
+void codegen_func_def_end() {
+    // printf("\t\t\t\t\t\t\t\t\t\tPOPFRAME\n");
+    printf("\t\t\t\t\t\t\t\t\t\tRETURN\n");
+}
 
+void codegen_func_call(char *label) {
+    printf("\t\t\t\t\t\t\t\t\t\tCALL %s\n", label);
 }
 
 
 void codegen_if() {
-    printf("LABEL if_%d\n\n\n\n", active->cond_cnt);
-    printf("DEFVAR LF@%%cond\n\n\n\n");
-    printf("POPS LF@%%cond\n\n\n\n");
-    printf("JUMPIFEQ else_%d LF@%%cond bool@false\n\n\n\n", active->cond_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL if_%d\n", active->cond_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tDEFVAR LF@%%cond\n");
+    printf("\t\t\t\t\t\t\t\t\t\tPOPS LF@%%cond\n");
+    printf("\t\t\t\t\t\t\t\t\t\tJUMPIFEQ else_%d LF@%%cond bool@false\n", active->cond_cnt);
 }
 
 void codegen_else() {
-    printf("JUMP end_if_%d\n\n\n\n", active->cond_cnt);
-    printf("LABEL else_%d\n\n\n\n", active->cond_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tJUMP end_if_%d\n", active->cond_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL else_%d\n", active->cond_cnt);
 
 }
 
 void codegen_ifelse_end() {
-    printf("LABEL end_if_%d\n\n\n\n", active->cond_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL end_if_%d\n", active->cond_cnt);
 }   
 
 
 void codegen_while_start() {
-    printf("LABEL while_%d\n\n\n\n", while_cnt);
-    printf("DEFVAR LF@%%cond\n\n\n\n");
-    printf("POPS LF@%%cond\n\n\n\n");
-    printf("JUMPIFEQ end_while_%d LF@%%cond bool@false\n\n\n\n", while_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL while_%d\n", while_cnt);
+    printf("\t\t\t\t\t\t\t\t\t\tDEFVAR LF@%%cond\n");
+    printf("\t\t\t\t\t\t\t\t\t\tPOPS LF@%%cond\n");
+    printf("\t\t\t\t\t\t\t\t\t\tJUMPIFEQ end_while_%d LF@%%cond bool@false\n", while_cnt);
 }
 
 void codegen_while_end() {
-    printf("JUMP %s\n\n\n\n", active->name);
-    printf("LABEL end_%s\n\n\n\n", active->name);
+    printf("\t\t\t\t\t\t\t\t\t\tJUMP %s\n", active->name);
+    printf("\t\t\t\t\t\t\t\t\t\tLABEL end_%s\n", active->name);
 }
 
 
 void codegen_generate_code_please() {
-    init(token_stack);
     printf(".IFJcode23\n");
 }
 

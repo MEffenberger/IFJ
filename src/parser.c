@@ -23,6 +23,7 @@ int ifelse_cnt = 0;
 int while_cnt = 0;
 char node_name[20] = {0};
 cnt_stack_t *cnt_stack = NULL;
+token_stack_t *token_stack = NULL;
 int cnt = 0;
 
 
@@ -240,6 +241,8 @@ void func_def() {
 
             params();
 
+            codegen_func_def();
+
             if (current_token->type == TOKEN_RPAR) {
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
@@ -267,7 +270,8 @@ void func_def() {
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
 
-                        
+                        codegen_func_def_end();
+
                         printf("-- returning...\n\n");
                         return;
                     }
@@ -379,6 +383,7 @@ void par_id() {
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's id
+        token_push(token_stack, current_token);
         queue_push(queue, current_token);
         queue_print(queue);
         printf("-- returning...\n\n");
@@ -597,6 +602,10 @@ void var_def() {
         if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
         }
+
+
+
+
         // store variable's name
         queue_push(queue, current_token);
         queue_print(queue);
@@ -704,7 +713,10 @@ void func_call() {
     printf("-- entering FUNC_CALL --\n");
     print_debug(current_token, 2, debug_cnt);
 
+
     // store the function's name for later usage
+    char *func_name = malloc(sizeof(char) * 20);
+    func_name = strcpy(func_name, current_token->value.vector->array);
     // queue_push(queue, current_token); bacha ve var_def aby se to nebylo, možná druhou queue?
 
     // get TOKEN_LPAR from buffer
@@ -716,6 +728,9 @@ void func_call() {
     args();
 
     if (current_token->type == TOKEN_RPAR) {
+        codegen_func_call(func_name);
+        free(func_name); func_name = NULL;
+
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
@@ -982,6 +997,8 @@ int parser_parse_please () {
 
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
+    token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
+    token_init(token_stack);
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
     forest_node *global = forest_insert_global();

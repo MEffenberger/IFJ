@@ -51,8 +51,9 @@ typedef struct codeblock {
 
 
 
-void codegen_funcdef();
-void codegen_funcdef_end();
+void codegen_func_def();
+void codegen_func_def_end();
+void codegen_func_call(char *label);
 void codegen_if();
 void codegen_else();
 void codegen_ifelse_end();
