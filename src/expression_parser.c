@@ -27,7 +27,7 @@ static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 /* == */ {'<','<','<','<',' ',' ',' ',' ',' ',' ','<','>','<','>','<','>'},
 /* !  */ {'>','>','>','>','>','>','>','>','>','>',' ','>',' ','>','>','>'},
 /* ?? */ {'<','<','<','<','<','<','<','<','<','?','<','<','<','>','<','>'},
-/* (  */ {'<','<','<','<','<','<','<','<','<','<',' ','<','<','=','<',' '},
+/* (  */ {'<','<','<','<','<','<','<','<','<','<','<','<','<','=','<',' '},
 /* )  */ {'>','>','>','>','>','>','>','>','>','>','>','>',' ','>',' ','>'},
 /* i  */ {'>','>','>','>','>','>','>','>','>','>','>','>',' ','>',' ','>'},
 /* $  */ {'<','<','<','<','<','<','<','<','<','<','<','<','<',' ','<',' '},
@@ -138,21 +138,55 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     {
     case 1: //E->i
         return RULE_OPERAND;
-        break;
 
+    case 2:
+        if(token1->type == TOKEN_EXCLAM && token2->type == TOKEN_EXPRESSION){
+            return RULE_EXCL;
+        } else {
+            error_exit(2, "expression_parser", "Wrong operator");
+        }
+        break;
     case 3:
+
+        if(token1->type == TOKEN_RPAR && token3->type == TOKEN_LPAR){
+            return RULE_PAR;
+        }
+
         switch (token2->type)
         {
         case TOKEN_PLUS:
             return RULE_ADD;
-            break;
+        case TOKEN_MULTIPLY:
+            return RULE_MUL;
+        case TOKEN_MINUS:
+            return RULE_SUB;
+        case TOKEN_DIVIDE:
+            return RULE_DIV;
+        case TOKEN_LESS:
+            return RULE_LESS;
+        case TOKEN_LESS_EQ:
+            return RULE_LEQ;
+        case TOKEN_GREAT:
+            return RULE_GTR;   
+        case TOKEN_GREAT_EQ:
+            return RULE_GEQ;       
+        case TOKEN_EQEQ:
+            return RULE_EQ;    
+        case TOKEN_EXCLAMEQ:
+            return RULE_NEQ;  
+        case TOKEN_DOUBLE_QM:
+            return RULE_QMS;  
         default:
+            error_exit(2, "expression_parser", "Wrong operator");
+            return NOT_RULE;
             break;
         }
     default:
         error_exit(2, "expression_parser", "Rule does not exist");
+        return NOT_RULE;
         break;
     }
+    return NOT_RULE;
 }
 
 void call_expr_parser(token_type_t return_type){
@@ -166,14 +200,14 @@ void call_expr_parser(token_type_t return_type){
     char table_result;
 
     bool eval_expr = true; 
-
+    
     while(eval_expr){
         
         token_t* terminal = stack_top_terminal(&stack);
+
         int stack_index = get_index(terminal->type);
         int next_token_index = get_index(current_token->type);
         table_result = precedence_table[stack_index][next_token_index];
-
 
         if(next_token_index == 15 && stack_top_terminal(&stack)->type == TOKEN_DOLLAR){
 
@@ -224,31 +258,78 @@ void call_expr_parser(token_type_t return_type){
             {
             case RULE_OPERAND:
                 if(tmp1->type == TOKEN_ID){
+
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->value.keyword = KW_EXP_ID_INT;
+                    printf("PUSHS typ@%s\n", tmp1->value.vector->array);
                     //hledani v symtable
                 } else if(tmp1->type == TOKEN_DEC){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->value.keyword = KW_EXP_CONST_DOUBLE;
+                    printf("PUSHS float@%a\n", tmp1->value.type_double);
                 } else if(tmp1->type == TOKEN_NUM){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->value.keyword = KW_EXP_CONST_INT;
+                    printf("PUSHS int@%d\n", tmp1->value.integer);
                 } else if (tmp1->type == TOKEN_EXP){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->value.keyword = KW_EXP_CONST_DOUBLE;
+                    printf("PUSHS float@%a\n", tmp1->value.type_double);
                 } else if (tmp1->type == TOKEN_STRING){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->value.keyword = KW_EXP_CONST_STRING;  
+                    printf("PUSHS string@%s\n", tmp1->value.vector->array);
                 }
                 stack_push(&stack, tmp1);
-                //stack_push(&stack, current_token);
                 break;
+
+            case RULE_EXCL:
+                stack_push(&stack, tmp2);
+                break;
+
             
+            case RULE_PAR:
+                stack_push(&stack, tmp2);
+                break;
+
             case RULE_ADD:
                 //check datovych typu
                 //printneme 2xPUSHS ADDS
+                printf("ADDS\n");
                 stack_push(&stack, tmp1);
-                //stack_push(&stack, current_token);
+                break;
+            case RULE_MUL:
+                printf("MULS\n");
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_SUB:
+                printf("SUBS\n");
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_DIV:
+                printf("DIVS\n");
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_LESS:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_LEQ:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_GTR:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_GEQ:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_EQ:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_NEQ:
+                stack_push(&stack, tmp1);
+                break;
+            case RULE_QMS:
+                stack_push(&stack, tmp1);
                 break;
             default:
                 break;
@@ -256,6 +337,8 @@ void call_expr_parser(token_type_t return_type){
 
             break;
         case '=':
+            stack_push(&stack, current_token);
+            current_token = get_next_token();
             break;
         
         default:
@@ -264,11 +347,6 @@ void call_expr_parser(token_type_t return_type){
 
     }
 
-
-    
-    for(int i = 0; i < stack.size; i++){
-        printf("TOKEN %d hodnota %d\n", i, stack.token_array[i]->type);
-    }
-    printf("%d", stack.size);
+    //printf("%d", stack.size);
     //printf("%d", current_token->type);
 }
