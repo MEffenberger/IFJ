@@ -1,0 +1,10 @@
+.IFJcode23
+DEFVAR GF@a 
+PUSHS int@3
+PUSHS int@2
+ADDS
+PUSHS int@3
+IDIVS
+POPS GF@a 
+WRITE GF@a
+

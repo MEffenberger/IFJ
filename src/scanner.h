@@ -141,15 +141,22 @@ typedef enum keyword{
 
     KW_GLOBAL,   // global (for global forest node)
 
-    KW_EXP_ID_INT,
-    KW_EXP_ID_DOUBLE,
-    KW_EXP_ID_STRING,
-
-    KW_EXP_CONST_INT,
-    KW_EXP_CONST_DOUBLE,
-    KW_EXP_CONST_STRING,
-
 }keyword_t;
+
+
+typedef enum expression_value{
+    INT,
+    DOUBLE,
+    STRING,
+    NIL,
+} expression_value_t;
+
+typedef enum expression_type{
+    ID,
+    CONST,
+} expression_type_t;
+
+
 
 typedef struct token_value
 {
@@ -164,6 +171,8 @@ typedef struct token {
     value_type_t value;
     token_type_t type;
     bool prev_was_eol;
+    expression_type_t exp_type;
+    expression_value_t exp_value;
 } token_t;
 
 keyword_t compare_keyword(vector* v);

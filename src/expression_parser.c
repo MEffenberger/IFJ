@@ -189,6 +189,61 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     return NOT_RULE;
 }
 
+
+void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
+    if (tmp1->exp_value == tmp3->exp_value){
+        if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
+            error_exit(2, "expression_parser", "Wrong operator in concatenation");
+        }
+    }
+    else{
+        if (tmp1->exp_type == CONST){
+            if (tmp3->exp_type == ID){
+                error_exit(2, "expression_parser", "ID type mismatch");
+            }
+            else{
+                if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                    error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                }
+
+                if (tmp1->exp_value == INT){
+                    printf("INT2FLOATS\n");
+                }
+                else if (tmp3->exp_value == INT){
+                    printf("DEFVAR GF@$$tmp$$\n");
+                    printf("POPS GF@$$tmp$$\n");
+                    printf("INT2FLOATS\n");
+                    printf("PUSHS GF@$$tmp$$\n");
+                }
+            }
+        }
+        else if (tmp3->exp_type == CONST){
+            if (tmp1->exp_type == ID){
+                error_exit(2, "expression_parser", "ID type mismatch");
+            }
+            else{
+                if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                    error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                }
+
+                if (tmp1->exp_value == INT){
+                    printf("INT2FLOATS\n");
+                }
+                else if (tmp3->exp_value == INT){
+                    printf("DEFVAR GF@$$tmp$$\n");
+                    printf("POPS GF@$$tmp$$\n");
+                    printf("INT2FLOATS\n");
+                    printf("PUSHS GF@$$tmp$$\n");
+                }
+            }
+        }
+        else{
+            error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
+        }
+    }
+}
+
+
 void call_expr_parser(token_type_t return_type){
     token_stack stack;
     stack_init(&stack);
@@ -253,31 +308,35 @@ void call_expr_parser(token_type_t return_type){
 
             stack_pop(&stack);
             expression_rules_t rule = find_reduce_rule(tmp1, tmp2, tmp3, rule_params_count);
-
             switch (rule)
             {
             case RULE_OPERAND:
                 if(tmp1->type == TOKEN_ID){
 
                     tmp1->type = TOKEN_EXPRESSION;
-                    tmp1->value.keyword = KW_EXP_ID_INT;
+                    tmp1->exp_type = ID;
+                    tmp1->exp_value = INT;
                     printf("PUSHS typ@%s\n", tmp1->value.vector->array);
                     //hledani v symtable
                 } else if(tmp1->type == TOKEN_DEC){
                     tmp1->type = TOKEN_EXPRESSION;
-                    tmp1->value.keyword = KW_EXP_CONST_DOUBLE;
+                    tmp1->exp_type = CONST;
+                    tmp1->exp_value = DOUBLE;
                     printf("PUSHS float@%a\n", tmp1->value.type_double);
                 } else if(tmp1->type == TOKEN_NUM){
                     tmp1->type = TOKEN_EXPRESSION;
-                    tmp1->value.keyword = KW_EXP_CONST_INT;
+                    tmp1->exp_type = CONST;
+                    tmp1->exp_value = INT;
                     printf("PUSHS int@%d\n", tmp1->value.integer);
                 } else if (tmp1->type == TOKEN_EXP){
                     tmp1->type = TOKEN_EXPRESSION;
-                    tmp1->value.keyword = KW_EXP_CONST_DOUBLE;
+                    tmp1->exp_type = CONST;
+                    tmp1->exp_value = DOUBLE;
                     printf("PUSHS float@%a\n", tmp1->value.type_double);
                 } else if (tmp1->type == TOKEN_STRING){
                     tmp1->type = TOKEN_EXPRESSION;
-                    tmp1->value.keyword = KW_EXP_CONST_STRING;  
+                    tmp1->exp_type = CONST;
+                    tmp1->exp_value = STRING;
                     printf("PUSHS string@%s\n", tmp1->value.vector->array);
                 }
                 stack_push(&stack, tmp1);
@@ -293,16 +352,17 @@ void call_expr_parser(token_type_t return_type){
                 break;
 
             case RULE_ADD:
-                //check datovych typu
-                //printneme 2xPUSHS ADDS
+                check_types(tmp1,tmp2, tmp3);
                 printf("ADDS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_MUL:
+                check_types(tmp1, tmp2, tmp3);
                 printf("MULS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_SUB:
+                check_types(tmp1, tmp2, tmp3);
                 printf("SUBS\n");
                 stack_push(&stack, tmp1);
                 break;
