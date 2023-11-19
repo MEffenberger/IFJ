@@ -202,6 +202,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 if (tmp3->exp_type == ID){
                     if(tmp3->exp_value == DOUBLE){
                         printf("INT2FLOATS\n");
+                        tmp1->exp_value = DOUBLE;
                     } else {
                         error_exit(2, "expression_parser", "ID type mismatch");
                     }
@@ -213,6 +214,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                     if (tmp1->exp_value == INT){
                         printf("INT2FLOATS\n");
+                        tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
                         printf("DEFVAR GF@$$tmp$$\n");
@@ -241,6 +243,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                     if (tmp1->exp_value == INT){
                         printf("INT2FLOATS\n");
+                        tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
                         printf("DEFVAR GF@$$tmp$$\n");
@@ -271,6 +274,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp3->exp_value == DOUBLE){
                         printf("INT2FLOATS\n");
                         printf("DIVS\n");
+                        tmp1->exp_value = DOUBLE;
                     } else {
                         error_exit(2, "expression_parser", "ID type mismatch");
                     }
@@ -282,6 +286,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if (tmp1->exp_value == INT){
                         printf("INT2FLOATS\n");
                         printf("DIVS\n");
+                        tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
                         printf("DEFVAR GF@$$tmp$$\n");
@@ -312,6 +317,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if (tmp1->exp_value == INT){
                         printf("INT2FLOATS\n");
                         printf("DIVS\n");
+                        tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
                         printf("DEFVAR GF@$$tmp$$\n");
