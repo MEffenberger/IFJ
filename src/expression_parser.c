@@ -191,58 +191,144 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
 
 
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
-    if (tmp1->exp_value == tmp3->exp_value){
-        if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
-            error_exit(2, "expression_parser", "Wrong operator in concatenation");
-        }
-    }
-    else{
-        if (tmp1->exp_type == CONST){
-            if (tmp3->exp_type == ID){
-                error_exit(2, "expression_parser", "ID type mismatch");
+
+    if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
+        if (tmp1->exp_value == tmp3->exp_value){
+            if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
+                error_exit(2, "expression_parser", "Wrong operator in concatenation");
+            }
+        } else{
+            if (tmp1->exp_type == CONST){
+                if (tmp3->exp_type == ID){
+                    if(tmp3->exp_value == DOUBLE){
+                        printf("INT2FLOATS\n");
+                    } else {
+                        error_exit(2, "expression_parser", "ID type mismatch");
+                    }
+                }
+                else{
+                    if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                    }
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                    }
+                }
+            }
+            else if (tmp3->exp_type == CONST){
+                if (tmp1->exp_type == ID){
+                    if(tmp1->exp_value == DOUBLE){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                    } else {
+                        error_exit(2, "expression_parser", "ID type mismatch");
+                    }
+                    
+                }
+                else{
+                    if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                    }
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                    }
+                }
             }
             else{
-                if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                    error_exit(2, "expression_parser", "This cannot participate in concatenation");
-                }
-
-                if (tmp1->exp_value == INT){
-                    printf("INT2FLOATS\n");
-                }
-                else if (tmp3->exp_value == INT){
-                    printf("DEFVAR GF@$$tmp$$\n");
-                    printf("POPS GF@$$tmp$$\n");
-                    printf("INT2FLOATS\n");
-                    printf("PUSHS GF@$$tmp$$\n");
-                }
+                error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
             }
         }
-        else if (tmp3->exp_type == CONST){
-            if (tmp1->exp_type == ID){
-                error_exit(2, "expression_parser", "ID type mismatch");
+    } else if(tmp2->type == TOKEN_DIVIDE){
+        if (tmp1->exp_value == tmp3->exp_value){
+            if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
+                error_exit(2, "expression_parser", "Wrong operator in concatenation");
+            }
+
+            if(tmp1->exp_value == INT && tmp1->exp_value == INT){
+                printf("IDIVS\n");
+            } else {
+                printf("DIVS\n");
+            }
+        } else {
+            if (tmp1->exp_type == CONST){
+                if (tmp3->exp_type == ID){
+                    if(tmp3->exp_value == DOUBLE){
+                        printf("INT2FLOATS\n");
+                        printf("DIVS\n");
+                    } else {
+                        error_exit(2, "expression_parser", "ID type mismatch");
+                    }
+                } else{
+                    if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                    }
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        printf("DIVS\n");
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("DIVS\n");
+                    }
+                }
+            }
+            else if (tmp3->exp_type == CONST){
+                if (tmp1->exp_type == ID){
+                    if(tmp1->exp_value == DOUBLE){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("DIVS\n");
+                    } else {
+                        error_exit(2, "expression_parser", "ID type mismatch");
+                    }
+                }
+                else{
+                    if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
+                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                    }
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        printf("DIVS\n");
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("DIVS\n");
+                    }
+                }
             }
             else{
-                if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                    error_exit(2, "expression_parser", "This cannot participate in concatenation");
-                }
-
-                if (tmp1->exp_value == INT){
-                    printf("INT2FLOATS\n");
-                }
-                else if (tmp3->exp_value == INT){
-                    printf("DEFVAR GF@$$tmp$$\n");
-                    printf("POPS GF@$$tmp$$\n");
-                    printf("INT2FLOATS\n");
-                    printf("PUSHS GF@$$tmp$$\n");
-                }
+                error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
             }
         }
-        else{
-            error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
-        }
     }
+    
 }
-
 
 void call_expr_parser(token_type_t return_type){
     token_stack stack;
@@ -367,7 +453,7 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_DIV:
-                printf("DIVS\n");
+                check_types(tmp1, tmp2, tmp3);
                 stack_push(&stack, tmp1);
                 break;
             case RULE_LESS:

@@ -149,6 +149,11 @@ typedef enum expression_value{
     DOUBLE,
     STRING,
     NIL,
+    BOOL,
+    INT_QM,
+    DOUBLE_QM,
+    STRING_QM,
+
 } expression_value_t;
 
 typedef enum expression_type{
