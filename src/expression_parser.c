@@ -267,6 +267,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 printf("IDIVS\n");
             } else {
                 printf("DIVS\n");
+                tmp1->exp_value = DOUBLE;
             }
         } else {
             if (tmp1->exp_type == CONST){
