@@ -29,7 +29,7 @@ token_stack_t *token_stack = NULL;
 int cnt = 0;
 int renamer3000 = 0;
 int call_args_order = 0;
-
+char *var_name = NULL; // to find the data type of variable for expression parser
 
 
 
@@ -254,8 +254,6 @@ void func_def() {
                 print_debug(current_token, 1, debug_cnt++);
 
                 ret_type();
-
-                printf("here\n");
 
                 // insert function with its return type to symtable
                 data = set_data_func(&data, convert_dt(queue->first->token));
@@ -494,6 +492,8 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
+        //call_expr_parser(tmp->return_type); 
+
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
     }
@@ -513,6 +513,7 @@ void body() {
             if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
+            var_name = current_token->value.vector->array; // for case: id = <exp>
             assign();
         }
         else if (token_buffer->type == TOKEN_LPAR) {
@@ -613,6 +614,7 @@ void var_def() {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
+        var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 //        if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
 //            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
 //        }
@@ -626,11 +628,13 @@ void var_def() {
 
         // insert variable to symtable
         if (queue->first->next == NULL) {
-            // TODO: set_data_var: data_type musi byt odvozen z hodnoty (není expicitně zadán)
+            data = set_data_var(data, is_defined, T_UNKNOWN, letvar);
         }
         else {
             data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
         }
+
+        // data type of var set, T_UNKNOWN when not yet known, expr_parser should set it
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
         
@@ -696,6 +700,7 @@ void assign() {
     print_debug(current_token, 1, debug_cnt++);
 
     // here: id = | var id = | let id = 
+    // id is in var_name
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -703,20 +708,23 @@ void assign() {
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_LPAR) {
-            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions //////////////////////////OSETRENO?
-            // if (false) {  
-            //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
-            // }
-            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls //TOTO BY TO MOHLO RESIT
+            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls 
 
             func_call();
         }
         else {
+            //AVL_tree *tmp = forest_search_symbol(active, var_name);
+            //call_expr_parser(tmp->data.data_type); 
+
             //expression_parser(); calling with the first token of expression in current_token
             //when expr-parser returns, current_token is first token after the expression
         }
     }
     else {
+        // get the data type of the variable from symtable
+        //AVL_tree *tmp = forest_search_symbol(active, var_name);
+        //call_expr_parser(tmp->data.data_type); 
+
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
     }    
@@ -770,13 +778,13 @@ void args() {
     if (token_buffer->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
-                                                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////// ZUSTAVAME ARG COUNTEM NA NULE
+                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////// ZUSTAVAME ARG COUNTEM NA NULE
     }
     else {
         // <args> -> <arg> <args_n>
-        call_args_order++;                                                                                             //////////////////////////////////////////// ZVYSUJEME S KAZDYM NACTENYM ARGUMENTEM, ZACINAME NA 1
+        call_args_order++;                                                                             //////////////////////////////////////////// ZVYSUJEME S KAZDYM NACTENYM ARGUMENTEM, ZACINAME NA 1
         arg();
-        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                                          ////////////////////////////////////////////////// JESUS PLS
+        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                               ////////////////////////////////////////////////// JESUS PLS
         if (call_args_order != tmp->data.order) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
         }
@@ -806,7 +814,7 @@ void arg() {
         // check if the name of the argument in function call matches the name of the parameter in function definition
         // search the value based on the order of the callee's arguments utilize forest_search and symtable_lookup
 
-        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                                          ////////////////////////////////////////////////// JESUS PLS
+        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                              ////////////////////////////////////////////////// JESUS PLS
         int order_of_arg = call_args_order;
         if (!validation_of_id(tmp, current_token->value.vector->array, order_of_arg)) {                                 ////////////////////////////////////////////////// TADY TO MOZNA SPADNE NEKDA?
             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
@@ -823,6 +831,9 @@ void arg() {
             print_debug(current_token, 1, debug_cnt++);
         }
     }
+
+    //call_expr_parser(); // TODO: hey calle logic, how do I get the data type of the argument in function call to tell the expr_parser?
+
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
 }
@@ -892,6 +903,8 @@ void condition() {
         }
     }
     else {
+        //call_expr_parser(T_BOOL); 
+
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
     }
@@ -985,6 +998,8 @@ void cycle() {
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
+
+    // call_expr_parser(T_BOOL);
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
@@ -1282,15 +1297,15 @@ void rename_keep_exit() {
 
         // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
         if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
-            printf("active->symtable: %p\n", active->symtable);
-            printf("Printing active->symtable in order:\n");
-            inorder(&(active->symtable));
-            printf("\n");
+            // printf("active->symtable: %p\n", active->symtable);
+            // printf("Printing active->symtable in order:\n");
+            // inorder(&(active->symtable));
+            // printf("\n");
 
             // The node is not in any symtable above the current node, the name can be kept
             if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL)
             {
-                printf("should be here");
+                // printf("should be here");
                 return;
             } else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
             {

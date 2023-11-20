@@ -27,7 +27,9 @@ typedef enum e_data_type {
     T_DOUBLE_Q,
     T_STRING_Q,
     T_NIL, 
-    T_VOID
+    T_VOID,
+    T_BOOL,
+    T_UNKNOWN = -1
 } data_type;
 
 typedef enum e_var_type {
