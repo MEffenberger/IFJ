@@ -268,13 +268,17 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             error_exit(2, "expression_parser", "Can not divide bool");
         }
 
-
         if (tmp1->exp_value == tmp3->exp_value){
+
+            if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
+                    error_exit(53, "expression_parser", "Division by zero");
+            }
+
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
                 error_exit(2, "expression_parser", "Wrong operator in concatenation");
             }
 
-            if(tmp1->exp_value == INT && tmp1->exp_value == INT){
+            if(tmp1->exp_value == INT){
                 printf("IDIVS\n");
             } else {
                 printf("DIVS\n");
@@ -282,6 +286,11 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
         } else {
             if (tmp1->exp_type == CONST){
+
+                if((tmp1->value.integer == 0 && tmp1->exp_value == INT) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE)){
+                    error_exit(53, "expression_parser", "Division by zero");
+                }
+
                 if (tmp3->exp_type == ID){
                     if(tmp3->exp_value == DOUBLE){
                         printf("INT2FLOATS\n");
@@ -344,7 +353,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
-    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
+    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
         } else {
@@ -533,15 +542,32 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_LESS:
+                check_types(tmp1, tmp2, tmp3);
+                printf("LTS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_LEQ:
+                check_types(tmp1, tmp2, tmp3);
+                printf("LTS\n");
+                printf("DEFVAR GF@$$res1\n");
+                printf("DEFVAR GF@$$res2\n");
+                printf("POPS GF@$$res1\n");
+                //printf("PUSHS %d@%d\n", tmp3->exp_value, tmp3->value.integer);
+                //printf("PUSHS %d@%d\n", tmp1->exp_value, tmp1->value.integer);
+                printf("EQS\n");
+                printf("POPS GF@$$res2\n");
+                printf("PUSHS GF@$$res1\n");
+                printf("PUSHS GF@$$res2\n");
+                printf("ORS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_GTR:
+                check_types(tmp1, tmp2, tmp3);
+                printf("GTS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_GEQ:
+                check_types(tmp1, tmp2, tmp3);
                 stack_push(&stack, tmp1);
                 break;
             case RULE_EQ:
