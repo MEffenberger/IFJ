@@ -750,9 +750,14 @@ void func_call() {
     func_name = strcpy(func_name, current_token->value.vector->array);
 
 
-    AVL_tree* tmp = forest_search_symbol(active, var_name);
-    printf("dada\n");
-    insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
+    // func_call is not assigned 
+    if (var_name == NULL) {
+        insert_callee_into_list(callee_list, func_name, T_VOID);
+    }
+    else {
+        AVL_tree* tmp = forest_search_symbol(active, var_name);
+        insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
+    }
 
 
     // get TOKEN_LPAR from buffer
@@ -785,6 +790,11 @@ void args() {
 
     peek();
     if (token_buffer->type == TOKEN_RPAR) {
+
+        // get TOKEN_RPAR from buffer
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+
         printf("-- returning...\n\n");
         return;
     }
@@ -1370,11 +1380,11 @@ void callee_validation(forest_node *global) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
                         else {
-                            callee_list = callee_list->next;
                         }
                     }
                 }
             }
         }
+        callee_list = callee_list->next;
     }
 }
