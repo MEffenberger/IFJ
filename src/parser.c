@@ -23,10 +23,12 @@ int debug_cnt = 1;
 int ifelse_cnt = 0;
 int while_cnt = 0;
 char node_name[20] = {0};
+char *func_name_validate = NULL;
 cnt_stack_t *cnt_stack = NULL;
 token_stack_t *token_stack = NULL;
 int cnt = 0;
 int renamer3000 = 0;
+int call_args_order = 0;
 
 
 
@@ -242,6 +244,8 @@ void func_def() {
             print_debug(current_token, 1, debug_cnt++);
 
             params();
+            active->param_cnt = param_order;                                                ///////////////////////////////////////// TATO SPECIFIC FUNKCE MA MIT TOLIK PARAMETRU
+            param_order = 0;                                                                ///////////////////////////////////////// NOVY ORDER PRO NOVOU FUNKCI
 
             codegen_func_def();
 
@@ -342,8 +346,11 @@ void params() {
     }
 
     // insert parameter to function's symtable
+    param_order++;
     data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array);
+
     symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, data);
+                                                                                                                                             ///??????????????????????????????????????????? PARAM ORDER (0 bude default)
     queue_dispose(queue);
 
     current_token = get_next_token();
@@ -721,11 +728,13 @@ void func_call() {
     printf("-- entering FUNC_CALL --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    call_args_order = 0;                                                                                                //////////////////////////////////////////// ZACINAME NA 0, VZDY SE VYNULUJE
 
     // store the function's name for later usage
     char *func_name = malloc(sizeof(char) * 20);
     func_name = strcpy(func_name, current_token->value.vector->array);
     // queue_push(queue, current_token); bacha ve var_def aby se to nebylo, možná druhou queue?
+    func_name_validate = func_name;                                                                                     /////////////////////////UKAZATEL NA TADY TO JMENO FUNKCE, KTEROU CHCEM VOLAT
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
@@ -761,10 +770,16 @@ void args() {
     if (token_buffer->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
+                                                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////// ZUSTAVAME ARG COUNTEM NA NULE
     }
     else {
         // <args> -> <arg> <args_n>
+        call_args_order++;                                                                                             //////////////////////////////////////////// ZVYSUJEME S KAZDYM NACTENYM ARGUMENTEM, ZACINAME NA 1
         arg();
+        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                                          ////////////////////////////////////////////////// JESUS PLS
+        if (call_args_order != tmp->data.order) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
+        }
 
         if (current_token->type == TOKEN_RPAR) {
             printf("-- returning...\n\n");
@@ -789,7 +804,13 @@ void arg() {
 
     if (current_token->type == TOKEN_ID) {
         // check if the name of the argument in function call matches the name of the parameter in function definition
-        //
+        // search the value based on the order of the callee's arguments utilize forest_search and symtable_lookup
+
+        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                                          ////////////////////////////////////////////////// JESUS PLS
+        int order_of_arg = call_args_order;
+        if (!validation_of_id(tmp, current_token->value.vector->array, order_of_arg)) {                                 ////////////////////////////////////////////////// TADY TO MOZNA SPADNE NEKDA?
+            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+        }
 
         peek();
         if (token_buffer->type == TOKEN_COLON) {
@@ -1260,7 +1281,6 @@ void print_debug(token_t *token, int mode, int cnt) {
 void rename_keep_exit() {
 
         // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-
         if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
             printf("active->symtable: %p\n", active->symtable);
             printf("Printing active->symtable in order:\n");
@@ -1289,7 +1309,6 @@ void rename_keep_exit() {
             }
         }
         error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
-
 }
 
 // Used for fn_calls validation as function can be called before its own declaration (recursive function calls)

@@ -15,6 +15,8 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #include <stdbool.h>
+extern int param_order;
+
 
 
 typedef enum e_data_type {
@@ -50,6 +52,7 @@ typedef struct symbol_data {
     bool is_param;
     const char *param_name;
     data_type param_type;
+    int order;
 
 } sym_data;
 
@@ -194,5 +197,6 @@ void symtable_dispose(AVL_tree **tree);
  */
 void inorder(AVL_tree **tree);
 
+bool validation_of_id(AVL_tree *tree, char *key, int order_arg);
 
 #endif //IFJ_SYMTABLE_H

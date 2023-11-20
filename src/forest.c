@@ -24,6 +24,7 @@ forest_node *forest_insert_global() {
     root->children_count = 0;
     root->symtable = NULL;
     root->cond_cnt = 0;
+    root->param_cnt = 0;
     return root; 
 }
 

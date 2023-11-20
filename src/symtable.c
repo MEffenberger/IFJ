@@ -18,6 +18,7 @@
 // void symtable_init(AVL_tree **tree) {
 //     *tree = NULL;
 // }
+int param_order = 0;
 
 void data_init(sym_data *data){
     data->defined = false; // initialized
@@ -62,6 +63,7 @@ sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) 
     data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
+    data->order = param_order;
     return *data;
 }
 
@@ -97,6 +99,21 @@ sym_data *symtable_lookup(AVL_tree *tree, char *key) {
     }
 }
 
+bool validation_of_id(AVL_tree *tree, char *key, int order_arg) {
+    if (tree == NULL || key == NULL) {
+        return false;
+    }
+    else if (strcmp(tree->key, key) == 0 && order_arg == tree->data.order && tree->data.is_param) {
+        return true;
+    }
+    else if (strcmp(tree->key, key) > 0) {
+        return validation_of_id(tree->left, key, order_arg);
+    }
+    else { // strcmp(tree->key, key) < 0
+        return validation_of_id(tree->right, key, order_arg);
+    }
+    return false;
+}
 
 int height(AVL_tree *tree) {
     if (tree == NULL) {
