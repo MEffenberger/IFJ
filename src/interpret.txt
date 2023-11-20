@@ -1,8 +1,18 @@
 .IFJcode23
-DEFVAR GF@a 
-PUSHS int@0
-PUSHS int@6
-SUBS
+DEFVAR GF@a
+PUSHS int@3
+PUSHS int@2
+PUSHS int@3
+PUSHS int@2
+LTS
+DEFVAR GF@$$res1
+DEFVAR GF@$$res2
+POPS GF@$$res1
+EQS
+POPS GF@$$res2
+PUSHS GF@$$res1
+PUSHS GF@$$res2
+ORS
 POPS GF@a 
 WRITE GF@a
 

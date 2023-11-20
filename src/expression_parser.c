@@ -12,6 +12,8 @@
 
 #define TABLE_SIZE 16
 
+int variable_counter = 1;
+
 static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 
 /*    *//* +   -   *   /   <   >   <=  >=  !=  ==  !   ??  (   )   i   $   */
@@ -222,20 +224,22 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
+                        variable_counter++;
                     }
                 }
             }
             else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
                     if(tmp1->exp_value == DOUBLE){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
+                        variable_counter++;
                     } else {
                         error_exit(2, "expression_parser", "ID type mismatch");
                     }
@@ -251,10 +255,11 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
+                        variable_counter++;
                     }
                 }
             }
@@ -310,22 +315,24 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         printf("DIVS\n");
+                        variable_counter++;
                     }
                 }
             }
             else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
                     if(tmp1->exp_value == DOUBLE){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         printf("DIVS\n");
+                        variable_counter++;
                     } else {
                         error_exit(2, "expression_parser", "ID type mismatch");
                     }
@@ -341,11 +348,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = DOUBLE;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         printf("DIVS\n");
+                        variable_counter++;
                     }
                 }
             }
@@ -372,22 +380,24 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = BOOL;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         tmp1->exp_value = BOOL;
+                        variable_counter++;
                     }
                 }
             }
             else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
                     if(tmp1->exp_value == DOUBLE){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         tmp1->exp_value = BOOL;
+                        variable_counter++;
                     } else {
                         error_exit(7, "expression_parser", "Can not compare 2 values of different types");
                     }
@@ -398,11 +408,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = BOOL;
                     }
                     else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
+                        printf("DEFVAR GF@$$tmp%d$$\n", variable_counter);
+                        printf("POPS GF@$$tmp%d$$\n", variable_counter);
                         printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
+                        printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         tmp1->exp_value = BOOL;
+                        variable_counter++;
                     }
                 }
             }
@@ -421,7 +432,48 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 }
 
 
+void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
+    if (tmp3->exp_type == CONST){
+        if (tmp3->exp_value == INT){
+            printf("PUSHS int@%d\n", tmp3->value.integer);
+        } else if (tmp3->exp_value == DOUBLE){
+            printf("PUSHS float@%a\n", tmp3->value.type_double);
+        } else if (tmp3->exp_value == STRING){
+            printf("PUSHS string@%s\n", tmp3->value.vector->array);
+        }
+    } else {
+        if (tmp3->exp_value == INT){
+            printf("PUSHS int@%s\n", tmp3->value.vector->array);
+        } else if (tmp3->exp_value == DOUBLE){
+            printf("PUSHS float@%s\n", tmp3->value.vector->array);
+        } else if (tmp3->exp_value == STRING){
+            printf("PUSHS string@%s\n", tmp3->value.vector->array);
+        }
+    }
+
+    if (tmp1->exp_type == CONST){
+        if (tmp1->exp_value == INT){
+            printf("PUSHS int@%d\n", tmp1->value.integer);
+        } else if (tmp1->exp_value == DOUBLE){
+            printf("PUSHS float@%a\n", tmp1->value.type_double);
+        } else if (tmp1->exp_value == STRING){
+            printf("PUSHS string@%s\n", tmp1->value.vector->array);
+        }
+    } else {
+        if (tmp1->exp_value == INT){
+            printf("PUSHS int@%s\n", tmp1->value.vector->array);
+        } else if (tmp1->exp_value == DOUBLE){
+            printf("PUSHS float@%s\n", tmp1->value.vector->array);
+        } else if (tmp1->exp_value == STRING){
+            printf("PUSHS string@%s\n", tmp1->value.vector->array);
+        }
+    }
+}
+
+
+
 void call_expr_parser(token_type_t return_type){
+
     token_stack stack;
     stack_init(&stack);
 
@@ -449,6 +501,7 @@ void call_expr_parser(token_type_t return_type){
             }
             eval_expr = false;
             printf("TT:%d", stack_top(&stack)->exp_value);
+            dispose_stack(&stack);
             break;
         }
 
@@ -521,6 +574,9 @@ void call_expr_parser(token_type_t return_type){
                 break;
 
             case RULE_EXCL:
+                if(tmp2->exp_value == NIL){
+                    error_exit(7, "expression_parser", "Expression is nil");
+                }
                 stack_push(&stack, tmp2);
                 break;
 
@@ -554,19 +610,20 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_LEQ:
+                push_for_leq_geq(tmp1, tmp3);
                 check_types(tmp1, tmp2, tmp3);
                 printf("LTS\n");
-                printf("DEFVAR GF@$$res1\n");
-                printf("DEFVAR GF@$$res2\n");
-                printf("POPS GF@$$res1\n");
-                //printf("PUSHS %d@%d\n", tmp3->exp_value, tmp3->value.integer);
-                //printf("PUSHS %d@%d\n", tmp1->exp_value, tmp1->value.integer);
+                printf("DEFVAR GF@$$leq%d$$\n", variable_counter);
+                printf("DEFVAR GF@$$leq%d$$\n", variable_counter+1);
+                printf("POPS GF@$$leq%d$$\n", variable_counter);
                 printf("EQS\n");
-                printf("POPS GF@$$res2\n");
-                printf("PUSHS GF@$$res1\n");
-                printf("PUSHS GF@$$res2\n");
+                printf("POPS GF@$$leq%d$$\n", variable_counter +1);
+                printf("PUSHS GF@$$leq%d$$\n", variable_counter);
+                printf("PUSHS GF@$$leq%d$$\n", variable_counter+1);
                 printf("ORS\n");
                 stack_push(&stack, tmp1);
+                variable_counter++;
+                variable_counter++;
                 break;
             case RULE_GTR:
                 check_types(tmp1, tmp2, tmp3);
@@ -574,8 +631,20 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_GEQ:
+                push_for_leq_geq(tmp1, tmp3);
                 check_types(tmp1, tmp2, tmp3);
+                printf("GTS\n");
+                printf("DEFVAR GF@$$geq%d$$\n", variable_counter);
+                printf("DEFVAR GF@$$geq%d$$\n", variable_counter+1);
+                printf("POPS GF@$$geq%d$$\n", variable_counter);
+                printf("EQS\n");
+                printf("POPS GF@$$geq%d$$\n", variable_counter+1);
+                printf("PUSHS GF@$$geq%d$$\n", variable_counter);
+                printf("PUSHS GF@$$geq%d$$\n", variable_counter+1);
+                printf("ORS\n");
                 stack_push(&stack, tmp1);
+                variable_counter++;
+                variable_counter++;
                 break;
             case RULE_EQ:
                 check_types(tmp1, tmp2, tmp3);
@@ -589,7 +658,22 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_QMS:
-                stack_push(&stack, tmp1);
+                if(tmp3->exp_value != NIL){
+                    printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
+                    printf("POPS GF@$$qms%d$$\n", variable_counter);
+                    stack_push(&stack, tmp3);
+                    variable_counter++;
+                } else {
+                    printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
+                    printf("DEFVAR GF@$$qms%d$$\n", variable_counter+1);
+                    printf("POPS GF@$$qms%d$$\n", variable_counter);
+                    printf("POPS GF@$$qms%d$$\n", variable_counter+1);
+                    printf("PUSHS GF@$$qm%d$$\n", variable_counter);
+                    stack_push(&stack, tmp1);
+                    variable_counter++;
+                    variable_counter++;
+
+                }
                 break;
             default:
                 break;
