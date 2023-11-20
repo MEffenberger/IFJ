@@ -193,6 +193,11 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
+
+        if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
+            error_exit(2, "expression_parser", "Can not do arithmetic opeation with booleans");
+        }
+
         if (tmp1->exp_value == tmp3->exp_value){
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
                 error_exit(2, "expression_parser", "Wrong operator in concatenation");
@@ -258,6 +263,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
         }
     } else if(tmp2->type == TOKEN_DIVIDE){
+
+        if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
+            error_exit(2, "expression_parser", "Can not divide bool");
+        }
+
+
         if (tmp1->exp_value == tmp3->exp_value){
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
                 error_exit(2, "expression_parser", "Wrong operator in concatenation");
@@ -333,7 +344,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
-    } else if(tmp2->type == TOKEN_EQEQ){
+    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
         } else {
@@ -361,62 +372,6 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else if (tmp3->exp_type == CONST){
-                if (tmp1->exp_type == ID){
-                    if(tmp1->exp_value == DOUBLE){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
-                        printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
-                        tmp1->exp_value = BOOL;
-                    } else {
-                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
-                    }
-                }
-                else{
-                    if (tmp1->exp_value == INT){
-                        printf("INT2FLOATS\n");
-                        tmp1->exp_value = BOOL;
-                    }
-                    else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
-                        printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
-                        tmp1->exp_value = BOOL;
-                    }
-                }
-            }
-            else{
-                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
-            }
-        }
-    } else if(tmp2->type == TOKEN_EXCLAMEQ){
-        if(tmp1->exp_value == tmp3->exp_value){
-            tmp1->exp_value = BOOL;
-        } else {
-            if (tmp1->exp_type == CONST){
-                if (tmp3->exp_type == ID){
-                    if(tmp3->exp_value == DOUBLE){
-                        printf("INT2FLOATS\n");
-                        tmp1->exp_value = BOOL;
-                    } else {
-                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
-                    }
-                } else{
-
-                    if (tmp1->exp_value == INT){
-                        printf("INT2FLOATS\n");
-                        tmp1->exp_value = BOOL;
-                    }
-                    else if (tmp3->exp_value == INT){
-                        printf("DEFVAR GF@$$tmp$$\n");
-                        printf("POPS GF@$$tmp$$\n");
-                        printf("INT2FLOATS\n");
-                        printf("PUSHS GF@$$tmp$$\n");
-                        tmp1->exp_value = BOOL;
-                    }
-                }
-            } else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
                     if(tmp1->exp_value == DOUBLE){
                         printf("DEFVAR GF@$$tmp$$\n");
