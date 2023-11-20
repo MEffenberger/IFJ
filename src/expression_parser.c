@@ -353,7 +353,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
-    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
         } else {
@@ -410,9 +410,16 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(7, "expression_parser", "Can not compare 2 values of different types");
             }
         }
+    } else if(tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+        if(tmp1->exp_value == tmp3->exp_value){
+            tmp1->exp_value = BOOL;
+        } else {
+                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+        }
     }
     
 }
+
 
 void call_expr_parser(token_type_t return_type){
     token_stack stack;
