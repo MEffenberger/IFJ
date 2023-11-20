@@ -330,7 +330,120 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
+                error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
+            }
+        }
+    } else if(tmp2->type == TOKEN_EQEQ){
+        if(tmp1->exp_value == tmp3->exp_value){
+            tmp1->exp_value = BOOL;
+        } else {
+            if (tmp1->exp_type == CONST){
+                if (tmp3->exp_type == ID){
+                    if(tmp3->exp_value == DOUBLE){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    } else {
+                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                    }
+                } else{
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                }
+            }
+            else if (tmp3->exp_type == CONST){
+                if (tmp1->exp_type == ID){
+                    if(tmp1->exp_value == DOUBLE){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    } else {
+                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                    }
+                }
+                else{
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                }
+            }
+            else{
+                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+            }
+        }
+    } else if(tmp2->type == TOKEN_EXCLAMEQ){
+        if(tmp1->exp_value == tmp3->exp_value){
+            tmp1->exp_value = BOOL;
+        } else {
+            if (tmp1->exp_type == CONST){
+                if (tmp3->exp_type == ID){
+                    if(tmp3->exp_value == DOUBLE){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    } else {
+                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                    }
+                } else{
+
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                }
+            } else if (tmp3->exp_type == CONST){
+                if (tmp1->exp_type == ID){
+                    if(tmp1->exp_value == DOUBLE){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    } else {
+                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                    }
+                }
+                else{
+                    if (tmp1->exp_value == INT){
+                        printf("INT2FLOATS\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                    else if (tmp3->exp_value == INT){
+                        printf("DEFVAR GF@$$tmp$$\n");
+                        printf("POPS GF@$$tmp$$\n");
+                        printf("INT2FLOATS\n");
+                        printf("PUSHS GF@$$tmp$$\n");
+                        tmp1->exp_value = BOOL;
+                    }
+                }
+            }
+            else{
+                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
             }
         }
     }
@@ -476,9 +589,14 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_EQ:
+                check_types(tmp1, tmp2, tmp3);
+                printf("EQS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_NEQ:
+                check_types(tmp1, tmp2, tmp3);
+                printf("EQS\n");
+                printf("NOTS\n");
                 stack_push(&stack, tmp1);
                 break;
             case RULE_QMS:
