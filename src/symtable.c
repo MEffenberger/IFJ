@@ -18,7 +18,6 @@
 // void symtable_init(AVL_tree **tree) {
 //     *tree = NULL;
 // }
-int param_order = 0;
 
 void data_init(sym_data *data){
     data->defined = false; // initialized
@@ -26,9 +25,6 @@ void data_init(sym_data *data){
     data->is_var = false;
     data->var_type = VAR;
     data->data_type = T_NIL;
-    // data->int_value = 0;
-    // data->double_value = 0.0;
-    // data->string_value = NULL;
 
     data->is_func = false;
     data->return_type = T_NIL;
@@ -36,17 +32,15 @@ void data_init(sym_data *data){
     data->is_param = false;
     data->param_name = NULL;
     data->param_type = T_NIL;
+    data->param_order = 0;
 }
 
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { // int int_value, double double_value, char *string_value) {
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { 
     data_init(&data);
     data.is_var = true;
     data.defined = initialized;
     data.data_type = data_type;
     data.var_type = var_type;
-    // data.int_value = int_value;
-    // data.double_value = double_value;
-    // data.string_value = string_value;
     return data;
 }
 
@@ -58,12 +52,12 @@ sym_data set_data_func(sym_data *data, data_type return_type) {
     return *data;
 }
 
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name) {
+sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
     data_init(data);
     data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
-    data->order = param_order;
+    data->param_order = param_order;
     return *data;
 }
 
@@ -84,6 +78,30 @@ AVL_tree *symtable_search(AVL_tree *tree, char *key) {
     }
 }
 
+// traverse the tree and find the parameter with the given order
+AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg) {
+    if (tree == NULL) {
+        return NULL;
+    }
+    else if (tree->data.is_param && tree->data.param_order == order_arg) {
+        return tree;
+    }
+    else {
+        AVL_tree *left = symtable_find_param(tree->left, order_arg);
+        AVL_tree *right = symtable_find_param(tree->right, order_arg);
+        if (left != NULL) {
+            return left;
+        }
+        else if (right != NULL) {
+            return right;
+        }
+        else {
+            return NULL;
+        }
+    }
+}
+
+
 sym_data *symtable_lookup(AVL_tree *tree, char *key) {
     if (tree == NULL || key == NULL) {
         return NULL;
@@ -103,7 +121,7 @@ bool validation_of_id(AVL_tree *tree, char *key, int order_arg) {
     if (tree == NULL || key == NULL) {
         return false;
     }
-    else if (strcmp(tree->key, key) == 0 && order_arg == tree->data.order && tree->data.is_param) {
+    else if (strcmp(tree->key, key) == 0 && order_arg == tree->data.param_order && tree->data.is_param) {
         return true;
     }
     else if (strcmp(tree->key, key) > 0) {

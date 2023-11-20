@@ -15,7 +15,6 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #include <stdbool.h>
-extern int param_order;
 
 
 
@@ -54,7 +53,7 @@ typedef struct symbol_data {
     bool is_param;
     const char *param_name;
     data_type param_type;
-    int order;
+    int param_order;
 
 } sym_data;
 
@@ -109,8 +108,9 @@ sym_data set_data_func(sym_data *data, data_type return_type);
  * @param data Data to be set
  * @param param_type Data type of the parameter
  * @param param_name Name of the parameter
+ * @param param_order Order of the parameter
  */
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name);
+sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order);
 
 /**
  * @brief Symbol insertion
@@ -199,6 +199,7 @@ void symtable_dispose(AVL_tree **tree);
  */
 void inorder(AVL_tree **tree);
 
+AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg);
 bool validation_of_id(AVL_tree *tree, char *key, int order_arg);
 
 #endif //IFJ_SYMTABLE_H

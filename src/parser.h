@@ -22,6 +22,7 @@
 // #include "expression_parser.h"
 #include "codegen.h"
 #include "string_vector.h"
+#include "callee.h"
 
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
@@ -173,7 +174,8 @@ int parser_parse_please();
 
 void rename_keep_exit();
 
-void validate_fn_calls();
+void callee_validation(forest_node *global);
+
 
 /**
  * @brief When a return statement is encountered, check if it is somewhere in a function

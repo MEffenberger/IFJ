@@ -15,7 +15,7 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
 token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
-queue_t *fn_call_queue = NULL; // Queue for function calls
+//queue_t *fn_call_queue = NULL; // Queue for function calls
 sym_data data = {0};
 var_type letvar = -1;
 bool is_defined = false;
@@ -28,8 +28,11 @@ cnt_stack_t *cnt_stack = NULL;
 token_stack_t *token_stack = NULL;
 int cnt = 0;
 int renamer3000 = 0;
-int call_args_order = 0;
+///int call_args_order = 0;
 char *var_name = NULL; // to find the data type of variable for expression parser
+int param_order = 0;
+callee_list_t *callee_list = NULL;
+
 
 
 
@@ -122,84 +125,84 @@ token_t* get_next_token() {
 }
 
 
-void built_in_functions() {
-    // func readString() -> String?
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
-    data = set_data_func(&data, T_STRING_Q);
-    symtable_insert(&active->symtable, "readString", data);
-    BACK_TO_PARENT_IN_FOREST;
+// void built_in_functions() {
+//     // func readString() -> String?
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
+//     data = set_data_func(&data, T_STRING_Q);
+//     symtable_insert(&active->symtable, "readString", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func readInt() -> Int?
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
-    data = set_data_func(&data, T_INT_Q);
-    symtable_insert(&active->symtable, "readInt", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func readInt() -> Int?
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
+//     data = set_data_func(&data, T_INT_Q);
+//     symtable_insert(&active->symtable, "readInt", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func readDouble() -> Double?
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
-    data = set_data_func(&data, T_DOUBLE_Q);
-    symtable_insert(&active->symtable, "readDouble", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func readDouble() -> Double?
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
+//     data = set_data_func(&data, T_DOUBLE_Q);
+//     symtable_insert(&active->symtable, "readDouble", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // tODO picovINA PRBLM
-    // func write(term_1, term_2, ..., term_n)
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-    data = set_data_func(&data, T_NIL);
-    symtable_insert(&active->symtable, "write", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // tODO picovINA PRBLM
+//     // func write(term_1, term_2, ..., term_n)
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
+//     data = set_data_func(&data, T_NIL);
+//     symtable_insert(&active->symtable, "write", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func Int2Double(_ term : Int) -> Double
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
-    data = set_data_func(&data, T_DOUBLE);
-    symtable_insert(&active->symtable, "Int2Double", data);
-    data = set_data_param(&data, T_INT, "_");
-    symtable_insert(&active->symtable, "term", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func Int2Double(_ term : Int) -> Double
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
+//     data = set_data_func(&data, T_DOUBLE);
+//     symtable_insert(&active->symtable, "Int2Double", data);
+//     data = set_data_param(&data, T_INT, "_");
+//     symtable_insert(&active->symtable, "term", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func Double2Int(_ term : Double) -> Int
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
-    data = set_data_func(&data, T_INT);
-    symtable_insert(&active->symtable, "Double2Int", data);
-    data = set_data_param(&data, T_DOUBLE, "_");
-    symtable_insert(&active->symtable, "term", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func Double2Int(_ term : Double) -> Int
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
+//     data = set_data_func(&data, T_INT);
+//     symtable_insert(&active->symtable, "Double2Int", data);
+//     data = set_data_param(&data, T_DOUBLE, "_");
+//     symtable_insert(&active->symtable, "term", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func length(_ s : String) -> Int
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
-    data = set_data_func(&data, T_INT);
-    symtable_insert(&active->symtable, "length", data);
-    data = set_data_param(&data, T_STRING, "_");
-    symtable_insert(&active->symtable, "s", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func length(_ s : String) -> Int
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
+//     data = set_data_func(&data, T_INT);
+//     symtable_insert(&active->symtable, "length", data);
+//     data = set_data_param(&data, T_STRING, "_");
+//     symtable_insert(&active->symtable, "s", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
-    data = set_data_func(&data, T_STRING_Q);
-    symtable_insert(&active->symtable, "substring", data);
-    data = set_data_param(&data, T_STRING, "of");
-    symtable_insert(&active->symtable, "s", data);
-    data = set_data_param(&data, T_INT, "startingAt");
-    symtable_insert(&active->symtable, "i", data);
-    data = set_data_param(&data, T_INT, "endingBefore");
-    symtable_insert(&active->symtable, "j", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
+//     data = set_data_func(&data, T_STRING_Q);
+//     symtable_insert(&active->symtable, "substring", data);
+//     data = set_data_param(&data, T_STRING, "of");
+//     symtable_insert(&active->symtable, "s", data);
+//     data = set_data_param(&data, T_INT, "startingAt");
+//     symtable_insert(&active->symtable, "i", data);
+//     data = set_data_param(&data, T_INT, "endingBefore");
+//     symtable_insert(&active->symtable, "j", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func ord(_ c : String) -> Int
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
-    data = set_data_func(&data, T_INT);
-    symtable_insert(&active->symtable, "ord", data);
-    data = set_data_param(&data, T_STRING, "_");
-    symtable_insert(&active->symtable, "c", data);
-    BACK_TO_PARENT_IN_FOREST;
+//     // func ord(_ c : String) -> Int
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
+//     data = set_data_func(&data, T_INT);
+//     symtable_insert(&active->symtable, "ord", data);
+//     data = set_data_param(&data, T_STRING, "_");
+//     symtable_insert(&active->symtable, "c", data);
+//     BACK_TO_PARENT_IN_FOREST;
 
-    // func chr(_ i : Int) -> String
-    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
-    data = set_data_func(&data, T_STRING);
-    symtable_insert(&active->symtable, "chr", data);
-    data = set_data_param(&data, T_INT, "_");
-    symtable_insert(&active->symtable, "i", data);
-    BACK_TO_PARENT_IN_FOREST;
-}
+//     // func chr(_ i : Int) -> String
+//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
+//     data = set_data_func(&data, T_STRING);
+//     symtable_insert(&active->symtable, "chr", data);
+//     data = set_data_param(&data, T_INT, "_");
+//     symtable_insert(&active->symtable, "i", data);
+//     BACK_TO_PARENT_IN_FOREST;
+// }
 
 
 
@@ -244,8 +247,10 @@ void func_def() {
             print_debug(current_token, 1, debug_cnt++);
 
             params();
-            active->param_cnt = param_order;                                                ///////////////////////////////////////// TATO SPECIFIC FUNKCE MA MIT TOLIK PARAMETRU
-            param_order = 0;                                                                ///////////////////////////////////////// NOVY ORDER PRO NOVOU FUNKCI
+
+            // set the number of parameters of the function
+            active->param_cnt = param_order;
+            param_order = 0;
 
             codegen_func_def();
 
@@ -344,11 +349,10 @@ void params() {
     }
 
     // insert parameter to function's symtable
-    param_order++;
-    data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array);
+    data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
 
     symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, data);
-                                                                                                                                             ///??????????????????????????????????????????? PARAM ORDER (0 bude default)
+
     queue_dispose(queue);
 
     current_token = get_next_token();
@@ -504,6 +508,8 @@ void body() {
     printf("-- entering BODY --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    var_name = NULL;
+
     // note: když je <body> -> eps, tak body() se vůbec nezavolá
 
     if (current_token->type == TOKEN_ID) {
@@ -518,11 +524,13 @@ void body() {
         }
         else if (token_buffer->type == TOKEN_LPAR) {
             // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
-            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls
+            //queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls
 
             // if (false) {  
             //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
             // }
+
+            // function call without assigning, expecting void function
             func_call();
         }
         else {
@@ -708,7 +716,7 @@ void assign() {
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_LPAR) {
-            queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls 
+            //queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls 
 
             func_call();
         }
@@ -736,25 +744,26 @@ void func_call() {
     printf("-- entering FUNC_CALL --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    call_args_order = 0;                                                                                                //////////////////////////////////////////// ZACINAME NA 0, VZDY SE VYNULUJE
 
-    // store the function's name for later usage
-    char *func_name = malloc(sizeof(char) * 20);
+    // store the function's name for later usage (for codegen)
+    char *func_name = malloc(sizeof(char) * strlen(current_token->value.vector->array) + 1);
     func_name = strcpy(func_name, current_token->value.vector->array);
-    // queue_push(queue, current_token); bacha ve var_def aby se to nebylo, možná druhou queue?
-    func_name_validate = func_name;                                                                                     /////////////////////////UKAZATEL NA TADY TO JMENO FUNKCE, KTEROU CHCEM VOLAT
+
+
+    AVL_tree* tmp = forest_search_symbol(active, var_name);
+    printf("dada\n");
+    insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
+
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
-    // TODO: hodně validation ze symtable dané funkce, jeslti všechno sedí dle definice
-    // jestli matchuje počet argumentů, jména a datové typy atd.
     args();
 
     if (current_token->type == TOKEN_RPAR) {
+
         codegen_func_call(func_name);
-        free(func_name); func_name = NULL;
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -778,16 +787,10 @@ void args() {
     if (token_buffer->type == TOKEN_RPAR) {
         printf("-- returning...\n\n");
         return;
-                                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////// ZUSTAVAME ARG COUNTEM NA NULE
     }
     else {
         // <args> -> <arg> <args_n>
-        call_args_order++;                                                                             //////////////////////////////////////////// ZVYSUJEME S KAZDYM NACTENYM ARGUMENTEM, ZACINAME NA 1
         arg();
-        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                               ////////////////////////////////////////////////// JESUS PLS
-        if (call_args_order != tmp->data.order) {
-            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
-        }
 
         if (current_token->type == TOKEN_RPAR) {
             printf("-- returning...\n\n");
@@ -811,18 +814,13 @@ void arg() {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
-        // check if the name of the argument in function call matches the name of the parameter in function definition
-        // search the value based on the order of the callee's arguments utilize forest_search and symtable_lookup
 
-        AVL_tree *tmp = forest_search_symbol(active, func_name_validate);                                                              ////////////////////////////////////////////////// JESUS PLS
-        int order_of_arg = call_args_order;
-        if (!validation_of_id(tmp, current_token->value.vector->array, order_of_arg)) {                                 ////////////////////////////////////////////////// TADY TO MOZNA SPADNE NEKDA?
-            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
-        }
 
         peek();
         if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
+            insert_into_callee(callee_list->callee, current_token->value.vector->array);
+
             // get TOKEN_COLON from buffer
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
@@ -832,7 +830,7 @@ void arg() {
         }
     }
 
-    //call_expr_parser(); // TODO: hey calle logic, how do I get the data type of the argument in function call to tell the expr_parser?
+    //call_expr_parser(); // TODO: if function is already defined, its possible somehow to get the parameters datatype, otherwise v pici
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
@@ -1039,14 +1037,16 @@ int parser_parse_please () {
     printf("Parser parse please\n");
     printf("---------------------\n\n");
 
+    callee_list = init_callee_list();
+
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
     token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
     token_init(token_stack);
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
-    fn_call_queue = (queue_t*)malloc(sizeof(queue_t));
-    init_queue(fn_call_queue);
+    // fn_call_queue = (queue_t*)malloc(sizeof(queue_t));
+    // init_queue(fn_call_queue);
     forest_node *global = forest_insert_global();
     active = global;
     //built_in_functions(); // insert built-in functions to the global symtable
@@ -1058,7 +1058,10 @@ int parser_parse_please () {
 
     prog();
 
-    validate_fn_calls();
+
+
+
+    callee_validation(global);
 
     traverse_forest(global);
 
@@ -1326,18 +1329,6 @@ void rename_keep_exit() {
         error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
 }
 
-// Used for fn_calls validation as function can be called before its own declaration (recursive function calls)
-void validate_fn_calls() {
-    while (!queue_is_empty(fn_call_queue)) {
-        token_t *token = queue_pop(fn_call_queue);
-        if (token == NULL) {
-            return;
-        }
-        if (forest_search_symbol(active, token->value.vector->array) == NULL) {
-            error_exit(ERROR_SYN, "PARSER", "Function is not defined");
-        }
-    }
-}
 
 // when a return statement is encountered, check if it is somewhere in a function
 forest_node* check_return_stmt(forest_node *node) {
@@ -1353,6 +1344,37 @@ forest_node* check_return_stmt(forest_node *node) {
         }
         else {
             return check_return_stmt(node->parent);
+        }
+    }
+}
+
+
+// validating function calls, since function definitions can be after function calls
+void callee_validation(forest_node *global) {
+    while (callee_list->next != NULL) {
+        forest_node *tmp = forest_search_function(global, callee_list->callee->name);
+        if (tmp == NULL) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
+        }
+        else {
+            if (callee_list->callee->arg_count != tmp->param_cnt) {
+                error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
+            }
+            else {
+                if (callee_list->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                    error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
+                }
+                else {
+                    for (int i = 1; i <= tmp->param_cnt; i++) {
+                        if (callee_list->callee->args_names[i] != (symtable_find_param(tmp->symtable, i))->data.param_name) {
+                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+                        }
+                        else {
+                            callee_list = callee_list->next;
+                        }
+                    }
+                }
+            }
         }
     }
 }

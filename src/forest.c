@@ -36,6 +36,7 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         child->parent = parent;
         child->children = NULL;
         child->cond_cnt = 0;
+        child->param_cnt = 0;
         if (parent->children == NULL) {
             parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)) , "forest node children", BASIC);
         } else {

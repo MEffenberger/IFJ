@@ -14,14 +14,13 @@
 #define IFJ_CALLEE_H
 
 #include "symtable.h"
-#include <string.h>
-#include <stdlib.h>
+#include "error.h"
 
     typedef struct callee{
     char *name;
     data_type return_type;
-    int param_count;
-    char **ids;
+    int arg_count;
+    char **args_names; // '_' for unnamed
     }callee_t;
 
     typedef struct callee_list{
@@ -30,8 +29,13 @@
     }callee_list_t;
 
 callee_list_t* init_callee_list();
-callee_t* init_callee(const char* name, data_type return_type, int param_count);
+callee_t* init_callee(const char* name, data_type return_type);
+void insert_callee_into_list(callee_list_t* list, const char* name, data_type return_type);
 void insert_into_callee(callee_t* callee, char* id);
+
+void callee_list_dispose(callee_list_t* list);
+void callee_dispose(callee_t* callee);
+
 
 
 
