@@ -477,6 +477,7 @@ void call_expr_parser(token_type_t return_type){
                 error_exit(2, "expression_parser", "empty expression");
             }
             eval_expr = false;
+            printf("TT:%d", stack_top(&stack)->exp_value);
             break;
         }
 
