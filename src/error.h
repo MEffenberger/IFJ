@@ -44,7 +44,6 @@ typedef enum e_error_code {
 
 // Data types for allocated pointers
 typedef enum e_alloc_type {
-    NONE,
     BASIC,
     VECTOR,
     SYMTABLE,

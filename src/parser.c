@@ -1,9 +1,9 @@
 /**
- * @file error.h
+ * @file parser.c
  *
  * IFJ23 compiler
  *
- * @brief Error handling header file
+ * @brief Recursive descent parser for IFJ23 language including semantic analysis
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
@@ -25,14 +25,14 @@ int while_cnt = 0;
 char node_name[20] = {0};
 char *func_name_validate = NULL;
 cnt_stack_t *cnt_stack = NULL;
-token_stack_t *token_stack = NULL;
+//token_stack_t *token_stack = NULL;
 int cnt = 0;
 int renamer3000 = 0;
 ///int call_args_order = 0;
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 callee_list_t *callee_list = NULL;
-
+data_type type_of_expr = T_UNKNOWN;
 
 
 
@@ -144,11 +144,9 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "readDouble", data);
     BACK_TO_PARENT_IN_FOREST;
 
-
-    //
     // func write(term_1, term_2, ..., term_n)
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-    data = set_data_func(&data, T_NIL);
+    data = set_data_func(&data, T_VOID);
     symtable_insert(&active->symtable, "write", data);
     BACK_TO_PARENT_IN_FOREST;
 
@@ -399,7 +397,7 @@ void par_id() {
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's id
-        token_push(token_stack, current_token);
+        //token_push(token_stack, current_token);
         queue_push(queue, current_token);
         queue_print(queue);
         printf("-- returning...\n\n");
@@ -504,6 +502,8 @@ void ret() {
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
     }
+    // CODEGEN
+    codegen_func_def_return();
 }
 
 void body() {
@@ -526,13 +526,6 @@ void body() {
             assign();
         }
         else if (token_buffer->type == TOKEN_LPAR) {
-            /// TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
-            //queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls
-
-            // if (false) {  
-            //     error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
-            // }
-
             // function call without assigning, expecting void function
             func_call();
         }
@@ -564,45 +557,17 @@ void body() {
                 cycle();                       
                 break;
 
-            // case KW_RD_STR:
-
-            //     break;
-
-            // case KW_RD_INT:
-
-            //     break;
-
-            // case KW_RD_DBL:
-
-            //     break;
-
-            // case KW_WRT:
-
-            //     break;
-
-            // case KW_INT_2_DBL:
-
-            //     break;
-
-            // case KW_DBL_2_INT:
-
-            //     break;
-
-            // case KW_LENGHT:
-
-            //     break;
-
-            // case KW_SUBSTR:
-
-            //     break;
-
-            // case KW_ORD:
-
-            //     break;
-
-            // case KW_CHR:
-
-            //     break;
+            // write(term_1, term_2, ..., term_n)
+            case KW_WRT:
+                peek();
+                if (token_buffer->type == TOKEN_LPAR) {
+                    // function call without assigning, expecting void function
+                    func_call();
+                    break;
+                }
+                else {
+                    error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
+                }
 
             default:
                 error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
@@ -626,10 +591,6 @@ void var_def() {
 
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
-//        if (symtable_search(active->symtable, current_token->value.vector->array) != NULL) {
-//            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Variable is already declared");
-//        }
-        //QUITE POSSIBLY NOT NEEDED
 
         // store variable's name
         rename_keep_exit();
@@ -716,11 +677,11 @@ void assign() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
+    // looking for function call
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_LPAR) {
-            //queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls 
-
+            // expecting user-defined function
             func_call();
         }
         else {
@@ -730,6 +691,59 @@ void assign() {
             //expression_parser(); calling with the first token of expression in current_token
             //when expr-parser returns, current_token is first token after the expression
         }
+    }
+    else if (current_token->type == TOKEN_KEYWORD) {
+        switch (current_token->value.keyword) {
+            case KW_RD_STR:
+                // CODEGEN
+                codegen_readString();
+                break;
+            
+            case KW_RD_INT:
+                // CODEGEN
+                codegen_readInt();
+                break;
+            
+            case KW_RD_DBL:
+                // CODEGEN
+                codegen_readDouble();
+                break;
+
+            case KW_INT_2_DBL:
+                // CODEGEN
+                codegen_Int2Double();
+                break;
+            
+            case KW_DBL_2_INT:
+                // CODEGEN
+                codegen_Double2Int();
+                break;
+
+            case KW_LENGHT:
+                // CODEGEN
+                codegen_length();
+                break;
+
+            case KW_SUBSTR:
+                // CODEGEN
+                codegen_substring();
+                break;
+            
+            case KW_ORD:
+                // CODEGEN
+                codegen_ord();
+                break;
+
+            case KW_CHR:
+                // CODEGEN
+                codegen_chr();
+                break;
+            
+            default:
+                error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment");
+                break;
+        }
+        func_call();
     }
     else {
         // get the data type of the variable from symtable
@@ -762,6 +776,8 @@ void func_call() {
         insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
     }
 
+    // CODEGEN 
+    codegen_func_call_start();
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
@@ -772,7 +788,7 @@ void func_call() {
     if (current_token->type == TOKEN_RPAR) {
 
         // CODEGEN
-        codegen_func_call(func_name);
+        codegen_func_call_end(func_name);
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -843,10 +859,8 @@ void arg() {
             print_debug(current_token, 1, debug_cnt++);
         }
     }
-
-
-
-
+    
+    insert_into_callee(callee_list->callee, "_");
 
     // calling expression parser for the argument in function call; 
     // based on the value of the expression, it has to be validated afterwards, that it matches parameters' data types in function definition
@@ -855,6 +869,9 @@ void arg() {
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
+
+    // CODEGEN
+    codegen_add_arg();
 }
 
 void args_n() {
@@ -1068,8 +1085,8 @@ int parser_parse_please () {
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
 
-    token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
-    token_init(token_stack);
+    //token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
+    //token_init(token_stack);
 
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
@@ -1114,21 +1131,22 @@ void rename_keep_exit() {
             {
                 // printf("should be here");
                 return;
-            } else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
-            {
-                printf("ich here");
-                int value = renamer3000;
-                char bytes[5];
+            } 
+            // else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
+            // {
+            //     printf("ich here");
+            //     int value = renamer3000;
+            //     char bytes[5];
 
-                sprintf(bytes, "%d", value);
+            //     sprintf(bytes, "%d", value);
 
-                for (int i = 0; bytes[i] != '\0'; i++) {
-                    vector_append(current_token->value.vector, bytes[i]);
-                }
+            //     for (int i = 0; bytes[i] != '\0'; i++) {
+            //         vector_append(current_token->value.vector, bytes[i]);
+            //     }
 
-                renamer3000++;
-                return;
-            }
+            //     renamer3000++;
+            //     return;
+            // }
         }
         error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
 }
@@ -1161,7 +1179,7 @@ void callee_validation(forest_node *global) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
         else {
-            if (callee_list->callee->arg_count != tmp->param_cnt) {
+            if (callee_list->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of builtin write function the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             }
             else {
@@ -1173,13 +1191,11 @@ void callee_validation(forest_node *global) {
                         if (callee_list->callee->args_names[i] != (symtable_find_param(tmp->symtable, i))->data.param_name) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
-                        else {
-                            callee_list = callee_list->next;
-                        }
                     }
                 }
             }
         }
+        callee_list = callee_list->next;
     }
 }
 

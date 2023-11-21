@@ -1,13 +1,14 @@
 /**
- * @file error.h
+ * @file parser.h
  *
  * IFJ23 compiler
  *
- * @brief Error handling header file
+ * @brief Recursive descent parser for IFJ23 language including semantic analysis
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
  */
+
 
 #ifndef IFJ_PARSER_H
 #define IFJ_PARSER_H
@@ -40,7 +41,7 @@ void print_debug(token_t *token, int mode, int cnt);
 extern token_t *current_token; // Pointer to the current token
 extern int ifelse_cnt; // Count of get_next_token calls
 extern int while_cnt; // Count of get_next_token calls
-extern int renamer3000; // used for creation of unique variable names
+extern data_type type_of_expr;
 
 
 /**

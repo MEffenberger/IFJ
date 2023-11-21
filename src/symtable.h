@@ -28,7 +28,7 @@ typedef enum e_data_type {
     T_NIL, 
     T_VOID,
     T_BOOL,
-    T_UNKNOWN = -1
+    T_UNKNOWN
 } data_type;
 
 typedef enum e_var_type {

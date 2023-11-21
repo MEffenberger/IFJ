@@ -26,8 +26,6 @@ void free_alloc_memory() {
     while (allocated_pointers != NULL) {
         alloc_ptr *tmp = allocated_pointers;
         switch (tmp->type) {
-            case NONE:
-                break;
             case BASIC:
                 free(tmp->ptr);
                 tmp->ptr = NULL;
@@ -61,6 +59,7 @@ void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type)
     }
     return ptr;
 }
+
 
 
 void error_exit(error_code_t error_code, const char* module, const char* message) { 

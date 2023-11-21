@@ -21,68 +21,248 @@
 // }
 
 
+int cnt = 1;
 
 
+void codegen_var_def(char *name) {
+    if (active->parent == NULL) {
+        printf("DEFVAR GF@%s\n", name);
+    } else {
+        printf("DEFVAR LF@%s\n", name);
+    }
+}
 
+void codegen_var_assign(char *name) {
+    if (active->parent == NULL) {
+        printf("POPS GF@%s\n", name);
+    } else {
+        printf("POPS LF@%s\n", name);
+    }
+}
 
 
 
 
 // function for generating code for function definition
 void codegen_func_def() {
-    // printf("\t\t\t\t\t\t\t\t\t\t  CREATEFRAME\n");
-    // printf("\t\t\t\t\t\t\t\t\t\t  PUSHFRAME\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL %s\n", active->name);
-    while (!(token_is_empty(token_stack))) {
-        printf("\t\t\t\t\t\t\t\t\t\t  DEFVAR LF@%s\n", token_top(token_stack)->value.vector->array);
-        printf("\t\t\t\t\t\t\t\t\t\t  POPS LF@%s\n", token_top(token_stack)->value.vector->array);
-        token_pop(token_stack);
-    }
+    printf("JUMP !!skip_%s\n", active->name);
+    printf("LABEL %s\n", active->name);
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    for (int i = 1; i <= active->param_cnt; i++) {
+        AVL_tree* param = symtable_find_param(active->symtable, i);
+        printf("DEFVAR LF@%s\n", param->data.param_name);
+        printf("MOVE LF@%s LF@$%d\n", param->data.param_name, i);
+    } 
 }
 
+void codegen_func_def_return() {
+    printf("POPS LF@$retval$\n");
+}
 
 void codegen_func_def_end() {
-    // printf("\t\t\t\t\t\t\t\t\t\t  POPFRAME\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  RETURN\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_%s\n", active->name);
 }
 
-void codegen_func_call(char *label) {
-    printf("\t\t\t\t\t\t\t\t\t\t  CALL %s\n", label);
+
+
+
+void codegen_func_call_start() {
+    printf("CREATEFRAME\n");
 }
+
+void codegen_add_arg() {
+    printf("DEFVAR TF@%%d\n", cnt);
+    printf("POPS TF@%%d\n", cnt++);
+}
+
+void codegen_func_call_end(char *label) {
+    cnt = 1;
+    printf("CALL %s\n", label);
+    printf("PUSHS TF@$retval$\n");
+}
+
 
 
 void codegen_if() {
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL if_%d\n", active->cond_cnt);
-    printf("\t\t\t\t\t\t\t\t\t\t  DEFVAR LF@%%cond\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  POPS LF@%%cond\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  JUMPIFEQ else_%d LF@%%cond bool@false\n", active->cond_cnt);
+    printf("LABEL if_%d\n", active->cond_cnt);
+    printf("DEFVAR LF@$cond$\n");
+    printf("POPS LF@$cond$\n");
+    printf("JUMPIFEQ else_%d LF@$cond$ bool@false\n", active->cond_cnt);
 }
 
 void codegen_else() {
-    printf("\t\t\t\t\t\t\t\t\t\t  JUMP end_if_%d\n", active->cond_cnt);
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL else_%d\n", active->cond_cnt);
+    printf("JUMP end_if_%d\n", active->cond_cnt);
+    printf("LABEL else_%d\n", active->cond_cnt);
 
 }
 
 void codegen_ifelse_end() {
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL end_if_%d\n", active->cond_cnt);
+    printf("LABEL end_if_%d\n", active->cond_cnt);
 }   
 
 
+
+
 void codegen_while_start() {
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL while_%d\n", while_cnt);
-    printf("\t\t\t\t\t\t\t\t\t\t  DEFVAR LF@%%cond\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  POPS LF@%%cond\n");
-    printf("\t\t\t\t\t\t\t\t\t\t  JUMPIFEQ end_while_%d LF@%%cond bool@false\n", while_cnt);
+    printf("LABEL while_%d\n", while_cnt);
+    printf("DEFVAR LF@$cond$\n");
+    printf("POPS LF@$cond$\n");
+    printf("JUMPIFEQ end_while_%d LF@$cond$ bool@false\n", while_cnt);
 }
 
 void codegen_while_end() {
-    printf("\t\t\t\t\t\t\t\t\t\t  JUMP %s\n", active->name);
-    printf("\t\t\t\t\t\t\t\t\t\t  LABEL end_%s\n", active->name);
+    printf("JUMP %s\n", active->name);
+    printf("LABEL end_%s\n", active->name);
 }
+
+
+
+
+void codegen_readString() {
+    printf("JUMP !!skip_readString\n");
+    printf("LABEL readString\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("READ LF@$retval$ string\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_readString\n");
+}
+
+void codegen_readInt() {
+    printf("JUMP !!skip_readInt\n");
+    printf("LABEL readInt\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("READ LF@$retval$ int\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_readInt\n");
+}
+
+void codegen_readDouble() {
+    printf("JUMP !!skip_readDouble\n");
+    printf("LABEL readDouble\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("READ LF@$retval$ double\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_readDouble\n");
+}
+
+void codegen_write() {
+    printf("LABEL write\n");
+    printf("PUSHFRAME\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+}
+
+void codegen_Int2Double() {
+    printf("JUMP !!skip_Int2Double\n");  
+    printf("LABEL Int2Double\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("INT2FLOAT LF@$retval$ LF@$1\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_Int2Double\n");
+}
+
+void codegen_Double2Int() {  
+    printf("JUMP !!skip_Double2Int\n");
+    printf("LABEL Double2Int\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("FLOAT2INT LF@$retval$ LF@$1\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_Double2Int\n");
+}
+
+void codegen_length() {
+    printf("JUMP !!skip_length\n");
+    printf("LABEL length\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("STRLEN LF@$retval$ LF@$1\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_length\n");
+}
+
+void codegen_substring() {
+    printf("JUMP !!skip_substring\n");
+    printf("LABEL substring\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("DEFVAR LF@$tmp1\n");
+    printf("DEFVAR LF@$check\n");
+    printf("MOVE LF@$check bool@false\n");
+    printf("LT LF@$check LF@$2 int@0\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("LT LF@$check LF@$3 int@0\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("GT LF@$check LF@$2 LF@$3\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("DEFVAR LF@$tmp_strlen\n");
+    printf("STRLEN LF@$tmp_strlen LF@$1\n");
+    printf("GT LF@$check LF@$2 LF@$tmp_strlen\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("EQ LF@$check LF@$2 LF@$tmp_strlen\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("GT LF@$check LF@$3 LF@$tmp_strlen\n");
+    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    printf("LABEL !!substring_loop\n");
+    printf("GETCHAR LF@$tmp1 LF@$1 LF@$2\n");
+    printf("CONCAT LF@$retval$ LF@$retval$ LF@$tmp1\n");
+    printf("ADD LF@$2 LF@$2 int@1\n");
+    printf("JUMPIFNEQ !!substring_loop LF@$2 LF@$3\n");
+    printf("JUMP !!load_result\n");
+    printf("LABEL !!load_nil\n");
+    printf("MOVE LF@$retval$ nil@nil\n");
+    printf("LABEL !!load_result\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_substring\n");
+}
+
+void codegen_ord() {
+    printf("JUMP !!skip_ord\n");
+    printf("LABEL ord\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("STR2INT LF@$retval$ LF@$1 int@0\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_ord\n");  
+}
+
+void codegen_chr() {
+    printf("JUMP !!skip_chr\n");
+    printf("LABEL chr\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@$retval$\n");
+    printf("INT2CHAR LF@$retval$ LF@$1\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL !!skip_chr\n");
+}
+
+
 
 
 void codegen_generate_code_please() {
     printf(".IFJcode23\n");
+    // printf("DEFVAR GF$tmp1\n"); dle potreby
+    // printf("DEFVAR GF$tmp2\n");
+    printf("JUMP $$main\n");
+
+    //space for sth before main
+
+    printf("LABEL $$main\n");
 }
 

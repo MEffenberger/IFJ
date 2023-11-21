@@ -87,7 +87,7 @@ void forest_convert_to_nonq_data_type(char *key){
 
 // search for a symbol in a symtable, if not found, search in the parent's symtable
 AVL_tree *forest_search_symbol(forest_node *node, char *key) {
-    printf("FOREST: Search symbol in the forest\n");
+    printf("FOREST: Search %s in the forest\n", key);
     if (node != NULL) {
         printf("searching in %s\n", node->name);
         if (node->symtable != NULL) {
