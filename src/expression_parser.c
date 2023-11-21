@@ -602,11 +602,11 @@ void call_expr_parser(token_type_t return_type){
                     printf("POPS GF@$$excl%d\n", variable_counter);
                     printf("PUSHS GF@$$excl%d\n", variable_counter);
                     printf("PUSHS nil@nil\n");
-                    printf("JUMPIFNEQS GF@$RULE_EXCL_CORRECT$\n");
-                    printf("GF@$RULE_EXCL_ERROR$\n");
+                    printf("JUMPIFNEQS $RULE_EXCL_CORRECT$\n");
+                    printf("LABEL $RULE_EXCL_ERROR$\n");
                     printf("WRITE string@Variable\\032is\\032NULL\n");
                     printf("EXIT int@7\n"); //doresit cislo chyby
-                    printf("GF@$RULE_EXCL_CORRECT$\n");
+                    printf("LABEL $RULE_EXCL_CORRECT$\n");
                     printf("PUSHS GF@$$excl%d\n", variable_counter);
                     variable_counter++;
                     stack_push(&stack, tmp2);
