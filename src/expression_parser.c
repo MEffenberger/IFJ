@@ -699,13 +699,41 @@ void call_expr_parser(token_type_t return_type){
                 break;
             case RULE_QMS:
                 if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
-                    if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
+                    /*if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
                         error_exit(7, "expression_parser", "wrong ID type for right side of ??");
-                    }
+                    }*/
                     //printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
                     //printf("POPS GF@$$qms%d$$\n", variable_counter);
                     //stack_push(&stack, tmp3);
                     //variable_counter++;
+                    printf("DEFVAR GF@$$rule_qms%d\n", variable_counter);
+                    printf("DEFVAR GF@$$rule_qms%d\n", variable_counter+1);
+                    printf("POPS GF@$$rule_qms%d\n", variable_counter);
+                    printf("POPS GF@$$rule_qms%d\n", variable_counter+1);
+                    printf("PUSHS GF@$$rule_qms%d\n", variable_counter+1);
+                    printf("PUSHS nil@nil\n");
+                    printf("JUMPIFNEQS $RULE_QMS_NOT_NILL$\n");
+
+                    printf("LABEL $RULE_QMS_NILL$\n");
+                    printf("PUSHS GF@$$rule_qms%d\n", variable_counter);
+                    printf("JUMP $END_RULE_QMS\n");
+
+                    printf("LABEL $RULE_QMS_NOT_NILL$\n");
+                    printf("PUSHS GF@$$rule_qms%d\n", variable_counter+1);
+
+                    printf("LABEL $END_RULE_QMS\n$");
+
+                    /*if(tmp3->exp_value == INT_QM){
+                        tmp1->exp_value = INT;
+                    } else if(tmp3->exp_value == DOUBLE_QM){
+                        tmp1->exp_value = DOUBLE;
+                    } else if(tmp3->exp_value == STRING){
+                        tmp1->exp_value = STRING;
+                    }*/
+                    variable_counter++;
+                    variable_counter++;
+                    stack_push(&stack, tmp1);
+
                 } else {
                     error_exit(7, "expression_parser", "wrong ID type for left side of ??");
                     /*printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
