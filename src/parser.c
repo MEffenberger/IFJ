@@ -125,84 +125,85 @@ token_t* get_next_token() {
 }
 
 
-// void built_in_functions() {
-//     // func readString() -> String?
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
-//     data = set_data_func(&data, T_STRING_Q);
-//     symtable_insert(&active->symtable, "readString", data);
-//     BACK_TO_PARENT_IN_FOREST;
+void define_built_in_functions() {
+    // func readString() -> String?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
+    data = set_data_func(&data, T_STRING_Q);
+    symtable_insert(&active->symtable, "readString", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func readInt() -> Int?
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
-//     data = set_data_func(&data, T_INT_Q);
-//     symtable_insert(&active->symtable, "readInt", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func readInt() -> Int?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
+    data = set_data_func(&data, T_INT_Q);
+    symtable_insert(&active->symtable, "readInt", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func readDouble() -> Double?
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
-//     data = set_data_func(&data, T_DOUBLE_Q);
-//     symtable_insert(&active->symtable, "readDouble", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func readDouble() -> Double?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
+    data = set_data_func(&data, T_DOUBLE_Q);
+    symtable_insert(&active->symtable, "readDouble", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // tODO picovINA PRBLM
-//     // func write(term_1, term_2, ..., term_n)
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-//     data = set_data_func(&data, T_NIL);
-//     symtable_insert(&active->symtable, "write", data);
-//     BACK_TO_PARENT_IN_FOREST;
 
-//     // func Int2Double(_ term : Int) -> Double
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
-//     data = set_data_func(&data, T_DOUBLE);
-//     symtable_insert(&active->symtable, "Int2Double", data);
-//     data = set_data_param(&data, T_INT, "_");
-//     symtable_insert(&active->symtable, "term", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    //
+    // func write(term_1, term_2, ..., term_n)
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
+    data = set_data_func(&data, T_NIL);
+    symtable_insert(&active->symtable, "write", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func Double2Int(_ term : Double) -> Int
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
-//     data = set_data_func(&data, T_INT);
-//     symtable_insert(&active->symtable, "Double2Int", data);
-//     data = set_data_param(&data, T_DOUBLE, "_");
-//     symtable_insert(&active->symtable, "term", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func Int2Double(_ term : Int) -> Double
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
+    data = set_data_func(&data, T_DOUBLE);
+    symtable_insert(&active->symtable, "Int2Double", data);
+    data = set_data_param(&data, T_INT, "_", 1);
+    symtable_insert(&active->symtable, "term", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func length(_ s : String) -> Int
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
-//     data = set_data_func(&data, T_INT);
-//     symtable_insert(&active->symtable, "length", data);
-//     data = set_data_param(&data, T_STRING, "_");
-//     symtable_insert(&active->symtable, "s", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func Double2Int(_ term : Double) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "Double2Int", data);
+    data = set_data_param(&data, T_DOUBLE, "_", 1);
+    symtable_insert(&active->symtable, "term", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
-//     data = set_data_func(&data, T_STRING_Q);
-//     symtable_insert(&active->symtable, "substring", data);
-//     data = set_data_param(&data, T_STRING, "of");
-//     symtable_insert(&active->symtable, "s", data);
-//     data = set_data_param(&data, T_INT, "startingAt");
-//     symtable_insert(&active->symtable, "i", data);
-//     data = set_data_param(&data, T_INT, "endingBefore");
-//     symtable_insert(&active->symtable, "j", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func length(_ s : String) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "length", data);
+    data = set_data_param(&data, T_STRING, "_", 1);
+    symtable_insert(&active->symtable, "s", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func ord(_ c : String) -> Int
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
-//     data = set_data_func(&data, T_INT);
-//     symtable_insert(&active->symtable, "ord", data);
-//     data = set_data_param(&data, T_STRING, "_");
-//     symtable_insert(&active->symtable, "c", data);
-//     BACK_TO_PARENT_IN_FOREST;
+    // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
+    data = set_data_func(&data, T_STRING_Q);
+    symtable_insert(&active->symtable, "substring", data);
+    data = set_data_param(&data, T_STRING, "of", 1);
+    symtable_insert(&active->symtable, "s", data);
+    data = set_data_param(&data, T_INT, "startingAt", 2);
+    symtable_insert(&active->symtable, "i", data);
+    data = set_data_param(&data, T_INT, "endingBefore", 3);
+    symtable_insert(&active->symtable, "j", data);
+    BACK_TO_PARENT_IN_FOREST;
 
-//     // func chr(_ i : Int) -> String
-//     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
-//     data = set_data_func(&data, T_STRING);
-//     symtable_insert(&active->symtable, "chr", data);
-//     data = set_data_param(&data, T_INT, "_");
-//     symtable_insert(&active->symtable, "i", data);
-//     BACK_TO_PARENT_IN_FOREST;
-// }
+    // func ord(_ c : String) -> Int
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
+    data = set_data_func(&data, T_INT);
+    symtable_insert(&active->symtable, "ord", data);
+    data = set_data_param(&data, T_STRING, "_", 1);
+    symtable_insert(&active->symtable, "c", data);
+    BACK_TO_PARENT_IN_FOREST;
+
+    // func chr(_ i : Int) -> String
+    MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
+    data = set_data_func(&data, T_STRING);
+    symtable_insert(&active->symtable, "chr", data);
+    data = set_data_param(&data, T_INT, "_", 1);
+    symtable_insert(&active->symtable, "i", data);
+    BACK_TO_PARENT_IN_FOREST;
+}
 
 
 
@@ -252,6 +253,7 @@ void func_def() {
             active->param_cnt = param_order;
             param_order = 0;
 
+            // CODEGEN
             codegen_func_def();
 
             if (current_token->type == TOKEN_RPAR) {
@@ -281,6 +283,7 @@ void func_def() {
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
 
+                        // CODEGEN
                         codegen_func_def_end();
 
                         printf("-- returning...\n\n");
@@ -523,7 +526,7 @@ void body() {
             assign();
         }
         else if (token_buffer->type == TOKEN_LPAR) {
-            // TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
+            /// TODO: check if the id is forest, so the function is defined? Problem with recursive calling fo two functions
             //queue_push(fn_call_queue, current_token); // second queue, stores the IDs of function calls
 
             // if (false) {  
@@ -561,45 +564,45 @@ void body() {
                 cycle();                       
                 break;
 
-            case KW_RD_STR: // func readString() -> String?
+            // case KW_RD_STR:
 
-                break;
+            //     break;
 
-            case KW_RD_INT:
+            // case KW_RD_INT:
 
-                break;
+            //     break;
 
-            case KW_RD_DBL:
+            // case KW_RD_DBL:
 
-                break;
+            //     break;
 
-            case KW_WRT:
+            // case KW_WRT:
 
-                break;
+            //     break;
 
-            case KW_INT_2_DBL:
+            // case KW_INT_2_DBL:
 
-                break;
+            //     break;
 
-            case KW_DBL_2_INT:
+            // case KW_DBL_2_INT:
 
-                break;
+            //     break;
 
-            case KW_LENGHT:
+            // case KW_LENGHT:
 
-                break;
+            //     break;
 
-            case KW_SUBSTR:
+            // case KW_SUBSTR:
 
-                break;
+            //     break;
 
-            case KW_ORD:
+            // case KW_ORD:
 
-                break;
+            //     break;
 
-            case KW_CHR:
+            // case KW_CHR:
 
-                break;
+            //     break;
 
             default:
                 error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
@@ -768,6 +771,7 @@ void func_call() {
 
     if (current_token->type == TOKEN_RPAR) {
 
+        // CODEGEN
         codegen_func_call(func_name);
 
         current_token = get_next_token();
@@ -840,7 +844,14 @@ void arg() {
         }
     }
 
-    //call_expr_parser(); // TODO: if function is already defined, its possible somehow to get the parameters datatype, otherwise v pici
+
+
+
+
+    // calling expression parser for the argument in function call; 
+    // based on the value of the expression, it has to be validated afterwards, that it matches parameters' data types in function definition
+
+    //call_expr_parser(T_UNKNOWN); 
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
@@ -893,7 +904,7 @@ void condition() {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             else {
-                // TODO: Místo pravdivostního výrazu výraz lze alternativně použít syntaxi: ’let id’, 
+                /// TODO: Místo pravdivostního výrazu výraz lze alternativně použít syntaxi: ’let id’, 
                 // kde id zastupuje dříve definovanou (nemodifikovatelnou) proměnnou. Je-li pak proměnná id
                 // hodnoty nil, vykoná se sekvence_příkazů2, jinak se vykoná sekvence_příkazů1, kde navíc bude typ 
                 // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
@@ -903,7 +914,7 @@ void condition() {
                 print_debug(current_token, 1, debug_cnt++);
 
 
-                // TODO: vyřešit let id a PUSHS bool pro codegen
+                /// TODO: vyřešit let id a PUSHS bool pro codegen
             }
         }
         else {
@@ -920,6 +931,7 @@ void condition() {
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
         
+        // CODEGEN
         codegen_if();
         ifelse_cnt++;
 
@@ -944,6 +956,7 @@ void condition() {
                 MAKE_CHILDREN_IN_FOREST(W_ELSE, node_name3);
                 active->cond_cnt = cnt;
 
+                // CODEGEN
                 codegen_else();
 
                 current_token = get_next_token();
@@ -964,6 +977,7 @@ void condition() {
                     
                         active->cond_cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
                         
+                        // CODEGEN
                         codegen_ifelse_end();  
 
                         cnt_pop(cnt_stack); // pop ifelse_cnt from stack
@@ -1014,6 +1028,7 @@ void cycle() {
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
+        // CODEGEN
         codegen_while_start();
 
         current_token = get_next_token();
@@ -1023,6 +1038,7 @@ void cycle() {
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
 
+            // CODEGEN
             codegen_while_end();
             
             // closing bracket of while statement, go back to parent in forest
@@ -1051,17 +1067,18 @@ int parser_parse_please () {
 
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
+
     token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
     token_init(token_stack);
+
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
-    // fn_call_queue = (queue_t*)malloc(sizeof(queue_t));
-    // init_queue(fn_call_queue);
+
     forest_node *global = forest_insert_global();
     active = global;
-    //built_in_functions(); // insert built-in functions to the global symtable
     
-    //volam prog
+    
+    define_built_in_functions();
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -1073,7 +1090,7 @@ int parser_parse_please () {
 
     callee_validation(global);
 
-    traverse_forest(global);
+    traverse_forest(global); // printing the forest
 
     printf("\n---------------------------\n");
     printf("PARSER: Parsed successfully\n");
@@ -1082,6 +1099,100 @@ int parser_parse_please () {
 }
 
 
+
+void rename_keep_exit() {
+
+        // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
+        if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
+            // printf("active->symtable: %p\n", active->symtable);
+            // printf("Printing active->symtable in order:\n");
+            // inorder(&(active->symtable));
+            // printf("\n");
+
+            // The node is not in any symtable above the current node, the name can be kept
+            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL)
+            {
+                // printf("should be here");
+                return;
+            } else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
+            {
+                printf("ich here");
+                int value = renamer3000;
+                char bytes[5];
+
+                sprintf(bytes, "%d", value);
+
+                for (int i = 0; bytes[i] != '\0'; i++) {
+                    vector_append(current_token->value.vector, bytes[i]);
+                }
+
+                renamer3000++;
+                return;
+            }
+        }
+        error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+}
+
+
+// when a return statement is encountered, check if it is somewhere in a function
+forest_node* check_return_stmt(forest_node *node) {
+
+    // function gets to the global scope, so it is not part of the function
+    if (node->parent == NULL) {
+        error_exit(ERROR_SYN, "PARSER", "Return statement is not in a function");
+        return NULL;
+    }
+    else {
+        if (node->keyword == W_FUNCTION) {
+            return node;
+        }
+        else {
+            return check_return_stmt(node->parent);
+        }
+    }
+}
+
+
+// validating function calls, since function definitions can be after function calls
+void callee_validation(forest_node *global) {
+    while (callee_list->next != NULL) {
+        forest_node *tmp = forest_search_function(global, callee_list->callee->name);
+        if (tmp == NULL) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
+        }
+        else {
+            if (callee_list->callee->arg_count != tmp->param_cnt) {
+                error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
+            }
+            else {
+                if (callee_list->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                    error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
+                }
+                else {
+                    for (int i = 1; i <= tmp->param_cnt; i++) {
+                        if (callee_list->callee->args_names[i] != (symtable_find_param(tmp->symtable, i))->data.param_name) {
+                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+                        }
+                        else {
+                            callee_list = callee_list->next;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 // –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 void print_debug(token_t *token, int mode, int cnt) {
@@ -1302,89 +1413,5 @@ void print_debug(token_t *token, int mode, int cnt) {
         else { 
             printf("PRINT_DEBUG: Unknown mode\n");
         }
-    }
-}
-
-
-void rename_keep_exit() {
-
-        // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-        if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
-            // printf("active->symtable: %p\n", active->symtable);
-            // printf("Printing active->symtable in order:\n");
-            // inorder(&(active->symtable));
-            // printf("\n");
-
-            // The node is not in any symtable above the current node, the name can be kept
-            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL)
-            {
-                // printf("should be here");
-                return;
-            } else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
-            {
-                printf("ich here");
-                int value = renamer3000;
-                char bytes[5];
-
-                sprintf(bytes, "%d", value);
-
-                for (int i = 0; bytes[i] != '\0'; i++) {
-                    vector_append(current_token->value.vector, bytes[i]);
-                }
-
-                renamer3000++;
-                return;
-            }
-        }
-        error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
-}
-
-
-// when a return statement is encountered, check if it is somewhere in a function
-forest_node* check_return_stmt(forest_node *node) {
-
-    // function gets to the global scope, so it is not part of the function
-    if (node->parent == NULL) {
-        error_exit(ERROR_SYN, "PARSER", "Return statement is not in a function");
-        return NULL;
-    }
-    else {
-        if (node->keyword == W_FUNCTION) {
-            return node;
-        }
-        else {
-            return check_return_stmt(node->parent);
-        }
-    }
-}
-
-
-// validating function calls, since function definitions can be after function calls
-void callee_validation(forest_node *global) {
-    while (callee_list->next != NULL) {
-        forest_node *tmp = forest_search_function(global, callee_list->callee->name);
-        if (tmp == NULL) {
-            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
-        }
-        else {
-            if (callee_list->callee->arg_count != tmp->param_cnt) {
-                error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
-            }
-            else {
-                if (callee_list->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
-                    error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
-                }
-                else {
-                    for (int i = 1; i <= tmp->param_cnt; i++) {
-                        if (callee_list->callee->args_names[i] != (symtable_find_param(tmp->symtable, i))->data.param_name) {
-                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
-                        }
-                        else {
-                        }
-                    }
-                }
-            }
-        }
-        callee_list = callee_list->next;
     }
 }
