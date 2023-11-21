@@ -384,6 +384,10 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
+
+        } else if((tmp1->exp_value == STRING && tmp3->exp_value != STRING) || (tmp1->exp_value != STRING && tmp3->exp_value == STRING)){
+            error_exit(7, "expression_parser", "Can not compare string with other type");
+            
         } else {
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
@@ -560,7 +564,7 @@ void call_expr_parser(token_type_t return_type){
 
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
-                    tmp1->exp_value = INT_QM;
+                    tmp1->exp_value = DOUBLE;
                     printf("PUSHS typ@%s\n", tmp1->value.vector->array);
                     //hledani v symtable
                 } else if(tmp1->type == TOKEN_DEC){
