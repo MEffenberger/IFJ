@@ -153,6 +153,7 @@ typedef enum expression_value{
     INT_QM,
     DOUBLE_QM,
     STRING_QM,
+    DONT_CARE,
 
 } expression_value_t;
 
