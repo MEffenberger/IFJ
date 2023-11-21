@@ -13,6 +13,7 @@
 #define TABLE_SIZE 16
 
 int variable_counter = 1;
+bool concat = false;
 
 static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 
@@ -201,8 +202,22 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         }
 
         if (tmp1->exp_value == tmp3->exp_value){
+
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
                 error_exit(2, "expression_parser", "Wrong operator in concatenation");
+
+            } else if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type == TOKEN_PLUS){
+                concat = true;
+                printf("DEFVAR GF@$$s%d$$\n", variable_counter);
+                printf("DEFVAR GF@$$s%d$$\n", variable_counter+1);
+                printf("POPS GF@$$s%d$$\n", variable_counter+1);
+                printf("POPS GF@$$s%d$$\n", variable_counter);
+                printf("CONCAT GF@$$s%d$$ GF@$$s%d$$ GF@$$s%d$$\n", variable_counter, variable_counter, variable_counter+1);
+                printf("PUSHS GF@$$s%d$$\n", variable_counter); 
+                variable_counter++;
+                variable_counter++;
+                return;
+
             }
         } else{
             if (tmp1->exp_type == CONST){
@@ -587,7 +602,12 @@ void call_expr_parser(token_type_t return_type){
 
             case RULE_ADD:
                 check_types(tmp1,tmp2, tmp3);
+                if(concat){
+                    concat = false;
+                    
+                } else { 
                 printf("ADDS\n");
+                }
                 stack_push(&stack, tmp1);
                 break;
             case RULE_MUL:
