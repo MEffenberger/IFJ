@@ -87,8 +87,8 @@ int get_index(token_type_t token){
         case TOKEN_ID:
         return 14;
 
-        //case TOKEN_EXPRESSION:
-        //return 14;
+        case TOKEN_KEYWORD:
+        return 14;
 
         case TOKEN_NUM:
         return 14;
@@ -195,16 +195,21 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
 
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
+    if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
+        error_exit(7, "expression_parser", "Can not do arithmetic opeation with nils");
+    }
+
+
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
-            error_exit(2, "expression_parser", "Can not do arithmetic opeation with booleans");
+            error_exit(7, "expression_parser", "Can not do arithmetic opeation with booleans");
         }
 
         if (tmp1->exp_value == tmp3->exp_value){
 
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
-                error_exit(2, "expression_parser", "Wrong operator in concatenation");
+                error_exit(7, "expression_parser", "Wrong operator in concatenation");
 
             } else if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type == TOKEN_PLUS){
                 concat = true;
@@ -226,12 +231,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         printf("INT2FLOATS\n");
                         tmp1->exp_value = DOUBLE;
                     } else {
-                        error_exit(2, "expression_parser", "ID type mismatch");
+                        error_exit(7, "expression_parser", "ID type mismatch");
                     }
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -295,7 +300,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
 
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
-                error_exit(2, "expression_parser", "Wrong operator in concatenation");
+                error_exit(7, "expression_parser", "Wrong operator in concatenation");
             }
 
             if(tmp1->exp_value == INT){
@@ -317,11 +322,11 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         printf("DIVS\n");
                         tmp1->exp_value = DOUBLE;
                     } else {
-                        error_exit(2, "expression_parser", "ID type mismatch");
+                        error_exit(7, "expression_parser", "ID type mismatch");
                     }
                 } else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -376,7 +381,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
-    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
+    } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
         } else {
@@ -435,12 +440,6 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             else{
                 error_exit(7, "expression_parser", "Can not compare 2 values of different types");
             }
-        }
-    } else if(tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
-        if(tmp1->exp_value == tmp3->exp_value){
-            tmp1->exp_value = BOOL;
-        } else {
-                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
         }
     }
     
@@ -561,7 +560,7 @@ void call_expr_parser(token_type_t return_type){
 
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
-                    tmp1->exp_value = INT;
+                    tmp1->exp_value = INT_QM;
                     printf("PUSHS typ@%s\n", tmp1->value.vector->array);
                     //hledani v symtable
                 } else if(tmp1->type == TOKEN_DEC){
@@ -584,16 +583,37 @@ void call_expr_parser(token_type_t return_type){
                     tmp1->exp_type = CONST;
                     tmp1->exp_value = STRING;
                     printf("PUSHS string@%s\n", tmp1->value.vector->array);
+                } else if(tmp1->type == TOKEN_KEYWORD){
+                    if(tmp1->value.keyword != KW_NIL){
+                        error_exit(7, "expression_parser", "Can not do operations with keywords");
+                    } else {
+                        tmp1->type = TOKEN_EXPRESSION;
+                        tmp1->exp_type = CONST;
+                        tmp1->exp_value = NIL;
+                        printf("PUSHS nil@%s\n", tmp1->value.vector->array);
+                    }
                 }
                 stack_push(&stack, tmp1);
                 break;
 
             case RULE_EXCL:
-                if(tmp2->exp_value == NIL){
-                    error_exit(7, "expression_parser", "Expression is nil");
-                }
-                stack_push(&stack, tmp2);
-                break;
+                if(tmp2->exp_value == INT_QM || tmp2->exp_value == DOUBLE_QM || tmp2->exp_value == STRING_QM){
+                    printf("DEFVAR GF@$$excl%d\n", variable_counter);
+                    printf("POPS GF@$$excl%d\n", variable_counter);
+                    printf("PUSHS GF@$$excl%d\n", variable_counter);
+                    printf("PUSHS nil@nil\n");
+                    printf("JUMPIFNEQS GF@$RULE_EXCL_CORRECT$\n");
+                    printf("GF@$RULE_EXCL_ERROR$\n");
+                    printf("WRITE string@Variable\\032is\\032NULL\n");
+                    printf("EXIT int@7\n"); //doresit cislo chyby
+                    printf("GF@$RULE_EXCL_CORRECT$\n");
+                    printf("PUSHS GF@$$excl%d\n", variable_counter);
+                    variable_counter++;
+                    stack_push(&stack, tmp2);
+                } else {
+                    error_exit(7, "expression_parser", "Can not apply ! to non qm operands");
+                }           
+            break;
 
             
             case RULE_PAR:
@@ -678,20 +698,25 @@ void call_expr_parser(token_type_t return_type){
                 stack_push(&stack, tmp1);
                 break;
             case RULE_QMS:
-                if(tmp3->exp_value != NIL){
-                    printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
-                    printf("POPS GF@$$qms%d$$\n", variable_counter);
-                    stack_push(&stack, tmp3);
-                    variable_counter++;
+                if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
+                    if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
+                        error_exit(7, "expression_parser", "wrong ID type for right side of ??");
+                    }
+                    //printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
+                    //printf("POPS GF@$$qms%d$$\n", variable_counter);
+                    //stack_push(&stack, tmp3);
+                    //variable_counter++;
                 } else {
-                    printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
+                    error_exit(7, "expression_parser", "wrong ID type for left side of ??");
+                    /*printf("DEFVAR GF@$$qms%d$$\n", variable_counter);
                     printf("DEFVAR GF@$$qms%d$$\n", variable_counter+1);
                     printf("POPS GF@$$qms%d$$\n", variable_counter);
                     printf("POPS GF@$$qms%d$$\n", variable_counter+1);
                     printf("PUSHS GF@$$qm%d$$\n", variable_counter);
                     stack_push(&stack, tmp1);
                     variable_counter++;
-                    variable_counter++;
+                    variable_counter++;*/
+
 
                 }
                 break;
