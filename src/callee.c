@@ -135,6 +135,7 @@ void callee_dispose(callee_t* callee) {
         free(callee->args_names[i]);
     }
     free(callee->args_names);
+    free(callee->args_types);
 
     // Free the callee
     free(callee);

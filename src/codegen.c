@@ -27,6 +27,7 @@ int add_arg_cnt = 0;
 void codegen_var_def(char *name) {
     if (active->parent == NULL) {
         printf("DEFVAR GF@%s\n", name);
+
     } else {
         printf("DEFVAR LF@%s\n", name);
     }

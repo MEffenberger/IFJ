@@ -356,9 +356,9 @@ void params() {
         error_exit(ERROR_SYN, "PARSER", "Missing colon in function's parameter");
     }
 
-    // name of the parameter has to differ from the identifier of the parameter
-    ///// what about _ _ ?? func foo(_ _ : Int) {}
-    if (strcmp(queue->first->token->value.vector->array, queue->first->next->token->value.vector->array)) {
+    // name of the parameter has to differ from the identifier of the parameter (except for case when the name and id is _)
+    if (strcmp(queue->first->token->value.vector->array, queue->first->next->token->value.vector->array) == 0 && 
+        strcmp(queue->first->token->value.vector->array, "_") != 0) {
         error_exit(ERROR_SEM_OTHER, "PARSER", "Parameter's name has to differ from its identifier");
     }
 
@@ -422,12 +422,12 @@ void par_id() {
 }
 
 void type() {
-    // <type> -> Int | Int? | Double | Double? | String | String? | nil
+    // <type> -> Int | Int? | Double | Double? | String | String?
     printf("-- entering TYPE --\n");
     print_debug(current_token, 2, debug_cnt);
 
     if (current_token->type == TOKEN_KEYWORD || current_token->type == TOKEN_KEYWORD_QM) {
-        if (current_token->value.keyword == KW_INT || current_token->value.keyword == KW_DOUBLE || current_token->value.keyword == KW_STRING || current_token->value.keyword == KW_NIL) {
+        if (current_token->value.keyword == KW_INT || current_token->value.keyword == KW_DOUBLE || current_token->value.keyword == KW_STRING) {
             // store type
             queue_push(queue, current_token);
             queue_print(queue);
@@ -616,8 +616,7 @@ void var_def() {
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 
-        // store variable's name
-        rename_keep_exit();
+    //    rename_keep_exit();
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
@@ -708,14 +707,9 @@ void assign() {
             func_call();
         }
         else {
-            // wrong: variable is inserted into smytable AFTER assigning
-            //AVL_tree *tmp = forest_search_symbol(active, var_name);
-            //call_expr_parser(tmp->data.data_type); 
-
             // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
             if (queue->first->next == NULL) {
                 //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
-
             }
             else {
                 //call_expr_parser(convert_dt(queue->first->next->token));
@@ -779,11 +773,6 @@ void assign() {
         func_call();
     }
     else {
-        // get the data type of the variable from symtable
-        ///// wrong: variable is inserted into smytable AFTER assigning
-        //AVL_tree *tmp = forest_search_symbol(active, var_name);
-        //call_expr_parser(tmp->data.data_type); 
-
         // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
         if (queue->first->next == NULL) {
             //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
@@ -1162,7 +1151,6 @@ int parser_parse_please () {
 }
 
 
-
 void rename_keep_exit() {
 
         // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
@@ -1198,6 +1186,8 @@ void rename_keep_exit() {
 }
 
 
+
+
 // when a return statement is encountered, check if it is somewhere in a function
 forest_node* check_return_stmt(forest_node *node) {
 
@@ -1216,7 +1206,6 @@ forest_node* check_return_stmt(forest_node *node) {
     }
 }
 
-/// TODO: arg/param data type match validation (arg data types already added to callee)
 
 // validating function calls, since function definitions can be after function calls
 void callee_validation(forest_node *global) {
@@ -1235,8 +1224,36 @@ void callee_validation(forest_node *global) {
                 }
                 else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
-                        if (callee_list->callee->args_names[i] != (symtable_find_param(tmp->symtable, i))->data.param_name) {
+                        AVL_tree* param = symtable_find_param(tmp->symtable, i);
+                        if (callee_list->callee->args_names[i] != param->data.param_name) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+                        }
+                        // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
+                        switch (param->data.param_type) {
+                            case T_INT_Q:
+                                if (callee_list->callee->args_types[i] != T_INT && callee_list->callee->args_types[i] != T_NIL) {
+                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                                }
+                                break;
+                            case T_DOUBLE_Q:
+                                if (callee_list->callee->args_types[i] != T_DOUBLE && callee_list->callee->args_types[i] != T_NIL) {
+                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                                }
+                                break;
+                            case T_STRING_Q:
+                                if (callee_list->callee->args_types[i] != T_STRING && callee_list->callee->args_types[i] != T_NIL) {
+                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                                }
+                                break;
+                            case T_INT:
+                            case T_DOUBLE:
+                            case T_STRING:
+                                if (callee_list->callee->args_types[i] != param->data.param_type) {
+                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

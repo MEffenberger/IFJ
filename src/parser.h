@@ -100,7 +100,7 @@ void par_name();
 void par_id();
 
 /**
- * @brief <type> -> Int | Int? | Double | Double? | String | String? | nil
+ * @brief <type> -> Int | Int? | Double | Double? | String | String? 
  */
 void type();
 
