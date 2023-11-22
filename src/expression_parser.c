@@ -566,11 +566,10 @@ void call_expr_parser(data_type return_type){
             eval_expr = false;
             /*printf("TT:%d\n", stack_top(&stack)->exp_value);
             printf("Current token: %d", current_token->type);*/
+            type_of_expr = stack_top(&stack)->exp_value;
             
-
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
 
-                type_of_expr = stack_top(&stack)->exp_value;
 
                 if(return_type == INT_QM && stack_top(&stack)->exp_value == INT){
                     type_of_expr = INT_QM;
