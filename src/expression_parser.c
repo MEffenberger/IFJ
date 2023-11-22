@@ -629,13 +629,13 @@ void call_expr_parser(data_type return_type){
                     tmp1->exp_value = variable_type;
 
                     
-                    if(variable_type == INT){
+                    if(variable_type == INT || variable_type == INT_QM){
                         printf("PUSHS int@%s\n", tmp1->value.vector->array);
-                    } else if (variable_type == DOUBLE){
+                    } else if (variable_type == DOUBLE || variable_type == DOUBLE_QM){
                         printf("PUSHS float@%s\n", tmp1->value.vector->array);
                     } else if(variable_type == NIL){
                         //
-                    } else if(variable_type = STRING){
+                    } else if(variable_type = STRING || variable_type == STRING_QM){
                         printf("PUSHS string@%s\n", tmp1->value.vector->array);
                     }
                     
