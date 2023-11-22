@@ -544,8 +544,8 @@ void call_expr_parser(data_type return_type){
                 error_exit(2, "expression_parser", "empty expression");
             }
             eval_expr = false;
-            printf("TT:%d\n", stack_top(&stack)->exp_value);
-            printf("Current token: %d", current_token->type);
+            /*printf("TT:%d\n", stack_top(&stack)->exp_value);
+            printf("Current token: %d", current_token->type);*/
             dispose_stack(&stack);
             break;
         }
@@ -798,9 +798,9 @@ void call_expr_parser(data_type return_type){
             break;
             }
 
-            for(int i =0; i < stack.size; i++){
+            /*for(int i =0; i < stack.size; i++){
                 printf("STACK:%d\n", stack.token_array[i]->type);
-            }
+            }*/
 
             error_exit(2, "expression_parser", "syntax error");
         }
