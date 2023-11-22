@@ -99,15 +99,15 @@ void insert_name_into_callee(callee_t* callee, char* name) {
         return;
     }
 
+    // Increment the arg_count
+    callee->arg_count++;
+
     // Allocate memory for the new name
     callee->args_names[callee->arg_count] = strdup(name); 
     if (callee->args_names[callee->arg_count] == NULL) {
         // Handle memory allocation failure
         return;
     }
-
-    // Increment the arg_count
-    callee->arg_count++;
 }
 
 

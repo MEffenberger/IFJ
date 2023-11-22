@@ -907,7 +907,9 @@ void arg() {
         }
     }
     else { // calling without name and the first token of expression is not id
+        printf("\n\n\nCalling without name and the first token of expression is not id\n\n\n");
         insert_name_into_callee(callee_list->callee, "_");
+        printf("picacaaa: %s\n\n\n", callee_list->callee->args_names[0]);
     }
 
     call_expr_parser(UNKNOWN);
@@ -1237,23 +1239,26 @@ void callee_validation(forest_node *global) {
                 else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         AVL_tree* param = symtable_find_param(tmp->symtable, i);
-                        if (callee_list->callee->args_names[i] != param->data.param_name) {
+                        if (strcmp(callee_list->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
                         // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
                         switch (param->data.param_type) {
                             case INT_QM:
                                 if (callee_list->callee->args_types[i] != INT && callee_list->callee->args_types[i] != NIL) {
+                                    printf("intq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
                             case DOUBLE_QM:
                                 if (callee_list->callee->args_types[i] != DOUBLE && callee_list->callee->args_types[i] != NIL) {
+                                    printf("dblq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
                             case STRING_QM:
                                 if (callee_list->callee->args_types[i] != STRING && callee_list->callee->args_types[i] != NIL) {
+                                    printf("srtnignq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
@@ -1261,6 +1266,7 @@ void callee_validation(forest_node *global) {
                             case DOUBLE:
                             case STRING:
                                 if (callee_list->callee->args_types[i] != param->data.param_type) {
+                                    printf("intdblstrng\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
