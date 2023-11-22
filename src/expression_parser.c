@@ -25,6 +25,7 @@
 
 int variable_counter = 1;
 bool concat = false;
+bool stop_expression = false;
 
 static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 
@@ -511,14 +512,35 @@ void call_expr_parser(data_type return_type){
     char table_result;
 
     bool eval_expr = true; 
+
+    int stack_index;
+    int next_token_index;
     
     while(eval_expr){
         
         token_t* terminal = stack_top_terminal(&stack);
 
-        int stack_index = get_index(terminal->type);
-        int next_token_index = get_index(current_token->type);
-        table_result = precedence_table[stack_index][next_token_index];
+        //int stack_index = get_index(terminal->type);
+        //int next_token_index = get_index(current_token->type);
+        /*if(current_token->type == TOKEN_KEYWORD && current_token->value.keyword != KW_NIL){
+            table_result = '>';
+            next_token_index = 15;
+        } else {
+            table_result = precedence_table[stack_index][next_token_index];
+        }*/
+        
+
+        if(!stop_expression){
+            stack_index = get_index(terminal->type);
+            next_token_index = get_index(current_token->type);
+            if(current_token->type == TOKEN_KEYWORD){
+                table_result = '>';
+                next_token_index = 15;
+            } else {
+                table_result = precedence_table[stack_index][next_token_index];
+            }
+        }
+
 
         if(next_token_index == 15 && stack_top_terminal(&stack)->type == TOKEN_DOLLAR){
 
@@ -527,7 +549,8 @@ void call_expr_parser(data_type return_type){
                 error_exit(2, "expression_parser", "empty expression");
             }
             eval_expr = false;
-            printf("TT:%d", stack_top(&stack)->exp_value);
+            printf("TT:%d\n", stack_top(&stack)->exp_value);
+            printf("Current token: %d", current_token->type);
             dispose_stack(&stack);
             break;
         }
@@ -573,7 +596,7 @@ void call_expr_parser(data_type return_type){
 
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
-                    tmp1->exp_value = INT_QM;
+                    tmp1->exp_value = INT;
                     printf("PUSHS typ@%s\n", tmp1->value.vector->array);
                     //hledani v symtable
                 } else if(tmp1->type == TOKEN_DEC){
@@ -772,6 +795,18 @@ void call_expr_parser(data_type return_type){
             break;
         
         default:
+
+            if(current_token->type == TOKEN_ID){
+            table_result = '>';
+            next_token_index = 15;
+            stop_expression = true;
+            break;
+            }
+
+            for(int i =0; i < stack.size; i++){
+                printf("STACK:%d\n", stack.token_array[i]->type);
+            }
+
             error_exit(2, "expression_parser", "syntax error");
         }
 
