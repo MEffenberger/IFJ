@@ -41,4 +41,6 @@ void call_expr_parser(token_type_t return_type);
 void rule_operand(token_stack* stack);
 void rule_parens(token_stack* stack);
 
+void format_string(token_t* token);
+
 #endif //IFJ_EXPRESSION_PARSER_H

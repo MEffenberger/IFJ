@@ -136,6 +136,27 @@ void token_shift(token_stack* stack){
     stack_push(stack, current_token);
 }
 
+void format_string(token_t* token){
+    int i = 0;
+    while(i < token->value.vector->size){
+        if(token->value.vector->array[i] == ' '){
+
+            for (int j = token->value.vector->size - 1; j > i; j--) {
+                token->value.vector->array[j + 3] = token->value.vector->array[j];
+            }
+
+            token->value.vector->array[i] = '\\';
+            token->value.vector->array[i + 1] = '0';
+            token->value.vector->array[i + 2] = '3';
+            token->value.vector->array[i + 3] = '2';
+
+            token->value.vector->size += 3;
+            
+        }
+        i++;
+    }
+}
+
 expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* token3, int number_of_tokens){
     switch (number_of_tokens)
     {
@@ -293,6 +314,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             error_exit(2, "expression_parser", "Can not divide bool");
         }
 
+        
         if (tmp1->exp_value == tmp3->exp_value){
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
@@ -586,6 +608,7 @@ void call_expr_parser(token_type_t return_type){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
                     tmp1->exp_value = STRING;
+                    format_string(tmp1);
                     printf("PUSHS string@%s\n", tmp1->value.vector->array);
                 } else if(tmp1->type == TOKEN_KEYWORD){
                     if(tmp1->value.keyword != KW_NIL){
@@ -594,6 +617,7 @@ void call_expr_parser(token_type_t return_type){
                         tmp1->type = TOKEN_EXPRESSION;
                         tmp1->exp_type = CONST;
                         tmp1->exp_value = NIL;
+
                         printf("PUSHS nil@%s\n", tmp1->value.vector->array);
                     }
                 }
@@ -643,8 +667,10 @@ void call_expr_parser(token_type_t return_type){
                 check_types(tmp1, tmp2, tmp3);
                 printf("SUBS\n");
                 stack_push(&stack, tmp1);
+                
                 break;
             case RULE_DIV:
+                
                 check_types(tmp1, tmp2, tmp3);
                 stack_push(&stack, tmp1);
                 break;
