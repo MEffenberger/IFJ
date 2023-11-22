@@ -21,6 +21,7 @@
 #include "string_vector.h"
 #include "symtable.h"
 #include "token_stack.h"
+#include <string.h>
 
 forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token

@@ -12,7 +12,7 @@
 #ifndef IFJ_ERROR_H
 #define IFJ_ERROR_H
 
-
+#include <stddef.h>
 
 // Error codes
 typedef enum e_error_code {

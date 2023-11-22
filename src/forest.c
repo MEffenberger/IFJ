@@ -22,6 +22,7 @@
 #include "string_vector.h"
 #include "symtable.h"
 #include "token_stack.h"
+#include <string.h>
 
 
 

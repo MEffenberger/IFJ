@@ -13,6 +13,8 @@
 #ifndef IFJ_CALLEE_H
 #define IFJ_CALLEE_H
 
+#include "symtable.h"
+#include <string.h>
 
 typedef struct callee {
     char *name;

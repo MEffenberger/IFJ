@@ -12,6 +12,8 @@
 #ifndef IFJ_SYMTABLE_H
 #define IFJ_SYMTABLE_H
 
+#include <stdbool.h>        
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 

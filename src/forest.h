@@ -12,6 +12,7 @@
 #ifndef IFJ_FOREST_H
 #define IFJ_FOREST_H
 
+#include "symtable.h"
 
 typedef enum f_keyword {
     W_GLOBAL,

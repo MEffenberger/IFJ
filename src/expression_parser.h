@@ -12,6 +12,8 @@
 #ifndef IFJ_EXPRESSION_PARSER_H
 #define IFJ_EXPRESSION_PARSER_H
 
+#include "token_stack.h"
+
 typedef enum expression_rules{
 
     RULE_PAR,       // E -> (E)

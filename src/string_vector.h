@@ -10,7 +10,7 @@
 #ifndef STRING_VECTOR_H
 #define STRING_VECTOR_H
 
-
+#include <stdbool.h>
 
 #define VECTOR_LENGTH 8 //default size of dynamic array
 

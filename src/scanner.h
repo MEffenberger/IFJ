@@ -11,6 +11,11 @@
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
 
+#include <stdbool.h>
+#include <stdio.h>
+#include "string_vector.h"
+#include "symtable.h"
+
 typedef enum token_types {
     TOKEN_WHITESPACE,
     TOKEN_TAB,
