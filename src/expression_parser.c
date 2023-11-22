@@ -635,7 +635,7 @@ void call_expr_parser(data_type return_type){
                         printf("PUSHS float@%s\n", tmp1->value.vector->array);
                     } else if(variable_type == NIL){
                         //
-                    } else if(variabl= STRING || variable_type == STRING_QM){
+                    } else if(variable_type == STRING || variable_type == STRING_QM){
                         printf("PUSHS string@%s\n", tmp1->value.vector->array);
                     }
                     
