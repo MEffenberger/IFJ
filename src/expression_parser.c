@@ -544,8 +544,7 @@ void call_expr_parser(data_type return_type){
         //int stack_index = get_index(terminal->type);
         //int next_token_index = get_index(current_token->type);
         //table_result = precedence_table[stack_index][next_token_index];
-        
-
+    
         if(!stop_expression){
             stack_index = get_index(terminal->type);
             next_token_index = get_index(current_token->type);
@@ -574,6 +573,7 @@ void call_expr_parser(data_type return_type){
             }
             type_of_expr = stack_top(&stack)->exp_value;
             dispose_stack(&stack);
+            stop_expression = false;
             break;
         }
 
