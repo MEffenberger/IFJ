@@ -548,7 +548,7 @@ void call_expr_parser(data_type return_type){
             printf("Current token: %d", current_token->type);*/
             
 
-            if((return_type != UNKNOWN) && return_type != stack_top(&stack)->exp_value){
+            if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
                 error_exit(2, "expression_parser", "Wrong data type result of expression");
             }
             type_of_expr = stack_top(&stack)->exp_value;
@@ -594,12 +594,30 @@ void call_expr_parser(data_type return_type){
             {
             case RULE_OPERAND:
                 if(tmp1->type == TOKEN_ID){
+                    
+                    AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
+
+                    if(node == NULL){
+                        error_exit(2, "expression_parser", "Variable does not exist");
+                    }
+
+                    data_type variable_type = node->data.data_type;
 
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
-                    tmp1->exp_value = INT;
-                    printf("PUSHS typ@%s\n", tmp1->value.vector->array);
-                    //hledani v symtable
+                    tmp1->exp_value = variable_type;
+
+                    
+                    if(variable_type == INT){
+                        printf("PUSHS int@%s\n", tmp1->value.vector->array);
+                    } else if (variable_type == DOUBLE){
+                        printf("PUSHS float@%s\n", tmp1->value.vector->array);
+                    } else if(variable_type == NIL){
+                        //
+                    } else if(variable_type = STRING){
+                        printf("PUSHS string@%s\n", tmp1->value.vector->array);
+                    }
+                    
                 } else if(tmp1->type == TOKEN_DEC){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
