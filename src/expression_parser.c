@@ -569,9 +569,19 @@ void call_expr_parser(data_type return_type){
             
 
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
-                error_exit(2, "expression_parser", "Wrong data type result of expression");
+
+                type_of_expr = stack_top(&stack)->exp_value;
+
+                if(return_type == INT_QM && stack_top(&stack)->exp_value == INT){
+                    type_of_expr = INT_QM;
+                } else if(return_type == DOUBLE_QM && stack_top(&stack)->exp_value == DOUBLE){
+                    type_of_expr = DOUBLE_QM;
+                } else if(return_type == STRING_QM && stack_top(&stack)->exp_value == STRING){
+                    type_of_expr = STRING_QM;
+                } else {
+                    error_exit(2, "expression_parser", "Wrong data type result of expression");
+                }
             }
-            type_of_expr = stack_top(&stack)->exp_value;
             dispose_stack(&stack);
             stop_expression = false;
             break;
