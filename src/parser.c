@@ -26,13 +26,13 @@ char node_name[20] = {0};
 char *func_name_validate = NULL;
 cnt_stack_t *cnt_stack = NULL;
 //token_stack_t *token_stack = NULL;
-int cnt = 0;
+int cnt = 0; // used for generating unique labels for if-else
 int renamer3000 = 0;
 ///int call_args_order = 0;
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 callee_list_t *callee_list = NULL;
-data_type type_of_expr = T_UNKNOWN;
+data_type type_of_expr = T_UNKNOWN; // for expression parser to return the data type of expression
 
 
 
@@ -561,7 +561,9 @@ void body() {
             case KW_WRT:
                 peek();
                 if (token_buffer->type == TOKEN_LPAR) {
-                    // function call without assigning, expecting void function
+                    // CODEGEN
+                    codegen_write();
+
                     func_call();
                     break;
                 }
@@ -599,14 +601,13 @@ void var_def() {
         opt_var_def();
 
         // insert variable to symtable
-        if (queue->first->next == NULL) {
-            data = set_data_var(data, is_defined, T_UNKNOWN, letvar);
+        if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
+            data = set_data_var(data, is_defined, type_of_expr, letvar);
         }
-        else {
+        else { // the data type was specified
             data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
         }
 
-        // data type of var set, T_UNKNOWN when not yet known, expr_parser should set it
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
         
@@ -685,8 +686,18 @@ void assign() {
             func_call();
         }
         else {
+            // wrong: variable is inserted into smytable AFTER assigning
             //AVL_tree *tmp = forest_search_symbol(active, var_name);
             //call_expr_parser(tmp->data.data_type); 
+
+            // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
+            if (queue->first->next == NULL) {
+                //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
+
+            }
+            else {
+                //call_expr_parser(convert_dt(queue->first->next->token));
+            }
 
             //expression_parser(); calling with the first token of expression in current_token
             //when expr-parser returns, current_token is first token after the expression
@@ -747,8 +758,18 @@ void assign() {
     }
     else {
         // get the data type of the variable from symtable
+        ///// wrong: variable is inserted into smytable AFTER assigning
         //AVL_tree *tmp = forest_search_symbol(active, var_name);
         //call_expr_parser(tmp->data.data_type); 
+
+        // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
+        if (queue->first->next == NULL) {
+            //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
+
+        }
+        else {
+            //call_expr_parser(convert_dt(queue->first->next->token));
+        }
 
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
@@ -849,7 +870,7 @@ void arg() {
         peek();
         if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
-            insert_into_callee(callee_list->callee, current_token->value.vector->array);
+            insert_name_into_callee(callee_list->callee, current_token->value.vector->array);
 
             // get TOKEN_COLON from buffer
             current_token = get_next_token();
@@ -858,14 +879,20 @@ void arg() {
             current_token = get_next_token();
             print_debug(current_token, 1, debug_cnt++);
         }
+        else { // calling without name
+            insert_name_into_callee(callee_list->callee, "_");
+        }
     }
+    else { // calling without name and the first token of expression is not id
+        insert_name_into_callee(callee_list->callee, "_");
+    }
+
+    //call_expr_parser(T_UNKNOWN);
+
+    insert_type_into_callee(callee_list->callee, type_of_expr);
+
+    /// TODO: arg/param data type validation
     
-    insert_into_callee(callee_list->callee, "_");
-
-    // calling expression parser for the argument in function call; 
-    // based on the value of the expression, it has to be validated afterwards, that it matches parameters' data types in function definition
-
-    //call_expr_parser(T_UNKNOWN); 
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression

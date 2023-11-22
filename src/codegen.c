@@ -21,7 +21,7 @@
 // }
 
 
-int cnt = 1;
+int add_arg_cnt = 0;
 
 
 void codegen_var_def(char *name) {
@@ -74,12 +74,12 @@ void codegen_func_call_start() {
 }
 
 void codegen_add_arg() {
-    printf("DEFVAR TF@%%d\n", cnt);
-    printf("POPS TF@%%d\n", cnt++);
+    printf("DEFVAR TF@$%d\n", ++add_arg_cnt);
+    printf("POPS TF@$%d\n", add_arg_cnt);
 }
 
 void codegen_func_call_end(char *label) {
-    cnt = 1;
+    add_arg_cnt = 0;
     printf("CALL %s\n", label);
     printf("PUSHS TF@$retval$\n");
 }
@@ -155,10 +155,15 @@ void codegen_readDouble() {
 }
 
 void codegen_write() {
+    printf("JUMP !!skip_write\n");
     printf("LABEL write\n");
     printf("PUSHFRAME\n");
+    // for (int i = 1; i <= XXXXXXXXXXXX; i++) {
+    //     printf("WRITE LF@$%d\n", i);
+    // }
     printf("POPFRAME\n");
     printf("RETURN\n");
+    printf("LABEL !!skip_write\n");
 }
 
 void codegen_Int2Double() {

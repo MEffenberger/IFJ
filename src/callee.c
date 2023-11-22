@@ -25,7 +25,6 @@ callee_list_t* init_callee_list() {
 }
 
 callee_t* init_callee(const char* name, data_type return_type) {
-    printf("hovnicko\n");
     callee_t* callee = (callee_t*)malloc(sizeof(callee_t));
     if (callee == NULL) {
         // Handle memory allocation failure
@@ -44,13 +43,13 @@ callee_t* init_callee(const char* name, data_type return_type) {
     callee->return_type = return_type;
     callee->arg_count = 0;
     callee->args_names = NULL; // Initialize args_names to NULL
+    callee->args_types = NULL; // Initialize args_types to NULL
 
     return callee;
 }
 
 void insert_callee_into_list(callee_list_t* list, const char* name, data_type return_type) {
     // Initialize a new callee
-    printf("hovno\n");
     callee_t* new_callee = init_callee(name, return_type);
     if (new_callee == NULL) {
         // Handle initialization failure
@@ -76,7 +75,7 @@ void insert_callee_into_list(callee_list_t* list, const char* name, data_type re
     }
 }
 
-void insert_into_callee(callee_t* callee, char* name) {
+void insert_name_into_callee(callee_t* callee, char* name) {
     // Assuming that callee->args_names is initially NULL or allocated dynamically
     // You need to reallocate the array to accommodate the new name
 
@@ -95,6 +94,21 @@ void insert_into_callee(callee_t* callee, char* name) {
 
     // Increment the arg_count
     callee->arg_count++;
+}
+
+
+void insert_type_into_callee(callee_t* callee, data_type type) {
+    // Assuming that callee->arg_types is initially NULL or allocated dynamically
+    // You need to reallocate the array to accommodate the new name
+
+    callee->args_types = realloc(callee->args_types, (callee->arg_count + 1) * sizeof(data_type));
+    if (callee->args_types == NULL) {
+        // Handle memory reallocation failure
+        return;
+    }
+
+    // Allocate memory for the new name
+    callee->args_types[callee->arg_count] = type; 
 }
 
 
