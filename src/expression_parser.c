@@ -522,12 +522,7 @@ void call_expr_parser(data_type return_type){
 
         //int stack_index = get_index(terminal->type);
         //int next_token_index = get_index(current_token->type);
-        /*if(current_token->type == TOKEN_KEYWORD && current_token->value.keyword != KW_NIL){
-            table_result = '>';
-            next_token_index = 15;
-        } else {
-            table_result = precedence_table[stack_index][next_token_index];
-        }*/
+        //table_result = precedence_table[stack_index][next_token_index];
         
 
         if(!stop_expression){
@@ -796,7 +791,7 @@ void call_expr_parser(data_type return_type){
         
         default:
 
-            if(current_token->type == TOKEN_ID){
+            if(current_token->type == TOKEN_ID || current_token->type == TOKEN_RPAR){
             table_result = '>';
             next_token_index = 15;
             stop_expression = true;
