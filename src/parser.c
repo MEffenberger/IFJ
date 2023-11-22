@@ -522,7 +522,7 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-        //call_expr_parser(tmp->return_type); 
+        call_expr_parser(tmp->symtable->data.return_type); 
 
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
@@ -721,10 +721,10 @@ void assign() {
         else {
             // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
             if (queue->first->next == NULL) {
-                //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
+                call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
             }
             else {
-                //call_expr_parser(convert_dt(queue->first->next->token));
+                call_expr_parser(convert_dt(queue->first->next->token));
             }
 
             //expression_parser(); calling with the first token of expression in current_token
@@ -787,11 +787,11 @@ void assign() {
     else {
         // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
         if (queue->first->next == NULL) {
-            //call_expr_parser(T_UNKNOWN); // in type_of_expr should be the data type of the expression
+            call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
 
         }
         else {
-            //call_expr_parser(convert_dt(queue->first->next->token));
+            call_expr_parser(convert_dt(queue->first->next->token));
         }
 
         //expression_parser(); calling with the first token of expression in current_token
@@ -910,7 +910,7 @@ void arg() {
         insert_name_into_callee(callee_list->callee, "_");
     }
 
-    //call_expr_parser(T_UNKNOWN);
+    call_expr_parser(UNKNOWN);
 
     insert_type_into_callee(callee_list->callee, type_of_expr);    
 
@@ -986,7 +986,7 @@ void condition() {
         }
     }
     else {
-        //call_expr_parser(T_BOOL); 
+        call_expr_parser(BOOL); 
 
         //expression_parser(); calling with the first token of expression in current_token
         //when expr-parser returns, current_token is first token after the expression
@@ -1085,7 +1085,7 @@ void cycle() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
-    // call_expr_parser(T_BOOL);
+    call_expr_parser(BOOL);
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression

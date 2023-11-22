@@ -506,6 +506,8 @@ void call_expr_parser(data_type return_type){
     token_t* stack_bottom = token_create(TOKEN_DOLLAR);
     stack_push(&stack, stack_bottom);
 
+    int rule_params_count = 0;
+    
     char table_result;
 
     bool eval_expr = true; 
@@ -537,7 +539,7 @@ void call_expr_parser(data_type return_type){
             current_token = get_next_token();
             break;
         case '>':
-            int rule_params_count = 0;
+            rule_params_count = 0;
             token_t* tmp1, *tmp2, *tmp3;
             if(stack_top(&stack)->type != TOKEN_SHIFT){
                 tmp1 = stack_top(&stack);
