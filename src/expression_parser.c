@@ -148,6 +148,27 @@ void token_shift(token_stack* stack){
     stack_push(stack, current_token);
 }
 
+void format_string(token_t* token){
+    int i = 0;
+    while(i < token->value.vector->size){
+        if(token->value.vector->array[i] == ' '){
+
+            for (int j = token->value.vector->size - 1; j > i; j--) {
+                token->value.vector->array[j + 3] = token->value.vector->array[j];
+            }
+
+            token->value.vector->array[i] = '\\';
+            token->value.vector->array[i + 1] = '0';
+            token->value.vector->array[i + 2] = '3';
+            token->value.vector->array[i + 3] = '2';
+
+            token->value.vector->size += 3;
+            
+        }
+        i++;
+    }
+}
+
 expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* token3, int number_of_tokens){
     switch (number_of_tokens)
     {
@@ -619,6 +640,7 @@ void call_expr_parser(data_type return_type){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
                     tmp1->exp_value = STRING;
+                    format_string(tmp1);
                     printf("PUSHS string@%s\n", tmp1->value.vector->array);
                 } else if(tmp1->type == TOKEN_KEYWORD){
                     if(tmp1->value.keyword != KW_NIL){
