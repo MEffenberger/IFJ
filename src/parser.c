@@ -518,12 +518,21 @@ void body() {
     if (current_token->type == TOKEN_ID) {
         peek();
         if (token_buffer->type == TOKEN_EQ) {
+            var_name = current_token->value.vector->array; // for case: id = <exp>
+            AVL_tree *tmp = forest_search_symbol(active, var_name);
+
             // check if the id is in symtable, so the variable is declared
-            if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
+            if (tmp == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
-            var_name = current_token->value.vector->array; // for case: id = <exp>
+            if (tmp->data.var_type == LET && tmp->data.defined) {
+                error_exit(ERROR_SEM_OTHER, "PARSER", "Unmodifiable variable cannot be redefined");
+            }
+            if (!(tmp->data.defined)) {
+                tmp->data.defined = true;
+            }
             assign();
+
         }
         else if (token_buffer->type == TOKEN_LPAR) {
             // function call without assigning, expecting void function
@@ -889,10 +898,7 @@ void arg() {
 
     //call_expr_parser(T_UNKNOWN);
 
-    insert_type_into_callee(callee_list->callee, type_of_expr);
-
-    /// TODO: arg/param data type validation
-    
+    insert_type_into_callee(callee_list->callee, type_of_expr);    
 
     //expression_parser(); calling with the first token of expression in current_token
     //when expr-parser returns, current_token is first token after the expression
@@ -1197,6 +1203,7 @@ forest_node* check_return_stmt(forest_node *node) {
     }
 }
 
+ /// TODO: arg/param data type match validation (arg data types already added to callee)
 
 // validating function calls, since function definitions can be after function calls
 void callee_validation(forest_node *global) {
