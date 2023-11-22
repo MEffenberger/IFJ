@@ -34,6 +34,7 @@ typedef struct s_forest_node {
     AVL_tree *symtable; // pointer to the scope's symbol table
     int cond_cnt; // counter for if/else/while
     int param_cnt; // counter for parameters
+    int node_cnt; // counter for nodes, used for renaming
 } forest_node;
 
 // Global pointer to the active node in forest

@@ -66,7 +66,8 @@ typedef struct avl_tree {
     sym_data data;
     struct avl_tree *left;
     struct avl_tree *right;
-    int height;      
+    int height; 
+    int nickname; // for renaming purposes for codegen, number of special characters in the name     
 } AVL_tree;
 
 

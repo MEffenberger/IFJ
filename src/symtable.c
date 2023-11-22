@@ -206,6 +206,7 @@ void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
         (*tree)->left = NULL;
         (*tree)->right = NULL;
         (*tree)->height = 0;
+        (*tree)->nickname = 0;
     }
     else if (strcmp((*tree)->key, key) > 0) {
         symtable_insert(&((*tree)->left), key, data);

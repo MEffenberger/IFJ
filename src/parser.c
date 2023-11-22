@@ -27,24 +27,20 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
 token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
-//queue_t *fn_call_queue = NULL; // Queue for function calls
+cnt_stack_t *cnt_stack = NULL;
+callee_list_t *callee_list = NULL;
 sym_data data = {0};
 var_type letvar = -1;
+data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
 bool is_defined = false;
 int debug_cnt = 1;
 int ifelse_cnt = 0;
 int while_cnt = 0;
 char node_name[20] = {0};
 char *func_name_validate = NULL;
-cnt_stack_t *cnt_stack = NULL;
-//token_stack_t *token_stack = NULL;
 int cnt = 0; // used for generating unique labels for if-else
-int renamer3000 = 0;
-///int call_args_order = 0;
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
-callee_list_t *callee_list = NULL;
-data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
 bool vardef_assign = false; // for assign() to know where to get info about the variable (from queue or from symtable)
 
 
@@ -253,7 +249,7 @@ void func_def() {
         // check if the function is already defined
         forest_node *tmp = forest_search_function(active, current_token->value.vector->array);
         if (tmp != NULL) {
-            error_exit(ERROR_SEM_OTHER, "PARSER", "Function is already defined and cannot be redefined");
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is already defined and cannot be redefined");
         }
      
         MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
@@ -1229,9 +1225,6 @@ int parser_parse_please () {
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
 
-    //token_stack = (token_stack_t*)malloc(sizeof(token_stack_t));
-    //token_init(token_stack);
-
     queue = (queue_t*)malloc(sizeof(queue_t));
     init_queue(queue);
 
@@ -1261,39 +1254,22 @@ int parser_parse_please () {
 
 
 void rename_keep_exit() {
-
-        // The node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-        if (symtable_lookup(active->symtable, current_token->value.vector->array) == NULL) {
-            // printf("active->symtable: %p\n", active->symtable);
-            // printf("Printing active->symtable in order:\n");
-            // inorder(&(active->symtable));
-            // printf("\n");
-
-            // The node is not in any symtable above the current node, the name can be kept
-            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL)
-            {
-                // printf("should be here");
+        AVL_tree *tmp = symtable_search(active->symtable, current_token->value.vector->array);
+        if (tmp == NULL) {
+            // the node is not in any symtable above the current node, the name can be kept
+            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL) {
                 return;
             } 
-            // else  // The node is in any symtable above, no matter what, the name must be changed to unique identifier
-            // {
-            //     printf("ich here");
-            //     int value = renamer3000;
-            //     char bytes[5];
-
-            //     sprintf(bytes, "%d", value);
-
-            //     for (int i = 0; bytes[i] != '\0'; i++) {
-            //         vector_append(current_token->value.vector, bytes[i]);
-            //     }
-
-            //     renamer3000++;
-            //     return;
-            // }
+            else { // the node is in any symtable above, no matter what, the name must be changed to unique identifier
+                // nickname is set based on node_cnt from forest node (active), which is incremented after each insertions
+                tmp->nickname = active->node_cnt;
+                return;
+            }
         }
-        error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+        else { // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
+            error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+        }
 }
-
 
 
 
