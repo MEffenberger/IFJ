@@ -24,7 +24,7 @@
 #include "token_stack.h"
 #include <string.h>
 
-
+int forest_node_cnt = -10; // skip built-in functions
 
 
 forest_node *forest_insert_global() {
@@ -37,6 +37,7 @@ forest_node *forest_insert_global() {
     root->symtable = NULL;
     root->cond_cnt = 0;
     root->param_cnt = 0;
+    root->node_cnt = 0;
     return root; 
 }
 
@@ -49,6 +50,7 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         child->children = NULL;
         child->cond_cnt = 0;
         child->param_cnt = 0;
+        child->node_cnt = ++forest_node_cnt;
         if (parent->children == NULL) {
             parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)) , "forest node children", BASIC);
         } else {
