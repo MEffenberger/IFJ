@@ -45,6 +45,7 @@ char *var_name = NULL; // to find the data type of variable for expression parse
 int param_order = 0;
 callee_list_t *callee_list = NULL;
 data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
+bool vardef_assign = false; // for assign() to know where to get info about the variable (from queue or from symtable)
 
 
 
@@ -522,10 +523,10 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
+        printf("ENTERING WORLD OF EXPRESSION PARSER\n");
         call_expr_parser(tmp->symtable->data.return_type); 
+        printf("COMING BACK FROM EXPR_PARSER");
 
-        //expression_parser(); calling with the first token of expression in current_token
-        //when expr-parser returns, current_token is first token after the expression
     }
     // CODEGEN
     codegen_func_def_return();
@@ -556,6 +557,7 @@ void body() {
             if (!(tmp->data.defined)) {
                 tmp->data.defined = true;
             }
+            vardef_assign = false;
             assign();
 
         }
@@ -674,6 +676,7 @@ void opt_var_def() {
 
         peek();
         if (token_buffer->type == TOKEN_EQ) {
+            vardef_assign = true;
             assign();
             // variable is defined
             is_defined = true;
@@ -686,6 +689,7 @@ void opt_var_def() {
         printf("-- returning...\n\n");
     }
     else if (token_buffer->type == TOKEN_EQ) {
+        vardef_assign = true;
         assign();
         // variable is defined
         is_defined = true;
@@ -696,106 +700,197 @@ void opt_var_def() {
     }
 }
 
+
+
 void assign() {
     // <assign> -> = <exp> | = <func_call>
     printf("-- entering ASSIGN --\n");
     print_debug(current_token, 2, debug_cnt);
-
-    // get TOKEN_EQ from buffer 
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
-
-    // here: id = | var id = | let id = 
+    
     // id is in var_name
 
-    current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    // assigning to variable while defining it
+    if (vardef_assign) {
+        // get TOKEN_EQ from buffer 
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
 
-    // looking for function call
-    if (current_token->type == TOKEN_ID) {
-        peek();
-        if (token_buffer->type == TOKEN_LPAR) {
-            // expecting user-defined function
+        // here: var id = | let id = 
+
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
+
+        // looking for function call
+        if (current_token->type == TOKEN_ID) {
+            peek();
+            if (token_buffer->type == TOKEN_LPAR) {
+                // expecting user-defined function
+                func_call();
+            }
+            else {
+                // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
+                if (queue->first->next == NULL) {
+                    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                    call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
+                    printf("COMING BACK FROM EXPR_PARSER");
+                }
+                else {
+                    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                    call_expr_parser(convert_dt(queue->first->next->token));
+                    printf("COMING BACK FROM EXPR_PARSER");
+                }
+            }
+        }
+        else if (current_token->type == TOKEN_KEYWORD) {
+            switch (current_token->value.keyword) {
+                case KW_RD_STR:
+                    // CODEGEN
+                    codegen_readString();
+                    break;
+                
+                case KW_RD_INT:
+                    // CODEGEN
+                    codegen_readInt();
+                    break;
+                
+                case KW_RD_DBL:
+                    // CODEGEN
+                    codegen_readDouble();
+                    break;
+
+                case KW_INT_2_DBL:
+                    // CODEGEN
+                    codegen_Int2Double();
+                    break;
+                
+                case KW_DBL_2_INT:
+                    // CODEGEN
+                    codegen_Double2Int();
+                    break;
+
+                case KW_LENGHT:
+                    // CODEGEN
+                    codegen_length();
+                    break;
+
+                case KW_SUBSTR:
+                    // CODEGEN
+                    codegen_substring();
+                    break;
+                
+                case KW_ORD:
+                    // CODEGEN
+                    codegen_ord();
+                    break;
+
+                case KW_CHR:
+                    // CODEGEN
+                    codegen_chr();
+                    break;
+                
+                default:
+                    error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to variable while defining it");
+                    break;
+            }
             func_call();
         }
         else {
             // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
             if (queue->first->next == NULL) {
+                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
                 call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
+                printf("COMING BACK FROM EXPR_PARSER");
             }
             else {
+                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
                 call_expr_parser(convert_dt(queue->first->next->token));
+                printf("COMING BACK FROM EXPR_PARSER");
             }
-
-            //expression_parser(); calling with the first token of expression in current_token
-            //when expr-parser returns, current_token is first token after the expression
-        }
+        }    
     }
-    else if (current_token->type == TOKEN_KEYWORD) {
-        switch (current_token->value.keyword) {
-            case KW_RD_STR:
-                // CODEGEN
-                codegen_readString();
-                break;
-            
-            case KW_RD_INT:
-                // CODEGEN
-                codegen_readInt();
-                break;
-            
-            case KW_RD_DBL:
-                // CODEGEN
-                codegen_readDouble();
-                break;
+    else { // assigning to already defined variable
+        AVL_tree *tmp = forest_search_symbol(active, var_name);
+        
+        // get TOKEN_EQ from buffer 
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
 
-            case KW_INT_2_DBL:
-                // CODEGEN
-                codegen_Int2Double();
-                break;
-            
-            case KW_DBL_2_INT:
-                // CODEGEN
-                codegen_Double2Int();
-                break;
+        // here: id =
+   
+        current_token = get_next_token();
+        print_debug(current_token, 1, debug_cnt++);
 
-            case KW_LENGHT:
-                // CODEGEN
-                codegen_length();
-                break;
-
-            case KW_SUBSTR:
-                // CODEGEN
-                codegen_substring();
-                break;
-            
-            case KW_ORD:
-                // CODEGEN
-                codegen_ord();
-                break;
-
-            case KW_CHR:
-                // CODEGEN
-                codegen_chr();
-                break;
-            
-            default:
-                error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment");
-                break;
+        // looking for function call
+        if (current_token->type == TOKEN_ID) {
+            peek();
+            if (token_buffer->type == TOKEN_LPAR) {
+                // expecting user-defined function
+                func_call();
+            }
+            else { // variable is already defined, so it's data_type is known
+                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                call_expr_parser(tmp->data.data_type);
+                printf("COMING BACK FROM EXPR_PARSER");
+            }
         }
-        func_call();
-    }
-    else {
-        // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
-        if (queue->first->next == NULL) {
-            call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
+        else if (current_token->type == TOKEN_KEYWORD) {
+            switch (current_token->value.keyword) {
+                case KW_RD_STR:
+                    // CODEGEN
+                    codegen_readString();
+                    break;
+                
+                case KW_RD_INT:
+                    // CODEGEN
+                    codegen_readInt();
+                    break;
+                
+                case KW_RD_DBL:
+                    // CODEGEN
+                    codegen_readDouble();
+                    break;
 
+                case KW_INT_2_DBL:
+                    // CODEGEN
+                    codegen_Int2Double();
+                    break;
+                
+                case KW_DBL_2_INT:
+                    // CODEGEN
+                    codegen_Double2Int();
+                    break;
+
+                case KW_LENGHT:
+                    // CODEGEN
+                    codegen_length();
+                    break;
+
+                case KW_SUBSTR:
+                    // CODEGEN
+                    codegen_substring();
+                    break;
+                
+                case KW_ORD:
+                    // CODEGEN
+                    codegen_ord();
+                    break;
+
+                case KW_CHR:
+                    // CODEGEN
+                    codegen_chr();
+                    break;
+                
+                default:
+                    error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to already defined variable");
+                    break;
+            }
+            func_call();
         }
         else {
-            call_expr_parser(convert_dt(queue->first->next->token));
+            printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+            call_expr_parser(tmp->data.data_type);
+            printf("COMING BACK FROM EXPR_PARSER");
         }
-
-        //expression_parser(); calling with the first token of expression in current_token
-        //when expr-parser returns, current_token is first token after the expression
     }    
 }
 
@@ -912,12 +1007,12 @@ void arg() {
         printf("picacaaa: %s\n\n\n", callee_list->callee->args_names[0]);
     }
 
+    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
     call_expr_parser(UNKNOWN);
+    printf("COMING BACK FROM EXPR_PARSER");
 
     insert_type_into_callee(callee_list->callee, type_of_expr);    
 
-    //expression_parser(); calling with the first token of expression in current_token
-    //when expr-parser returns, current_token is first token after the expression
 
     // CODEGEN
     codegen_add_arg();
@@ -988,10 +1083,10 @@ void condition() {
         }
     }
     else {
+        printf("ENTERING WORLD OF EXPRESSION PARSER\n");
         call_expr_parser(BOOL); 
+        printf("COMING BACK FROM EXPR_PARSER");
 
-        //expression_parser(); calling with the first token of expression in current_token
-        //when expr-parser returns, current_token is first token after the expression
     }
 
 
@@ -1087,10 +1182,10 @@ void cycle() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
+    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
     call_expr_parser(BOOL);
+    printf("COMING BACK FROM EXPR_PARSER");
 
-    //expression_parser(); calling with the first token of expression in current_token
-    //when expr-parser returns, current_token is first token after the expression
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
@@ -1156,7 +1251,7 @@ int parser_parse_please () {
 
     callee_validation(global);
 
-    traverse_forest(global); // printing the forest
+    //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
     printf("\n---------------------------\n");
     printf("PARSER: Parsed successfully\n");
