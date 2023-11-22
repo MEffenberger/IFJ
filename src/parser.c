@@ -236,6 +236,13 @@ void func_def() {
     print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
+
+        // check if the function is already defined
+        forest_node *tmp = forest_search_function(active, current_token->value.vector->array);
+        if (tmp != NULL) {
+            error_exit(ERROR_SEM_OTHER, "PARSER", "Function is already defined and cannot be redefined");
+        }
+     
         MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
         
         current_token = get_next_token();
@@ -347,6 +354,12 @@ void params() {
     }
     else {
         error_exit(ERROR_SYN, "PARSER", "Missing colon in function's parameter");
+    }
+
+    // name of the parameter has to differ from the identifier of the parameter
+    ///// what about _ _ ?? func foo(_ _ : Int) {}
+    if (strcmp(queue->first->token->value.vector->array, queue->first->next->token->value.vector->array)) {
+        error_exit(ERROR_SEM_OTHER, "PARSER", "Parameter's name has to differ from its identifier");
     }
 
     // insert parameter to function's symtable
@@ -1203,7 +1216,7 @@ forest_node* check_return_stmt(forest_node *node) {
     }
 }
 
- /// TODO: arg/param data type match validation (arg data types already added to callee)
+/// TODO: arg/param data type match validation (arg data types already added to callee)
 
 // validating function calls, since function definitions can be after function calls
 void callee_validation(forest_node *global) {
@@ -1213,7 +1226,7 @@ void callee_validation(forest_node *global) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
         else {
-            if (callee_list->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of builtin write function the number of arguments is not checked
+            if (callee_list->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             }
             else {
