@@ -546,6 +546,12 @@ void call_expr_parser(data_type return_type){
             eval_expr = false;
             /*printf("TT:%d\n", stack_top(&stack)->exp_value);
             printf("Current token: %d", current_token->type);*/
+            
+
+            if((return_type != UNKNOWN) && return_type != stack_top(&stack)->exp_value){
+                error_exit(2, "expression_parser", "Wrong data type result of expression");
+            }
+            type_of_expr = stack_top(&stack)->exp_value;
             dispose_stack(&stack);
             break;
         }
