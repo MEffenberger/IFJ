@@ -13,7 +13,6 @@
 #define IFJ_FOREST_H
 
 #include "symtable.h"
-#include "error.h"
 #include "scanner.h"
 //#include "parser.h"
 

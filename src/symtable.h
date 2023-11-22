@@ -14,6 +14,10 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+#include "error.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 
 
@@ -93,6 +97,7 @@ void data_init(sym_data *data);
  * @param string_value String value when T_STRING(_Q)
  */
 sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
+sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
 
 /**
  * @brief Set the function's data
@@ -100,6 +105,7 @@ sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_
  * @param data Data to be set
  * @param return_type Return type of the function
  */
+sym_data set_data_func(sym_data *data, data_type return_type);
 sym_data set_data_func(sym_data *data, data_type return_type);
 
 /**

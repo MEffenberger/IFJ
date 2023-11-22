@@ -22,7 +22,7 @@ void push_alloc_ptr(void *ptr, alloc_type type) {
     allocated_pointers = new;
 }
 
-void free_alloc_memory() {
+/*void free_alloc_memory() {
     while (allocated_pointers != NULL) {
         alloc_ptr *tmp = allocated_pointers;
         switch (tmp->type) {
@@ -46,7 +46,7 @@ void free_alloc_memory() {
         allocated_pointers = allocated_pointers->next;
         free(tmp);
     }
-}
+}*/
 
 
 void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type) {
