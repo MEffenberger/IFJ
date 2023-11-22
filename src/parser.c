@@ -633,7 +633,12 @@ void var_def() {
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
-            data = set_data_var(data, is_defined, type_of_expr, letvar);
+            if (type_of_expr == BOOL) {
+                error_exit(ERROR_SEM_OTHER, "PARSER", "Variable cannot be of type bool");
+            } 
+            else {
+                data = set_data_var(data, is_defined, type_of_expr, letvar);
+            }
         }
         else { // the data type was specified
             data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
@@ -1269,6 +1274,17 @@ void rename_keep_exit() {
         else { // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
             error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
         }
+}
+
+
+// function for renaming the node  
+char *renamer(AVL_tree *node) {
+    vector *v = vector_init();
+    for (int i = 0; i < node->nickname; i++) {
+        vector_append(v, '*');
+    }
+    vector_str_append(v, node->key);
+    return v->array;
 }
 
 

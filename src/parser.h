@@ -14,6 +14,7 @@
 #define IFJ_PARSER_H
 
 #include "scanner.h"
+#include "string_vector.h"
 
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
