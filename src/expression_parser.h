@@ -11,8 +11,7 @@
 
 #ifndef IFJ_EXPRESSION_PARSER_H
 #define IFJ_EXPRESSION_PARSER_H
-#include "token_stack.h"
-#include "parser.h"
+
 typedef enum expression_rules{
 
     RULE_PAR,       // E -> (E)
@@ -36,7 +35,7 @@ typedef enum expression_rules{
 int get_index(token_type_t token);
 void place_shifter(token_stack* stack);
 token_t* token_create(token_type_t token_type);
-void call_expr_parser(token_type_t return_type);
+void call_expr_parser(data_type return_type);
 
 void rule_operand(token_stack* stack);
 void rule_parens(token_stack* stack);

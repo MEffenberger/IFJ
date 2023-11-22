@@ -13,8 +13,6 @@
 #ifndef IFJ_CALLEE_H
 #define IFJ_CALLEE_H
 
-#include "symtable.h"
-#include "error.h"
 
 typedef struct callee {
     char *name;

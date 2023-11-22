@@ -10,6 +10,19 @@
  */
 
 #include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
+#include "error.h"
+#include "expression_parser.h"
+#include "forest.h"
+#include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
+
+
 
 callee_list_t* init_callee_list() {
     callee_list_t* list = (callee_list_t*)malloc(sizeof(callee_list_t));

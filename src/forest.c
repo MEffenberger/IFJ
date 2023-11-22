@@ -10,7 +10,18 @@
  */
 
 
+#include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
+#include "error.h"
+#include "expression_parser.h"
 #include "forest.h"
+#include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
 
 
 
@@ -72,12 +83,12 @@ void forest_convert_to_nonq_data_type(char *key){
     if (node != NULL) {
             sym_data *data = symtable_lookup(node, key);
             if (data != NULL) {
-                if (data->data_type == T_STRING_Q) {
-                    data->data_type = T_STRING;
-                } else if (data->data_type == T_INT_Q) {
-                    data->data_type = T_INT;
-                } else if (data->data_type == T_DOUBLE_Q) {
-                    data->data_type = T_DOUBLE;
+                if (data->data_type == STRING_QM) {
+                    data->data_type = STRING;
+                } else if (data->data_type == INT_QM) {
+                    data->data_type = INT;
+                } else if (data->data_type == DOUBLE_QM) {
+                    data->data_type = DOUBLE;
                 }
         }
     }

@@ -3,3 +3,5 @@ src/*.o
 */.DS_Store
 compiler
 *.txt
+.vscode/*
+src/.vscode/*

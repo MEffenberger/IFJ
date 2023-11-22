@@ -9,7 +9,18 @@
  * @author Adam Valík <xvalik05>
  */
 
+#include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
+#include "error.h"
+#include "expression_parser.h"
+#include "forest.h"
 #include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
 
 forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
@@ -32,7 +43,7 @@ int renamer3000 = 0;
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 callee_list_t *callee_list = NULL;
-data_type type_of_expr = T_UNKNOWN; // for expression parser to return the data type of expression
+data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
 
 
 
@@ -40,13 +51,13 @@ data_type convert_dt(token_t* token) {
     if (token->type == TOKEN_KEYWORD) {
         switch (token->value.keyword) {
             case KW_INT:
-                return T_INT;
+                return INT;
             case KW_DOUBLE:
-                return T_DOUBLE;
+                return DOUBLE;
             case KW_STRING:
-                return T_STRING;
+                return STRING;
             case KW_NIL:
-                return T_NIL;
+                return NIL;
             default:
                 return -1;
         }
@@ -54,17 +65,17 @@ data_type convert_dt(token_t* token) {
     else if (token->type == TOKEN_KEYWORD_QM) {
         switch (token->value.keyword) {
             case KW_INT:
-                return T_INT_Q;
+                return INT_QM;
             case KW_DOUBLE:
-                return T_DOUBLE_Q;
+                return DOUBLE_QM;
             case KW_STRING:
-                return T_STRING_Q;
+                return STRING_QM;
             default:
                 return -1;
         }
     }
     else if (token->type == TOKEN_LEFT_BRACKET) {
-        return T_VOID; // void function (absence of return type)
+        return VOID; // void function (absence of return type)
     }
     else {
         return -1; 
@@ -128,77 +139,77 @@ token_t* get_next_token() {
 void define_built_in_functions() {
     // func readString() -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
-    data = set_data_func(&data, T_STRING_Q);
+    data = set_data_func(&data, STRING_QM);
     symtable_insert(&active->symtable, "readString", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readInt() -> Int?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
-    data = set_data_func(&data, T_INT_Q);
+    data = set_data_func(&data, INT_QM);
     symtable_insert(&active->symtable, "readInt", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readDouble() -> Double?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
-    data = set_data_func(&data, T_DOUBLE_Q);
+    data = set_data_func(&data, DOUBLE_QM);
     symtable_insert(&active->symtable, "readDouble", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func write(term_1, term_2, ..., term_n)
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-    data = set_data_func(&data, T_VOID);
+    data = set_data_func(&data, VOID);
     symtable_insert(&active->symtable, "write", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func Int2Double(_ term : Int) -> Double
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
-    data = set_data_func(&data, T_DOUBLE);
+    data = set_data_func(&data, DOUBLE);
     symtable_insert(&active->symtable, "Int2Double", data);
-    data = set_data_param(&data, T_INT, "_", 1);
+    data = set_data_param(&data, INT, "_", 1);
     symtable_insert(&active->symtable, "term", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func Double2Int(_ term : Double) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
-    data = set_data_func(&data, T_INT);
+    data = set_data_func(&data, INT);
     symtable_insert(&active->symtable, "Double2Int", data);
-    data = set_data_param(&data, T_DOUBLE, "_", 1);
+    data = set_data_param(&data, DOUBLE, "_", 1);
     symtable_insert(&active->symtable, "term", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func length(_ s : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
-    data = set_data_func(&data, T_INT);
+    data = set_data_func(&data, INT);
     symtable_insert(&active->symtable, "length", data);
-    data = set_data_param(&data, T_STRING, "_", 1);
+    data = set_data_param(&data, STRING, "_", 1);
     symtable_insert(&active->symtable, "s", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
-    data = set_data_func(&data, T_STRING_Q);
+    data = set_data_func(&data, STRING_QM);
     symtable_insert(&active->symtable, "substring", data);
-    data = set_data_param(&data, T_STRING, "of", 1);
+    data = set_data_param(&data, STRING, "of", 1);
     symtable_insert(&active->symtable, "s", data);
-    data = set_data_param(&data, T_INT, "startingAt", 2);
+    data = set_data_param(&data, INT, "startingAt", 2);
     symtable_insert(&active->symtable, "i", data);
-    data = set_data_param(&data, T_INT, "endingBefore", 3);
+    data = set_data_param(&data, INT, "endingBefore", 3);
     symtable_insert(&active->symtable, "j", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func ord(_ c : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
-    data = set_data_func(&data, T_INT);
+    data = set_data_func(&data, INT);
     symtable_insert(&active->symtable, "ord", data);
-    data = set_data_param(&data, T_STRING, "_", 1);
+    data = set_data_param(&data, STRING, "_", 1);
     symtable_insert(&active->symtable, "c", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func chr(_ i : Int) -> String
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
-    data = set_data_func(&data, T_STRING);
+    data = set_data_func(&data, STRING);
     symtable_insert(&active->symtable, "chr", data);
-    data = set_data_param(&data, T_INT, "_", 1);
+    data = set_data_param(&data, INT, "_", 1);
     symtable_insert(&active->symtable, "i", data);
     BACK_TO_PARENT_IN_FOREST;
 }
@@ -499,7 +510,7 @@ void ret() {
     forest_node *tmp = check_return_stmt(active);
     sym_data *tmp_data = symtable_lookup(tmp->symtable, tmp->name);
 
-    if (tmp_data->return_type == T_VOID) { // void function 
+    if (tmp_data->return_type == VOID) { // void function 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
@@ -801,7 +812,7 @@ void func_call() {
 
     // func_call is not assigned 
     if (var_name == NULL) {
-        insert_callee_into_list(callee_list, func_name, T_VOID);
+        insert_callee_into_list(callee_list, func_name, VOID);
     }
     else {
         AVL_tree* tmp = forest_search_symbol(active, var_name);
@@ -1230,24 +1241,24 @@ void callee_validation(forest_node *global) {
                         }
                         // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
                         switch (param->data.param_type) {
-                            case T_INT_Q:
-                                if (callee_list->callee->args_types[i] != T_INT && callee_list->callee->args_types[i] != T_NIL) {
+                            case INT_QM:
+                                if (callee_list->callee->args_types[i] != INT && callee_list->callee->args_types[i] != NIL) {
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
-                            case T_DOUBLE_Q:
-                                if (callee_list->callee->args_types[i] != T_DOUBLE && callee_list->callee->args_types[i] != T_NIL) {
+                            case DOUBLE_QM:
+                                if (callee_list->callee->args_types[i] != DOUBLE && callee_list->callee->args_types[i] != NIL) {
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
-                            case T_STRING_Q:
-                                if (callee_list->callee->args_types[i] != T_STRING && callee_list->callee->args_types[i] != T_NIL) {
+                            case STRING_QM:
+                                if (callee_list->callee->args_types[i] != STRING && callee_list->callee->args_types[i] != NIL) {
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
-                            case T_INT:
-                            case T_DOUBLE:
-                            case T_STRING:
+                            case INT:
+                            case DOUBLE:
+                            case STRING:
                                 if (callee_list->callee->args_types[i] != param->data.param_type) {
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }

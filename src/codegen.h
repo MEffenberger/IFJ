@@ -14,13 +14,6 @@
 #ifndef IFJ_CODEGEN_H
 #define IFJ_CODEGEN_H
 
-#include "error.h"
-#include "scanner.h"
-#include "symtable.h"
-#include "forest.h"
-#include "token_stack.h"
-#include "parser.h"
-#include "cnt_stack.h"
 
 
 // typedef enum instruction_name {

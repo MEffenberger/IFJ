@@ -11,11 +11,6 @@
 #define STRING_VECTOR_H
 
 
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-
 
 #define VECTOR_LENGTH 8 //default size of dynamic array
 

@@ -12,12 +12,7 @@
 #ifndef IFJ_ERROR_H
 #define IFJ_ERROR_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "string_vector.h"
-#include "scanner.h"
-#include "symtable.h"
-//#include "forest.h"
+
 
 // Error codes
 typedef enum e_error_code {

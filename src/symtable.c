@@ -9,11 +9,19 @@
  * @author Marek Effenberger <xeffen00>
  */
 
-#include "symtable.h"
+#include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
 #include "error.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "expression_parser.h"
+#include "forest.h"
+#include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
+
 
 // void symtable_init(AVL_tree **tree) {
 //     *tree = NULL;
@@ -24,14 +32,14 @@ void data_init(sym_data *data){
 
     data->is_var = false;
     data->var_type = VAR;
-    data->data_type = T_NIL;
+    data->data_type = NIL;
 
     data->is_func = false;
-    data->return_type = T_NIL;
+    data->return_type = NIL;
 
     data->is_param = false;
     data->param_name = NULL;
-    data->param_type = T_NIL;
+    data->param_type = NIL;
     data->param_order = 0;
 }
 

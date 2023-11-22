@@ -8,7 +8,18 @@
  * @author Dominik Horut <xhorut01>
  * @author Samuel Hejnicek <xhejni00>
  */
+#include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
+#include "error.h"
 #include "expression_parser.h"
+#include "forest.h"
+#include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
 
 #define TABLE_SIZE 16
 
@@ -486,7 +497,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 
 
 
-void call_expr_parser(token_type_t return_type){
+void call_expr_parser(data_type return_type){
 
     token_stack stack;
     stack_init(&stack);

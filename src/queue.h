@@ -13,9 +13,6 @@
 #ifndef IFJ_QUEUE_H
 #define IFJ_QUEUE_H
 
-#include "scanner.h"
-#include "error.h"
-
 typedef struct queue_item {
     token_t *token;
     struct queue_item *next;

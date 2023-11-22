@@ -13,18 +13,6 @@
 #ifndef IFJ_PARSER_H
 #define IFJ_PARSER_H
 
-#include "error.h"
-#include "scanner.h"
-#include "symtable.h"
-#include "forest.h"
-#include "queue.h"
-#include "cnt_stack.h"
-#include <string.h>
-// #include "expression_parser.h"
-#include "codegen.h"
-#include "string_vector.h"
-#include "callee.h"
-
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
 

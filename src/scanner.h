@@ -10,9 +10,6 @@
  */
 #ifndef IFJ_SCANNER_H
 #define IFJ_SCANNER_H
-#include "error.h"
-#include <ctype.h>
-//#include "token.h"
 
 typedef enum token_types {
     TOKEN_WHITESPACE,
@@ -143,21 +140,6 @@ typedef enum keyword{
 }keyword_t;
 
 
-
-
-typedef enum expression_value{
-    INT,
-    DOUBLE,
-    STRING,
-    NIL,
-    BOOL,
-    INT_QM,
-    DOUBLE_QM,
-    STRING_QM,
-    DONT_CARE,
-
-} expression_value_t;
-
 typedef enum expression_type{
     ID,
     CONST,
@@ -178,7 +160,7 @@ typedef struct token {
     token_type_t type;
     bool prev_was_eol;
     expression_type_t exp_type;
-    expression_value_t exp_value;
+    data_type exp_value;
 } token_t;
 
 keyword_t compare_keyword(vector* v);

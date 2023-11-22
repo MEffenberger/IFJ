@@ -10,9 +10,6 @@
 #ifndef CNT_STACK_H
 #define CNT_STACK_H
 
-#include <stdlib.h>
-#include <stdbool.h>
-#include "codegen.h"
 
 /**
  * @brief A stack data structure for cnts.

@@ -1,15 +1,29 @@
 /**
- * @file error.h
+ * @file error.c
  *
  * IFJ23 compiler
  *
  * @brief Error handling header file
- *
+ *s
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
  */
 
+
+
+#include "callee.h"
+#include "cnt_stack.h"
+#include "codegen.h"
 #include "error.h"
+#include "expression_parser.h"
+#include "forest.h"
+#include "parser.h"
+#include "queue.h"
+#include "scanner.h"
+#include "string_vector.h"
+#include "symtable.h"
+#include "token_stack.h"
+
 
 void push_alloc_ptr(void *ptr, alloc_type type) {
     alloc_ptr *new = malloc(sizeof(alloc_ptr));

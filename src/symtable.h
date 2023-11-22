@@ -14,25 +14,21 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-#include "error.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+
 
 
 
 typedef enum e_data_type {
-    T_INT,
-    T_DOUBLE,
-    T_STRING,
-    T_INT_Q,
-    T_DOUBLE_Q,
-    T_STRING_Q,
-    T_NIL, 
-    T_VOID,
-    T_BOOL,
-    T_UNKNOWN
+    INT,
+    DOUBLE,
+    STRING,
+    NIL,
+    BOOL,
+    INT_QM,
+    DOUBLE_QM,
+    STRING_QM,
+    VOID,
+    UNKNOWN
 } data_type;
 
 typedef enum e_var_type {
