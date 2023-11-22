@@ -190,6 +190,7 @@ void left_rotate(AVL_tree **tree) {
 void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
     if (*tree == NULL) { // insert first to an empty tree
         printf("SYMTABLE: Inserting %s\n", key);
+        printf("SYMTABLE: Inserting %s\n", key);
         *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
         (*tree)->key = key;
         (*tree)->data = data;

@@ -20,13 +20,12 @@
  * This struct represents a stack data structure for tokens. It contains a dynamically allocated array of tokens,
  * along with the current size and capacity of the stack.
  */
-typedef struct tokenstack{
+typedef struct {
     token_t** token_array;
     int size;
     int capacity;
-} token_stack_t;
+} token_stack;
 
-extern token_stack_t *token_stack;
 
 /**
  * @brief Initializes a token stack with a given capacity.
@@ -36,7 +35,7 @@ extern token_stack_t *token_stack;
  * 
  * @param token_stack A pointer to the token stack to be initialized.
  */
-void token_init(token_stack_t* token_stack);
+void stack_init(token_stack* token_stack);
 
 /**
  * @brief Pushes a token onto the top of the stack.
@@ -47,7 +46,7 @@ void token_init(token_stack_t* token_stack);
  * @param token_stack A pointer to the token stack.
  * @param token The token to be pushed onto the stack.
  */
-void token_push(token_stack_t* token_stack, token_t* token);
+void stack_push(token_stack* token_stack, token_t* token);
 
 /**
  * @brief Pops a token from the top of the stack.
@@ -58,7 +57,7 @@ void token_push(token_stack_t* token_stack, token_t* token);
  * @param token_stack A pointer to the token stack.
  * @return The token popped from the top of the stack.
  */
-void token_pop(token_stack_t* token_stack);
+void stack_pop(token_stack* token_stack);
 
 /**
  * @brief Returns the token at the top of the stack.
@@ -69,7 +68,7 @@ void token_pop(token_stack_t* token_stack);
  * @param token_stack A pointer to the token stack.
  * @return The token at the top of the stack.
  */
-token_t* token_top(token_stack_t* token_stack);
+token_t* stack_top(token_stack* token_stack);
 
 /**
  * @brief Checks if the stack is empty.
@@ -79,7 +78,14 @@ token_t* token_top(token_stack_t* token_stack);
  * @param token_stack A pointer to the token stack.
  * @return True if the stack is empty, false otherwise.
  */
-bool token_is_empty(token_stack_t* token_stack);
+bool stack_is_empty(token_stack* token_stack);
+
+
+
+token_t* stack_top_nonterminal(token_stack* token_stack);
+
+token_t* stack_top_terminal(token_stack* token_stack);
+
 
 /**
  * @brief Disposes of a token stack.
@@ -89,6 +95,6 @@ bool token_is_empty(token_stack_t* token_stack);
  * 
  * @param token_stack A pointer to the token stack to be disposed of.
  */
-void token_dispose_stack(token_stack_t* token_stack);
+void dispose_stack(token_stack* token_stack);
 
 #endif /* TOKEN_STACK_H */

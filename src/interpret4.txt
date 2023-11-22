@@ -1,0 +1,4 @@
+.IFJcode23
+DEFVAR GF@a
+MOVE GF@a int@5
+MOVE GF@a nil@nil
