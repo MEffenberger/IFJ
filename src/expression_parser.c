@@ -636,6 +636,7 @@ void call_expr_parser(data_type return_type){
                     } else if(variable_type == NIL){
                         //
                     } else if(variable_type == STRING || variable_type == STRING_QM){
+                        format_string(tmp1);
                         printf("PUSHS string@%s\n", tmp1->value.vector->array);
                     }
                     
