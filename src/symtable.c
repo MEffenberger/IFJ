@@ -38,7 +38,6 @@ void data_init(sym_data *data){
 sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { 
     data_init(&data);
     data.is_var = true;
-    data.is_var = true;
     data.defined = initialized;
     data.data_type = data_type;
     data.var_type = var_type;
@@ -46,10 +45,7 @@ sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_
 }
 
 sym_data set_data_func(sym_data *data, data_type return_type) {
-sym_data set_data_func(sym_data *data, data_type return_type) {
     data_init(data);
-    data->is_func = true;
-    data->defined = true;
     data->is_func = true;
     data->defined = true;
     data->return_type = return_type;
@@ -58,7 +54,6 @@ sym_data set_data_func(sym_data *data, data_type return_type) {
 
 sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
     data_init(data);
-    data->is_param = true;
     data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
@@ -331,20 +326,6 @@ void symtable_dispose(AVL_tree **tree) {
 void inorder(AVL_tree **tree) { 
     if (*tree != NULL) {
         inorder(&((*tree)->left));
-        char *type;
-        if ((*tree)->data.is_var) {
-            type = "var";
-        }
-        else if ((*tree)->data.is_func) {
-            type = "func";
-        }
-        else if ((*tree)->data.is_param) {
-            type = "param";
-        }
-        else {
-            type = "unknown";
-        }
-        printf("key: %s - %s\n", (*tree)->key, type);
         char *type;
         if ((*tree)->data.is_var) {
             type = "var";

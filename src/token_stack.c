@@ -62,17 +62,6 @@ token_t* stack_top_terminal(token_stack* token_stack){
     return tmp;
 }
 
-
-token_t* stack_top_terminal(token_stack* token_stack){
-    int counter = 0;
-    token_t* tmp = token_stack->token_array[token_stack->size - 1 + counter];
-    while(tmp->type == TOKEN_EXPRESSION){
-        counter--;
-        tmp = token_stack->token_array[token_stack->size -1 + counter];
-    }
-    return tmp;
-}
-
 void dispose_stack(token_stack* token_stack) {
     for(int i = 0; i < token_stack->size; i++){
         destroy_token(token_stack->token_array[i]);

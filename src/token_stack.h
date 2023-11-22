@@ -20,13 +20,12 @@
  * This struct represents a stack data structure for tokens. It contains a dynamically allocated array of tokens,
  * along with the current size and capacity of the stack.
  */
-typedef struct tokenstack{
+typedef struct {
     token_t** token_array;
     int size;
     int capacity;
-} token_stack_t;
+} token_stack;
 
-extern token_stack_t *token_stack;
 
 /**
  * @brief Initializes a token stack with a given capacity.
@@ -96,6 +95,6 @@ token_t* stack_top_terminal(token_stack* token_stack);
  * 
  * @param token_stack A pointer to the token stack to be disposed of.
  */
-void dispose_stack(token_stack_t* token_stack);
+void dispose_stack(token_stack* token_stack);
 
 #endif /* TOKEN_STACK_H */
