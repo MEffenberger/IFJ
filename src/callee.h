@@ -30,8 +30,8 @@ typedef struct callee_list {
 } callee_list_t;
 
 callee_list_t* init_callee_list();
-callee_t* init_callee(const char* name, data_type return_type);
-void insert_callee_into_list(callee_list_t* list, const char* name, data_type return_type);
+callee_t* init_callee(const char* name);
+void insert_callee_into_list(callee_list_t* list, const char* name);
 void insert_name_into_callee(callee_t* callee, char* id);
 void insert_type_into_callee(callee_t* callee, data_type type);
 

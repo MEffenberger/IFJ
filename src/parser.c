@@ -537,9 +537,9 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-        printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+        printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp_data->return_type);
         call_expr_parser(tmp_data->return_type); 
-        printf("COMING BACK FROM EXPR_PARSER");
+        printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
         codegen_func_def_return(tmp->name);
@@ -768,14 +768,14 @@ void assign() {
             else {
                 // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
                 if (queue->first->next == NULL) {
-                    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                    printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                     call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
-                    printf("COMING BACK FROM EXPR_PARSER");
+                    printf("COMING BACK FROM EXPR_PARSER\n");
                 }
                 else {
-                    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                    printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
                     call_expr_parser(convert_dt(queue->first->next->token));
-                    printf("COMING BACK FROM EXPR_PARSER");
+                    printf("COMING BACK FROM EXPR_PARSER\n");
                 }
             }
         }
@@ -870,14 +870,14 @@ void assign() {
         else {
             // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
             if (queue->first->next == NULL) {
-                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                 call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
-                printf("COMING BACK FROM EXPR_PARSER");
+                printf("COMING BACK FROM EXPR_PARSER\n");
             }
             else {
-                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
                 call_expr_parser(convert_dt(queue->first->next->token));
-                printf("COMING BACK FROM EXPR_PARSER");
+                printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }    
     }
@@ -901,9 +901,9 @@ void assign() {
                 func_call();
             }
             else { // variable is already defined, so it's data_type is known
-                printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
                 call_expr_parser(tmp->data.data_type);
-                printf("COMING BACK FROM EXPR_PARSER");
+                printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
         else if (current_token->type == TOKEN_KEYWORD) {
@@ -995,9 +995,11 @@ void assign() {
             func_call();
         }
         else {
-            printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+                            printf("here nil\n");
+
+            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
             call_expr_parser(tmp->data.data_type);
-            printf("COMING BACK FROM EXPR_PARSER");
+            printf("COMING BACK FROM EXPR_PARSER\n");
         }
     }    
 }
@@ -1015,14 +1017,31 @@ void func_call() {
 
 
 
-    // func_call is not assigned 
+    // // func_call is not assigned 
+    // if (var_name == NULL) {
+    //     insert_callee_into_list(callee_list, func_name, VOID);
+    // }
+    // else {
+    //     AVL_tree* tmp = forest_search_symbol(active, var_name);
+    //     if (tmp == NULL) {
+    //         printf("segafult\n");
+    //     }
+    //     insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
+    // }
+
+    insert_callee_into_list(callee_list, func_name);
     if (var_name == NULL) {
-        insert_callee_into_list(callee_list, func_name, VOID);
+        callee_list->callee->return_type = VOID;
     }
     else {
         AVL_tree* tmp = forest_search_symbol(active, var_name);
-        insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
+        if (tmp != NULL) {
+            callee_list->callee->return_type = tmp->data.data_type;
+        }
     }
+
+
+
 
 
     if (!function_write) {
@@ -1117,9 +1136,9 @@ void arg() {
         insert_name_into_callee(callee_list->callee, "_");
     }
 
-    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+    printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
     call_expr_parser(UNKNOWN);
-    printf("COMING BACK FROM EXPR_PARSER");
+    printf("COMING BACK FROM EXPR_PARSER\n");
 
     insert_type_into_callee(callee_list->callee, type_of_expr);    
 
@@ -1201,9 +1220,9 @@ void condition() {
         }
     }
     else {
-        printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+        printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
         call_expr_parser(BOOL); 
-        printf("COMING BACK FROM EXPR_PARSER");
+        printf("COMING BACK FROM EXPR_PARSER\n");
 
         codegen_if();
     }
@@ -1300,9 +1319,9 @@ void cycle() {
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
 
-    printf("ENTERING WORLD OF EXPRESSION PARSER\n");
+    printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
     call_expr_parser(BOOL);
-    printf("COMING BACK FROM EXPR_PARSER");
+    printf("COMING BACK FROM EXPR_PARSER\n");
 
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {

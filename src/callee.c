@@ -38,7 +38,7 @@ callee_list_t* init_callee_list() {
     return list;
 }
 
-callee_t* init_callee(const char* name, data_type return_type) {
+callee_t* init_callee(const char* name) {
     callee_t* callee = (callee_t*)malloc(sizeof(callee_t));
     if (callee == NULL) {
         // Handle memory allocation failure
@@ -55,7 +55,7 @@ callee_t* init_callee(const char* name, data_type return_type) {
         return NULL;
     }
 
-    callee->return_type = return_type;
+    callee->return_type = UNKNOWN;
     arg_counter = 0;
     callee->arg_count = arg_counter;
     callee->args_names = NULL; // Initialize args_names to NULL
@@ -64,9 +64,9 @@ callee_t* init_callee(const char* name, data_type return_type) {
     return callee;
 }
 
-void insert_callee_into_list(callee_list_t* list, const char* name, data_type return_type) {
+void insert_callee_into_list(callee_list_t* list, const char* name) {
     // Initialize a new callee
-    callee_t* new_callee = init_callee(name, return_type);
+    callee_t* new_callee = init_callee(name);
     if (new_callee == NULL) {
         // Handle initialization failure
         return;
