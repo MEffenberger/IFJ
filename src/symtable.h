@@ -78,52 +78,17 @@ typedef struct avl_tree {
  */
 void symtable_init(AVL_tree **tree);
 
-/**
- * @brief Data initialization
- * 
- * @param data Pointer to the data
- */
-void data_init(sym_data *data);
 
-/**
- * @brief Set the variable's data
- * 
- * @param data Data to be set
- * @param initialized If the variable is initialized
- * @param data_type Data type of the variable (T_INT/DOUBLE/...)
- * @param var_type LET/VAR
- * @param int_value Integer value when T_INT(_Q)
- * @param double_value Double value when T_DOUBLE(_Q)
- * @param string_value String value when T_STRING(_Q)
- */
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
-
-/**
- * @brief Set the function's data
- * 
- * @param data Data to be set
- * @param return_type Return type of the function
- */
-sym_data set_data_func(sym_data *data, data_type return_type);
-
-/**
- * @brief Set the parameter's data
- * 
- * @param data Data to be set
- * @param param_type Data type of the parameter
- * @param param_name Name of the parameter
- * @param param_order Order of the parameter
- */
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order);
+sym_data data_init();
+ 
 
 /**
  * @brief Symbol insertion
  * 
  * @param tree Pointer to the root of the tree
  * @param key Key of the node
- * @param value Value of the node
  */
-void symtable_insert(AVL_tree **tree, char *key, sym_data data);
+void symtable_insert(AVL_tree **tree, char *key);
 
 /**
  * @brief Symbol search in the symbol table

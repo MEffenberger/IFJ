@@ -28,47 +28,49 @@
 //     *tree = NULL;
 // }
 
-void data_init(sym_data *data){
-    data->defined = false; // initialized
+sym_data data_init(){
+    sym_data data;
+    data.defined = false; // initialized
 
-    data->is_var = false;
-    data->var_type = VAR;
-    data->data_type = NIL;
+    data.is_var = false;
+    data.var_type = VAR;
+    data.data_type = UNKNOWN;
 
-    data->is_func = false;
-    data->return_type = NIL;
+    data.is_func = false;
+    data.return_type = UNKNOWN;
 
-    data->is_param = false;
-    data->param_name = NULL;
-    data->param_type = NIL;
-    data->param_order = 0;
-}
-
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { 
-    data_init(&data);
-    data.is_var = true;
-    data.defined = initialized;
-    data.data_type = data_type;
-    data.var_type = var_type;
+    data.is_param = false;
+    data.param_name = NULL;
+    data.param_type = UNKNOWN;
+    data.param_order = 0;
     return data;
 }
 
-sym_data set_data_func(sym_data *data, data_type return_type) {
-    data_init(data);
-    data->is_func = true;
-    data->defined = true;
-    data->return_type = return_type;
-    return *data;
-}
+// sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { 
+//     data_init(&data);
+//     data.is_var = true;
+//     data.defined = initialized;
+//     data.data_type = data_type;
+//     data.var_type = var_type;
+//     return data;
+// }
 
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
-    data_init(data);
-    data->is_param = true;
-    data->param_type = param_type;
-    data->param_name = param_name;
-    data->param_order = param_order;
-    return *data;
-}
+// sym_data set_data_func(sym_data *data, data_type return_type) {
+//     data_init(data);
+//     data->is_func = true;
+//     data->defined = true;
+//     data->return_type = return_type;
+//     return *data;
+// }
+
+// sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
+//     data_init(data);
+//     data->is_param = true;
+//     data->param_type = param_type;
+//     data->param_name = param_name;
+//     data->param_order = param_order;
+//     return *data;
+// }
 
 
 AVL_tree *symtable_search(AVL_tree *tree, char *key) {
@@ -191,21 +193,21 @@ void left_rotate(AVL_tree **tree) {
 }
 
 
-void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
+void symtable_insert(AVL_tree **tree, char *key) {
     if (*tree == NULL) { // insert first to an empty tree
         *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
         (*tree)->key = key;
-        (*tree)->data = data;
+        (*tree)->data = data_init();
         (*tree)->left = NULL;
         (*tree)->right = NULL;
         (*tree)->height = 0;
         (*tree)->nickname = 0;
     }
     else if (strcmp((*tree)->key, key) > 0) {
-        symtable_insert(&((*tree)->left), key, data);
+        symtable_insert(&((*tree)->left), key);
     }
     else if (strcmp((*tree)->key, key) < 0) {
-        symtable_insert(&((*tree)->right), key, data);
+        symtable_insert(&((*tree)->right), key);
     }
     else { // strcmp((*tree)->key, key) == 0
         error_exit(ERROR_SEM_OTHER, "SYMTABLE", "Key already exists in the symbol table.");

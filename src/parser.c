@@ -148,78 +148,78 @@ token_t* get_next_token() {
 void define_built_in_functions() {
     // func readString() -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
-    data = set_data_func(&data, STRING_QM);
-    symtable_insert(&active->symtable, "readString", data);
+    //data = set_data_func(&data, STRING_QM);
+    //symtable_insert(&active->symtable, "readString", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readInt() -> Int?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
-    data = set_data_func(&data, INT_QM);
-    symtable_insert(&active->symtable, "readInt", data);
+    //data = set_data_func(&data, INT_QM);
+    //symtable_insert(&active->symtable, "readInt", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readDouble() -> Double?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
-    data = set_data_func(&data, DOUBLE_QM);
-    symtable_insert(&active->symtable, "readDouble", data);
+    //data = set_data_func(&data, DOUBLE_QM);
+    //symtable_insert(&active->symtable, "readDouble", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func write(term_1, term_2, ..., term_n)
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-    data = set_data_func(&data, VOID);
-    symtable_insert(&active->symtable, "write", data);
+    //data = set_data_func(&data, VOID);
+    //symtable_insert(&active->symtable, "write", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func Int2Double(_ term : Int) -> Double
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
-    data = set_data_func(&data, DOUBLE);
-    symtable_insert(&active->symtable, "Int2Double", data);
-    data = set_data_param(&data, INT, "_", 1);
-    symtable_insert(&active->symtable, "term", data);
+    //data = set_data_func(&data, DOUBLE);
+    //symtable_insert(&active->symtable, "Int2Double", data);
+    //data = set_data_param(&data, INT, "_", 1);
+    //symtable_insert(&active->symtable, "term", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func Double2Int(_ term : Double) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "Double2Int", data);
-    data = set_data_param(&data, DOUBLE, "_", 1);
-    symtable_insert(&active->symtable, "term", data);
+    //data = set_data_func(&data, INT);
+    //symtable_insert(&active->symtable, "Double2Int", data);
+    //data = set_data_param(&data, DOUBLE, "_", 1);
+    //symtable_insert(&active->symtable, "term", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func length(_ s : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "length", data);
-    data = set_data_param(&data, STRING, "_", 1);
-    symtable_insert(&active->symtable, "s", data);
+    //data = set_data_func(&data, INT);
+    //symtable_insert(&active->symtable, "length", data);
+    //data = set_data_param(&data, STRING, "_", 1);
+    //symtable_insert(&active->symtable, "s", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
-    data = set_data_func(&data, STRING_QM);
-    symtable_insert(&active->symtable, "substring", data);
-    data = set_data_param(&data, STRING, "of", 1);
-    symtable_insert(&active->symtable, "s", data);
-    data = set_data_param(&data, INT, "startingAt", 2);
-    symtable_insert(&active->symtable, "i", data);
-    data = set_data_param(&data, INT, "endingBefore", 3);
-    symtable_insert(&active->symtable, "j", data);
+    //data = set_data_func(&data, STRING_QM);
+    //symtable_insert(&active->symtable, "substring", data);
+    //data = set_data_param(&data, STRING, "of", 1);
+    //symtable_insert(&active->symtable, "s", data);
+    //data = set_data_param(&data, INT, "startingAt", 2);
+    //symtable_insert(&active->symtable, "i", data);
+    //data = set_data_param(&data, INT, "endingBefore", 3);
+    //symtable_insert(&active->symtable, "j", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func ord(_ c : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "ord", data);
-    data = set_data_param(&data, STRING, "_", 1);
-    symtable_insert(&active->symtable, "c", data);
+    //data = set_data_func(&data, INT);
+    //symtable_insert(&active->symtable, "ord", data);
+    //data = set_data_param(&data, STRING, "_", 1);
+    //symtable_insert(&active->symtable, "c", data);
     BACK_TO_PARENT_IN_FOREST;
 
     // func chr(_ i : Int) -> String
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
-    data = set_data_func(&data, STRING);
-    symtable_insert(&active->symtable, "chr", data);
-    data = set_data_param(&data, INT, "_", 1);
-    symtable_insert(&active->symtable, "i", data);
+    //data = set_data_func(&data, STRING);
+    //symtable_insert(&active->symtable, "chr", data);
+    //data = set_data_param(&data, INT, "_", 1);
+    //symtable_insert(&active->symtable, "i", data);
     BACK_TO_PARENT_IN_FOREST;
 }
 
@@ -288,8 +288,11 @@ void func_def() {
                 ret_type();
 
                 // insert function with its return type to symtable
-                data = set_data_func(&data, convert_dt(queue->first->token));
-                symtable_insert(&active->symtable, active->name, data);
+                symtable_insert(&active->symtable, active->name);
+                AVL_tree *symbol = symtable_search(active->symtable, active->name);
+                symbol->data.defined = true;
+                symbol->data.is_func = true;
+                symbol->data.return_type = convert_dt(queue->first->token);
                 queue_dispose(queue);
 
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
@@ -384,12 +387,14 @@ void params() {
         error_exit(ERROR_SEM_OTHER, "PARSER", "Parameter's name has to differ from its identifier");
     }
 
-    printf("AAAAPICO %d\n\n\n", convert_dt(current_token));
     
     // insert parameter to function's symtable
-    data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
-
-    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, data);
+    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array);
+    AVL_tree *symbol = symtable_search(active->symtable, queue->first->next->token->value.vector->array);
+    symbol->data.is_param = true;
+    symbol->data.param_name = queue->first->token->value.vector->array;
+    symbol->data.param_type = convert_dt(current_token);
+    symbol->data.param_order = ++param_order;
 
     queue_dispose(queue);
 
@@ -648,13 +653,20 @@ void var_def() {
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 
-    //    rename_keep_exit();
+        symtable_insert(&active->symtable, var_name);
+        AVL_tree *symbol = symtable_search(active->symtable, var_name);
+        symbol->data.is_var = true;
+        symbol->data.var_type = letvar;
+
+        rename_keep_exit();
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
 
+        symbol->data.defined = is_defined;
+
         // insert variable to symtable
-        if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
+        if (symbol->data.data_type == UNKNOWN) { // the data type is not specified, expression parser determined it
 
             if (type_of_expr == NIL) {
                 error_exit(ERROR_SEM_DERIV, "PARSER", "Variable cannot derive its type from nil");
@@ -662,10 +674,6 @@ void var_def() {
             else if (type_of_expr == BOOL) {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Variable cannot be of type bool");
             } 
-            else {
-                printf("\n\n\n\n\nletvar: %d\n", letvar);
-                data = set_data_var(data, is_defined, type_of_expr, letvar);
-            }
         }
         else { // the data type was specified, expression parser will handle it as there is expected data type
             // '= nil' does not go through the expression parses, has to be handled here
@@ -677,11 +685,8 @@ void var_def() {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Variable cannot be of type nil");
                 }
             }
-            printf("\n\n\n\n\nletvar: %d\n", letvar);
-            data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
         }        
 
-        symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
         
         printf("-- returning...\n\n");
@@ -708,6 +713,10 @@ void opt_var_def() {
         print_debug(current_token, 1, debug_cnt++);
 
         type();
+
+        AVL_tree *symbol = symtable_search(active->symtable, var_name);
+        symbol->data.data_type = convert_dt(current_token);
+
 
         // variable is declared
         is_defined = false;
@@ -771,6 +780,8 @@ void assign() {
                     printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                     call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
                     printf("COMING BACK FROM EXPR_PARSER\n");
+                    AVL_tree *symbol = symtable_search(active->symtable, var_name);
+                    symbol->data.data_type = type_of_expr;
                 }
                 else {
                     printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
@@ -873,6 +884,9 @@ void assign() {
                 printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                 call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
                 printf("COMING BACK FROM EXPR_PARSER\n");
+                AVL_tree *symbol = symtable_search(active->symtable, var_name);
+                symbol->data.data_type = type_of_expr;
+
             }
             else {
                 printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
@@ -1016,31 +1030,22 @@ void func_call() {
     func_name = strcpy(func_name, current_token->value.vector->array);
 
 
-
-    // // func_call is not assigned 
-    // if (var_name == NULL) {
-    //     insert_callee_into_list(callee_list, func_name, VOID);
-    // }
-    // else {
-    //     AVL_tree* tmp = forest_search_symbol(active, var_name);
-    //     if (tmp == NULL) {
-    //         printf("segafult\n");
-    //     }
-    //     insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
-    // }
-
+    // func_call is not assigned
     insert_callee_into_list(callee_list, func_name);
-    if (var_name == NULL) {
+    if (var_name == NULL) { // function call without assigning
         callee_list->callee->return_type = VOID;
     }
-    else {
+    else { // assigning to variable already defined
         AVL_tree* tmp = forest_search_symbol(active, var_name);
         if (tmp != NULL) {
             callee_list->callee->return_type = tmp->data.data_type;
         }
     }
 
-
+    // assigning to variable while defining it with previous function definition
+    if (vardef_assign && queue->first->next != NULL) {
+        callee_list->callee->return_type = convert_dt(queue->first->next->token);
+    }
 
 
 
@@ -1196,7 +1201,6 @@ void condition() {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             else if (tmp->data.var_type == VAR) {
-                printf("0 je VAR, 1 je LET =====>%d\n", tmp->data.var_type);
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot be used as follows: \"if let id\"");
 
             }
