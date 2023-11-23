@@ -42,7 +42,17 @@ int cnt = 0; // used for generating unique labels for if-else
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 bool vardef_assign = false; // for assign() to know where to get info about the variable (from queue or from symtable)
-bool function_write = true; // for parser to know that the function being handled is write() and needs special treatment
+bool function_write = false; // for parser to know that the function being handled is write() and needs special treatment
+// flags for defining built-in functions in codegen, so they are not defined multiple times
+bool readString_defined = false;
+bool readInt_defined = false;
+bool readDouble_defined = false;
+bool Int2Double_defined = false;
+bool Double2Int_defined = false;
+bool length_defined = false;
+bool substring_defined = false;
+bool ord_defined = false;
+bool chr_defined = false;
 
 
 
@@ -771,48 +781,75 @@ void assign() {
         else if (current_token->type == TOKEN_KEYWORD) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
-                    // CODEGEN
-                    codegen_readString();
+                    if (!readString_defined) {
+                        // CODEGEN
+                        codegen_readString();
+                        readString_defined = true;
+                    }
                     break;
                 
                 case KW_RD_INT:
-                    // CODEGEN
-                    codegen_readInt();
+                    if (!readInt_defined) {
+                        // CODEGEN
+                        codegen_readInt();
+                        readInt_defined = true;
+                    }
                     break;
                 
                 case KW_RD_DBL:
-                    // CODEGEN
-                    codegen_readDouble();
+                    if (!readDouble_defined) {
+                        // CODEGEN
+                        codegen_readDouble();
+                        readDouble_defined = true;
+                    }
                     break;
 
                 case KW_INT_2_DBL:
-                    // CODEGEN
-                    codegen_Int2Double();
+                    if (!Int2Double_defined) {
+                        // CODEGEN
+                        codegen_Int2Double();
+                        Int2Double_defined = true;
+                    }
                     break;
                 
                 case KW_DBL_2_INT:
-                    // CODEGEN
-                    codegen_Double2Int();
+                    if (!Double2Int_defined) {
+                        // CODEGEN
+                        codegen_Double2Int();
+                        Double2Int_defined = true;
+                    }
                     break;
 
                 case KW_LENGHT:
-                    // CODEGEN
-                    codegen_length();
+                    if (!length_defined) {
+                        // CODEGEN
+                        codegen_length();
+                        length_defined = true;
+                    }
                     break;
 
                 case KW_SUBSTR:
-                    // CODEGEN
-                    codegen_substring();
+                    if (!substring_defined) {
+                        // CODEGEN
+                        codegen_substring();
+                        substring_defined = true;
+                    }
                     break;
                 
                 case KW_ORD:
-                    // CODEGEN
-                    codegen_ord();
+                    if (!ord_defined) {
+                        // CODEGEN
+                        codegen_ord();
+                        ord_defined = true;
+                    }
                     break;
 
                 case KW_CHR:
-                    // CODEGEN
-                    codegen_chr();
+                    if (!chr_defined) {
+                        // CODEGEN
+                        codegen_chr();
+                        chr_defined = true;
+                    }
                     break;
 
                 case KW_NIL:
@@ -871,48 +908,75 @@ void assign() {
         else if (current_token->type == TOKEN_KEYWORD) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
-                    // CODEGEN
-                    codegen_readString();
+                    if (!readString_defined) {
+                        // CODEGEN
+                        codegen_readString();
+                        readString_defined = true;
+                    }
                     break;
                 
                 case KW_RD_INT:
-                    // CODEGEN
-                    codegen_readInt();
+                    if (!readInt_defined) {
+                        // CODEGEN
+                        codegen_readInt();
+                        readInt_defined = true;
+                    }
                     break;
                 
                 case KW_RD_DBL:
-                    // CODEGEN
-                    codegen_readDouble();
+                    if (!readDouble_defined) {
+                        // CODEGEN
+                        codegen_readDouble();
+                        readDouble_defined = true;
+                    }
                     break;
 
                 case KW_INT_2_DBL:
-                    // CODEGEN
-                    codegen_Int2Double();
+                    if (!Int2Double_defined) {
+                        // CODEGEN
+                        codegen_Int2Double();
+                        Int2Double_defined = true;
+                    }
                     break;
                 
                 case KW_DBL_2_INT:
-                    // CODEGEN
-                    codegen_Double2Int();
+                    if (!Double2Int_defined) {
+                        // CODEGEN
+                        codegen_Double2Int();
+                        Double2Int_defined = true;
+                    }
                     break;
 
                 case KW_LENGHT:
-                    // CODEGEN
-                    codegen_length();
+                    if (!length_defined) {
+                        // CODEGEN
+                        codegen_length();
+                        length_defined = true;
+                    }
                     break;
 
                 case KW_SUBSTR:
-                    // CODEGEN
-                    codegen_substring();
+                    if (!substring_defined) {
+                        // CODEGEN
+                        codegen_substring();
+                        substring_defined = true;
+                    }
                     break;
                 
                 case KW_ORD:
-                    // CODEGEN
-                    codegen_ord();
+                    if (!ord_defined) {
+                        // CODEGEN
+                        codegen_ord();
+                        ord_defined = true;
+                    }
                     break;
 
                 case KW_CHR:
-                    // CODEGEN
-                    codegen_chr();
+                    if (!chr_defined) {
+                        // CODEGEN
+                        codegen_chr();
+                        chr_defined = true;
+                    }
                     break;
                
                 case KW_NIL:
@@ -958,6 +1022,8 @@ void func_call() {
         AVL_tree* tmp = forest_search_symbol(active, var_name);
         insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
     }
+
+    printf("\n\n\n%d\n\n\n", function_write);
 
     if (!function_write) {
         // CODEGEN
