@@ -85,19 +85,14 @@ forest_node* forest_search_function(forest_node *global, char *key) {
 AVL_tree *forest_search_symbol(forest_node *node, char *key) {
     printf("FOREST: Search %s in the forest\n", key);
     if (node != NULL) {
-        printf("searching in %s\n", node->name);
         if (node->symtable != NULL) {
-            printf("tryind to find %s\n", key);
             AVL_tree *found = symtable_search(node->symtable, key);
-            printf("found: %s\n", found->key);
             if (found != NULL) {
-                printf("returning\n");
                 return found;
             }
         }
         return forest_search_symbol(node->parent, key);
     }
-    printf("returning null\n");
     return NULL;
 }
 
@@ -124,7 +119,6 @@ void traverse_forest(forest_node *node) {
 
     // Process the current node
     printf("Node Name: %s %p\n", node->name, node);
-    // You can perform any actions you need on the current node here
 
     // Recursively traverse the children
     for (int i = 0; i < node->children_count; i++) {

@@ -72,21 +72,16 @@ sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, 
 
 
 AVL_tree *symtable_search(AVL_tree *tree, char *key) {
-    printf("SYMTABLE: Search %s\n", key);
-    printf("SYMTABLE: tree: %p\n", tree);
     if (tree == NULL || key == NULL) {
         return NULL;
     }
     else if (strcmp(tree->key, key) == 0) {
-        printf("SYMTABLE: Found %s\n", key);
         return tree;
     } 
     else if (strcmp(tree->key, key) > 0) {
-        printf("SYMTABLE: Going left\n");
         return symtable_search(tree->left, key);
     }
     else { // strcmp(tree->key, key) < 0
-        printf("SYMTABLE: Going right\n");
         return symtable_search(tree->right, key);
     }
 }

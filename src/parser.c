@@ -602,6 +602,7 @@ void body() {
                     function_write = false;
 
                     // CODEGEN
+                    printf("\n\n\n\n\naaaaaaPICO cum na write input: %d\n\n\n\n\n", callee_list->callee->arg_count);
                     codegen_write(callee_list->callee->arg_count);
 
                     break;
@@ -943,6 +944,7 @@ void func_call() {
     // store the function's name for later usage (for codegen)
     char *func_name = malloc(sizeof(char) * strlen(current_token->value.vector->array) + 1);
     func_name = strcpy(func_name, current_token->value.vector->array);
+
 
 
     // func_call is not assigned 
@@ -1356,6 +1358,8 @@ forest_node* check_return_stmt(forest_node *node) {
 // validating function calls, since function definitions can be after function calls
 void callee_validation(forest_node *global) {
     while (callee_list->next != NULL) {
+
+
         forest_node *tmp = forest_search_function(global, callee_list->callee->name);
         if (tmp == NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
