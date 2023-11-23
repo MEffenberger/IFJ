@@ -342,7 +342,18 @@ void inorder(AVL_tree **tree) {
         else {
             type = "unknown";
         }
-        printf("key: %s - %s\n", (*tree)->key, type);
+        if ((*tree)->data.is_param) {
+            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.param_type);
+        }
+        else if ((*tree)->data.is_func) {
+            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.return_type);
+        }
+        else if ((*tree)->data.is_var) {
+            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.data_type);
+        }
+        else {
+            printf("key: %s - %s\n", (*tree)->key, type);
+        }
         inorder(&((*tree)->right));
     }
 }

@@ -633,13 +633,22 @@ void call_expr_parser(data_type return_type){
             case RULE_OPERAND:
                 if(tmp1->type == TOKEN_ID){
                     
+                    //inorder(active->symtable);
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
 
                     if(node == NULL){
                         error_exit(2, "expression_parser", "Variable does not exist");
                     }
+                    
+                    data_type variable_type;
+                    if(node->data.is_param == false){
+                        variable_type = node->data.data_type;
+                    } else {
+                        variable_type = node->data.param_type;
+                    }
+                    
 
-                    data_type variable_type = node->data.data_type;
+                    printf("VAR TYPE z symtable:%d\n", variable_type);
 
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
