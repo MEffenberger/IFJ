@@ -467,8 +467,14 @@ token_t* get_me_token(){
                 }
             case(S_START_QUOTES):
                 if(readchar > ASCII_BEGIN && readchar != '\n' && readchar != '\\' && readchar != '"'){
-                    vector_append(buffer, readchar);
-                    break;
+                    if(readchar == ' '){
+                        vector_str_append(buffer, "\\032");
+                        break;
+                    } else {
+                        vector_append(buffer, readchar);
+                        break;
+                    }
+                    
                 } else if(readchar == '"'){
                     a_state = S_END_QUOTES;
                     token->type = TOKEN_STRING;
@@ -491,7 +497,13 @@ token_t* get_me_token(){
                     } else {
                         a_state= S_START_QUOTES;
                     } 
-                    vector_append(buffer, readchar);
+
+                    if(readchar == '"'){
+                        vector_str_append(buffer, "\\034");
+                    } else if (readchar == '\\'){
+                        vector_str_append(buffer,"\\092");
+                    }
+                    
                     break;
                 } else if(readchar == 'n'){
                     if(is_multiline){
@@ -499,7 +511,7 @@ token_t* get_me_token(){
                     } else {
                         a_state= S_START_QUOTES;
                     } 
-                    vector_append(buffer, '\n');
+                    vector_str_append(buffer, "\\010");
                     break;
                 } else if(readchar == 't'){
                     if(is_multiline){
@@ -507,7 +519,7 @@ token_t* get_me_token(){
                     } else {
                         a_state= S_START_QUOTES;
                     } 
-                    vector_append(buffer, '\t');
+                    vector_str_append(buffer, "\\009");
                     break;
                 } else if(readchar == 'r'){
                     int buffer_size = vector_size(buffer);
@@ -517,6 +529,7 @@ token_t* get_me_token(){
                     } else {
                         a_state= S_START_QUOTES;
                     } 
+                    vector_str_append(buffer, "\\013");
                         break;
                     } else if(buffer_size != 0){
                         next_char = (char) getc(stdin);
