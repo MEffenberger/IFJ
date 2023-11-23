@@ -652,7 +652,6 @@ void var_def() {
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
-        printf("back from opt_var_def\n\n\n\n");
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
@@ -677,8 +676,9 @@ void var_def() {
                 {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Variable cannot be of type nil");
                 }
-                data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
             }
+            printf("\n\n\n\n\nletvar: %d\n", letvar);
+            data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
         }        
 
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
@@ -1177,7 +1177,7 @@ void condition() {
     sprintf(node_name, "if_%d", ifelse_cnt);
     char *node_name2 = malloc(sizeof(char) * 20);
     node_name2 = strcpy(node_name2, node_name);
-    printf("node_name: %s\n", node_name);
+
     MAKE_CHILDREN_IN_FOREST(W_IF, node_name2);
     active->cond_cnt = ifelse_cnt;
 
@@ -1196,7 +1196,7 @@ void condition() {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             else if (tmp->data.var_type == VAR) {
-                printf("tmp->data.var_type: %d\n", tmp->data.var_type);
+                printf("0 je VAR, 1 je LET =====>%d\n", tmp->data.var_type);
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot be used as follows: \"if let id\"");
 
             }
@@ -1211,7 +1211,8 @@ void condition() {
                 // get TOKEN_LEFT_BRACKET
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
-
+                
+                // CODEGEN
                 codegen_if_let(renamer(tmp));
             }
         }
@@ -1224,13 +1225,13 @@ void condition() {
         call_expr_parser(BOOL); 
         printf("COMING BACK FROM EXPR_PARSER\n");
 
+        // CODEGEN
         codegen_if();
     }
 
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
         
-        // CODEGEN
         ifelse_cnt++;
 
         current_token = get_next_token();
@@ -1250,7 +1251,6 @@ void condition() {
                 sprintf(node_name, "else_%d", cnt);
                 char *node_name3 = malloc(sizeof(char) * 20);
                 node_name3 = strcpy(node_name3, node_name);
-                printf("node_name: %s\n", node_name);
                 MAKE_CHILDREN_IN_FOREST(W_ELSE, node_name3);
                 active->cond_cnt = cnt;
 
