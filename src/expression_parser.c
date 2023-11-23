@@ -556,7 +556,6 @@ void call_expr_parser(data_type return_type){
             }
         }
 
-
         if(next_token_index == 15 && stack_top_terminal(&stack)->type == TOKEN_DOLLAR){
 
             if(stack.size <= 1){
@@ -564,8 +563,8 @@ void call_expr_parser(data_type return_type){
                 error_exit(2, "expression_parser", "empty expression");
             }
             eval_expr = false;
-            /*printf("TT:%d\n", stack_top(&stack)->exp_value);
-            printf("Current token: %d", current_token->type);*/
+            //printf("TT:%d\n", stack_top(&stack)->exp_value);
+            //printf("Current token: %d", current_token->type);
             type_of_expr = stack_top(&stack)->exp_value;
             
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
@@ -581,6 +580,11 @@ void call_expr_parser(data_type return_type){
                     error_exit(2, "expression_parser", "Wrong data type result of expression");
                 }
             }
+
+            /*for(int i = 0; i< stack.size; i++){
+                printf("Stack:%d\n", stack.token_array[i]->exp_type);
+            }*/
+
             dispose_stack(&stack);
             stop_expression = false;
             break;
@@ -593,22 +597,26 @@ void call_expr_parser(data_type return_type){
             current_token = get_next_token();
             break;
         case '>':
+
             rule_params_count = 0;
             token_t* tmp1, *tmp2, *tmp3;
             if(stack_top(&stack)->type != TOKEN_SHIFT){
                 tmp1 = stack_top(&stack);
                 stack_pop(&stack);
                 rule_params_count++;
+                
 
                 if(stack_top(&stack)->type != TOKEN_SHIFT){
                     tmp2 = stack_top(&stack);
                     stack_pop(&stack);
                     rule_params_count++;
+                    
 
                     if(stack_top(&stack)->type != TOKEN_SHIFT){
                         tmp3 = stack_top(&stack);
                         stack_pop(&stack);
                         rule_params_count++;
+                        
 
                         if(stack_top(&stack)->type != TOKEN_SHIFT){
                             error_exit(2, "expression_parser", "syntax error");
@@ -679,6 +687,8 @@ void call_expr_parser(data_type return_type){
                         tmp1->exp_value = NIL;
                         printf("PUSHS nil@%s\n", tmp1->value.vector->array);
                     }
+                } else {
+                    error_exit(7, "expression_parser", "It its not a valid operand");
                 }
                 stack_push(&stack, tmp1);
                 break;
