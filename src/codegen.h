@@ -45,7 +45,8 @@ void codegen_var_def(char *name);
 void codegen_var_assign(char *name);
 
 void codegen_func_def();
-void codegen_func_def_return();
+void codegen_func_def_return_void(char *func_name);
+void codegen_func_def_return(char *func_name);
 void codegen_func_def_end();
 
 void codegen_func_call_start();
@@ -63,7 +64,7 @@ void codegen_while_end();
 void codegen_readString();
 void codegen_readInt();
 void codegen_readDouble();
-void codegen_write();
+void codegen_write(int count);
 void codegen_Int2Double();
 void codegen_Double2Int();
 void codegen_length();

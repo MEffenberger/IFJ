@@ -24,15 +24,9 @@
 #include "symtable.h"
 #include "token_stack.h"
 
-
-// void codegen_write(instruction *inst) {
-//     for (int i = 0; i < inst->num_operands; i++) {
-//         printf("WRITE LF@%s\n", inst->operands[i]);
-//     }
-// }
-
-
 int add_arg_cnt = 0;
+int write_renamer = 0;
+
 
 
 void codegen_var_def(char *name) {
@@ -55,7 +49,6 @@ void codegen_var_assign(char *name) {
 
 
 
-// function for generating code for function definition
 void codegen_func_def() {
     printf("JUMP !!skip_%s\n", active->name);
     printf("LABEL %s\n", active->name);
@@ -68,11 +61,17 @@ void codegen_func_def() {
     } 
 }
 
-void codegen_func_def_return() {
+void codegen_func_def_return(char *func_name) {
     printf("POPS LF@$retval$\n");
+    printf("JUMP end_%s\n", func_name);
+}
+
+void codegen_func_def_return_void(char *func_name) {
+    printf("JUMP end_%s\n", func_name);
 }
 
 void codegen_func_def_end() {
+    printf("LABEL end_%s\n", active->name);
     printf("POPFRAME\n");
     printf("RETURN\n");
     printf("LABEL !!skip_%s\n", active->name);
@@ -82,6 +81,7 @@ void codegen_func_def_end() {
 
 
 void codegen_func_call_start() {
+    add_arg_cnt = 0;
     printf("CREATEFRAME\n");
 }
 
@@ -91,10 +91,11 @@ void codegen_add_arg() {
 }
 
 void codegen_func_call_end(char *label) {
-    add_arg_cnt = 0;
     printf("CALL %s\n", label);
     printf("PUSHS TF@$retval$\n");
 }
+
+
 
 
 void codegen_if_let(char *name) {
@@ -172,16 +173,18 @@ void codegen_readDouble() {
     printf("LABEL !!skip_readDouble\n");
 }
 
-void codegen_write() {
-    printf("JUMP !!skip_write\n");
-    printf("LABEL write\n");
+void codegen_write(int count) {
+    printf("CREATEFRAME\n");
     printf("PUSHFRAME\n");
-    // for (int i = 1; i <= XXXXXXXXXXXX; i++) {
-    //     printf("WRITE LF@$%d\n", i);
-    // }
+    for (int i = 1; i <= count; i++) {
+        printf("DEFVAR LF@$%d\n", write_renamer + i);
+        printf("POPS LF@$%d\n", write_renamer + i);
+    }
+    for (int i = count; i >= 1; i--) {
+        printf("WRITE LF@$%d\n", write_renamer + i);
+    }
+    write_renamer += count;
     printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_write\n");
 }
 
 void codegen_Int2Double() {

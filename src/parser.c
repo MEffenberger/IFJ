@@ -42,6 +42,7 @@ int cnt = 0; // used for generating unique labels for if-else
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 bool vardef_assign = false; // for assign() to know where to get info about the variable (from queue or from symtable)
+bool function_write = true; // for parser to know that the function being handled is write() and needs special treatment
 
 
 
@@ -512,6 +513,9 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
+        // CODEGEN
+        codegen_func_def_return_void(tmp->name);
+
         printf("-- returning...\n\n");
         return;
     }
@@ -523,9 +527,9 @@ void ret() {
         call_expr_parser(tmp->symtable->data.return_type); 
         printf("COMING BACK FROM EXPR_PARSER");
 
+        // CODEGEN
+        codegen_func_def_return(tmp->name);
     }
-    // CODEGEN
-    codegen_func_def_return();
 }
 
 void body() {
@@ -593,10 +597,13 @@ void body() {
             case KW_WRT:
                 peek();
                 if (token_buffer->type == TOKEN_LPAR) {
-                    // CODEGEN
-                    codegen_write();
-
+                    function_write = true;
                     func_call();
+                    function_write = false;
+
+                    // CODEGEN
+                    codegen_write(callee_list->callee->arg_count);
+
                     break;
                 }
                 else {
@@ -947,8 +954,10 @@ void func_call() {
         insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
     }
 
-    // CODEGEN 
-    codegen_func_call_start();
+    if (!function_write) {
+        // CODEGEN
+        codegen_func_call_start();
+    }
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
@@ -957,9 +966,10 @@ void func_call() {
     args();
 
     if (current_token->type == TOKEN_RPAR) {
-
-        // CODEGEN
-        codegen_func_call_end(func_name);
+        if (!function_write) {
+            // CODEGEN
+            codegen_func_call_end(func_name);
+        }
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -1016,7 +1026,6 @@ void arg() {
 
     if (current_token->type == TOKEN_ID) {
 
-
         peek();
         if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
@@ -1034,9 +1043,7 @@ void arg() {
         }
     }
     else { // calling without name and the first token of expression is not id
-        printf("\n\n\nCalling without name and the first token of expression is not id\n\n\n");
         insert_name_into_callee(callee_list->callee, "_");
-        printf("picacaaa: %s\n\n\n", callee_list->callee->args_names[0]);
     }
 
     printf("ENTERING WORLD OF EXPRESSION PARSER\n");
@@ -1045,9 +1052,10 @@ void arg() {
 
     insert_type_into_callee(callee_list->callee, type_of_expr);    
 
-
-    // CODEGEN
-    codegen_add_arg();
+    if (!function_write) {
+        // CODEGEN
+        codegen_add_arg();
+    }
 }
 
 void args_n() {
@@ -1105,8 +1113,7 @@ void condition() {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Initializer for conditional binding must have optional type");
             }
             else {
-                /// TODO: Je-li pak proměnná id
-                // hodnoty nil, vykoná se sekvence_příkazů2, jinak se vykoná sekvence_příkazů1, kde navíc bude typ 
+                /// TODO: ??? vykoná sekvence_příkazů1, kde navíc bude typ 
                 // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
                 // (tj. např. proměnná původního typu String? bude v tomto bloku typu String).
 
@@ -1289,9 +1296,9 @@ int parser_parse_please () {
 
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
-    printf("\n---------------------------\n");
+    printf("\n-------------------------------------------\n");
     printf("PARSER: Parsed successfully, you're welcome\n");
-    printf("---------------------------\n\n");
+    printf("-------------------------------------------\n\n");
     return 0;
 }
 
