@@ -633,16 +633,31 @@ void var_def() {
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
-            if (type_of_expr == BOOL) {
+
+            if (type_of_expr == NIL) {
+                error_exit(ERROR_SEM_DERIV, "PARSER", "Variable cannot derive its type from nil");
+            }
+            else if (type_of_expr == BOOL) {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Variable cannot be of type bool");
             } 
             else {
                 data = set_data_var(data, is_defined, type_of_expr, letvar);
             }
         }
-        else { // the data type was specified
-            data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
-        }
+        else { // the data type was specified, expression parser will handle it as there is expected data type
+            // '= nil' does not go through the expression parses, has to be handled here
+            if (type_of_expr == NIL) {
+                if (convert_dt(queue->first->next->token) != INT_QM && 
+                    convert_dt(queue->first->next->token) != DOUBLE_QM && 
+                    convert_dt(queue->first->next->token) != STRING_QM)
+                {
+                    error_exit(ERROR_SEM_TYPE, "PARSER", "Variable cannot be of type nil");
+                }
+            }
+            else {
+                data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
+            }
+        }        
 
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
@@ -788,6 +803,14 @@ void assign() {
                     // CODEGEN
                     codegen_chr();
                     break;
+
+                case KW_NIL:
+                    // assigning nil
+                    type_of_expr = NIL;
+
+                    current_token = get_next_token();
+                    print_debug(current_token, 1, debug_cnt++);
+                    return;
                 
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to variable while defining it");
@@ -880,7 +903,15 @@ void assign() {
                     // CODEGEN
                     codegen_chr();
                     break;
-                
+               
+                case KW_NIL:
+                    // assigning nil
+                    type_of_expr = NIL;
+                    
+                    current_token = get_next_token();
+                    print_debug(current_token, 1, debug_cnt++);
+                    return;
+
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to already defined variable");
                     break;
