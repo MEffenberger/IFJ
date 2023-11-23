@@ -23,7 +23,7 @@
 #include "token_stack.h"
 #include <string.h>
 
-
+int arg_counter = 0;
 
 callee_list_t* init_callee_list() {
     callee_list_t* list = (callee_list_t*)malloc(sizeof(callee_list_t));
@@ -56,7 +56,8 @@ callee_t* init_callee(const char* name, data_type return_type) {
     }
 
     callee->return_type = return_type;
-    callee->arg_count = 0;
+    arg_counter = 0;
+    callee->arg_count = arg_counter;
     callee->args_names = NULL; // Initialize args_names to NULL
     callee->args_types = NULL; // Initialize args_types to NULL
 
@@ -101,7 +102,9 @@ void insert_name_into_callee(callee_t* callee, char* name) {
     }
 
     // Increment the arg_count
-    callee->arg_count++;
+    arg_counter++;
+    callee->arg_count = arg_counter;
+
 
     // Allocate memory for the new name
     callee->args_names[callee->arg_count] = (char*)malloc(strlen(name) + 1);

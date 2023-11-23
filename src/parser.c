@@ -606,7 +606,6 @@ void body() {
                     function_write = false;
 
                     // CODEGEN
-                    printf("\n\n\n\n\naaaaaaPICO cum na write input: %d\n\n\n\n\n", callee_list->callee->arg_count);
                     codegen_write(callee_list->callee->arg_count);
 
                     break;

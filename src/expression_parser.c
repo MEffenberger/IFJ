@@ -663,7 +663,6 @@ void call_expr_parser(data_type return_type){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
                     tmp1->exp_value = STRING;
-                    format_string(tmp1);
                     printf("PUSHS string@%s\n", tmp1->value.vector->array);
                 } else if(tmp1->type == TOKEN_KEYWORD){
                     if(tmp1->value.keyword != KW_NIL){
