@@ -25,7 +25,6 @@
 void cnt_init(cnt_stack_t* cnt_stack) {
     
     cnt_stack->cnt_array = (int*) malloc(STACK_SIZE * sizeof(int));
-    printf("cnt_init\n");
     cnt_stack->size = 0;
     cnt_stack->capacity = STACK_SIZE;
     

@@ -627,8 +627,6 @@ void call_expr_parser(data_type return_type){
                     }
                     
 
-                    printf("VAR TYPE z symtable:%d\n", variable_type);
-
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = ID;
                     tmp1->exp_value = variable_type;

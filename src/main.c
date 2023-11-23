@@ -29,5 +29,6 @@ alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 
 
 int main() {
+    codegen_generate_code_please();
     return parser_parse_please();
 }
