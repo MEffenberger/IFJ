@@ -287,13 +287,15 @@ void func_def() {
                     current_token = get_next_token();
                     print_debug(current_token, 1, debug_cnt++);
 
+                        printf("Printing active->symtable in order:\n");
+                        inorder(&(active->symtable));
+                        printf("\n");
+
+
                     local_body();
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
-                        // printf("Printing active->symtable in order:\n");
-                        // inorder(&(active->symtable));
-                        // printf("\n");
                         BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
@@ -372,8 +374,8 @@ void params() {
         error_exit(ERROR_SEM_OTHER, "PARSER", "Parameter's name has to differ from its identifier");
     }
 
-    printf("AAAAPICO\n\n\n");
-    print_debug(current_token, 1, debug_cnt);
+    printf("AAAAPICO %d\n\n\n", convert_dt(current_token));
+    
     // insert parameter to function's symtable
     data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
 
@@ -526,7 +528,7 @@ void ret() {
         print_debug(current_token, 1, debug_cnt++);
 
         printf("ENTERING WORLD OF EXPRESSION PARSER\n");
-        call_expr_parser(tmp->symtable->data.return_type); 
+        call_expr_parser(tmp_data->return_type); 
         printf("COMING BACK FROM EXPR_PARSER");
 
         // CODEGEN
