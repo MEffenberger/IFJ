@@ -47,7 +47,7 @@ callee_t* init_callee(const char* name, data_type return_type) {
 
 
     // Allocate memory for the name
-    callee->name = strdup(name); // Don't forget to include <string.h>
+    callee->name = (char*)malloc(strlen(name) + 1);
     if (callee->name == NULL) {
         // Handle memory allocation failure
         free(callee);
@@ -103,7 +103,8 @@ void insert_name_into_callee(callee_t* callee, char* name) {
     callee->arg_count++;
 
     // Allocate memory for the new name
-    callee->args_names[callee->arg_count] = strdup(name); 
+    callee->args_names[callee->arg_count] = (char*)malloc(strlen(name) + 1);
+
     if (callee->args_names[callee->arg_count] == NULL) {
         // Handle memory allocation failure
         return;
