@@ -100,16 +100,16 @@ void codegen_func_call_end(char *label) {
 
 void codegen_if_let(char *name) {
     printf("LABEL if_%d\n", active->cond_cnt);
-    printf("DEFVAR LF@$cond$\n");
-    printf("TYPE LF@$cond$ LF@%s\n", name);
-    printf("JUMPIFEQ else_%d LF@$cond$ string@nil\n", active->cond_cnt); 
+    printf("DEFVAR LF@$cond_%d$\n", active->cond_cnt);
+    printf("TYPE LF@$cond_%d$ LF@%s\n", active->cond_cnt, name);
+    printf("JUMPIFEQ else_%d LF@$cond_%d$ string@nil\n", active->cond_cnt, active->cond_cnt); 
 }
 
 void codegen_if() {
     printf("LABEL if_%d\n", active->cond_cnt);
-    printf("DEFVAR LF@$cond$\n");
-    printf("POPS LF@$cond$\n");
-    printf("JUMPIFEQ else_%d LF@$cond$ bool@false\n", active->cond_cnt);
+    printf("DEFVAR LF@$cond_%d$\n", active->cond_cnt);
+    printf("POPS LF@$cond_%d$\n", active->cond_cnt);
+    printf("JUMPIFEQ else_%d LF@$cond_%d$ bool@false\n", active->cond_cnt, active->cond_cnt);
 }
 
 void codegen_else() {
@@ -127,9 +127,9 @@ void codegen_ifelse_end() {
 
 void codegen_while_start() {
     printf("LABEL while_%d\n", while_cnt);
-    printf("DEFVAR LF@$cond$\n");
-    printf("POPS LF@$cond$\n");
-    printf("JUMPIFEQ end_while_%d LF@$cond$ bool@false\n", while_cnt);
+    printf("DEFVAR LF@$wcond_%d$\n", while_cnt);
+    printf("POPS LF@$wcond_%d$\n", while_cnt);
+    printf("JUMPIFEQ end_while_%d LF@$wcond_%d$ bool@false\n", while_cnt, while_cnt);
 }
 
 void codegen_while_end() {
