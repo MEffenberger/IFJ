@@ -168,6 +168,9 @@ void rename_keep_exit();
 
 void callee_validation(forest_node *global);
 
+char *renamer(AVL_tree *node);
+
+
 
 /**
  * @brief When a return statement is encountered, check if it is somewhere in a function

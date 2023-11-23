@@ -52,6 +52,7 @@ void codegen_func_call_start();
 void codegen_add_arg();
 void codegen_func_call_end(char *label);
 
+void codegen_if_let(char *name);
 void codegen_if();
 void codegen_else();
 void codegen_ifelse_end();

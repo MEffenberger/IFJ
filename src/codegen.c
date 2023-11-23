@@ -97,6 +97,12 @@ void codegen_func_call_end(char *label) {
 }
 
 
+void codegen_if_let(char *name) {
+    printf("LABEL if_%d\n", active->cond_cnt);
+    printf("DEFVAR LF@$cond$\n");
+    printf("TYPE LF@$cond$ LF@%s\n", name);
+    printf("JUMPIFEQ else_%d LF@$cond$ string@nil\n", active->cond_cnt); 
+}
 
 void codegen_if() {
     printf("LABEL if_%d\n", active->cond_cnt);

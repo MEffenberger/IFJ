@@ -1093,25 +1093,32 @@ void condition() {
 
         if (current_token->type == TOKEN_ID) {
             // check if the id is in symtable, so the variable is declared
-            if (forest_search_symbol(active, current_token->value.vector->array) == NULL) {
+            AVL_tree *tmp = forest_search_symbol(active, current_token->value.vector->array);
+            if (tmp == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
+            else if (tmp->data.var_type == VAR) {
+                error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot used as follows: \"if let id\"");
+
+            }
+            else if (tmp->data.data_type != INT_QM && tmp->data.data_type != DOUBLE_QM && tmp->data.data_type != STRING_QM) {
+                error_exit(ERROR_SEM_TYPE, "PARSER", "Initializer for conditional binding must have optional type");
+            }
             else {
-                /// TODO: Místo pravdivostního výrazu výraz lze alternativně použít syntaxi: ’let id’, 
-                // kde id zastupuje dříve definovanou (nemodifikovatelnou) proměnnou. Je-li pak proměnná id
+                /// TODO: Je-li pak proměnná id
                 // hodnoty nil, vykoná se sekvence_příkazů2, jinak se vykoná sekvence_příkazů1, kde navíc bude typ 
                 // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
                 // (tj. např. proměnná původního typu String? bude v tomto bloku typu String).
+
                 // get TOKEN_LEFT_BRACKET
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
 
-
-                /// TODO: vyřešit let id a PUSHS bool pro codegen
+                codegen_if_let(renamer(tmp));
             }
         }
         else {
-            error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using if \"let id\"");
+            error_exit(ERROR_SYN, "PARSER", "Missing identifier in condition using \"if let id\"");
         }
     }
     else {
@@ -1119,13 +1126,13 @@ void condition() {
         call_expr_parser(BOOL); 
         printf("COMING BACK FROM EXPR_PARSER");
 
+        codegen_if();
     }
 
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
         
         // CODEGEN
-        codegen_if();
         ifelse_cnt++;
 
         current_token = get_next_token();
@@ -1283,7 +1290,7 @@ int parser_parse_please () {
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
     printf("\n---------------------------\n");
-    printf("PARSER: Parsed successfully\n");
+    printf("PARSER: Parsed successfully, you're welcome\n");
     printf("---------------------------\n\n");
     return 0;
 }
@@ -1400,7 +1407,21 @@ void callee_validation(forest_node *global) {
 }
 
 
-
+// void convert_to_nonq_data_type(char *key){
+//     AVL_tree *node = forest_search_symbol(active, key);
+//     if (node != NULL) {
+//             sym_data *data = symtable_lookup(node, key);
+//             if (data != NULL) {
+//                 if (data->data_type == STRING_QM) {
+//                     data->data_type = STRING;
+//                 } else if (data->data_type == INT_QM) {
+//                     data->data_type = INT;
+//                 } else if (data->data_type == DOUBLE_QM) {
+//                     data->data_type = DOUBLE;
+//                 }
+//         }
+//     }
+// }
 
 
 
