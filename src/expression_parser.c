@@ -273,13 +273,13 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         printf("PUSHS GF@$$tmp%d$$\n", variable_counter);
                         variable_counter++;
                     } else {
-                        error_exit(2, "expression_parser", "ID type mismatch");
+                        error_exit(7, "expression_parser", "ID type mismatch");
                     }
                     
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -296,13 +296,13 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(2, "expression_parser", "Can not sum 2 IDs of different types");
+                error_exit(7, "expression_parser", "Can not sum 2 IDs of different types");
             }
         }
     } else if(tmp2->type == TOKEN_DIVIDE){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
-            error_exit(2, "expression_parser", "Can not divide bool");
+            error_exit(7, "expression_parser", "Can not divide bool");
         }
 
         if (tmp1->exp_value == tmp3->exp_value){
@@ -366,12 +366,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         printf("DIVS\n");
                         variable_counter++;
                     } else {
-                        error_exit(2, "expression_parser", "ID type mismatch");
+                        error_exit(7, "expression_parser", "ID type mismatch");
                     }
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(2, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -390,7 +390,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(2, "expression_parser", "Can not divide 2 IDs of different types");
+                error_exit(7, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
@@ -616,7 +616,7 @@ void call_expr_parser(data_type return_type){
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
 
                     if(node == NULL){
-                        error_exit(2, "expression_parser", "Variable does not exist");
+                        error_exit(5, "expression_parser", "Variable does not exist");
                     }
                     
                     data_type variable_type;
@@ -674,7 +674,7 @@ void call_expr_parser(data_type return_type){
                         printf("PUSHS nil@%s\n", tmp1->value.vector->array);
                     }
                 } else {
-                    error_exit(7, "expression_parser", "It its not a valid operand");
+                    error_exit(2, "expression_parser", "It its not a valid operand");
                 }
                 stack_push(&stack, tmp1);
                 break;
