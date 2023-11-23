@@ -308,7 +308,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         if (tmp1->exp_value == tmp3->exp_value){
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
-                    error_exit(53, "expression_parser", "Division by zero");
+                    error_exit(9, "expression_parser", "Division by zero");
             }
 
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
@@ -325,7 +325,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             if (tmp1->exp_type == CONST){
 
                 if((tmp1->value.integer == 0 && tmp1->exp_value == INT) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE)){
-                    error_exit(53, "expression_parser", "Division by zero");
+                    error_exit(9, "expression_parser", "Division by zero");
                 }
 
                 if (tmp3->exp_type == ID){
@@ -556,7 +556,7 @@ void call_expr_parser(data_type return_type){
                 } else if(return_type == STRING_QM && stack_top(&stack)->exp_value == STRING){
                     type_of_expr = STRING_QM;
                 } else {
-                    error_exit(2, "expression_parser", "Wrong data type result of expression");
+                    error_exit(7, "expression_parser", "Wrong data type result of expression");
                 }
             }
 
