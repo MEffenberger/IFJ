@@ -30,7 +30,7 @@ queue_t *queue = NULL; // Queue for the expression parser
 cnt_stack_t *cnt_stack = NULL;
 callee_list_t *callee_list = NULL;
 sym_data data = {0};
-var_type letvar = -1;
+var_type letvar = 99;
 data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
 bool is_defined = false;
 int debug_cnt = 1;
@@ -591,6 +591,7 @@ void body() {
 
             case KW_LET:
                 letvar = LET;
+                printf("\n\nsettitng letvar to LET %d\n\n", letvar);
                 var_def();
                 break;
 
@@ -651,6 +652,7 @@ void var_def() {
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
+        printf("back from opt_var_def\n\n\n\n");
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
@@ -662,6 +664,7 @@ void var_def() {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Variable cannot be of type bool");
             } 
             else {
+                printf("\n\n\n\n\nletvar: %d\n", letvar);
                 data = set_data_var(data, is_defined, type_of_expr, letvar);
             }
         }
@@ -674,8 +677,6 @@ void var_def() {
                 {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Variable cannot be of type nil");
                 }
-            }
-            else {
                 data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
             }
         }        
@@ -1023,7 +1024,6 @@ void func_call() {
         insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
     }
 
-    printf("\n\n\n%d\n\n\n", function_write);
 
     if (!function_write) {
         // CODEGEN
@@ -1177,7 +1177,8 @@ void condition() {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
             else if (tmp->data.var_type == VAR) {
-                error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot used as follows: \"if let id\"");
+                printf("tmp->data.var_type: %d\n", tmp->data.var_type);
+                error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot be used as follows: \"if let id\"");
 
             }
             else if (tmp->data.data_type != INT_QM && tmp->data.data_type != DOUBLE_QM && tmp->data.data_type != STRING_QM) {
