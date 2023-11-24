@@ -618,6 +618,8 @@ void call_expr_parser(data_type return_type){
                     if(node == NULL){
                         error_exit(5, "expression_parser", "Variable does not exist");
                     }
+
+                    char *nickname = renamer(node);
                     
                     data_type variable_type;
                     if(node->data.is_param == false){
@@ -633,13 +635,13 @@ void call_expr_parser(data_type return_type){
 
                     
                     if(variable_type == INT || variable_type == INT_QM){
-                        printf("PUSHS int@%s\n", tmp1->value.vector->array);
+                        printf("PUSHS int@%s\n", nickname);
                     } else if (variable_type == DOUBLE || variable_type == DOUBLE_QM){
-                        printf("PUSHS float@%s\n", tmp1->value.vector->array);
+                        printf("PUSHS float@%s\n", nickname);
                     } else if(variable_type == NIL){
                         //
                     } else if(variable_type == STRING || variable_type == STRING_QM){
-                        printf("PUSHS string@%s\n", tmp1->value.vector->array);
+                        printf("PUSHS string@%s\n", nickname);
                     }
                     
                 } else if(tmp1->type == TOKEN_DEC){
