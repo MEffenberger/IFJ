@@ -99,7 +99,7 @@ data_type convert_dt(token_t* token) {
  */
 void peek() {
     if (token_buffer != NULL) {
-        printf("\nWARNING: peek() voláš podruhé a token_buffer se přepíše!!! exit(1)...\n");
+        //printf("\nWARNING: peek() voláš podruhé a token_buffer se přepíše!!! exit(1)...\n");
         exit(1);
     }
     token_t *token = get_me_token();
@@ -228,14 +228,14 @@ void define_built_in_functions() {
 
 void prog() {
     // <prog> -> EOF | <func_def> <prog> | <body> <prog>
-    printf("-- entering PROG --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering PROG --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     if (current_token->type == TOKEN_EOF) {
-        // printf("Printing global symtable in order:\n");
+        // //printf("Printing global symtable in order:\n");
         // inorder(&(active->symtable));
-        // printf("\n");
-        printf("-- returning...\n\n");
+        // //printf("\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else if (current_token->value.keyword == KW_FUNC) {
@@ -250,11 +250,11 @@ void prog() {
 
 void func_def() {
     // <func_def> -> func id ( <params> ) <ret_type> { <body> }
-    printf("-- entering FUNC_DEF --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering FUNC_DEF --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
 
@@ -267,11 +267,11 @@ void func_def() {
         MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
         
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         if (current_token->type == TOKEN_LPAR) {
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
 
             params();
 
@@ -284,9 +284,10 @@ void func_def() {
 
             if (current_token->type == TOKEN_RPAR) {
                 current_token = get_next_token();
-                print_debug(current_token, 1, debug_cnt++);
+                //print_debug(current_token, 1, debug_cnt++);
 
                 ret_type();
+                //printf("RETURN TYPE: %d\n", convert_dt(queue->first->token));
 
                 // insert function with its return type to symtable
                 data = set_data_func(&data, convert_dt(queue->first->token));
@@ -296,11 +297,11 @@ void func_def() {
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
                     // get next token, body expects first token of body
                     current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
+                    //print_debug(current_token, 1, debug_cnt++);
 
-                        printf("Printing active->symtable in order:\n");
-                        inorder(&(active->symtable));
-                        printf("\n");
+                        //printf("Printing active->symtable in order:\n");
+                        //inorder(&(active->symtable));
+                        //printf("\n");
 
 
                     local_body();
@@ -309,12 +310,12 @@ void func_def() {
                         // func_def ends, go back to parent in forest
                         BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
-                        print_debug(current_token, 1, debug_cnt++);
+                        //print_debug(current_token, 1, debug_cnt++);
 
                         // CODEGEN
                         codegen_func_def_end();
 
-                        printf("-- returning...\n\n");
+                        //printf("-- returning...\n\n");
                         return;
                     }
                     else {
@@ -349,29 +350,29 @@ void local_body() {
 
 void params() {
     // <params> -> eps | <par_name> <par_id> : <type> <params_n>
-    printf("-- entering PARAMS --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering PARAMS --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     // void function
     if (current_token->type == TOKEN_RPAR) {
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     
     par_name();
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
     
     par_id();
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
 
     if (current_token->type == TOKEN_COLON) {
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         type();
     }
@@ -385,7 +386,7 @@ void params() {
         error_exit(ERROR_SEM_OTHER, "PARSER", "Parameter's name has to differ from its identifier");
     }
 
-    printf("AAAAPICO %d\n\n\n", convert_dt(current_token));
+    //printf("AAAAPICO %d\n\n\n", convert_dt(current_token));
     
     // insert parameter to function's symtable
     data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
@@ -395,10 +396,10 @@ void params() {
     queue_dispose(queue);
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_RPAR) {
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else if (current_token->type == TOKEN_COMMA) {
@@ -411,15 +412,15 @@ void params() {
 
 void par_name() {
     // <par_name> -> _ | id
-    printf("-- entering PAR_NAME --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering PAR_NAME --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's name
         queue_push(queue, current_token);
         queue_print(queue);
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else { // not _ or id
@@ -429,8 +430,8 @@ void par_name() {
 
 void par_id() {
     // <par_id> -> _ | id
-    printf("-- entering PAR_ID --\n");
-    print_debug(current_token, 2, debug_cnt);  
+    //printf("-- entering PAR_ID --\n");
+    //print_debug(current_token, 2, debug_cnt);  
 
 
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
@@ -438,7 +439,7 @@ void par_id() {
         //token_push(token_stack, current_token);
         queue_push(queue, current_token);
         queue_print(queue);
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else { // not _ or id
@@ -448,15 +449,15 @@ void par_id() {
 
 void type() {
     // <type> -> Int | Int? | Double | Double? | String | String?
-    printf("-- entering TYPE --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering TYPE --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     if (current_token->type == TOKEN_KEYWORD || current_token->type == TOKEN_KEYWORD_QM) {
         if (current_token->value.keyword == KW_INT || current_token->value.keyword == KW_DOUBLE || current_token->value.keyword == KW_STRING) {
             // store type
             queue_push(queue, current_token);
             queue_print(queue);
-            printf("-- returning...\n\n");
+            //printf("-- returning...\n\n");
             return;
         }
         else {
@@ -471,8 +472,8 @@ void type() {
 
 void params_n() {
     // <params_n> -> eps | , <params>
-    printf("-- entering PARAMS_N --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering PARAMS_N --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     
     peek();
@@ -481,7 +482,7 @@ void params_n() {
     }
     else {
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
         params();
     }
     
@@ -489,24 +490,24 @@ void params_n() {
 
 void ret_type() {
     // ret_type -> eps | -> <type>
-    printf("-- entering RET_TYPE --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering RET_TYPE --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     if (current_token->type == TOKEN_RET_TYPE) {
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         type();
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else if (current_token->type == TOKEN_LEFT_BRACKET) { // void function
         queue_push(queue, current_token); 
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else {
@@ -517,8 +518,8 @@ void ret_type() {
 
 void ret() {
     // <ret> -> return <exp> | eps
-    printf("-- entering RET --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering RET --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     // checks whether the return is in the function as it should be, error otherwise
     forest_node *tmp = check_return_stmt(active);
@@ -526,21 +527,21 @@ void ret() {
 
     if (tmp_data->return_type == VOID) { // void function 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         // CODEGEN
         codegen_func_def_return_void(tmp->name);
 
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else { // non-void function
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
-        printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp_data->return_type);
+        //printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp_data->return_type);
         call_expr_parser(tmp_data->return_type); 
-        printf("COMING BACK FROM EXPR_PARSER\n");
+        //printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
         codegen_func_def_return(tmp->name);
@@ -549,8 +550,8 @@ void ret() {
 
 void body() {
     // <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call> | <ret>
-    printf("-- entering BODY --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering BODY --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     var_name = NULL;
 
@@ -635,21 +636,26 @@ void body() {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
     }
     
-    printf("-- returning...\n\n");
+    //printf("-- returning...\n\n");
 }
 
 void var_def() {
     // <var_def> -> let id <opt_var_def> | var id <opt_var_def>
-    printf("-- entering VAR_DEF --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering VAR_DEF --\n");
+    //print_debug(current_token, 2, debug_cnt);
    
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 
-    //    rename_keep_exit();
+
+        AVL_tree *check = symtable_search(active->symtable, var_name);
+        if (check != NULL) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Multiple declarations of the same name are not allowed");
+        }
+
         queue_push(queue, current_token);
         queue_print(queue);
         opt_var_def();
@@ -682,8 +688,21 @@ void var_def() {
 
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
-        
-        printf("-- returning...\n\n");
+
+
+        AVL_tree *tmp = symtable_search(active->symtable, var_name);
+        tmp->nickname = active->node_cnt;
+        char *tmp_name = renamer(tmp);
+
+        //AAAAA predelat logiku symtable insert
+        codegen_var_def(tmp_name);
+
+        if (tmp->data.defined) {
+            codegen_var_assign(tmp_name);
+        }
+
+
+        //printf("-- returning...\n\n");
         return;
     }
     else {
@@ -693,18 +712,18 @@ void var_def() {
 
 void opt_var_def() {
     // <opt_var_def> -> : <type> | <assign> | : <type> <assign>
-    printf("-- entering OPT_VAR_DEF --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering OPT_VAR_DEF --\n");
+    //print_debug(current_token, 2, debug_cnt);
     
     peek();    
     if (token_buffer->type == TOKEN_COLON) {
         
         // get TOKEN_COLON from buffer
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         type();
 
@@ -721,16 +740,16 @@ void opt_var_def() {
         else {
             // let a : Int
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
         }
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
     }
     else if (token_buffer->type == TOKEN_EQ) {
         vardef_assign = true;
         assign();
         // variable is defined
         is_defined = true;
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
     }
     else {
         error_exit(ERROR_SYN, "PARSER", "Unexpected token in variable definition");
@@ -741,8 +760,8 @@ void opt_var_def() {
 
 void assign() {
     // <assign> -> = <exp> | = <func_call>
-    printf("-- entering ASSIGN --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering ASSIGN --\n");
+    //print_debug(current_token, 2, debug_cnt);
     
     // id is in var_name
 
@@ -750,12 +769,12 @@ void assign() {
     if (vardef_assign) {
         // get TOKEN_EQ from buffer 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         // here: var id = | let id = 
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         // looking for function call
         if (current_token->type == TOKEN_ID) {
@@ -769,14 +788,14 @@ void assign() {
             else {
                 // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
                 if (queue->first->next == NULL) {
-                    printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
+                    //printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                     call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
-                    printf("COMING BACK FROM EXPR_PARSER\n");
+                    //printf("COMING BACK FROM EXPR_PARSER\n");
                 }
                 else {
-                    printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
+                    //printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
                     call_expr_parser(convert_dt(queue->first->next->token));
-                    printf("COMING BACK FROM EXPR_PARSER\n");
+                    //printf("COMING BACK FROM EXPR_PARSER\n");
                 }
             }
         }
@@ -859,7 +878,7 @@ void assign() {
                     type_of_expr = NIL;
 
                     current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
+                    //print_debug(current_token, 1, debug_cnt++);
                     return;
                 
                 default:
@@ -872,14 +891,14 @@ void assign() {
         else {
             // in queue->first->next should be the data type of the variable, if it's NULL, the data type is unknown and should be determined by expression
             if (queue->first->next == NULL) {
-                printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
+                //printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
                 call_expr_parser(UNKNOWN); // in type_of_expr should be the data type of the expression
-                printf("COMING BACK FROM EXPR_PARSER\n");
+                //printf("COMING BACK FROM EXPR_PARSER\n");
             }
             else {
-                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
+                //printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
                 call_expr_parser(convert_dt(queue->first->next->token));
-                printf("COMING BACK FROM EXPR_PARSER\n");
+                //printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }    
     }
@@ -888,12 +907,12 @@ void assign() {
         
         // get TOKEN_EQ from buffer 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         // here: id =
    
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         // looking for function call
         if (current_token->type == TOKEN_ID) {
@@ -904,9 +923,11 @@ void assign() {
                 callee_list = callee_list->next;
             }
             else { // variable is already defined, so it's data_type is known
-                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
+                //printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
                 call_expr_parser(tmp->data.data_type);
-                printf("COMING BACK FROM EXPR_PARSER\n");
+
+                codegen_var_assign(renamer(tmp));
+                //printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
         else if (current_token->type == TOKEN_KEYWORD) {
@@ -988,7 +1009,7 @@ void assign() {
                     type_of_expr = NIL;
                     
                     current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
+                    //print_debug(current_token, 1, debug_cnt++);
                     return;
 
                 default:
@@ -1000,9 +1021,11 @@ void assign() {
 
         }
         else {
-            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
+            //printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
             call_expr_parser(tmp->data.data_type);
-            printf("COMING BACK FROM EXPR_PARSER\n");
+
+            codegen_var_assign(renamer(tmp));
+            //printf("COMING BACK FROM EXPR_PARSER\n");
         }
     }    
 }
@@ -1010,8 +1033,8 @@ void assign() {
 
 void func_call() {
     // <func_call> -> id ( <args> )
-    printf("-- entering FUNC_CALL --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering FUNC_CALL --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
 
     // store the function's name for later usage (for codegen)
@@ -1039,7 +1062,9 @@ void func_call() {
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
+    
+
     args();
 
     if (current_token->type == TOKEN_RPAR) {
@@ -1049,8 +1074,8 @@ void func_call() {
         }
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
-        printf("-- returning...\n\n");
+        //print_debug(current_token, 1, debug_cnt++);
+        //printf("-- returning...\n\n");
         return;
     }
     else {
@@ -1062,17 +1087,17 @@ void func_call() {
 
 void args() {
     // <args> -> eps | <arg> <args_n>
-    printf("-- entering ARGS --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering ARGS --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     peek();
     if (token_buffer->type == TOKEN_RPAR) {
 
         // get TOKEN_RPAR from buffer
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else {
@@ -1080,7 +1105,7 @@ void args() {
         arg();
 
         if (current_token->type == TOKEN_RPAR) {
-            printf("-- returning...\n\n");
+            //printf("-- returning...\n\n");
             return;
         }
         else if (current_token->type == TOKEN_COMMA) {
@@ -1094,25 +1119,29 @@ void args() {
 
 void arg() {
     // <arg> -> exp | id : exp
-    printf("-- entering ARG --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering ARG --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_ID) {
 
         peek();
         if (token_buffer->type == TOKEN_COLON) {
             // <arg> -> id : exp
+            //printf("ISMERTING %s into callee\n", current_token->value.vector->array);
             insert_name_into_callee(callee_list->callee, current_token->value.vector->array);
+            //printf("INSERTED %s into callee\n", current_token->value.vector->array);
+            //printf("CALLEE NAME: %s\n", callee_list->callee->name);
+            //printf("CALLEE ARG NAME: %s\n", callee_list->callee->args_names[1]);
 
             // get TOKEN_COLON from buffer
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
             
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
         }
         else { // calling without name
             insert_name_into_callee(callee_list->callee, "_");
@@ -1122,9 +1151,9 @@ void arg() {
         insert_name_into_callee(callee_list->callee, "_");
     }
 
-    printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
+    //printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
     call_expr_parser(UNKNOWN);
-    printf("COMING BACK FROM EXPR_PARSER\n");
+    //printf("COMING BACK FROM EXPR_PARSER\n");
 
     insert_type_into_callee(callee_list->callee, type_of_expr);
 
@@ -1136,13 +1165,13 @@ void arg() {
 
 void args_n() {
     // <args_n> -> eps | , <arg> <args_n>
-    printf("-- entering ARGS_N --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering ARGS_N --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     arg();
 
     if (current_token->type == TOKEN_RPAR) {
-        printf("-- returning...\n\n");
+        //printf("-- returning...\n\n");
         return;
     }
     else if (current_token->type == TOKEN_COMMA) {
@@ -1156,8 +1185,8 @@ void args_n() {
 
 void condition() {
     // <condition> -> if <exp> { <local_body> } else { <local_body> } | if let id { <local_body> } else { <local_body> }
-    printf("-- entering CONDITION --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering CONDITION --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     cnt_push(cnt_stack); // push ifelse_cnt to stack and increment
     sprintf(node_name, "if_%d", ifelse_cnt);
@@ -1168,12 +1197,12 @@ void condition() {
     active->cond_cnt = ifelse_cnt;
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword == KW_LET) {
         // if let id { <body> } <else> { <body> }
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         if (current_token->type == TOKEN_ID) {
             // check if the id is in symtable, so the variable is declared
@@ -1195,7 +1224,7 @@ void condition() {
 
                 // get TOKEN_LEFT_BRACKET
                 current_token = get_next_token();
-                print_debug(current_token, 1, debug_cnt++);
+                //print_debug(current_token, 1, debug_cnt++);
                 
                 // CODEGEN
                 codegen_if_let(renamer(tmp));
@@ -1206,9 +1235,9 @@ void condition() {
         }
     }
     else {
-        printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
+        //printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
         call_expr_parser(BOOL); 
-        printf("COMING BACK FROM EXPR_PARSER\n");
+        //printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
         codegen_if();
@@ -1220,7 +1249,7 @@ void condition() {
         ifelse_cnt++;
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         local_body();
 
@@ -1228,7 +1257,7 @@ void condition() {
             // closing bracket of if statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
 
             if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword == KW_ELSE) {
 
@@ -1243,11 +1272,11 @@ void condition() {
                 codegen_else();
 
                 current_token = get_next_token();
-                print_debug(current_token, 1, debug_cnt++);
+                //print_debug(current_token, 1, debug_cnt++);
 
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
                     current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
+                    //print_debug(current_token, 1, debug_cnt++);
 
                     local_body();
 
@@ -1255,7 +1284,7 @@ void condition() {
                         // closing bracket of else statement, go back to parent in forest
                         BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
-                        print_debug(current_token, 1, debug_cnt++);
+                        //print_debug(current_token, 1, debug_cnt++);
 
                     
                         active->cond_cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
@@ -1266,7 +1295,7 @@ void condition() {
                         cnt_pop(cnt_stack); // pop ifelse_cnt from stack
 
 
-                        printf("-- returning...\n\n");
+                        //printf("-- returning...\n\n");
                         return;
                     }
                     else {
@@ -1294,19 +1323,19 @@ void condition() {
 
 void cycle() {
     // <cycle -> while <exp> { <local_body> }
-    printf("-- entering CYCLE --\n");
-    print_debug(current_token, 2, debug_cnt);
+    //printf("-- entering CYCLE --\n");
+    //print_debug(current_token, 2, debug_cnt);
 
     sprintf(node_name, "while_%d", while_cnt);  
     while_cnt++;
     MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name);
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
-    printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
+    //printf("ENTERING WORLD OF EXPRESSION PARSER with bool\n");
     call_expr_parser(BOOL);
-    printf("COMING BACK FROM EXPR_PARSER\n");
+    //printf("COMING BACK FROM EXPR_PARSER\n");
 
 
     if (current_token->type == TOKEN_LEFT_BRACKET) {
@@ -1315,7 +1344,7 @@ void cycle() {
         codegen_while_start();
 
         current_token = get_next_token();
-        print_debug(current_token, 1, debug_cnt++);
+        //print_debug(current_token, 1, debug_cnt++);
 
         local_body();
 
@@ -1327,9 +1356,9 @@ void cycle() {
             // closing bracket of while statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
             current_token = get_next_token();
-            print_debug(current_token, 1, debug_cnt++);
+            //print_debug(current_token, 1, debug_cnt++);
 
-            printf("-- returning...\n\n");
+            //printf("-- returning...\n\n");
             return;
         }
         else {
@@ -1342,9 +1371,9 @@ void cycle() {
 }
 
 int parser_parse_please () {
-    printf("\n---------------------\n");
-    printf("Parser parse please\n");
-    printf("---------------------\n\n");
+    //printf("\n---------------------\n");
+    //printf("Parser parse please\n");
+    //printf("---------------------\n\n");
 
     callee_list = init_callee_list();
     callee_list_first = callee_list;
@@ -1362,7 +1391,7 @@ int parser_parse_please () {
     define_built_in_functions();
 
     current_token = get_next_token();
-    print_debug(current_token, 1, debug_cnt++);
+    //print_debug(current_token, 1, debug_cnt++);
 
     prog();
 
@@ -1371,9 +1400,9 @@ int parser_parse_please () {
 
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
-    printf("\n-------------------------------------------\n");
-    printf("PARSER: Parsed successfully, you're welcome\n");
-    printf("-------------------------------------------\n\n");
+    //printf("\n-------------------------------------------\n");
+    //printf("PARSER: Parsed successfully, you're welcome\n");
+    //printf("-------------------------------------------\n\n");
     return 0;
 }
 
@@ -1381,30 +1410,35 @@ int parser_parse_please () {
 void rename_keep_exit() {
         AVL_tree *tmp = symtable_search(active->symtable, current_token->value.vector->array);
         if (tmp == NULL) {
-            // the node is not in any symtable above the current node, the name can be kept
-            if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL) {
-                return;
-            } 
-            else { // the node is in any symtable above, no matter what, the name must be changed to unique identifier
-                // nickname is set based on node_cnt from forest node (active), which is incremented after each insertions
-                tmp->nickname = active->node_cnt;
-                return;
-            }
+            // // the node is not in any symtable above the current node, the name can be kept
+            // if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL) {
+            //     return;
+            // } 
+            // else { // the node is in any symtable above, no matter what, the name must be changed to unique identifier
+            //     // nickname is set based on node_cnt from forest node (active), which is incremented after each insertions
+            //     tmp->nickname = active->node_cnt;
+            //     return;
+            // }
         }
         else { // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-            error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Multiple declarations of the same name are not allowed");
         }
 }
 
 
 // function for renaming the node  
 char *renamer(AVL_tree *node) {
-    vector *v = vector_init();
-    for (int i = 0; i < node->nickname; i++) {
-        vector_append(v, '*');
+    if (node != NULL) {   
+        vector *v = vector_init();
+        for (int i = 0; i < node->nickname; i++) {
+            vector_append(v, '*');
+        }
+        vector_str_append(v, node->key);
+        return v->array;
     }
-    vector_str_append(v, node->key);
-    return v->array;
+    else {
+        return NULL;
+    }
 }
 
 
@@ -1440,12 +1474,17 @@ void callee_validation(forest_node *global){
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             }
             else {
-                if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                if ((callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) && callee_list_first->callee->return_type != UNKNOWN) {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
                 }
                 else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         AVL_tree* param = symtable_find_param(tmp->symtable, i);
+
+
+                        //printf("PARAM NAME: %s, ARG NAME: %s\n", param->data.param_name, callee_list_first->callee->args_names[1]);
+
+
                         if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
@@ -1693,40 +1732,40 @@ void print_debug(token_t *token, int mode, int cnt) {
 
         if (mode == 1) {
             if (token->type == TOKEN_KEYWORD || token->type == TOKEN_KEYWORD_QM) {
-                printf("(%d)G.N.T.: Current token: %s: %s\n\n", cnt, type, keyword);
+                //printf("(%d)G.N.T.: Current token: %s: %s\n\n", cnt, type, keyword);
             }
             else if (token->type == TOKEN_ID) {
-                printf("(%d)G.N.T.: Current token: %s: %s\n\n", cnt, type, token->value.vector->array);
+                //printf("(%d)G.N.T.: Current token: %s: %s\n\n", cnt, type, token->value.vector->array);
             }
             else if (token->type == TOKEN_NUM) {
-                printf("(%d)G.N.T.: Current token: %s: %d\n\n", cnt, type, token->value.integer);
+                //printf("(%d)G.N.T.: Current token: %s: %d\n\n", cnt, type, token->value.integer);
             }
             else if (token->type == TOKEN_DEC) {
-                printf("(%d)G.N.T.: Current token: %s: %f\n\n", cnt, type, token->value.type_double);
+                //printf("(%d)G.N.T.: Current token: %s: %f\n\n", cnt, type, token->value.type_double);
             }
             else {
-                printf("(%d)G.N.T.: Current token: %s\n\n", cnt, type);
+                //printf("(%d)G.N.T.: Current token: %s\n\n", cnt, type);
             }
         }
         else if (mode == 2) {
             if (token->type == TOKEN_KEYWORD || token->type == TOKEN_KEYWORD_QM) {
-                printf("-- with current token: %s: %s\n\n", type, keyword);
+                //printf("-- with current token: %s: %s\n\n", type, keyword);
             }
             else if (token->type == TOKEN_ID) {
-                printf("-- with current token: %s: %s\n\n", type, token->value.vector->array);
+                //printf("-- with current token: %s: %s\n\n", type, token->value.vector->array);
             }
             else if (token->type == TOKEN_NUM) {
-                printf("-- with current token: %s: %d\n\n", type, token->value.integer);
+                //printf("-- with current token: %s: %d\n\n", type, token->value.integer);
             }
             else if (token->type == TOKEN_DEC) {
-                printf("-- with current token: %s: %f\n\n", type, token->value.type_double);
+                //printf("-- with current token: %s: %f\n\n", type, token->value.type_double);
             }
             else {
-                printf("-- with current token: %s\n\n", type);
+                //printf("-- with current token: %s\n\n", type);
             }
         }
         else { 
-            printf("PRINT_DEBUG: Unknown mode\n");
+            //printf("PRINT_DEBUG: Unknown mode\n");
         }
     }
 }

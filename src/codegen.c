@@ -32,7 +32,6 @@ int write_renamer = 0;
 void codegen_var_def(char *name) {
     if (active->parent == NULL) {
         printf("DEFVAR GF@%s\n", name);
-
     } else {
         printf("DEFVAR LF@%s\n", name);
     }
@@ -283,7 +282,7 @@ void codegen_chr() {
 
 void codegen_generate_code_please() {
     printf(".IFJcode23\n");
-    // printf("DEFVAR GF$tmp1\n"); dle potreby
+    // printf("DEFVAR GF$check1\n"); dle potreby
     // printf("DEFVAR GF$tmp2\n");
     printf("JUMP $$main\n");
 
