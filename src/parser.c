@@ -1473,6 +1473,7 @@ void callee_validation(forest_node *global){
             if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             }
+            /*
             else {
                 if ((callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) && callee_list_first->callee->return_type != UNKNOWN) {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
@@ -1480,11 +1481,6 @@ void callee_validation(forest_node *global){
                 else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         AVL_tree* param = symtable_find_param(tmp->symtable, i);
-
-
-                        //printf("PARAM NAME: %s, ARG NAME: %s\n", param->data.param_name, callee_list_first->callee->args_names[1]);
-
-
                         if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
@@ -1518,6 +1514,7 @@ void callee_validation(forest_node *global){
                     }
                 }
             }
+            */
         }
         callee_list_first = callee_list_first->next;
     }

@@ -633,15 +633,31 @@ void call_expr_parser(data_type return_type){
                     tmp1->exp_type = ID;
                     tmp1->exp_value = variable_type;
 
+
+
                     
                     if(variable_type == INT || variable_type == INT_QM){
-                        printf("PUSHS int@%s\n", nickname);
+                        if (active->parent == NULL) {
+                            printf("PUSHS GF@%s\n", nickname);
+                        } else {
+                            printf("PUSHS TF@%s\n", nickname);
+                        }
                     } else if (variable_type == DOUBLE || variable_type == DOUBLE_QM){
-                        printf("PUSHS float@%s\n", nickname);
+                        if (active->parent == NULL) {
+                            printf("PUSHS GF@%s\n", nickname);
+                        } else {
+                            printf("PUSHS TF@%s\n", nickname);
+                        }
+
                     } else if(variable_type == NIL){
                         //
                     } else if(variable_type == STRING || variable_type == STRING_QM){
-                        printf("PUSHS string@%s\n", nickname);
+                        if (active->parent == NULL) {
+                            printf("PUSHS GF@%s\n", nickname);
+                        } else {
+                            printf("PUSHS TF@%s\n", nickname);
+                        }
+
                     }
                     
                 } else if(tmp1->type == TOKEN_DEC){

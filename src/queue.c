@@ -1,5 +1,5 @@
 /**
- * @file error.h
+ * @file queue.c
  *
  * IFJ23 compiler
  *

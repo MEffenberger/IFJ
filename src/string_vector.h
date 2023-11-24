@@ -1,5 +1,5 @@
 /**
- * @file string_vector.c
+ * @file string_vector.h
  * 
  * IFJ compiler 2023
  * 

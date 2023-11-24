@@ -1,5 +1,5 @@
 /**
- * @file forest.c
+ * @file forest.h
  *
  * IFJ23 compiler
  *

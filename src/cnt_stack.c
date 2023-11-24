@@ -5,6 +5,8 @@
  * 
  * @brief cnt stack implementation
  * 
+ * @author Adam Valik <xvalik05>
+ * 
  */
 
 #include "callee.h"

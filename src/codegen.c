@@ -284,10 +284,10 @@ void codegen_generate_code_please() {
     printf(".IFJcode23\n");
     // printf("DEFVAR GF$check1\n"); dle potreby
     // printf("DEFVAR GF$tmp2\n");
-    printf("JUMP $$main\n");
+    // printf("JUMP $$main\n");
 
-    //space for sth before main
+    // //space for sth before main
 
-    printf("LABEL $$main\n");
+    // printf("LABEL $$main\n");
 }
 
