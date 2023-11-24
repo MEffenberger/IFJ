@@ -29,6 +29,7 @@ token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
 cnt_stack_t *cnt_stack = NULL;
 callee_list_t *callee_list = NULL;
+callee_list_t *callee_list_first = NULL;
 sym_data data = {0};
 var_type letvar = 99;
 data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
@@ -618,7 +619,7 @@ void body() {
 
                     // CODEGEN
                     codegen_write(callee_list->callee->arg_count);
-
+                    callee_list = callee_list->next;
                     break;
                 }
                 else {
@@ -1014,34 +1015,33 @@ void func_call() {
     // store the function's name for later usage (for codegen)
     char *func_name = malloc(sizeof(char) * strlen(current_token->value.vector->array) + 1);
     func_name = strcpy(func_name, current_token->value.vector->array);
+    printf("\n\n\n\n\n\n\n\n\n\n\n\nfunc_name: %s\n", func_name);
 
 
 
-    // // func_call is not assigned 
-    // if (var_name == NULL) {
-    //     insert_callee_into_list(callee_list, func_name, VOID);
-    // }
-    // else {
-    //     AVL_tree* tmp = forest_search_symbol(active, var_name);
-    //     if (tmp == NULL) {
-    //         printf("segafult\n");
-    //     }
-    //     insert_callee_into_list(callee_list, func_name, tmp->data.data_type);
-    // }
-
+    printf("address of callee_list: %p\n", callee_list);
+    printf("address of callee_list->callee: %p\n", callee_list->callee);
     insert_callee_into_list(callee_list, func_name);
+    //callee_list = callee_list->next;
+    //printf("AAAAAaddress of callee_list: %p\n", callee_list);
+    //("address of callee_list: %p\n", callee_list);
+    //printf("address of callee_list->callee: %p\n", callee_list->callee);
+    //printf("\n\n\n\n\n\n\n\ntoto je von%s %d\n", callee_list->callee->name, callee_list->callee->arg_count);
+
     if (var_name == NULL) {
+        //printf("AAAAAAAAAAAAA");
         callee_list->callee->return_type = VOID;
     }
     else {
+        //printf("BBBBBBBBBBBBB");
+
         AVL_tree* tmp = forest_search_symbol(active, var_name);
         if (tmp != NULL) {
             callee_list->callee->return_type = tmp->data.data_type;
         }
     }
 
-
-
+    //printf("CCCCCCCCCCCCC");
 
 
     if (!function_write) {
@@ -1052,7 +1052,6 @@ void func_call() {
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
-
     args();
 
     if (current_token->type == TOKEN_RPAR) {
@@ -1063,7 +1062,6 @@ void func_call() {
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
-
         printf("-- returning...\n\n");
         return;
     }
@@ -1140,7 +1138,7 @@ void arg() {
     call_expr_parser(UNKNOWN);
     printf("COMING BACK FROM EXPR_PARSER\n");
 
-    insert_type_into_callee(callee_list->callee, type_of_expr);    
+    insert_type_into_callee(callee_list->callee, type_of_expr);
 
     if (!function_write) {
         // CODEGEN
@@ -1362,6 +1360,7 @@ int parser_parse_please () {
     printf("---------------------\n\n");
 
     callee_list = init_callee_list();
+    callee_list_first = callee_list;
 
     cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
@@ -1379,8 +1378,6 @@ int parser_parse_please () {
     print_debug(current_token, 1, debug_cnt++);
 
     prog();
-
-
 
 
     callee_validation(global);
@@ -1445,44 +1442,46 @@ forest_node* check_return_stmt(forest_node *node) {
 
 
 // validating function calls, since function definitions can be after function calls
-void callee_validation(forest_node *global) {
-    while (callee_list->next != NULL) {
-
-
-        forest_node *tmp = forest_search_function(global, callee_list->callee->name);
+void callee_validation(forest_node *global){
+    printf("help");
+    while (callee_list_first->next != NULL) {
+        printf("hele");
+        forest_node *tmp = forest_search_function(global, callee_list_first->callee->name);
         if (tmp == NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
         else {
-            if (callee_list->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
+            printf("\n\n\n\n%s %d\n", tmp->name, tmp->param_cnt);
+            printf("\n\n\n\n%s %d\n", callee_list_first->callee->name, callee_list_first->callee->arg_count);
+            if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             }
             else {
-                if (callee_list->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
                 }
                 else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         AVL_tree* param = symtable_find_param(tmp->symtable, i);
-                        if (strcmp(callee_list->callee->args_names[i], param->data.param_name) != 0) {
+                        if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
                         // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
                         switch (param->data.param_type) {
                             case INT_QM:
-                                if (callee_list->callee->args_types[i] != INT && callee_list->callee->args_types[i] != NIL) {
+                                if (callee_list_first->callee->args_types[i] != INT && callee_list_first->callee->args_types[i] != NIL) {
                                     printf("intq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
                             case DOUBLE_QM:
-                                if (callee_list->callee->args_types[i] != DOUBLE && callee_list->callee->args_types[i] != NIL) {
+                                if (callee_list_first->callee->args_types[i] != DOUBLE && callee_list_first->callee->args_types[i] != NIL) {
                                     printf("dblq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
                                 break;
                             case STRING_QM:
-                                if (callee_list->callee->args_types[i] != STRING && callee_list->callee->args_types[i] != NIL) {
+                                if (callee_list_first->callee->args_types[i] != STRING && callee_list_first->callee->args_types[i] != NIL) {
                                     printf("srtnignq\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
@@ -1490,7 +1489,7 @@ void callee_validation(forest_node *global) {
                             case INT:
                             case DOUBLE:
                             case STRING:
-                                if (callee_list->callee->args_types[i] != param->data.param_type) {
+                                if (callee_list_first->callee->args_types[i] != param->data.param_type) {
                                     printf("intdblstrng\n");
                                     error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                                 }
@@ -1502,7 +1501,7 @@ void callee_validation(forest_node *global) {
                 }
             }
         }
-        callee_list = callee_list->next;
+        callee_list_first = callee_list_first->next;
     }
 }
 

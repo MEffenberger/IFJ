@@ -47,8 +47,10 @@ callee_t* init_callee(const char* name) {
 
 
     // Allocate memory for the name
+
     callee->name = (char*)malloc(strlen(name) + 1);
     callee->name = strcpy(callee->name, name);
+
     if (callee->name == NULL) {
         // Handle memory allocation failure
         free(callee);
@@ -71,7 +73,6 @@ void insert_callee_into_list(callee_list_t* list, const char* name) {
         // Handle initialization failure
         return;
     }
-
     // Find the last node in the list
     callee_list_t* current = list;
     while (current->next != NULL) {
