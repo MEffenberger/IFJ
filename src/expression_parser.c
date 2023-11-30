@@ -579,7 +579,31 @@ void call_expr_parser(data_type return_type){
 
             rule_params_count = 0;
             token_t* tmp1, *tmp2, *tmp3;
-            if(stack_top(&stack)->type != TOKEN_SHIFT){
+
+            while(stack_top(&stack)->type != TOKEN_SHIFT){
+                if(rule_params_count == 0){
+                    tmp1 = stack_top(&stack);
+                    stack_pop(&stack);
+                }
+
+                if(rule_params_count == 1){
+                    tmp2 = stack_top(&stack);
+                    stack_pop(&stack);
+                }
+
+                if(rule_params_count == 2){
+                    tmp3 = stack_top(&stack);
+                    stack_pop(&stack);
+                }
+
+                if(rule_params_count > 2){
+                    error_exit(2, "expression_parser", "syntax error");
+                }
+                rule_params_count++;
+            }
+
+
+            /*if(stack_top(&stack)->type != TOKEN_SHIFT){
                 tmp1 = stack_top(&stack);
                 stack_pop(&stack);
                 rule_params_count++;
@@ -602,7 +626,7 @@ void call_expr_parser(data_type return_type){
                         }
                     }
                 }
-            }
+            }*/
 
 
             stack_pop(&stack);
