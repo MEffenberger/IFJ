@@ -16,7 +16,9 @@
 #include "string_vector.h"
 #include "symtable.h"
 
+/// Enumeration of all types of tokens
 typedef enum token_types {
+
     TOKEN_WHITESPACE,
     TOKEN_TAB,
     TOKEN_EOL,
@@ -37,9 +39,9 @@ typedef enum token_types {
     TOKEN_COMMA,
     TOKEN_COLON,
     TOKEN_DOUBLE_QM,
-    TOKEN_RET_TYPE, //->
+    TOKEN_RET_TYPE,
     TOKEN_ID,
-    TOKEN_KEYWORD_QM, //ID?
+    TOKEN_KEYWORD_QM,
     TOKEN_NUM,
     TOKEN_EXP,
     TOKEN_DEC,
@@ -51,23 +53,24 @@ typedef enum token_types {
     TOKEN_RIGHT_BRACKET,
     TOKEN_DIVIDE,
 
-    //Tokens for expression parser
-    TOKEN_DOLLAR, //$
-    TOKEN_SHIFT,  //<
-    TOKEN_EXPRESSION, //Ei
+    TOKEN_DOLLAR,
+    TOKEN_SHIFT,  
+    TOKEN_EXPRESSION, 
     TOKEN_LITERAL_INT,
     TOKEN_LITERAL_DOUBLE,
     TOKEN_LITERAL_STRING,
     TOKEN_BOOL
+
 } token_type_t;
 
+/// Enumeration of all states of automata
 typedef enum state{
 
     S_START,
-    S_COLON,    // id type declaration
+    S_COLON,   
     S_COMMA,
     S_QM,
-    S_DOUBLE_QM,    // ?? operator
+    S_DOUBLE_QM,  
     S_GTR,
     S_GTR_EQ,
     S_LESS,
@@ -79,12 +82,12 @@ typedef enum state{
     S_MULTIPLY,
     S_PLUS,
     S_MINUS,
-    S_RET_TYPE,     // -> returned type
+    S_RET_TYPE,    
     S_LPAR,
     S_RPAR,
     S_UNDERSCORE,
     S_ID, 
-    S_ID_QM,      // String?
+    S_ID_QM,      
     S_NUM,
     S_NUM_DOT,
     S_NUM_E,
@@ -92,15 +95,15 @@ typedef enum state{
     S_DEC, 
     S_EXP,
 
-    S_START_QUOTES, //"
-    S_END_QUOTES,    //"
-    S_START_ESC_SENTENCE, // /
-    S_START_HEX, // u
-    S_LEFT_BRACKET, // {
-    S_FIRST_HEX, //0-Z
+    S_START_QUOTES, 
+    S_END_QUOTES,    
+    S_START_ESC_SENTENCE, 
+    S_START_HEX, 
+    S_LEFT_BRACKET,
+    S_FIRST_HEX, 
 
-    S_THREE_QUOTES, // """
-    S_START_MULTILINE, //EOL
+    S_THREE_QUOTES,
+    S_START_MULTILINE, 
 
     S_SL_COM,
     S_NESTED_COM,
@@ -113,6 +116,8 @@ typedef enum state{
 
 } automat_state_t;
 
+
+/// Enumeration of all keywords
 typedef enum keyword{
 
     KW_DOUBLE,  // Double
@@ -144,14 +149,13 @@ typedef enum keyword{
 
 }keyword_t;
 
-
+/// @brief Enumeration of types esential for semantic analysis
 typedef enum expression_type{
     ID,
     CONST,
 } expression_type_t;
 
-
-
+/// @brief Struct of data types 
 typedef struct token_value {
     int integer;
     double type_double;
@@ -159,7 +163,7 @@ typedef struct token_value {
     vector* vector;
 } value_type_t;
 
-
+/// @brief Struct of token
 typedef struct token {
     value_type_t value;
     token_type_t type;
@@ -168,9 +172,36 @@ typedef struct token {
     data_type exp_value;
 } token_t;
 
+/**
+ * @brief Function checks if the token is whether a keyword or an identifier
+ * 
+ * @param v string value of token 
+ * @return keyword_t type of token 
+*/
 keyword_t compare_keyword(vector* v);
+
+/**
+ * @brief Function checks if there is correct indent in multiline string
+ * 
+ * @param cnt_array array of every line indent in multiline string 
+ * @param size indent of multiline end 
+ * 
+ * @return bool true if indent is correct, false otherwise
+*/
 bool check_indent(int* cnt_array, int size);
+
+/**
+ * @brief Function to delete token and free all the memory it had allocated
+ * 
+ * @param token token to be deleted
+*/
 void destroy_token(token_t* token);
+
+/**
+ * @brief Function to get token from source code
+ * 
+ * @return token_t* pointer to newly allocated token
+*/
 token_t* get_me_token();
 
 #endif

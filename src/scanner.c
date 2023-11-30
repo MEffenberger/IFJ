@@ -5,8 +5,8 @@
  * 
  * @brief Scanner implementation
  *
- * @author Samuel Hejnicek <xhejni00>
  * @author Dominik Horut <xhorut01>
+ * @author Samuel Hejnicek <xhejni00>
  */
 
 #include "callee.h"
@@ -49,7 +49,6 @@ keyword_t compare_keyword(vector* v){
         return KW_VAR;
     } else if (vector_str_cmp(v, "while")){
         return KW_WHILE;
-
     } else if (vector_str_cmp(v, "readString")){
         return KW_RD_STR;
     } else if (vector_str_cmp(v, "readInt")){
@@ -95,8 +94,8 @@ void destroy_token(token_t* token){
 
 
 token_t* get_me_token(){
+
     token_t* token = malloc(sizeof(token_t));
-    //push_alloc_ptr(token, TOKEN);
     char readchar, next_char;
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
@@ -135,7 +134,6 @@ token_t* get_me_token(){
                     } else if(readchar == '?'){
                         a_state = S_QM;
                         vector_dispose(buffer);
-                        //break;
 
                     } else if(readchar == '('){
                         a_state = S_START;
@@ -253,7 +251,6 @@ token_t* get_me_token(){
 
                         if((next_char = (char) getc(stdin)) == '_' || isalpha(next_char) || isdigit(next_char)){
                             a_state = S_ID;
-
                             vector_append(buffer, readchar);
                             vector_append(buffer, next_char);
                             break;
@@ -482,7 +479,6 @@ token_t* get_me_token(){
                     return token;
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
-                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -554,7 +550,6 @@ token_t* get_me_token(){
                     }
                 } else if(readchar == 'u'){
                     a_state = S_START_HEX;
-                    //vector_append(buffer, readchar);
                     break;
                 } else {
                     vector_dispose(buffer);
@@ -685,7 +680,6 @@ token_t* get_me_token(){
                 }
             case(S_STR_EMPTY):
                 if(readchar != '"'){
-                    //Syntax error nemuze byt nic po dvou uvozovkach?
                     ungetc(readchar, stdin);
                     a_state = S_START;
                     token->type = TOKEN_STRING;
