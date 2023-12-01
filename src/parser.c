@@ -517,7 +517,7 @@ void ret_type() {
 
 
 void ret() {
-    // <ret> -> return <exp> | eps
+    // <ret> -> return <exp> | return
     //printf("-- entering RET --\n");
     //print_debug(current_token, 2, debug_cnt);
 

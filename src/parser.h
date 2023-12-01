@@ -66,7 +66,7 @@ token_t* get_next_token();
 void prog();
 
 /**
- * @brief <func_def> -> func id ( <params> ) <ret_type> { <func_body> }
+ * @brief <func_def> -> func id ( <params> ) <ret_type> { <local_body> }
  */
 void func_def();
 
@@ -101,7 +101,7 @@ void type();
 void params_n();
 
 /**
- * @brief ret_type -> eps | -> <type>
+ * @brief <ret_type> -> eps | -> <type>
  */
 void ret_type();
 
@@ -137,7 +137,7 @@ void func_call();
 void args();
 
 /**
- * @brief <arg> -> exp | id : exp
+ * @brief <arg> -> <exp> | id : <exp>
  */
 void arg();
 
@@ -152,7 +152,7 @@ void args_n();
 void condition();
 
 /**
- * @brief <ret> -> return <exp> | eps
+ * @brief <ret> -> return <exp> | return
  */
 void ret();
 
