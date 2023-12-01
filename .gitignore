@@ -2,6 +2,5 @@ src/*.o
 .DS_Store
 */.DS_Store
 compiler
-*.txt
 .vscode/*
 src/.vscode/*

@@ -109,7 +109,7 @@ void insert_name_into_callee(callee_t* callee, char* name) {
 
     // Allocate memory for the new name
     callee->args_names[callee->arg_count] = (char*)malloc(strlen(name) + 1);
-    callee->args_names[callee->arg_count] = strcpy(callee->args_names[callee->arg_count], name);
+    callee->args_names[callee->arg_count] = name;
 
     if (callee->args_names[callee->arg_count] == NULL) {
         // Handle memory allocation failure

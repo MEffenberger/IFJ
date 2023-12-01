@@ -18,7 +18,7 @@
 
 typedef struct callee {
     char *name;
-    data_type return_type;
+    data_type return_type; // type of assignee
     int arg_count;
     char **args_names; // '_' for unnamed
     data_type *args_types;
