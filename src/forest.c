@@ -38,6 +38,7 @@ forest_node *forest_insert_global() {
     root->cond_cnt = 0;
     root->param_cnt = 0;
     root->node_cnt = 0;
+    root->has_return = false;
     return root; 
 }
 
@@ -51,6 +52,7 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         child->cond_cnt = 0;
         child->param_cnt = 0;
         child->node_cnt = ++forest_node_cnt;
+        child->has_return = false;
         if (parent->children == NULL) {
             parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)) , "forest node children", BASIC);
         } else {
@@ -63,7 +65,6 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         parent->children[parent->children_count] = child;
         parent->children_count++;
         child->symtable = NULL;
-
         *active = child;
     }
 }

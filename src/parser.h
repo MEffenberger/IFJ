@@ -19,6 +19,7 @@
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
 
+#define AFTER_BUILTIN 10
 
 
 /**
@@ -170,6 +171,10 @@ void rename_keep_exit();
 void callee_validation(forest_node *global);
 
 char *renamer(AVL_tree *node);
+
+void return_logic_validation (forest_node *global);
+void validate_forest(forest_node *func);
+bool validate_forest_node(forest_node *node);
 
 
 

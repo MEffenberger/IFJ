@@ -523,8 +523,13 @@ void ret() {
     printf("-- entering RET --\n");
     print_debug(current_token, 2, debug_cnt);
 
+
     // checks whether the return is in the function as it should be, error otherwise
     forest_node *tmp = check_return_stmt(active);
+    
+    // set has_return flag to true, so the return logic knows this scope has return in it
+    active->has_return = true;
+    
     sym_data *tmp_data = symtable_lookup(tmp->symtable, tmp->name);
 
     if (tmp_data->return_type == VOID) { // void function 
@@ -1411,6 +1416,8 @@ int parser_parse_please () {
 
 
     callee_validation(global);
+    return_logic_validation(global);
+
 
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
@@ -1496,8 +1503,6 @@ void callee_validation(forest_node *global){
                 } else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         AVL_tree *param = symtable_find_param(tmp->symtable, i);
-                        printf("\n\n\nARGUMENT'S TYPE: %d\n", callee_list_first->callee->args_types[i]);
-                        printf("ARGUMENT'S NAME: %s\n", callee_list_first->callee->args_names[i]);
                         if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
                         }
@@ -1538,6 +1543,70 @@ void callee_validation(forest_node *global){
         callee_list_first = callee_list_first->next;
     }
 }
+
+void return_logic_validation (forest_node *global) {
+    // go through all functions in global scope (starting after all built-in functions)
+    for (int i = AFTER_BUILTIN; i < global->children_count; i++) {
+        if (global->children[i]->keyword == W_FUNCTION) { // work only with non-void functions
+            if (symtable_search(global->children[i]->symtable, global->children[i]->name)->data.return_type != VOID) {
+                validate_forest(global->children[i]);
+            }
+        }
+    }
+}
+
+void validate_forest(forest_node *func) {
+    // if the function has return, it's already valid
+    if (!func->has_return) {
+        bool if_valid = false;
+        bool else_valid = false;
+
+        for (int i = 0; i < func->children_count; i++) {
+            if (func->children[i]->keyword == W_IF) { // work only with if-else statements
+                if_valid = validate_forest_node(func->children[i]);
+                else_valid = validate_forest_node(func->children[i+1]);
+
+                if (if_valid && else_valid) {
+                    return;
+                }
+            }
+        }
+        // if this function goes through all of its children and does not return
+        error_exit(ERROR_SEM_OTHER, "PARSER", "Return logic in function is not valid");
+    }
+}
+
+bool validate_forest_node(forest_node *node) {
+    // if the node has return, it's valid
+    if (node->has_return) {
+        return true;
+    }
+
+    bool if_valid = false;
+    bool else_valid = false;
+
+    for (int i = 0; i < node->children_count; i++) {
+        if (node->children[i]->keyword == W_IF) { // work only with if-else statements
+            if_valid = validate_forest_node(node->children[i]);
+            else_valid = validate_forest_node(node->children[i+1]);
+
+            if (if_valid && else_valid) {
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 // void convert_to_nonq_data_type(char *key){
