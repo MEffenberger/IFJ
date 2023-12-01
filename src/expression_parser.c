@@ -51,7 +51,7 @@ static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 
 };
 
-
+// funkce se podiva na current token a vyhodi odpovidajici index v precedencni tabulce
 int get_index(token_type_t token){
 
     switch(token){
@@ -126,7 +126,7 @@ int get_index(token_type_t token){
 
 }
 
-
+// pomocna fce pro vytvoreni zarazky v zasobniku
 token_t* token_create(token_type_t token_type){
     token_t* token = malloc(sizeof(token_t));
     token->value.vector = NULL;
@@ -136,6 +136,8 @@ token_t* token_create(token_type_t token_type){
     return token;
 }
 
+// v precedencni tabulce je na miste [i][j] < coz znamena neredukuj ale pridej token na zasobnik a 
+// pred nejblizsi terminal pridej shift token <
 void token_shift(token_stack* stack){
     token_t* shift = token_create(TOKEN_SHIFT);
     token_t* top = stack_top(stack);
@@ -150,6 +152,8 @@ void token_shift(token_stack* stack){
     stack_push(stack, current_token);
 }
 
+
+// v podstate vraci pravidlo redukce podle poctu operandu, vetsinou jsou binarni takze 3(E operator E), 1 (E -> i) a 2 (E -> !E)
 expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* token3, int number_of_tokens){
     switch (number_of_tokens)
     {
@@ -206,22 +210,25 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     return NOT_RULE;
 }
 
-
+// kontrola typu => tri prdele case splitu, pokud je to token id konstanta tak ji lze pretypovat ale pouze z int na double
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
+    
     if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
         error_exit(7, "expression_parser", "Can not do arithmetic opeation with nils");
     }
 
-
+    // klasicke operace kde se resi jen typy
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(7, "expression_parser", "Can not do arithmetic opeation with booleans");
         }
 
+        // typy jsou stejne
         if (tmp1->exp_value == tmp3->exp_value){
 
+            // jedine co se stringy lze je +, * - je invalid
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
                 error_exit(7, "expression_parser", "Wrong operator in concatenation");
 
@@ -238,7 +245,10 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 return;
 
             }
+        // typy nejsou stejne
         } else{
+
+            // pokud je jeden id a druhy konstanta nebo naopak a lze pretypovat (z int na double) az po line 313
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
                     if(tmp3->exp_value == DOUBLE){
@@ -301,12 +311,15 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(7, "expression_parser", "Can not sum 2 IDs of different types");
             }
         }
+
+    // tady se resi celociselne a desetinne deleni (div x idiv)
     } else if(tmp2->type == TOKEN_DIVIDE){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(7, "expression_parser", "Can not divide bool");
         }
 
+        // typy se rovnaji, neni problem
         if (tmp1->exp_value == tmp3->exp_value){
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
@@ -323,6 +336,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 fprintf(file, "DIVS\n");
                 tmp1->exp_value = DOUBLE;
             }
+
+        // typy se nerovnaji to same jako u + - * az po line 412
         } else {
             if (tmp1->exp_type == CONST){
 
@@ -395,9 +410,15 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(7, "expression_parser", "Can not divide 2 IDs of different types");
             }
         }
+
+    // relacni operatory
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+        
+        // typy se rovnaji a navratova hodnota bude bool
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
+        
+        // nerovnaji se => opet pretypovani pokud lze az po konec funkce
         } else {
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
@@ -459,7 +480,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     
 }
 
-
+// u <= a >= je problem ze se musi provest zaroven operace (less nebo greater) + equal a vysledek tech dvou se ORuje
+// takze se do zasobniku hodnot v codegenu musi pushovat 2x
 void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
     if (tmp3->exp_type == CONST){
         if (tmp3->exp_value == INT){
@@ -499,7 +521,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 }
 
 
-
+// hlavni fce
 void call_expr_parser(data_type return_type){
 
     token_stack stack;
@@ -520,12 +542,15 @@ void call_expr_parser(data_type return_type){
     
     while(eval_expr){
         
+        // bereme nejvrchnejsi terminal na zasobniku
         token_t* terminal = stack_top_terminal(&stack);
 
         //int stack_index = get_index(terminal->type);
         //int next_token_index = get_index(current_token->type);
         //table_result = precedence_table[stack_index][next_token_index];
     
+        // pokud jsme uz narazili na token, ktery nelze vyhodnotit pomoci prec. tabulky, pokusime se 
+        // zredukovat dosavdani expression
         if(!stop_expression){
             stack_index = get_index(terminal->type);
             next_token_index = get_index(current_token->type);
@@ -537,6 +562,7 @@ void call_expr_parser(data_type return_type){
             }
         }
 
+        // podminka kdy ukoncit celkove vyhodnoceni vyrazu = na zasobniku je jen $ a E
         if(next_token_index == 15 && stack_top_terminal(&stack)->type == TOKEN_DOLLAR){
 
             if(stack.size <= 1){
@@ -548,6 +574,7 @@ void call_expr_parser(data_type return_type){
             //fprintf(file, "Current token: %d", current_token->type);
             type_of_expr = stack_top(&stack)->exp_value;
             
+            // Check ze vracime spravny typ
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
 
 
@@ -571,17 +598,21 @@ void call_expr_parser(data_type return_type){
             break;
         }
 
+        // podle vysledku z precedecni tab. bud shiftujeme nebo aplikujeme redukcni pravidlo
         switch (table_result)
         {
         case '<':
             token_shift(&stack);
             current_token = get_next_token();
             break;
+
+        // aplikujeme redukcni pravidlo
         case '>':
 
             rule_params_count = 0;
             token_t* tmp1, *tmp2, *tmp3;
 
+            // zjistime pocet operandu 
             while(stack_top(&stack)->type != TOKEN_SHIFT){
                 if(rule_params_count == 0){
                     tmp1 = stack_top(&stack);
@@ -635,6 +666,8 @@ void call_expr_parser(data_type return_type){
             expression_rules_t rule = find_reduce_rule(tmp1, tmp2, tmp3, rule_params_count);
             switch (rule)
             {
+
+            // E -> i, ziskani vsech informaci o tokenu - typ,...
             case RULE_OPERAND:
                 if(tmp1->type == TOKEN_ID){
                     
@@ -740,11 +773,12 @@ void call_expr_parser(data_type return_type){
                 }           
             break;
 
-            
+            // E -> (E)
             case RULE_PAR:
                 stack_push(&stack, tmp2);
                 break;
 
+            // vsehny easy binarni operace, neni moc co resit, check typu atd. viz check_types
             case RULE_ADD:
                 check_types(tmp1,tmp2, tmp3);
                 if(concat){
@@ -774,6 +808,8 @@ void call_expr_parser(data_type return_type){
                 fprintf(file, "LTS\n");
                 stack_push(&stack, tmp1);
                 break;
+
+            // v podstate to same jen vice printu, skrz duvod u push_for_leq_geq()
             case RULE_LEQ:
                 push_for_leq_geq(tmp1, tmp3);
                 check_types(tmp1, tmp2, tmp3);
@@ -822,6 +858,8 @@ void call_expr_parser(data_type return_type){
                 fprintf(file, "NOTS\n");
                 stack_push(&stack, tmp1);
                 break;
+
+            // totok uz delal Sam solo ale pravdepodobne radky navic kvuli praci se zasobnikem
             case RULE_QMS:
                 if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
                     /*if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
@@ -878,6 +916,7 @@ void call_expr_parser(data_type return_type){
             }
 
             break;
+        // pripad () proste pokracujeme
         case '=':
             stack_push(&stack, current_token);
             current_token = get_next_token();
@@ -885,6 +924,7 @@ void call_expr_parser(data_type return_type){
         
         default:
 
+            // redukujeme dokud to jde
             if(current_token->type == TOKEN_ID || current_token->type == TOKEN_RPAR){
             table_result = '>';
             next_token_index = 15;
