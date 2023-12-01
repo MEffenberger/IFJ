@@ -653,10 +653,13 @@ void var_def() {
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 
-    //    rename_keep_exit();
+        rename_keep_exit(); /// TODO: smazat funkci nebo coooo
         queue_push(queue, current_token);
-        queue_print(queue);
         opt_var_def();
+
+        queue_print(queue);
+
+
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
@@ -1046,8 +1049,23 @@ void func_call() {
     if (var_name == NULL) {
         callee_list->callee->return_type = VOID;
     }
+    else if (type_of_assignee == UNKNOWN) {
+        // find global node
+        forest_node *global = active;
+        while (global->parent != NULL) {
+            global = global->parent;
+        }
+        forest_node *func = forest_search_function(global, func_name);
+        if (func == NULL) {
+            error_exit(ERROR_SEM_DERIV, "PARSER", "Function is not defined when assigning to variable while defining it, cannot derive its type");
+        }
+        AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
+        type_of_assignee = func_symbol->data.return_type;
+        type_of_expr = type_of_assignee; // variable's type for symtable
+        callee_list->callee->return_type = type_of_assignee; // for callee validation to work smoothly
+    }
     else {
-        callee_list->callee->return_type = type_of_assignee;
+        callee_list->callee->return_type = type_of_assignee; 
     }
 
 
@@ -1399,7 +1417,7 @@ int parser_parse_please () {
     ////////////
     fclose(file);
     ////////////
-    
+
     printf("\n-------------------------------------------\n");
     printf("PARSER: Parsed successfully, you're welcome\n");
     printf("-------------------------------------------\n\n");
@@ -1473,8 +1491,7 @@ void callee_validation(forest_node *global){
             if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
             } else {
-                if (callee_list_first->callee->return_type !=
-                    (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
                 } else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
@@ -1538,8 +1555,6 @@ void callee_validation(forest_node *global){
 //         }
 //     }
 // }
-
-
 
 
 

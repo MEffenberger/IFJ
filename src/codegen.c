@@ -30,7 +30,7 @@ extern FILE *file;
 
 
 
-
+// V případě chybějícího inicializačního výrazu se u proměnných typu zahrnujícího nil provádí implicitní inicializace hodnotou nil. Proměnné ostatních typů nejsou bez inicializačního výrazu inicializovány.
 void codegen_var_def(char *name) {
     if (active->parent == NULL) {
         fprintf(file, "DEFVAR GF@%s\n", name);
