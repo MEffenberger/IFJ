@@ -120,6 +120,8 @@ void inst_list_dispose(instruction_list *list) {
 
 // search outermost while loop
 void inst_list_search_while(instruction_list *list) {
+    
+
     while (strcmp(list->active->name, forest_search_while(active)->name) != 0) {
         list->active = list->active->prev;
     }
@@ -247,7 +249,7 @@ void codegen_generate_code_please(instruction_list *list) {
                 fprintf(file, "PUSHS string@%s\n", inst->name);
                 break;
             case PUSHS:
-                fprintf(file, "PUSHS GF@%s\n", inst->name);
+                fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
                 break;
             case EXCLAMATION_RULE:
                 codegen_exclamation_rule(inst);
@@ -318,9 +320,9 @@ void codegen_func_def(instruction *inst) {
     fprintf(file, "PUSHFRAME\n");
     fprintf(file, "DEFVAR LF@$retval$\n");
     for (int i = 1; i <= inst->cnt; i++) {
-        AVL_tree* param = symtable_find_param(active->symtable, i);
-        fprintf(file, "DEFVAR LF@%s\n", param->data.param_name);
-        fprintf(file, "MOVE LF@%s LF@$%d\n", param->data.param_name, i);
+        AVL_tree* param = symtable_find_param(inst->relevant_node->symtable, i);
+        fprintf(file, "DEFVAR LF@%s\n", param->key);
+        fprintf(file, "MOVE LF@%s LF@$%d\n", param->key, i);
     } 
 }
 

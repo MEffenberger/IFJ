@@ -562,6 +562,7 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
+    
         printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp_data->return_type);
         call_expr_parser(tmp_data->return_type); 
         printf("COMING BACK FROM EXPR_PARSER\n");
@@ -715,15 +716,28 @@ void var_def() {
         symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
         queue_dispose(queue);
 
-
         AVL_tree *tmp = symtable_search(active->symtable, var_name);
         tmp->nickname = active->node_cnt;
         char *tmp_name = renamer(tmp);
 
-        // CODEGEN
-        instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
-        inst_list_insert_last(inst_list, inst);
-        //codegen_var_def(tmp_name);
+
+        forest_node* tmp2 = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
+        if (tmp2 == NULL) {
+            // CODEGEN
+            instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_var_def(tmp_name);
+        }
+        else {
+            printf("vyhul si to do while\n");
+            inst_list_search_while(inst_list); // int_list->active is now set on the outermost while -> insert before it
+            printf("vyhul si to do while\n");
+            // CODEGEN
+            instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
+            inst_list_insert_before(inst_list, inst);
+            //codegen_var_def(tmp_name);
+        }
+
 
         if (tmp->data.defined) {
             // CODEGEN

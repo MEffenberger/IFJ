@@ -772,6 +772,7 @@ void call_expr_parser(data_type return_type){
                     forest_node* forest = forest_search_scope(active, tmp1->value.vector->array);
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
 
+
                     if(node == NULL){
                         error_exit(5, "expression_parser", "Variable does not exist");
                     }
@@ -790,9 +791,6 @@ void call_expr_parser(data_type return_type){
                     tmp1->exp_type = ID;
                     tmp1->exp_value = variable_type;
 
-
-
-                    
                     if(variable_type == INT || variable_type == INT_QM){
                         // CODEGEN
                         instruction *inst = inst_init(PUSHS, forest->frame, nickname, 0, 0, 0.0, NULL);

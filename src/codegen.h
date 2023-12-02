@@ -127,6 +127,7 @@ instruction* inst_init(inst_type type,
 void inst_list_insert_last(instruction_list *list, instruction *new_inst);
 void inst_list_insert_before(instruction_list *list, instruction *new_inst);
 void inst_list_dispose(instruction_list *list);
+void inst_list_search_while(instruction_list *list);
 
 
 
