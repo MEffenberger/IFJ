@@ -33,8 +33,9 @@ void print_debug(token_t *token, int mode, int cnt);
 
 extern token_t *current_token; // Pointer to the current token
 extern int ifelse_cnt; // Count of get_next_token calls
-extern int while_cnt; // Count of get_next_token calls
+// extern int while_cnt; // Count of get_next_token calls
 extern data_type type_of_expr;
+extern instruction_list *inst_list;
 
 
 /**

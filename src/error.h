@@ -43,7 +43,8 @@ typedef enum e_alloc_type {
     BASIC,
     VECTOR,
     SYMTABLE,
-    FOREST
+    FOREST,
+    INST_DLL
 } alloc_type;
 
 // Structure to represent a node in the stack of allocated pointers

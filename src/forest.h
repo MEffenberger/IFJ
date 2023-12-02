@@ -32,10 +32,11 @@ typedef struct s_forest_node {
     struct s_forest_node **children; // array of pointers to children
     int children_count; // number of children (last index + 1)
     AVL_tree *symtable; // pointer to the scope's symbol table
-    int cond_cnt; // counter for if/else/while
+    int cond_cnt; // counter for if/else
     int param_cnt; // counter for parameters
     int node_cnt; // counter for nodes, used for renaming
     bool has_return; // true if the scope has return
+    char frame; // frame of the scope (G/L)
 } forest_node;
 
 // Global pointer to the active node in forest
@@ -69,6 +70,24 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
 forest_node* forest_search_function(forest_node *global, char *key);
 
 /**
+ * @brief 
+ * 
+ * @param node 
+ * @return true 
+ * @return false 
+ */
+bool forest_check_inside_func(forest_node *node);
+
+
+/**
+ * @brief 
+ * 
+ * @param node 
+ * @return forest_node* 
+ */
+forest_node* forest_search_while(forest_node *node);
+
+/**
  * @brief Searches for a symbol in the symbol table of the node (and its parents if not found)
  * 
  * @param node Pointer to the node where to start searching
@@ -76,6 +95,15 @@ forest_node* forest_search_function(forest_node *global, char *key);
  * @return AVL_tree* Pointer to the symbol if found, NULL otherwise
  */
 AVL_tree *forest_search_symbol(forest_node *node, char *key);
+
+/**
+ * @brief 
+ * 
+ * @param node 
+ * @param key 
+ * @return forest_node* 
+ */
+forest_node *forest_search_scope(forest_node *node, char *key);
 
 /**
  * @brief Forest dispose

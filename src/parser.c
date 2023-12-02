@@ -27,6 +27,7 @@ forest_node *active = NULL; // Pointer to the active node in the forest
 token_t *current_token = NULL; // Pointer to the current token
 token_t *token_buffer = NULL; // Buffer for tokens
 queue_t *queue = NULL; // Queue for the expression parser
+instruction_list *inst_list = NULL; // List of instructions for codegen
 cnt_stack_t *cnt_stack = NULL;
 callee_list_t *callee_list = NULL;
 callee_list_t *callee_list_first = NULL;
@@ -234,6 +235,8 @@ void prog() {
     printf("-- entering PROG --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    
+
     if (current_token->type == TOKEN_EOF) {
         // printf("Printing global symtable in order:\n");
         // inorder(&(active->symtable));
@@ -283,7 +286,9 @@ void func_def() {
             param_order = 0;
 
             // CODEGEN
-            codegen_func_def();
+            instruction *inst = inst_init(FUNC_DEF, 'G', active->name, active->param_cnt, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_func_def();
 
             if (current_token->type == TOKEN_RPAR) {
                 current_token = get_next_token();
@@ -311,13 +316,16 @@ void func_def() {
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
-                        BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
 
                         // CODEGEN
-                        codegen_func_def_end();
+                        instruction *inst = inst_init(FUNC_DEF_END, 'G', active->name, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_func_def_end();
 
+                        BACK_TO_PARENT_IN_FOREST;
+                        
                         printf("-- returning...\n\n");
                         return;
                     }
@@ -528,7 +536,13 @@ void ret() {
     forest_node *tmp = check_return_stmt(active);
     
     // set has_return flag to true, so the return logic knows this scope has return in it
-    active->has_return = true;
+    if (!active->has_return) {
+        active->has_return = true;
+    }
+    else {
+        error_exit(ERROR_SEM_OTHER, "PARSER", "Function has multiple returns in one scope");
+    }
+    
     
     sym_data *tmp_data = symtable_lookup(tmp->symtable, tmp->name);
 
@@ -537,7 +551,9 @@ void ret() {
         print_debug(current_token, 1, debug_cnt++);
 
         // CODEGEN
-        codegen_func_def_return_void(tmp->name);
+        instruction *inst = inst_init(FUNC_DEF_RETURN_VOID, 'G', tmp->name, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_func_def_return_void(tmp->name);
 
         printf("-- returning...\n\n");
         return;
@@ -551,7 +567,9 @@ void ret() {
         printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
-        codegen_func_def_return(tmp->name);
+        instruction *inst = inst_init(FUNC_DEF_RETURN, 'G', tmp->name, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_func_def_return(tmp->name);
     }
 }
 
@@ -627,7 +645,9 @@ void body() {
                     function_write = false;
 
                     // CODEGEN
-                    codegen_write(callee_list->callee->arg_count);
+                    instruction *inst = inst_init(WRITE, 'G', NULL, callee_list->callee->arg_count, 0, 0.0, NULL);
+                    inst_list_insert_last(inst_list, inst);
+                    //codegen_write(callee_list->callee->arg_count);
                     callee_list = callee_list->next;
                     break;
                 }
@@ -700,11 +720,16 @@ void var_def() {
         tmp->nickname = active->node_cnt;
         char *tmp_name = renamer(tmp);
 
-        //AAAAA predelat logiku symtable insert
-        codegen_var_def(tmp_name);
+        // CODEGEN
+        instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_var_def(tmp_name);
 
         if (tmp->data.defined) {
-            codegen_var_assign(tmp_name);
+            // CODEGEN
+            instruction *inst = inst_init(VAR_ASSIGN, active->frame, tmp_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_var_assign(tmp_name);
         }
 
 
@@ -810,7 +835,9 @@ void assign() {
                 case KW_RD_STR:
                     if (!readString_defined) {
                         // CODEGEN
-                        codegen_readString();
+                        instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readString();
                         readString_defined = true;
                     }
                     break;
@@ -818,7 +845,9 @@ void assign() {
                 case KW_RD_INT:
                     if (!readInt_defined) {
                         // CODEGEN
-                        codegen_readInt();
+                        instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readInt();
                         readInt_defined = true;
                     }
                     break;
@@ -826,7 +855,9 @@ void assign() {
                 case KW_RD_DBL:
                     if (!readDouble_defined) {
                         // CODEGEN
-                        codegen_readDouble();
+                        instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readDouble();
                         readDouble_defined = true;
                     }
                     break;
@@ -834,7 +865,9 @@ void assign() {
                 case KW_INT_2_DBL:
                     if (!Int2Double_defined) {
                         // CODEGEN
-                        codegen_Int2Double();
+                        instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_Int2Double();
                         Int2Double_defined = true;
                     }
                     break;
@@ -842,7 +875,9 @@ void assign() {
                 case KW_DBL_2_INT:
                     if (!Double2Int_defined) {
                         // CODEGEN
-                        codegen_Double2Int();
+                        instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_Double2Int();
                         Double2Int_defined = true;
                     }
                     break;
@@ -850,7 +885,9 @@ void assign() {
                 case KW_LENGHT:
                     if (!length_defined) {
                         // CODEGEN
-                        codegen_length();
+                        instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_length();
                         length_defined = true;
                     }
                     break;
@@ -858,7 +895,9 @@ void assign() {
                 case KW_SUBSTR:
                     if (!substring_defined) {
                         // CODEGEN
-                        codegen_substring();
+                        instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_substring();
                         substring_defined = true;
                     }
                     break;
@@ -866,7 +905,9 @@ void assign() {
                 case KW_ORD:
                     if (!ord_defined) {
                         // CODEGEN
-                        codegen_ord();
+                        instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_ord();
                         ord_defined = true;
                     }
                     break;
@@ -874,7 +915,9 @@ void assign() {
                 case KW_CHR:
                     if (!chr_defined) {
                         // CODEGEN
-                        codegen_chr();
+                        instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_chr();
                         chr_defined = true;
                     }
                     break;
@@ -933,7 +976,10 @@ void assign() {
                 printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
                 call_expr_parser(tmp->data.data_type);
 
-                codegen_var_assign(renamer(tmp));
+                // CODEGEN
+                instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(tmp), 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_var_assign(renamer(tmp));
                 printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
@@ -942,7 +988,9 @@ void assign() {
                 case KW_RD_STR:
                     if (!readString_defined) {
                         // CODEGEN
-                        codegen_readString();
+                        instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readString();
                         readString_defined = true;
                     }
                     break;
@@ -950,7 +998,9 @@ void assign() {
                 case KW_RD_INT:
                     if (!readInt_defined) {
                         // CODEGEN
-                        codegen_readInt();
+                        instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readInt();
                         readInt_defined = true;
                     }
                     break;
@@ -958,7 +1008,9 @@ void assign() {
                 case KW_RD_DBL:
                     if (!readDouble_defined) {
                         // CODEGEN
-                        codegen_readDouble();
+                        instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_readDouble();
                         readDouble_defined = true;
                     }
                     break;
@@ -966,7 +1018,9 @@ void assign() {
                 case KW_INT_2_DBL:
                     if (!Int2Double_defined) {
                         // CODEGEN
-                        codegen_Int2Double();
+                        instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_Int2Double();
                         Int2Double_defined = true;
                     }
                     break;
@@ -974,7 +1028,9 @@ void assign() {
                 case KW_DBL_2_INT:
                     if (!Double2Int_defined) {
                         // CODEGEN
-                        codegen_Double2Int();
+                        instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_Double2Int();
                         Double2Int_defined = true;
                     }
                     break;
@@ -982,7 +1038,9 @@ void assign() {
                 case KW_LENGHT:
                     if (!length_defined) {
                         // CODEGEN
-                        codegen_length();
+                        instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_length();
                         length_defined = true;
                     }
                     break;
@@ -990,7 +1048,9 @@ void assign() {
                 case KW_SUBSTR:
                     if (!substring_defined) {
                         // CODEGEN
-                        codegen_substring();
+                        instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_substring();
                         substring_defined = true;
                     }
                     break;
@@ -998,7 +1058,9 @@ void assign() {
                 case KW_ORD:
                     if (!ord_defined) {
                         // CODEGEN
-                        codegen_ord();
+                        instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_ord();
                         ord_defined = true;
                     }
                     break;
@@ -1006,7 +1068,9 @@ void assign() {
                 case KW_CHR:
                     if (!chr_defined) {
                         // CODEGEN
-                        codegen_chr();
+                        instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_chr();
                         chr_defined = true;
                     }
                     break;
@@ -1031,7 +1095,10 @@ void assign() {
             printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
             call_expr_parser(tmp->data.data_type);
 
-            codegen_var_assign(renamer(tmp));
+            // CODEGEN
+            instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(tmp), 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_var_assign(renamer(tmp));
             printf("COMING BACK FROM EXPR_PARSER\n");
         }
     }    
@@ -1076,18 +1143,23 @@ void func_call() {
 
     if (!function_write) {
         // CODEGEN
-        codegen_func_call_start();
+        instruction *inst = inst_init(FUNC_CALL_START, 'G', NULL, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_func_call_start();
     }
 
     // get TOKEN_LPAR from buffer
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
+
     args();
 
     if (current_token->type == TOKEN_RPAR) {
         if (!function_write) {
             // CODEGEN
-            codegen_func_call_end(func_name);
+            instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_func_call_end(func_name);
         }
 
         current_token = get_next_token();
@@ -1177,7 +1249,9 @@ void arg() {
 
     if (!function_write) {
         // CODEGEN
-        codegen_add_arg();
+        instruction *inst = inst_init(ADD_ARG, 'G', NULL, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_add_arg();
     }
 }
 
@@ -1245,7 +1319,9 @@ void condition() {
                 print_debug(current_token, 1, debug_cnt++);
                 
                 // CODEGEN
-                codegen_if_let(renamer(tmp));
+                instruction *inst = inst_init(IF_LET, active->frame, renamer(tmp), active->cond_cnt, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_if_let(renamer(tmp));
             }
         }
         else {
@@ -1258,7 +1334,9 @@ void condition() {
         printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
-        codegen_if();
+        instruction *inst = inst_init(IF, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_if();
     }
 
 
@@ -1287,7 +1365,9 @@ void condition() {
                 active->cond_cnt = cnt;
 
                 // CODEGEN
-                codegen_else();
+                instruction *inst = inst_init(ELSE, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_else();
 
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
@@ -1300,18 +1380,19 @@ void condition() {
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // closing bracket of else statement, go back to parent in forest
-                        BACK_TO_PARENT_IN_FOREST;
                         current_token = get_next_token();
                         print_debug(current_token, 1, debug_cnt++);
-
                     
                         active->cond_cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
                         
                         // CODEGEN
-                        codegen_ifelse_end();  
+                        instruction *inst = inst_init(IFELSE_END, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
+                        inst_list_insert_last(inst_list, inst);
+                        //codegen_ifelse_end();  
 
                         cnt_pop(cnt_stack); // pop ifelse_cnt from stack
 
+                        BACK_TO_PARENT_IN_FOREST;
 
                         printf("-- returning...\n\n");
                         return;
@@ -1359,7 +1440,9 @@ void cycle() {
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
         // CODEGEN
-        codegen_while_start();
+        instruction *inst = inst_init(WHILE_START, active->frame, node_name, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+        //codegen_while_start();
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -1369,7 +1452,9 @@ void cycle() {
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
 
             // CODEGEN
-            codegen_while_end();
+            instruction *inst = inst_init(WHILE_END, active->frame, node_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_while_end();
             
             // closing bracket of while statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
@@ -1392,6 +1477,9 @@ int parser_parse_please () {
     printf("\n---------------------\n");
     printf("Parser parse please\n");
     printf("---------------------\n\n");
+
+    inst_list = (instruction_list*)malloc(sizeof(instruction_list));
+    inst_list_init(inst_list);
 
 
     callee_list = init_callee_list();
@@ -1421,6 +1509,7 @@ int parser_parse_please () {
 
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
 
+    codegen_generate_code_please(inst_list);
     ////////////
     fclose(file);
     ////////////

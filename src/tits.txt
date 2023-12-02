@@ -1,0 +1,7 @@
+
+var a = 5
+
+func foo (_ x : Int) -> Int {
+    var a : Int = a + x
+    return a
+}
