@@ -58,7 +58,13 @@ instruction* inst_init(inst_type type,
     new_inst->relevant_node = active;
     new_inst->inst_type = type;
     new_inst->frame = frame;
-    new_inst->name = name;
+    if (name == NULL) {
+        new_inst->name = (char*) allocate_memory(sizeof(char) * 6, "instruction name", BASIC);
+        strcpy(new_inst->name, "null");
+    }
+    else {
+        new_inst->name = name;
+    }
     new_inst->cnt = cnt;
     new_inst->int_value = int_value;
     new_inst->float_value = float_value;
@@ -120,8 +126,8 @@ void inst_list_dispose(instruction_list *list) {
 
 // search outermost while loop
 void inst_list_search_while(instruction_list *list) {
-    
 
+    // move list->active based on the name of the node found of the outermost while loop found by forest_search_while (while_X)
     while (strcmp(list->active->name, forest_search_while(active)->name) != 0) {
         list->active = list->active->prev;
     }

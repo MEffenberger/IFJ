@@ -1297,7 +1297,7 @@ void condition() {
     cnt_push(cnt_stack); // push ifelse_cnt to stack and increment
     sprintf(node_name, "if_%d", ifelse_cnt);
     char *node_name2 = malloc(sizeof(char) * 20);
-    node_name2 = strcpy(node_name2, node_name);
+    strcpy(node_name2, node_name);
 
     MAKE_CHILDREN_IN_FOREST(W_IF, node_name2);
     active->cond_cnt = ifelse_cnt;
@@ -1374,7 +1374,7 @@ void condition() {
                 cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
                 sprintf(node_name, "else_%d", cnt);
                 char *node_name3 = malloc(sizeof(char) * 20);
-                node_name3 = strcpy(node_name3, node_name);
+                strcpy(node_name3, node_name);
                 MAKE_CHILDREN_IN_FOREST(W_ELSE, node_name3);
                 active->cond_cnt = cnt;
 
@@ -1439,9 +1439,12 @@ void cycle() {
     printf("-- entering CYCLE --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    sprintf(node_name, "while_%d", while_cnt);  
+    sprintf(node_name, "while_%d", while_cnt);
+    char *node_name1 = malloc(sizeof(char) * 20);
+    strcpy(node_name1, node_name);
+  
     while_cnt++;
-    MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name);
+    MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name1);
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -1454,7 +1457,7 @@ void cycle() {
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
         // CODEGEN
-        instruction *inst = inst_init(WHILE_START, active->frame, node_name, 0, 0, 0.0, NULL);
+        instruction *inst = inst_init(WHILE_START, active->frame, node_name1, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
         //codegen_while_start();
 
@@ -1466,7 +1469,7 @@ void cycle() {
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
 
             // CODEGEN
-            instruction *inst = inst_init(WHILE_END, active->frame, node_name, 0, 0, 0.0, NULL);
+            instruction *inst = inst_init(WHILE_END, active->frame, node_name1, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
             //codegen_while_end();
             

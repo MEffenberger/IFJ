@@ -117,12 +117,6 @@ forest_node* forest_search_while(forest_node *node) {
         node = node->parent;
     }
 
-    if (while_node == NULL) {
-        error_exit(ERROR_INTERNAL, "FOREST", "While loop not found");
-    }
-    else {
-        return while_node;
-    }
     return while_node;
 }
 
