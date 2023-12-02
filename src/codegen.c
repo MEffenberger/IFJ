@@ -171,6 +171,9 @@ void codegen_generate_code_please(instruction_list *list) {
             case FUNC_CALL_END:
                 codegen_func_call_end(inst);
                 break;
+            case FUNC_CALL_END_VOID:
+                codegen_func_call_end_void(inst);
+                break;
             case IF_LET:
                 codegen_if_let(inst);
                 break;
@@ -364,6 +367,10 @@ void codegen_add_arg(instruction *inst) {
 void codegen_func_call_end(instruction *inst) {
     printf("CALL %s\n", inst->name);
     printf("PUSHS TF@$retval$\n");
+}
+
+void codegen_func_call_end_void(instruction *inst) {
+    printf("CALL %s\n", inst->name);
 }
 
 

@@ -27,6 +27,7 @@ typedef enum instruction_type {
     FUNC_CALL_START,
     ADD_ARG,
     FUNC_CALL_END,
+    FUNC_CALL_END_VOID,
     IF_LET,
     IF,
     ELSE,
@@ -142,6 +143,7 @@ void codegen_func_def_end(instruction *inst);
 void codegen_func_call_start(instruction *inst);
 void codegen_add_arg(instruction *inst);
 void codegen_func_call_end(instruction *inst);
+void codegen_func_call_end_void(instruction *inst);
 
 void codegen_if_let(instruction *inst);
 void codegen_if(instruction *inst);

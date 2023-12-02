@@ -1170,10 +1170,26 @@ void func_call() {
 
     if (current_token->type == TOKEN_RPAR) {
         if (!function_write) {
-            // CODEGEN
-            instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-            //codegen_func_call_end(func_name);
+            forest_node *global = active;
+            while (global->parent != NULL) {
+                global = global->parent;
+            }
+            forest_node *func = forest_search_function(global, func_name);
+            AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
+
+            // if the called function is void, it does not return anything and the return value cannot be assigned to variable (codegen problem)
+            if (func_symbol->data.return_type == VOID) {
+                // CODEGEN
+                instruction *inst = inst_init(FUNC_CALL_END_VOID, 'G', func_name, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_func_call_end_void(func_name);
+            }
+            else {
+                // CODEGEN
+                instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_func_call_end(func_name);
+            }
         }
 
         current_token = get_next_token();
