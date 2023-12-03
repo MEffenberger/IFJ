@@ -1,11 +1,3 @@
 
-
-var i = 4
-
-while (i > 0)
-{
-    var a = 6
-    while (a > 0) {
-        
-    }
-}
+var a : Int
+write(a)

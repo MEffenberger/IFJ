@@ -1281,7 +1281,14 @@ void arg() {
             error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable in function call passed as argument is not declared");
         }
         else {
-            insert_bool_into_callee(callee_list->callee, tmp->data.defined);
+            printf("here, tmp->data.defined = %d\n", tmp->data.defined);
+            // if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+            //     // in built-in function write, when passing argument of optional type and uninitialized, it is implicitly set to nil and printing ""
+            //     insert_bool_into_callee(callee_list->callee, true);
+            // }
+            // else {
+                insert_bool_into_callee(callee_list->callee, tmp->data.defined);
+            //}
         }
     }
     else {
