@@ -170,6 +170,7 @@ typedef struct token {
     bool prev_was_eol;
     expression_type_t exp_type;
     data_type exp_value;
+    bool was_id;
 } token_t;
 
 /**
