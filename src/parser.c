@@ -181,6 +181,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "Int2Double", data);
     data = set_data_param(&data, INT, "_", 1);
     symtable_insert(&active->symtable, "term", data);
+    active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func Double2Int(_ term : Double) -> Int
@@ -189,6 +190,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "Double2Int", data);
     data = set_data_param(&data, DOUBLE, "_", 1);
     symtable_insert(&active->symtable, "term", data);
+    active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func length(_ s : String) -> Int
@@ -197,6 +199,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "length", data);
     data = set_data_param(&data, STRING, "_", 1);
     symtable_insert(&active->symtable, "s", data);
+    active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
@@ -209,6 +212,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "i", data);
     data = set_data_param(&data, INT, "endingBefore", 3);
     symtable_insert(&active->symtable, "j", data);
+    active->param_cnt = 3;
     BACK_TO_PARENT_IN_FOREST;
 
     // func ord(_ c : String) -> Int
@@ -217,6 +221,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "ord", data);
     data = set_data_param(&data, STRING, "_", 1);
     symtable_insert(&active->symtable, "c", data);
+    active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func chr(_ i : Int) -> String
@@ -225,6 +230,7 @@ void define_built_in_functions() {
     symtable_insert(&active->symtable, "chr", data);
     data = set_data_param(&data, INT, "_", 1);
     symtable_insert(&active->symtable, "i", data);
+    active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 }
 
@@ -428,7 +434,6 @@ void par_name() {
     if (current_token->type == TOKEN_UNDERSCORE || current_token->type == TOKEN_ID) {
         // store parameter's name
         queue_push(queue, current_token);
-        queue_print(queue);
         printf("-- returning...\n\n");
         return;
     }
@@ -447,7 +452,6 @@ void par_id() {
         // store parameter's id
         //token_push(token_stack, current_token);
         queue_push(queue, current_token);
-        queue_print(queue);
         printf("-- returning...\n\n");
         return;
     }
@@ -466,7 +470,6 @@ void type() {
             // store type
             type_of_assignee = convert_dt(current_token);
             queue_push(queue, current_token);
-            queue_print(queue);
             printf("-- returning...\n\n");
             return;
         }
@@ -683,13 +686,8 @@ void var_def() {
         queue_push(queue, current_token);
         opt_var_def();
 
-        queue_print(queue);
-
-
-
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
-
             if (type_of_expr == NIL) {
                 error_exit(ERROR_SEM_DERIV, "PARSER", "Variable cannot derive its type from nil");
             }
@@ -697,7 +695,12 @@ void var_def() {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Variable cannot be of type bool");
             } 
             else {
-                data = set_data_var(data, is_defined, type_of_expr, letvar);
+                if (type_of_assignee != UNKNOWN) {
+                    data = set_data_var(data, is_defined, type_of_assignee, letvar);
+                }
+                else {
+                    data = set_data_var(data, is_defined, type_of_expr, letvar);
+                }
             }
         }
         else { // the data type was specified, expression parser will handle it as there is expected data type
@@ -975,12 +978,15 @@ void assign() {
                 printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", convert_dt(queue->first->next->token));
                 call_expr_parser(convert_dt(queue->first->next->token));
                 printf("COMING BACK FROM EXPR_PARSER\n");
+                printf("TYPE OF EXPR: %d\n", type_of_expr);
             }
         }    
     }
     else { // assigning to already defined variable
-        AVL_tree *tmp = forest_search_symbol(active, var_name);
-        type_of_assignee = tmp->data.data_type;
+        forest_node *scope = forest_search_scope(active, var_name);
+        AVL_tree *symbol = symtable_search(scope->symtable, var_name);
+        type_of_assignee = symbol->data.data_type;
+
         
         // get TOKEN_EQ from buffer 
         current_token = get_next_token();
@@ -1000,13 +1006,13 @@ void assign() {
                 callee_list = callee_list->next;
             }
             else { // variable is already defined, so it's data_type is known
-                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
-                call_expr_parser(tmp->data.data_type);
+                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data.data_type);
+                call_expr_parser(symbol->data.data_type);
 
                 // CODEGEN
-                instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(tmp), 0, 0, 0.0, NULL);
+                instruction *inst = inst_init(VAR_ASSIGN, scope->frame, renamer(symbol), 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign(renamer(tmp));
+                //codegen_var_assign(renamer(symbol));
                 printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
@@ -1119,13 +1125,13 @@ void assign() {
 
         }
         else {
-            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp->data.data_type);
-            call_expr_parser(tmp->data.data_type);
+            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data.data_type);
+            call_expr_parser(symbol->data.data_type);
 
             // CODEGEN
-            instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(tmp), 0, 0, 0.0, NULL);
+            instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(symbol), 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_var_assign(renamer(tmp));
+            //codegen_var_assign(renamer(symbol));
             printf("COMING BACK FROM EXPR_PARSER\n");
         }
     }    
@@ -1158,6 +1164,10 @@ void func_call() {
             error_exit(ERROR_SEM_DERIV, "PARSER", "Function is not defined when assigning to variable while defining it, cannot derive its type");
         }
         AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
+        if (func_symbol->data.return_type == VOID) {
+            error_exit(ERROR_SEM_EXPR_TYPE, "PARSER", "Void function call cannot be assigned to a variable");
+        }
+        printf("\n\n\nFUNC_SYMBOL->DATA.RETURN_TYPE: %d\n\n\n", func_symbol->data.return_type);
         type_of_assignee = func_symbol->data.return_type;
         type_of_expr = type_of_assignee; // variable's type for symtable
         callee_list->callee->return_type = type_of_assignee; // for callee validation to work smoothly
@@ -1272,7 +1282,10 @@ void arg() {
             error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable in function call passed as argument is not declared");
         }
         else {
-            if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+            if (tmp->data.is_param) {
+                insert_bool_into_callee(callee_list->callee, true);
+            }
+            else if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
                 // in built-in function write, when passing argument of optional type and uninitialized, it is implicitly set to nil and printing ""
                 insert_bool_into_callee(callee_list->callee, true);
             }
@@ -1288,7 +1301,7 @@ void arg() {
     printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
     call_expr_parser(UNKNOWN);
     printf("COMING BACK FROM EXPR_PARSER\n");
-
+    printf("\n\nTYPE OF EXPR aftrer expr_par: %d\n", type_of_expr);
     insert_type_into_callee(callee_list->callee, type_of_expr);
 
     if (!function_write) {
@@ -1352,17 +1365,12 @@ void condition() {
             }
             else if (tmp->data.var_type == VAR) {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot be used as follows: \"if let id\"");
-
             }
             else if (tmp->data.data_type != INT_QM && tmp->data.data_type != DOUBLE_QM && tmp->data.data_type != STRING_QM) {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Initializer for conditional binding must have optional type");
             }
             else {
                 if_let = true;
-
-                /// TODO: ??? vykoná sekvence_příkazů1, kde navíc bude typ 
-                // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
-                // (tj. např. proměnná původního typu String? bude v tomto bloku typu String).
 
                 // get TOKEN_LEFT_BRACKET
                 current_token = get_next_token();
@@ -1662,14 +1670,15 @@ void callee_validation(forest_node *global){
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
         // if the function is void, there has to be removed the expected return value ftom the ifjcode
-        if (callee_list_first->callee->return_type == VOID && (symtable_search(tmp->symtable, tmp->name))->data.return_type == VOID && strcmp(tmp->name, "write") != 0) {
+        if (callee_list_first->callee->return_type == VOID && strcmp(tmp->name, "write") != 0) {
             inst_list_search_void_func_call(inst_list, callee_list_first->callee->name);
             inst_list_delete_after(inst_list);
         }
         if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
             error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
         } else {
-            if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+            // check if the return type of the function call matches the return type in function definition (ignore when the callee's return type is void -> not assigning retval)
+            if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type && callee_list_first->callee->return_type != VOID) {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
             } else {
                 for (int i = 1; i <= tmp->param_cnt; i++) {
