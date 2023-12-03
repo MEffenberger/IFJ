@@ -250,7 +250,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             // pokud je jeden id a druhy konstanta nebo naopak a lze pretypovat (z int na double) az po line 313
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
-                    if(tmp3->exp_value == DOUBLE){
+                    if(tmp3->exp_value == DOUBLE || tmp3->exp_value == DOUBLE_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -266,7 +266,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
-                    if (tmp1->exp_value == INT){
+                    if (tmp1->exp_value == INT || tmp1->exp_value == INT_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -274,7 +274,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = DOUBLE;
                     }
-                    else if (tmp3->exp_value == INT){
+                    else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
@@ -285,7 +285,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             } else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
-                    if(tmp1->exp_value == DOUBLE){
+                    if(tmp1->exp_value == DOUBLE || tmp1->exp_value == DOUBLE_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
@@ -302,7 +302,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
-                    if (tmp1->exp_value == INT){
+                    if (tmp1->exp_value == INT || tmp1->exp_value == INT_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -310,7 +310,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = DOUBLE;
                     }
-                    else if (tmp3->exp_value == INT){
+                    else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
@@ -678,11 +678,11 @@ void call_expr_parser(data_type return_type){
                     instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
                 } else if(return_type == INT_QM && stack_top(&stack)->exp_value == INT){
-                    type_of_expr = INT_QM;
+                    type_of_expr = INT;
                 } else if(return_type == DOUBLE_QM && stack_top(&stack)->exp_value == DOUBLE){
-                    type_of_expr = DOUBLE_QM;
+                    type_of_expr = DOUBLE;
                 } else if(return_type == STRING_QM && stack_top(&stack)->exp_value == STRING){
-                    type_of_expr = STRING_QM;
+                    type_of_expr = STRING;
                 } else {
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
                 }
