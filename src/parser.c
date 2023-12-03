@@ -1462,6 +1462,11 @@ void cycle() {
     while_cnt++;
     MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name1);
 
+    // CODEGEN
+    instruction *inst = inst_init(WHILE_START, active->frame, node_name1, 0, 0, 0.0, NULL);
+    inst_list_insert_last(inst_list, inst);
+    //codegen_while_do();
+
     current_token = get_next_token();
     //print_debug(current_token, 1, debug_cnt++);
 
@@ -1473,7 +1478,7 @@ void cycle() {
     if (current_token->type == TOKEN_LEFT_BRACKET) {
        
         // CODEGEN
-        instruction *inst = inst_init(WHILE_START, active->frame, node_name1, 0, 0, 0.0, NULL);
+        instruction *inst = inst_init(WHILE_DO, active->frame, node_name1, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
         //codegen_while_start();
 

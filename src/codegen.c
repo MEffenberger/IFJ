@@ -186,6 +186,9 @@ void codegen_generate_code_please(instruction_list *list) {
             case IFELSE_END:
                 codegen_ifelse_end(inst);
                 break;
+            case WHILE_DO:
+                codegen_while_do(inst);
+                break;
             case WHILE_START:
                 codegen_while_start(inst);
                 break;
@@ -400,22 +403,21 @@ void codegen_ifelse_end(instruction *inst) {
     printf("LABEL end_if_%d\n", inst->cnt);
 }   
 
-
-
-
 void codegen_while_start(instruction *inst) {
-    printf("LABEL %s\n", inst->name);
     printf("DEFVAR %cF@$cond_%s$\n", inst->frame, inst->name);
+    printf("LABEL %s\n", inst->name);
+}
+
+void codegen_while_do(instruction *inst) {
     printf("POPS %cF@$cond_%s$\n", inst->frame, inst->name);
     printf("JUMPIFEQ end_%s %cF@$cond_%s$ bool@false\n", inst->name, inst->frame, inst->name);
 }
+
 
 void codegen_while_end(instruction *inst) {
     printf("JUMP %s\n", inst->name);
     printf("LABEL end_%s\n", inst->name);
 }
-
-
 
 
 void codegen_readString(instruction *inst) {

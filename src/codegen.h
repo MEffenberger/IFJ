@@ -33,6 +33,7 @@ typedef enum instruction_type {
     ELSE,
     IFELSE_END,
     WHILE_START,
+    WHILE_DO,
     WHILE_END,
     READ_STRING,
     READ_INT,
@@ -151,6 +152,7 @@ void codegen_else(instruction *inst);
 void codegen_ifelse_end(instruction *inst);
 
 void codegen_while_start(instruction *inst);
+void codegen_while_do(instruction *inst);
 void codegen_while_end(instruction *inst);
 
 void codegen_readString(instruction *inst);
