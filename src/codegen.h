@@ -28,8 +28,8 @@ typedef enum instruction_type {
     FUNC_DEF_END,
     FUNC_CALL_START,
     ADD_ARG,
-    FUNC_CALL_END,
-    FUNC_CALL_END_VOID,
+    FUNC_CALL,
+    FUNC_CALL_RETVAL,
     IF_LET,
     IF,
     ELSE,
@@ -131,8 +131,10 @@ instruction* inst_init(inst_type type,
 
 void inst_list_insert_last(instruction_list *list, instruction *new_inst);
 void inst_list_insert_before(instruction_list *list, instruction *new_inst);
+void inst_list_delete_after(instruction_list *list);
 void inst_list_dispose(instruction_list *list);
 void inst_list_search_while(instruction_list *list, char *while_name);
+void inst_list_search_void_func_call(instruction_list *list, char *func_name);
 
 
 
@@ -147,8 +149,6 @@ void codegen_func_def_end(instruction *inst);
 
 void codegen_func_call_start(instruction *inst);
 void codegen_add_arg(instruction *inst);
-void codegen_func_call_end(instruction *inst);
-void codegen_func_call_end_void(instruction *inst);
 
 void codegen_if_let(instruction *inst);
 void codegen_if(instruction *inst);
