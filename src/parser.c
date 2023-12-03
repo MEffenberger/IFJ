@@ -540,7 +540,7 @@ void ret() {
         active->has_return = true;
     }
     else {
-        error_exit(ERROR_SEM_OTHER, "PARSER", "Function has multiple returns in one scope");
+        error_exit(ERROR_SEM_EXPR_RET, "PARSER", "Function has multiple returns in one scope");
     }
     
     
@@ -1666,60 +1666,58 @@ void callee_validation(forest_node *global){
             inst_list_search_void_func_call(inst_list, callee_list_first->callee->name);
             inst_list_delete_after(inst_list);
         }
-        else {
-            if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
-                error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
+        if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
+            error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
+        } else {
+            if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
+                error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
             } else {
-                if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type) {
-                    error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
-                } else {
-                    for (int i = 1; i <= tmp->param_cnt; i++) {
-                        // check if the variables given as args was initialized
-                        if (callee_list_first->callee->args_initialized[1] == false) {
-                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument in function call is not initialized");
-                        }
-
-                        AVL_tree *param = symtable_find_param(tmp->symtable, i);
-                        if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
-                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
-                        }
-                        // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
-                        switch (param->data.param_type) {
-                            case INT_QM:
-                                if (callee_list_first->callee->args_types[i] != INT &&
-                                    callee_list_first->callee->args_types[i] != NIL) {
-                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
-                                }
-                                break;
-                            case DOUBLE_QM:
-                                if (callee_list_first->callee->args_types[i] != DOUBLE &&
-                                    callee_list_first->callee->args_types[i] != NIL) {
-                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
-                                }
-                                break;
-                            case STRING_QM:
-                                if (callee_list_first->callee->args_types[i] != STRING &&
-                                    callee_list_first->callee->args_types[i] != NIL) {
-                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
-                                }
-                                break;
-                            case INT:
-                            case DOUBLE:
-                            case STRING:
-                                if (callee_list_first->callee->args_types[i] != param->data.param_type) {
-                                    error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
-                                }
-                                break;
-                            default:
-                                break;
-                        }
+                for (int i = 1; i <= tmp->param_cnt; i++) {
+                    // check if the variables given as args was initialized
+                    if (callee_list_first->callee->args_initialized[1] == false) {
+                        error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Argument in function call is not initialized");
                     }
-                    // write() has to be treated separately, since it have various number of arguments
-                    if (strcmp(tmp->name, "write") == 0) {
-                        for (int i = 1; i <= callee_list_first->callee->arg_count; i++) {
-                            if (callee_list_first->callee->args_initialized[1] == false) {
-                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument in function call is not initialized");
+
+                    AVL_tree *param = symtable_find_param(tmp->symtable, i);
+                    if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
+                        error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+                    }
+                    // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
+                    switch (param->data.param_type) {
+                        case INT_QM:
+                            if (callee_list_first->callee->args_types[i] != INT &&
+                                callee_list_first->callee->args_types[i] != NIL) {
+                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                             }
+                            break;
+                        case DOUBLE_QM:
+                            if (callee_list_first->callee->args_types[i] != DOUBLE &&
+                                callee_list_first->callee->args_types[i] != NIL) {
+                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                            }
+                            break;
+                        case STRING_QM:
+                            if (callee_list_first->callee->args_types[i] != STRING &&
+                                callee_list_first->callee->args_types[i] != NIL) {
+                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                            }
+                            break;
+                        case INT:
+                        case DOUBLE:
+                        case STRING:
+                            if (callee_list_first->callee->args_types[i] != param->data.param_type) {
+                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                // write() has to be treated separately, since it have various number of arguments
+                if (strcmp(tmp->name, "write") == 0) {
+                    for (int i = 1; i <= callee_list_first->callee->arg_count; i++) {
+                        if (callee_list_first->callee->args_initialized[1] == false) {
+                            error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Argument in function call is not initialized");
                         }
                     }
                 }
@@ -1762,7 +1760,7 @@ void validate_forest(forest_node *func) {
             }
         }
         // if this function goes through all of its children and does not return
-        error_exit(ERROR_SEM_OTHER, "PARSER", "Return logic in function is not valid");
+        error_exit(ERROR_SEM_EXPR_RET, "PARSER", "Return logic in function is not valid");
     }
 }
 
