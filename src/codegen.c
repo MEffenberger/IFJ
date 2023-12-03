@@ -611,16 +611,16 @@ void codegen_int2floats(instruction *inst) {
 
 
 void codegen_exclamation_rule(instruction *inst) {
-    fprintf(file, "DEFVAR GF@$$excl%d\n", inst->cnt);
-    fprintf(file, "POPS GF@$$excl%d\n", inst->cnt);
-    fprintf(file, "PUSHS GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "DEFVAR LF@$$excl%d\n", inst->cnt);
+    fprintf(file, "POPS LF@$$excl%d\n", inst->cnt);
+    fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
     fprintf(file, "PUSHS nil@nil\n");
     fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT$\n");
     fprintf(file, "LABEL $RULE_EXCL_ERROR$\n");
     fprintf(file, "WRITE string@Variable\\032is\\032NULL\n");
     fprintf(file, "EXIT int@7\n"); //doresit cislo chyby
     fprintf(file, "LABEL $RULE_EXCL_CORRECT$\n");
-    fprintf(file, "PUSHS GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
 }
 
 void codegen_leq_rule(instruction *inst) {
