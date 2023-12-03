@@ -227,7 +227,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
         // typy jsou stejne
         if (tmp1->exp_value == tmp3->exp_value){
-
+            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == INT && tmp3->exp_type == CONST)){
+                tmp1->exp_type = ID;
+            }
             // jedine co se stringy lze je +, * - je invalid
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
@@ -334,6 +336,10 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
         // typy se rovnaji, neni problem
         if (tmp1->exp_value == tmp3->exp_value){
+
+            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == INT && tmp3->exp_type == CONST)){
+                tmp1->exp_type = ID;
+            }
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
                     error_exit(ERROR_SEM_OTHER, "EXPRESSION PARSER", "Division by zero");
