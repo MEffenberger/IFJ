@@ -98,7 +98,7 @@ void insert_name_into_callee(callee_t* callee, char* name) {
     // Assuming that callee->args_names is initially NULL or allocated dynamically
     // You need to reallocate the array to accommodate the new name
 
-    callee->args_names = realloc(callee->args_names, (callee->arg_count + 1) * sizeof(char*));
+    callee->args_names = realloc(callee->args_names, (callee->arg_count + 2) * sizeof(char*));
     if (callee->args_names == NULL) {
         // Handle memory reallocation failure
         return;

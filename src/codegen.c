@@ -238,6 +238,7 @@ void codegen_generate_code_please(instruction_list *list) {
                 break;
             case INT2FLOATS_2:
                 codegen_int2floats(inst);
+                break;
             case DIVS:
                 fprintf(file, "DIVS\n");
                 break;
