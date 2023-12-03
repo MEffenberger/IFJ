@@ -127,7 +127,7 @@ void inst_list_dispose(instruction_list *list) {
 // search outermost while loop
 void inst_list_search_while(instruction_list *list, char *while_name) {
     // move list->active based on the name of the node found of the outermost while loop found by forest_search_while (while_X)
-    while (strcmp(list->active->name, while_name) != 0) {
+    while (strcmp(list->active->name, while_name) != 0 || list->active->inst_type != WHILE_START) {
         list->active = list->active->prev;
     }
     // list->active is now outermost while loop, you can insert before it
@@ -190,6 +190,9 @@ void codegen_generate_code_please(instruction_list *list) {
                 break;
             case WHILE_START:
                 fprintf(file, "LABEL %s\n", inst->name);
+                break;
+            case WHILE_DO:
+                codegen_while_do(inst);
                 break;
             case WHILE_END:
                 codegen_while_end(inst);
