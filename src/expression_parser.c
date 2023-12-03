@@ -164,7 +164,7 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
         if(token1->type == TOKEN_EXCLAM && token2->type == TOKEN_EXPRESSION){
             return RULE_EXCL;
         } else {
-            error_exit(2, "expression_parser", "Wrong operator");
+            error_exit(ERROR_SYN, "EXPRESSION PARSER", "Wrong operator");
         }
         break;
     case 3:
@@ -198,12 +198,12 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
         case TOKEN_DOUBLE_QM:
             return RULE_QMS;  
         default:
-            error_exit(2, "expression_parser", "Wrong operator");
+            error_exit(ERROR_SYN, "EXPRESSION PARSER", "Wrong operator");
             return NOT_RULE;
             break;
         }
     default:
-        error_exit(2, "expression_parser", "Rule does not exist");
+        error_exit(ERROR_SYN, "EXPRESSION PARSER", "Rule does not exist");
         return NOT_RULE;
         break;
     }
@@ -215,14 +215,14 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
     
     if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
-        error_exit(7, "expression_parser", "Can not do arithmetic opeation with nils");
+        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
     }
 
     // klasicke operace kde se resi jen typy
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
-            error_exit(7, "expression_parser", "Can not do arithmetic opeation with booleans");
+            error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with booleans");
         }
 
         // typy jsou stejne
@@ -230,7 +230,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
             // jedine co se stringy lze je +, * - je invalid
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
-                error_exit(7, "expression_parser", "Wrong operator in concatenation");
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
 
             } else if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type == TOKEN_PLUS){
                 concat = true;
@@ -258,12 +258,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = DOUBLE;
                     } else {
-                        error_exit(7, "expression_parser", "ID type mismatch");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "ID type mismatch");
                     }
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -294,13 +294,13 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         
                         variable_counter++;
                     } else {
-                        error_exit(7, "expression_parser", "ID type mismatch");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "ID type mismatch");
                     }
                     
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -322,7 +322,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(7, "expression_parser", "Can not sum 2 IDs of different types");
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not sum 2 IDs of different types");
             }
         }
 
@@ -330,18 +330,18 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     } else if(tmp2->type == TOKEN_DIVIDE){
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
-            error_exit(7, "expression_parser", "Can not divide bool");
+            error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not divide bool");
         }
 
         // typy se rovnaji, neni problem
         if (tmp1->exp_value == tmp3->exp_value){
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
-                    error_exit(9, "expression_parser", "Division by zero");
+                    error_exit(ERROR_SEM_OTHER, "EXPRESSION PARSER", "Division by zero");
             }
 
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
-                error_exit(7, "expression_parser", "Wrong operator in concatenation");
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
             }
 
             if(tmp1->exp_value == INT){
@@ -364,7 +364,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             if (tmp1->exp_type == CONST){
 
                 if((tmp1->value.integer == 0 && tmp1->exp_value == INT) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE)){
-                    error_exit(9, "expression_parser", "Division by zero");
+                    error_exit(ERROR_SEM_OTHER, "EXPRESSION PARSER", "Division by zero");
                 }
 
                 if (tmp3->exp_type == ID){
@@ -380,11 +380,11 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = DOUBLE;
                     } else {
-                        error_exit(7, "expression_parser", "ID type mismatch");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "ID type mismatch");
                     }
                 } else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -427,12 +427,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         variable_counter++;
                     } else {
-                        error_exit(7, "expression_parser", "ID type mismatch");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "ID type mismatch");
                     }
                 }
                 else{
                     if (tmp1->exp_value == STRING || tmp3->exp_value == STRING){
-                        error_exit(7, "expression_parser", "This cannot participate in concatenation");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "This cannot participate in concatenation");
                     }
 
                     if (tmp1->exp_value == INT){
@@ -462,7 +462,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(7, "expression_parser", "Can not divide 2 IDs of different types");
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not divide 2 IDs of different types");
             }
         }
 
@@ -485,7 +485,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = BOOL;
                     } else {
-                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare 2 values of different types");
                     }
                 } else{
 
@@ -519,7 +519,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         tmp1->exp_value = BOOL;
                         variable_counter++;
                     } else {
-                        error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare 2 values of different types");
                     }
                 }
                 else{
@@ -543,7 +543,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
             else{
-                error_exit(7, "expression_parser", "Can not compare 2 values of different types");
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare 2 values of different types");
             }
         }
     }
@@ -665,7 +665,7 @@ void call_expr_parser(data_type return_type){
 
             if(stack.size <= 1){
                 
-                error_exit(2, "expression_parser", "empty expression");
+                error_exit(ERROR_SYN, "EXPRESSION PARSER", "empty expression");
             }
             eval_expr = false;
             //fprintf(file, "TT:%d\n", stack_top(&stack)->exp_value);
@@ -683,7 +683,7 @@ void call_expr_parser(data_type return_type){
                 } else if(return_type == STRING_QM && stack_top(&stack)->exp_value == STRING){
                     type_of_expr = STRING_QM;
                 } else {
-                    error_exit(7, "expression_parser", "Wrong data type result of expression");
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
                 }
             }
 
@@ -728,7 +728,7 @@ void call_expr_parser(data_type return_type){
                 }
 
                 if(rule_params_count > 2){
-                    error_exit(2, "expression_parser", "syntax error");
+                    error_exit(ERROR_SYN, "EXPRESSION PARSER", "syntax error");
                 }
                 rule_params_count++;
             }
@@ -753,7 +753,7 @@ void call_expr_parser(data_type return_type){
                         
 
                         if(stack_top(&stack)->type != TOKEN_SHIFT){
-                            error_exit(2, "expression_parser", "syntax error");
+                            error_exit(ERROR_SYN, "EXPRESSION PARSER", "syntax error");
                         }
                     }
                 }
@@ -774,7 +774,7 @@ void call_expr_parser(data_type return_type){
 
 
                     if(node == NULL){
-                        error_exit(5, "expression_parser", "Variable does not exist");
+                        error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable does not exist");
                     }
 
                     char *nickname = renamer(node);
@@ -846,7 +846,7 @@ void call_expr_parser(data_type return_type){
 
                 } else if(tmp1->type == TOKEN_KEYWORD){
                     if(tmp1->value.keyword != KW_NIL){
-                        error_exit(7, "expression_parser", "Can not do operations with keywords");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operations with keywords");
                     } else {
                         tmp1->type = TOKEN_EXPRESSION;
                         tmp1->exp_type = CONST;
@@ -858,7 +858,7 @@ void call_expr_parser(data_type return_type){
 
                     }
                 } else {
-                    error_exit(2, "expression_parser", "It its not a valid operand");
+                    error_exit(ERROR_SYN, "EXPRESSION PARSER", "It its not a valid operand");
                 }
                 stack_push(&stack, tmp1);
                 break;
@@ -873,7 +873,7 @@ void call_expr_parser(data_type return_type){
                     variable_counter++;
                     stack_push(&stack, tmp2);
                 } else {
-                    error_exit(7, "expression_parser", "Can not apply ! to non qm operands");
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not apply ! to non qm operands");
                 }           
             break;
 
@@ -982,7 +982,7 @@ void call_expr_parser(data_type return_type){
             case RULE_QMS:
                 if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
                     /*if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
-                        error_exit(7, "expression_parser", "wrong ID type for right side of ??");
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
                     }*/
                     //fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter);
                     //fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter);
@@ -1008,7 +1008,7 @@ void call_expr_parser(data_type return_type){
                     stack_push(&stack, tmp1);
 
                 } else {
-                    error_exit(7, "expression_parser", "wrong ID type for left side of ??");
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for left side of ??");
                     /*fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter);
                     fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter+1);
                     fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter);
@@ -1046,7 +1046,7 @@ void call_expr_parser(data_type return_type){
                 fprintf(file, "STACK:%d\n", stack.token_array[i]->type);
             }*/
 
-            error_exit(2, "expression_parser", "syntax error");
+            error_exit(ERROR_SYN, "EXPRESSION PARSER", "syntax error");
         }
 
     }

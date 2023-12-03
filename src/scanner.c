@@ -318,7 +318,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_ID):
                 if(isalpha(readchar) || isdigit(readchar) || readchar == '_'){
@@ -384,7 +384,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 }
 
@@ -396,7 +396,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             
             case(S_DEC):
@@ -417,7 +417,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 }
             case(S_NUM_E):
@@ -432,7 +432,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_NUM_E_SIGN):
                 if(isdigit(readchar)){
@@ -442,7 +442,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_EXP):
                 if(isdigit(readchar)){
@@ -458,7 +458,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
 
                 }
@@ -484,7 +484,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_START_ESC_SENTENCE):
                 if(readchar == '"' || readchar == '\\'){
@@ -555,7 +555,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_START_HEX):
                 if(readchar == '{'){
@@ -565,7 +565,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_LEFT_BRACKET):
                 if(isdigit(readchar) || isalpha(readchar)){
@@ -577,7 +577,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             case(S_FIRST_HEX):
                 if(isdigit(readchar) || isalpha(readchar)){
@@ -586,7 +586,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
 
                     hex[hex_counter] = readchar;
@@ -608,14 +608,14 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
 
                 } else {
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
             
             case(S_SL_COM):
@@ -634,7 +634,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 }
 
                 if(readchar == '/'){
@@ -699,7 +699,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 }
 
@@ -733,14 +733,14 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 } else if ((int) readchar == EOF) {
                     free(cnt_array);
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(1, "scanner", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
                     break;
@@ -769,7 +769,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
@@ -787,7 +787,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     } else {
                         ungetc(next_char, stdin);
                         if(check_indent(cnt_array, cnt_array_size)){
@@ -804,7 +804,7 @@ token_t* get_me_token(){
                             vector_dispose(buffer);
                             free(token);
                             token = NULL;
-                            error_exit(1, "scanner", "Lexical error");
+                            error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                         }
                     }
                 } else if(readchar == '\n'){
@@ -824,7 +824,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(1, "scanner", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
