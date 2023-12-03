@@ -20,6 +20,7 @@ typedef enum instruction_type {
     MAIN,
     VAR_DEF,
     VAR_ASSIGN,
+    IMPLICIT_NIL,
     FUNC_DEF,
     FUNC_DEF_RETURN,
     FUNC_DEF_RETURN_VOID,

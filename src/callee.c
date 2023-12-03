@@ -22,6 +22,7 @@
 #include "symtable.h"
 #include "token_stack.h"
 #include <string.h>
+#include <stdbool.h>
 
 int arg_counter = 0;
 
@@ -62,6 +63,7 @@ callee_t* init_callee(const char* name) {
     callee->arg_count = arg_counter;
     callee->args_names = NULL; // Initialize args_names to NULL
     callee->args_types = NULL; // Initialize args_types to NULL
+    callee->args_initialized = NULL; // Initialize args_initialized to NULL
 
     return callee;
 }
@@ -130,6 +132,20 @@ void insert_type_into_callee(callee_t* callee, data_type type) {
 
     // Allocate memory for the new name
     callee->args_types[callee->arg_count] = type; 
+}
+
+
+void insert_bool_into_callee(callee_t* callee, bool is_initialized) {
+    // Assuming that callee->arg_types is initially NULL or allocated dynamically
+    // You need to reallocate the array to accommodate the new name
+
+    callee->args_initialized = realloc(callee->args_initialized, (callee->arg_count + 1) * sizeof(bool));
+    if (callee->args_initialized == NULL) {
+        // Handle memory reallocation failure
+        return;
+    }
+
+    callee->args_initialized[callee->arg_count] = is_initialized; 
 }
 
 

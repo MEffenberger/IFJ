@@ -707,7 +707,7 @@ void var_def() {
                     convert_dt(queue->first->next->token) != DOUBLE_QM && 
                     convert_dt(queue->first->next->token) != STRING_QM)
                 {
-                    error_exit(ERROR_SEM_TYPE, "PARSER", "Variable cannot be of type nil");
+                    error_exit(ERROR_SEM_EXPR_TYPE, "PARSER", "Variable cannot be of type nil");
                 }
             }
             data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
@@ -742,6 +742,13 @@ void var_def() {
             instruction *inst = inst_init(VAR_ASSIGN, active->frame, tmp_name, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
             //codegen_var_assign(tmp_name);
+        }
+        if (!tmp->data.defined && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+            // CODEGEN
+            instruction *inst = inst_init(IMPLICIT_NIL, active->frame, tmp_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            //codegen_var_assign(tmp_name);
+            // tmp->data.defined = true; 
         }
 
 
@@ -1266,7 +1273,19 @@ void arg() {
     }
     else { // calling without name and the first token of expression is not id
         insert_name_into_callee(callee_list->callee, "_");
+    }
 
+    if (current_token->type == TOKEN_ID) {
+        AVL_tree *tmp = forest_search_symbol(active, current_token->value.vector->array);
+        if (tmp == NULL) {
+            error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable in function call passed as argument is not declared");
+        }
+        else {
+            insert_bool_into_callee(callee_list->callee, tmp->data.defined);
+        }
+    }
+    else {
+        insert_bool_into_callee(callee_list->callee, true);
     }
 
     printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
@@ -1653,6 +1672,11 @@ void callee_validation(forest_node *global){
                     error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
                 } else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
+                        // check if the variables given as args was initialized
+                        if (callee_list_first->callee->args_initialized[i] == false) {
+                            error_exit(ERROR_SEM_TYPE, "PARSER", "Argument in function call is not initialized");
+                        }
+
                         AVL_tree *param = symtable_find_param(tmp->symtable, i);
                         if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");

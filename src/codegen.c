@@ -149,6 +149,9 @@ void codegen_generate_code_please(instruction_list *list) {
             case VAR_ASSIGN:
                 codegen_var_assign(inst);
                 break;
+            case IMPLICIT_NIL:
+                fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
+                break;
             case FUNC_DEF:
                 codegen_func_def(inst);
                 break;
@@ -316,7 +319,8 @@ void codegen_generate_code_please(instruction_list *list) {
 
 
 
-// // V případě chybějícího inicializačního výrazu se u proměnných typu zahrnujícího nil provádí implicitní inicializace hodnotou nil. Proměnné ostatních typů nejsou bez inicializačního výrazu inicializovány.
+//V případě chybějícího inicializačního výrazu se u proměnných typu zahrnujícího nil provádí implicitní inicializace hodnotou nil. 
+//Proměnné ostatních typů nejsou bez inicializačního výrazu inicializovány.
 void codegen_var_def(instruction *inst) {
     fprintf(file, "DEFVAR %cF@%s\n", inst->frame, inst->name);
 }

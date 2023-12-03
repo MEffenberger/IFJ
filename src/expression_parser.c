@@ -702,6 +702,8 @@ void call_expr_parser(data_type return_type){
         case '<':
             token_shift(&stack);
             current_token = get_next_token();
+            printf("(EXP)G.N.T.: Current token: %d\n", current_token->type);
+
             break;
 
         // aplikujeme redukcni pravidlo
@@ -1030,6 +1032,7 @@ void call_expr_parser(data_type return_type){
         case '=':
             stack_push(&stack, current_token);
             current_token = get_next_token();
+            printf("(EXP)G.N.T.: Current token: %d\n", current_token->type);
             break;
         
         default:
