@@ -32,6 +32,7 @@ typedef enum instruction_type {
     IF,
     ELSE,
     IFELSE_END,
+    WHILE_COND_DEF,
     WHILE_START,
     WHILE_DO,
     WHILE_END,
@@ -129,7 +130,7 @@ instruction* inst_init(inst_type type,
 void inst_list_insert_last(instruction_list *list, instruction *new_inst);
 void inst_list_insert_before(instruction_list *list, instruction *new_inst);
 void inst_list_dispose(instruction_list *list);
-void inst_list_search_while(instruction_list *list);
+void inst_list_search_while(instruction_list *list, char *while_name);
 
 
 
@@ -151,7 +152,6 @@ void codegen_if(instruction *inst);
 void codegen_else(instruction *inst);
 void codegen_ifelse_end(instruction *inst);
 
-void codegen_while_start(instruction *inst);
 void codegen_while_do(instruction *inst);
 void codegen_while_end(instruction *inst);
 

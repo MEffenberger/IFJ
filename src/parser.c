@@ -721,17 +721,15 @@ void var_def() {
         char *tmp_name = renamer(tmp);
 
 
-        forest_node* tmp2 = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
-        if (tmp2 == NULL) {
+        forest_node *outermost_while = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
+        if (outermost_while == NULL) { 
             // CODEGEN
             instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
             //codegen_var_def(tmp_name);
         }
         else {
-            printf("vyhul si to do while\n");
-            inst_list_search_while(inst_list); // int_list->active is now set on the outermost while -> insert before it
-            printf("vyhul si to do while\n");
+            inst_list_search_while(inst_list, outermost_while->name); // int_list->active is now set on the outermost while -> insert before it
             // CODEGEN
             instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
             inst_list_insert_before(inst_list, inst);
@@ -1471,12 +1469,27 @@ void cycle() {
     strcpy(node_name1, node_name);
   
     while_cnt++;
+    forest_node *outermost_while = forest_search_while(active);
     MAKE_CHILDREN_IN_FOREST(W_WHILE, node_name1);
 
     // CODEGEN
-    instruction *inst = inst_init(WHILE_START, active->frame, node_name1, 0, 0, 0.0, NULL);
-    inst_list_insert_last(inst_list, inst);
-    //codegen_while_do();
+    if (outermost_while == NULL) {
+        // CODEGEN
+        instruction *inst = inst_init(WHILE_COND_DEF, active->frame, node_name1, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+    }
+    else {
+        inst_list_search_while(inst_list, outermost_while->name); // int_list->active is now set on the outermost while -> insert before it
+        // CODEGEN
+        instruction *inst = inst_init(WHILE_COND_DEF, active->frame, node_name1, 0, 0, 0.0, NULL);
+        inst_list_insert_before(inst_list, inst);
+    }
+
+
+    // CODEGEN
+    instruction *inst1 = inst_init(WHILE_START, 'G', node_name1, 0, 0, 0.0, NULL);
+    inst_list_insert_last(inst_list, inst1);
+
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -1491,7 +1504,7 @@ void cycle() {
         // CODEGEN
         instruction *inst = inst_init(WHILE_DO, active->frame, node_name1, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_while_start();
+        //codegen_while_do();
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);

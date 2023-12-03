@@ -1,14 +1,11 @@
 
-var a = 5
 
-func foo (_ x : Int) -> Int{
-    while a > 7 {
-        while a > 6 {
-        var b = 5
-        }
+var i = 4
+
+while (i > 0)
+{
+    var a = 6
+    while (a > 0) {
+        
     }
-    return a + x
 }
-
-let b : Int = foo(2)
-write (b)

@@ -125,10 +125,9 @@ void inst_list_dispose(instruction_list *list) {
 }
 
 // search outermost while loop
-void inst_list_search_while(instruction_list *list) {
-
+void inst_list_search_while(instruction_list *list, char *while_name) {
     // move list->active based on the name of the node found of the outermost while loop found by forest_search_while (while_X)
-    while (strcmp(list->active->name, forest_search_while(active)->name) != 0) {
+    while (strcmp(list->active->name, while_name) != 0) {
         list->active = list->active->prev;
     }
     // list->active is now outermost while loop, you can insert before it
@@ -186,11 +185,11 @@ void codegen_generate_code_please(instruction_list *list) {
             case IFELSE_END:
                 codegen_ifelse_end(inst);
                 break;
-            case WHILE_DO:
-                codegen_while_do(inst);
+            case WHILE_COND_DEF:
+                fprintf(file, "DEFVAR %cF@$cond_%s$\n", inst->frame, inst->name);
                 break;
             case WHILE_START:
-                codegen_while_start(inst);
+                fprintf(file, "LABEL %s\n", inst->name);
                 break;
             case WHILE_END:
                 codegen_while_end(inst);
@@ -403,16 +402,10 @@ void codegen_ifelse_end(instruction *inst) {
     fprintf(file, "LABEL end_if_%d\n", inst->cnt);
 }   
 
-void codegen_while_start(instruction *inst) {
-    fprintf(file, "DEFVAR %cF@$cond_%s$\n", inst->frame, inst->name);
-    fprintf(file, "LABEL %s\n", inst->name);
-}
-
 void codegen_while_do(instruction *inst) {
     fprintf(file, "POPS %cF@$cond_%s$\n", inst->frame, inst->name);
     fprintf(file, "JUMPIFEQ end_%s %cF@$cond_%s$ bool@false\n", inst->name, inst->frame, inst->name);
 }
-
 
 void codegen_while_end(instruction *inst) {
     fprintf(file, "JUMP %s\n", inst->name);
