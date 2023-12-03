@@ -695,8 +695,6 @@ void call_expr_parser(data_type return_type){
                 error_exit(ERROR_SYN, "EXPRESSION PARSER", "empty expression");
             }
             eval_expr = false;
-            //fprintf(file, "TT:%d\n", stack_top(&stack)->exp_value);
-            //fprintf(file, "Current token: %d", current_token->type);
             type_of_expr = stack_top(&stack)->exp_value;
             
             // Check ze vracime spravny typ
@@ -723,10 +721,6 @@ void call_expr_parser(data_type return_type){
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
                 }
             }
-
-            /*for(int i = 0; i< stack.size; i++){
-                fprintf(file, "Stack:%d\n", stack.token_array[i]->exp_type);
-            }*/
 
             dispose_stack(&stack);
             stop_expression = false;
@@ -771,33 +765,6 @@ void call_expr_parser(data_type return_type){
                 }
                 rule_params_count++;
             }
-
-
-            /*if(stack_top(&stack)->type != TOKEN_SHIFT){
-                tmp1 = stack_top(&stack);
-                stack_pop(&stack);
-                rule_params_count++;
-                
-
-                if(stack_top(&stack)->type != TOKEN_SHIFT){
-                    tmp2 = stack_top(&stack);
-                    stack_pop(&stack);
-                    rule_params_count++;
-                    
-
-                    if(stack_top(&stack)->type != TOKEN_SHIFT){
-                        tmp3 = stack_top(&stack);
-                        stack_pop(&stack);
-                        rule_params_count++;
-                        
-
-                        if(stack_top(&stack)->type != TOKEN_SHIFT){
-                            error_exit(ERROR_SYN, "EXPRESSION PARSER", "syntax error");
-                        }
-                    }
-                }
-            }*/
-
 
             stack_pop(&stack);
             expression_rules_t rule = find_reduce_rule(tmp1, tmp2, tmp3, rule_params_count);
@@ -1038,13 +1005,6 @@ void call_expr_parser(data_type return_type){
             // totok uz delal Sam solo ale pravdepodobne radky navic kvuli praci se zasobnikem
             case RULE_QMS:
                 if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
-                    /*if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
-                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
-                    }*/
-                    //fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter);
-                    //fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter);
-                    //stack_push(&stack, tmp3);
-                    //variable_counter++;
 
                     if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
@@ -1056,30 +1016,12 @@ void call_expr_parser(data_type return_type){
                     inst_list_insert_last(inst_list, inst);
 
 
-
-                    /*if(tmp3->exp_value == INT_QM){
-                        tmp1->exp_value = INT;
-                    } else if(tmp3->exp_value == DOUBLE_QM){
-                        tmp1->exp_value = DOUBLE;
-                    } else if(tmp3->exp_value == STRING){
-                        tmp1->exp_value = STRING;
-                    }*/
                     variable_counter++;
                     variable_counter++;
                     stack_push(&stack, tmp1);
 
                 } else {
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for left side of ??");
-                    /*fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter);
-                    fprintf(file, "DEFVAR GF@$$qms%d$$\n", variable_counter+1);
-                    fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter);
-                    fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter+1);
-                    fprintf(file, "PUSHS GF@$$qm%d$$\n", variable_counter);
-                    stack_push(&stack, tmp1);
-                    variable_counter++;
-                    variable_counter++;*/
-
-
                 }
                 break;
             default:
@@ -1112,7 +1054,4 @@ void call_expr_parser(data_type return_type){
         }
 
     }
-
-    //fprintf(file, "%d", stack.size);
-    //fprintf(file, "%d", current_token->type);
 }
