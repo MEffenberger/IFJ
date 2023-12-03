@@ -1318,6 +1318,9 @@ void condition() {
     MAKE_CHILDREN_IN_FOREST(W_IF, node_name2);
     active->cond_cnt = ifelse_cnt;
 
+    bool if_let = false;
+    AVL_tree *tmp1 = NULL;
+
     current_token = get_next_token();
     //print_debug(current_token, 1, debug_cnt++);
 
@@ -1329,6 +1332,7 @@ void condition() {
         if (current_token->type == TOKEN_ID) {
             // check if the id is in symtable, so the variable is declared
             AVL_tree *tmp = forest_search_symbol(active, current_token->value.vector->array);
+            tmp1 = tmp; // for later usage (converting optional type to non-optional and back)
             if (tmp == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
@@ -1340,6 +1344,8 @@ void condition() {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Initializer for conditional binding must have optional type");
             }
             else {
+                if_let = true;
+
                 /// TODO: ??? vykoná sekvence_příkazů1, kde navíc bude typ 
                 // id upraven tak, že nebude (pouze v tomto bloku) zahrnovat hodnotu nil 
                 // (tj. např. proměnná původního typu String? bude v tomto bloku typu String).
@@ -1376,8 +1382,12 @@ void condition() {
 
         current_token = get_next_token();
         //print_debug(current_token, 1, debug_cnt++);
-
+        
+        convert_optional_data_type(tmp1, 1); // convert optional type to non-optional
+        // IF BODY
         local_body();
+
+        convert_optional_data_type(tmp1, 2); // convert non-optional type back to optional
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
             // closing bracket of if statement, go back to parent in forest
@@ -1406,6 +1416,7 @@ void condition() {
                     current_token = get_next_token();
                     //print_debug(current_token, 1, debug_cnt++);
 
+                    // ELSE BODY
                     local_body();
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
@@ -1726,31 +1737,38 @@ bool validate_forest_node(forest_node *node) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-// void convert_to_nonq_data_type(char *key){
-//     AVL_tree *node = forest_search_symbol(active, key);
-//     if (node != NULL) {
-//             sym_data *data = symtable_lookup(node, key);
-//             if (data != NULL) {
-//                 if (data->data_type == STRING_QM) {
-//                     data->data_type = STRING;
-//                 } else if (data->data_type == INT_QM) {
-//                     data->data_type = INT;
-//                 } else if (data->data_type == DOUBLE_QM) {
-//                     data->data_type = DOUBLE;
-//                 }
-//         }
-//     }
-// }
+// mode 1: convert node's data_type from optional to non-optional
+// mode 2: convert node's data_type from non-optional to optional
+void convert_optional_data_type (AVL_tree *node, int mode) {
+    if (node != NULL) {
+        switch (node->data.data_type) {
+           if (mode == 1) {
+                case INT_QM:
+                    node->data.data_type = INT;
+                    break;
+                case DOUBLE_QM:
+                    node->data.data_type = DOUBLE;
+                    break;
+                case STRING_QM:
+                    node->data.data_type = STRING;
+                    break;
+            }
+            else if (mode == 2) {
+                case INT:
+                    node->data.data_type = INT_QM;
+                    break;
+                case DOUBLE:
+                    node->data.data_type = DOUBLE_QM;
+                    break;
+                case STRING:
+                    node->data.data_type = STRING_QM;
+                    break;
+            }
+            default:
+                break;
+        }
+    }
+}
 
 
 

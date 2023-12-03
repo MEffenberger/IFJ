@@ -176,6 +176,7 @@ char *renamer(AVL_tree *node);
 void return_logic_validation (forest_node *global);
 void validate_forest(forest_node *func);
 bool validate_forest_node(forest_node *node);
+void convert_optional_data_type (AVL_tree *node, int mode);
 
 
 
