@@ -79,6 +79,14 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
  * @param token2 Pointer to the second token to be checked
  * @param token3 Pointer to the third token to be checked
  */
+
+/**
+ * @brief Converts QM token types to non qm token types
+ * 
+ * @param tmp1 Pointer to the token to be converted
+ */
+void convert_qm(token_t* token1);
+
 void check_types(token_t* token1, token_t* token2, token_t* token3);
 
 /**

@@ -210,6 +210,19 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     return NOT_RULE;
 }
 
+
+void convert_qm(token_t* tmp1){
+    if(tmp1->exp_value == INT_QM){
+        tmp1->exp_value = INT;
+    } else if(tmp1->exp_value == DOUBLE_QM){
+        tmp1->exp_value = DOUBLE;
+    } else if(tmp1->exp_value == STRING_QM){
+        tmp1->exp_value = STRING;
+    }
+}
+
+
+
 // kontrola typu => tri prdele case splitu, pokud je to token id konstanta tak ji lze pretypovat ale pouze z int na double
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
@@ -221,6 +234,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     // klasicke operace kde se resi jen typy
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
 
+        convert_qm(tmp1);
+        convert_qm(tmp3);
+            
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with booleans");
         }
@@ -329,6 +345,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
     // tady se resi celociselne a desetinne deleni (div x idiv)
     } else if(tmp2->type == TOKEN_DIVIDE){
+
+        convert_qm(tmp1);
+        convert_qm(tmp3);
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not divide bool");
@@ -474,6 +493,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     // relacni operatory
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
         
+        convert_qm(tmp1);
+        convert_qm(tmp3);
+
         // typy se rovnaji a navratova hodnota bude bool
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
