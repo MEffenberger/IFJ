@@ -229,66 +229,66 @@ void codegen_generate_code_please(instruction_list *list) {
                 codegen_concat(inst);
                 break;
             case INT2FLOATS:
-                printf("INT2FLOATS\n");
+                fprintf(file, "INT2FLOATS\n");
                 break;
             case INT2FLOATS_2:
                 codegen_int2floats(inst);
             case DIVS:
-                printf("DIVS\n");
+                fprintf(file, "DIVS\n");
                 break;
             case IDIVS:
-                printf("IDIVS\n");
+                fprintf(file, "IDIVS\n");
                 break;
             case PUSHS_INT_CONST:
-                printf("PUSHS int@%d\n", inst->int_value);
+                fprintf(file, "PUSHS int@%d\n", inst->int_value);
                 break;
             case PUSHS_FLOAT_CONST:
-                printf("PUSHS float@%a\n", inst->float_value);
+                fprintf(file, "PUSHS float@%a\n", inst->float_value);
                 break;
             case PUSHS_STRING_CONST:
-                printf("PUSHS string@%s\n", inst->string_value);
+                fprintf(file, "PUSHS string@%s\n", inst->string_value);
                 break;
             case PUSHS_NIL:
-                printf("PUSHS nil@nil\n");
+                fprintf(file, "PUSHS nil@nil\n");
                 break;
             case PUSHS_INT:
-                printf("PUSHS int@%s\n", inst->name);
+                fprintf(file, "PUSHS int@%s\n", inst->name);
                 break;
             case PUSHS_FLOAT:
-                printf("PUSHS float@%s\n", inst->name);
+                fprintf(file, "PUSHS float@%s\n", inst->name);
                 break;
             case PUSHS_STRING:
-                printf("PUSHS string@%s\n", inst->name);
+                fprintf(file, "PUSHS string@%s\n", inst->name);
                 break;
             case PUSHS:
-                printf("PUSHS %cF@%s\n", inst->frame, inst->name);
+                fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
                 break;
             case EXCLAMATION_RULE:
                 codegen_exclamation_rule(inst);
                 break;
             case ADDS:
-                printf("ADDS\n");
+                fprintf(file, "ADDS\n");
                 break;
             case MULS:
-                printf("MULS\n");
+                fprintf(file, "MULS\n");
                 break;
             case SUBS:
-                printf("SUBS\n");
+                fprintf(file, "SUBS\n");
                 break;
             case LTS:
-                printf("LTS\n");
+                fprintf(file, "LTS\n");
                 break;
             case EQS:
-                printf("EQS\n");
+                fprintf(file, "EQS\n");
                 break;
             case ORS:
-                printf("ORS\n");
+                fprintf(file, "ORS\n");
                 break;
             case GTS:
-                printf("GTS\n");
+                fprintf(file, "GTS\n");
                 break;
             case NOTS:
-                printf("NOTS\n");
+                fprintf(file, "NOTS\n");
                 break;
             case LEQ_RULE:
                 codegen_leq_rule(inst);
@@ -316,42 +316,42 @@ void codegen_generate_code_please(instruction_list *list) {
 
 // // V případě chybějícího inicializačního výrazu se u proměnných typu zahrnujícího nil provádí implicitní inicializace hodnotou nil. Proměnné ostatních typů nejsou bez inicializačního výrazu inicializovány.
 void codegen_var_def(instruction *inst) {
-    printf("DEFVAR %cF@%s\n", inst->frame, inst->name);
+    fprintf(file, "DEFVAR %cF@%s\n", inst->frame, inst->name);
 }
 
 void codegen_var_assign(instruction *inst) {
-    printf("POPS %cF@%s\n", inst->frame, inst->name);
+    fprintf(file, "POPS %cF@%s\n", inst->frame, inst->name);
 }
 
 
 
 
 void codegen_func_def(instruction *inst) {
-    printf("JUMP !!skip_%s\n", inst->name);
-    printf("LABEL %s\n", inst->name);
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
+    fprintf(file, "JUMP !!skip_%s\n", inst->name);
+    fprintf(file, "LABEL %s\n", inst->name);
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
     for (int i = 1; i <= inst->cnt; i++) {
         AVL_tree* param = symtable_find_param(inst->relevant_node->symtable, i);
-        printf("DEFVAR LF@%s\n", param->key);
-        printf("MOVE LF@%s LF@$%d\n", param->key, i);
+        fprintf(file, "DEFVAR LF@%s\n", param->key);
+        fprintf(file, "MOVE LF@%s LF@$%d\n", param->key, i);
     } 
 }
 
 void codegen_func_def_return(instruction *inst) {
-    printf("POPS LF@$retval$\n");
-    printf("JUMP end_%s\n", inst->name);
+    fprintf(file, "POPS LF@$retval$\n");
+    fprintf(file, "JUMP end_%s\n", inst->name);
 }
 
 void codegen_func_def_return_void(instruction *inst) {
-    printf("JUMP end_%s\n", inst->name);
+    fprintf(file, "JUMP end_%s\n", inst->name);
 }
 
 void codegen_func_def_end(instruction *inst) {
-    printf("LABEL end_%s\n", inst->name);
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_%s\n", inst->name);
+    fprintf(file, "LABEL end_%s\n", inst->name);
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_%s\n", inst->name);
 }
 
 
@@ -359,292 +359,292 @@ void codegen_func_def_end(instruction *inst) {
 
 void codegen_func_call_start(instruction *inst) {
     add_arg_cnt = 0;
-    printf("CREATEFRAME\n");
+    fprintf(file, "CREATEFRAME\n");
 }
 
 void codegen_add_arg(instruction *inst) {
-    printf("DEFVAR TF@$%d\n", ++add_arg_cnt);
-    printf("POPS TF@$%d\n", add_arg_cnt);
+    fprintf(file, "DEFVAR TF@$%d\n", ++add_arg_cnt);
+    fprintf(file, "POPS TF@$%d\n", add_arg_cnt);
 }
 
 void codegen_func_call_end(instruction *inst) {
-    printf("CALL %s\n", inst->name);
-    printf("PUSHS TF@$retval$\n");
+    fprintf(file, "CALL %s\n", inst->name);
+    fprintf(file, "PUSHS TF@$retval$\n");
 }
 
 void codegen_func_call_end_void(instruction *inst) {
-    printf("CALL %s\n", inst->name);
+    fprintf(file, "CALL %s\n", inst->name);
 }
 
 
 
 
 void codegen_if_let(instruction *inst) {
-    printf("LABEL if_%d\n", inst->cnt);
-    printf("DEFVAR %cF@$cond_%d$\n", inst->frame, inst->cnt);
-    printf("TYPE %cF@$cond_%d$ %cF@%s\n", inst->frame, inst->cnt, inst->frame, inst->name);
-    printf("JUMPIFEQ else_%d %cF@$cond_%d$ string@nil\n", inst->cnt, inst->frame, inst->cnt); 
+    fprintf(file, "LABEL if_%d\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$cond_%d$\n", inst->frame, inst->cnt);
+    fprintf(file, "TYPE %cF@$cond_%d$ %cF@%s\n", inst->frame, inst->cnt, inst->frame, inst->name);
+    fprintf(file, "JUMPIFEQ else_%d %cF@$cond_%d$ string@nil\n", inst->cnt, inst->frame, inst->cnt); 
 }
 
 void codegen_if(instruction *inst) {
-    printf("LABEL if_%d\n", inst->cnt);
-    printf("DEFVAR %cF@$cond_%d$\n", inst->frame, inst->cnt);
-    printf("POPS %cF@$cond_%d$\n", inst->frame, inst->cnt);
-    printf("JUMPIFEQ else_%d %cF@$cond_%d$ bool@false\n", inst->cnt, inst->frame, inst->cnt);
+    fprintf(file, "LABEL if_%d\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$cond_%d$\n", inst->frame, inst->cnt);
+    fprintf(file, "POPS %cF@$cond_%d$\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMPIFEQ else_%d %cF@$cond_%d$ bool@false\n", inst->cnt, inst->frame, inst->cnt);
 }
 
 void codegen_else(instruction *inst) {
-    printf("JUMP end_if_%d\n", inst->cnt);
-    printf("LABEL else_%d\n", inst->cnt);
+    fprintf(file, "JUMP end_if_%d\n", inst->cnt);
+    fprintf(file, "LABEL else_%d\n", inst->cnt);
 
 }
 
 void codegen_ifelse_end(instruction *inst) {
-    printf("LABEL end_if_%d\n", inst->cnt);
+    fprintf(file, "LABEL end_if_%d\n", inst->cnt);
 }   
 
 void codegen_while_start(instruction *inst) {
-    printf("DEFVAR %cF@$cond_%s$\n", inst->frame, inst->name);
-    printf("LABEL %s\n", inst->name);
+    fprintf(file, "DEFVAR %cF@$cond_%s$\n", inst->frame, inst->name);
+    fprintf(file, "LABEL %s\n", inst->name);
 }
 
 void codegen_while_do(instruction *inst) {
-    printf("POPS %cF@$cond_%s$\n", inst->frame, inst->name);
-    printf("JUMPIFEQ end_%s %cF@$cond_%s$ bool@false\n", inst->name, inst->frame, inst->name);
+    fprintf(file, "POPS %cF@$cond_%s$\n", inst->frame, inst->name);
+    fprintf(file, "JUMPIFEQ end_%s %cF@$cond_%s$ bool@false\n", inst->name, inst->frame, inst->name);
 }
 
 
 void codegen_while_end(instruction *inst) {
-    printf("JUMP %s\n", inst->name);
-    printf("LABEL end_%s\n", inst->name);
+    fprintf(file, "JUMP %s\n", inst->name);
+    fprintf(file, "LABEL end_%s\n", inst->name);
 }
 
 
 void codegen_readString(instruction *inst) {
-    printf("JUMP !!skip_readString\n");
-    printf("LABEL readString\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("READ LF@$retval$ string\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_readString\n");
+    fprintf(file, "JUMP !!skip_readString\n");
+    fprintf(file, "LABEL readString\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "READ LF@$retval$ string\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_readString\n");
 }
 
 void codegen_readInt(instruction *inst) {
-    printf("JUMP !!skip_readInt\n");
-    printf("LABEL readInt\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("READ LF@$retval$ int\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_readInt\n");
+    fprintf(file, "JUMP !!skip_readInt\n");
+    fprintf(file, "LABEL readInt\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "READ LF@$retval$ int\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_readInt\n");
 }
 
 void codegen_readDouble(instruction *inst) {
-    printf("JUMP !!skip_readDouble\n");
-    printf("LABEL readDouble\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("READ LF@$retval$ double\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_readDouble\n");
+    fprintf(file, "JUMP !!skip_readDouble\n");
+    fprintf(file, "LABEL readDouble\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "READ LF@$retval$ double\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_readDouble\n");
 }
 
 void codegen_write(instruction *inst) {
-    printf("CREATEFRAME\n");
-    printf("PUSHFRAME\n");
+    fprintf(file, "CREATEFRAME\n");
+    fprintf(file, "PUSHFRAME\n");
     for (int i = 1; i <= inst->cnt; i++) {
-        printf("DEFVAR LF@$%d\n", write_renamer + i);
-        printf("POPS LF@$%d\n", write_renamer + i);
+        fprintf(file, "DEFVAR LF@$%d\n", write_renamer + i);
+        fprintf(file, "POPS LF@$%d\n", write_renamer + i);
     }
     for (int i = inst->cnt; i >= 1; i--) {
-        printf("WRITE LF@$%d\n", write_renamer + i);
+        fprintf(file, "WRITE LF@$%d\n", write_renamer + i);
     }
     write_renamer += inst->cnt;
-    printf("POPFRAME\n");
+    fprintf(file, "POPFRAME\n");
 }
 
 void codegen_Int2Double(instruction *inst) {
-    printf("JUMP !!skip_Int2Double\n");  
-    printf("LABEL Int2Double\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("INT2FLOAT LF@$retval$ LF@$1\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_Int2Double\n");
+    fprintf(file, "JUMP !!skip_Int2Double\n");  
+    fprintf(file, "LABEL Int2Double\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "INT2FLOAT LF@$retval$ LF@$1\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_Int2Double\n");
 }
 
 void codegen_Double2Int(instruction *inst) {  
-    printf("JUMP !!skip_Double2Int\n");
-    printf("LABEL Double2Int\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("FLOAT2INT LF@$retval$ LF@$1\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_Double2Int\n");
+    fprintf(file, "JUMP !!skip_Double2Int\n");
+    fprintf(file, "LABEL Double2Int\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "FLOAT2INT LF@$retval$ LF@$1\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_Double2Int\n");
 }
 
 void codegen_length(instruction *inst) {
-    printf("JUMP !!skip_length\n");
-    printf("LABEL length\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("STRLEN LF@$retval$ LF@$1\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_length\n");
+    fprintf(file, "JUMP !!skip_length\n");
+    fprintf(file, "LABEL length\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "STRLEN LF@$retval$ LF@$1\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_length\n");
 }
 
 void codegen_substring(instruction *inst) {
-    printf("JUMP !!skip_substring\n");
-    printf("LABEL substring\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("DEFVAR LF@$tmp1\n");
-    printf("DEFVAR LF@$check\n");
-    printf("MOVE LF@$check bool@false\n");
-    printf("LT LF@$check LF@$2 int@0\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("LT LF@$check LF@$3 int@0\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("GT LF@$check LF@$2 LF@$3\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("DEFVAR LF@$tmp_strlen\n");
-    printf("STRLEN LF@$tmp_strlen LF@$1\n");
-    printf("GT LF@$check LF@$2 LF@$tmp_strlen\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("EQ LF@$check LF@$2 LF@$tmp_strlen\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("GT LF@$check LF@$3 LF@$tmp_strlen\n");
-    printf("JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    printf("LABEL !!substring_loop\n");
-    printf("GETCHAR LF@$tmp1 LF@$1 LF@$2\n");
-    printf("CONCAT LF@$retval$ LF@$retval$ LF@$tmp1\n");
-    printf("ADD LF@$2 LF@$2 int@1\n");
-    printf("JUMPIFNEQ !!substring_loop LF@$2 LF@$3\n");
-    printf("JUMP !!load_result\n");
-    printf("LABEL !!load_nil\n");
-    printf("MOVE LF@$retval$ nil@nil\n");
-    printf("LABEL !!load_result\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_substring\n");
+    fprintf(file, "JUMP !!skip_substring\n");
+    fprintf(file, "LABEL substring\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "DEFVAR LF@$tmp1\n");
+    fprintf(file, "DEFVAR LF@$check\n");
+    fprintf(file, "MOVE LF@$check bool@false\n");
+    fprintf(file, "LT LF@$check LF@$2 int@0\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "LT LF@$check LF@$3 int@0\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "GT LF@$check LF@$2 LF@$3\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "DEFVAR LF@$tmp_strlen\n");
+    fprintf(file, "STRLEN LF@$tmp_strlen LF@$1\n");
+    fprintf(file, "GT LF@$check LF@$2 LF@$tmp_strlen\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "EQ LF@$check LF@$2 LF@$tmp_strlen\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "GT LF@$check LF@$3 LF@$tmp_strlen\n");
+    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
+    fprintf(file, "LABEL !!substring_loop\n");
+    fprintf(file, "GETCHAR LF@$tmp1 LF@$1 LF@$2\n");
+    fprintf(file, "CONCAT LF@$retval$ LF@$retval$ LF@$tmp1\n");
+    fprintf(file, "ADD LF@$2 LF@$2 int@1\n");
+    fprintf(file, "JUMPIFNEQ !!substring_loop LF@$2 LF@$3\n");
+    fprintf(file, "JUMP !!load_result\n");
+    fprintf(file, "LABEL !!load_nil\n");
+    fprintf(file, "MOVE LF@$retval$ nil@nil\n");
+    fprintf(file, "LABEL !!load_result\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_substring\n");
 }
 
 void codegen_ord(instruction *inst) {
-    printf("JUMP !!skip_ord\n");
-    printf("LABEL ord\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("STR2INT LF@$retval$ LF@$1 int@0\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_ord\n");  
+    fprintf(file, "JUMP !!skip_ord\n");
+    fprintf(file, "LABEL ord\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "STR2INT LF@$retval$ LF@$1 int@0\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_ord\n");  
 }
 
 void codegen_chr(instruction *inst) {
-    printf("JUMP !!skip_chr\n");
-    printf("LABEL chr\n");
-    printf("PUSHFRAME\n");
-    printf("DEFVAR LF@$retval$\n");
-    printf("INT2CHAR LF@$retval$ LF@$1\n");
-    printf("POPFRAME\n");
-    printf("RETURN\n");
-    printf("LABEL !!skip_chr\n");
+    fprintf(file, "JUMP !!skip_chr\n");
+    fprintf(file, "LABEL chr\n");
+    fprintf(file, "PUSHFRAME\n");
+    fprintf(file, "DEFVAR LF@$retval$\n");
+    fprintf(file, "INT2CHAR LF@$retval$ LF@$1\n");
+    fprintf(file, "POPFRAME\n");
+    fprintf(file, "RETURN\n");
+    fprintf(file, "LABEL !!skip_chr\n");
 }
 
 
 void codegen_main(instruction *inst) {
-    printf(".IFJcode23\n");
-    //printf("DEFVAR GF$check1\n"); pomocne promenne
-    //printf("DEFVAR GF$tmp2\n"); dle potreby
-    printf("JUMP $$main\n");
+    fprintf(file, ".IFJcode23\n");
+    //fprintf(file, "DEFVAR GF$check1\n"); pomocne promenne
+    //fprintf(file, "DEFVAR GF$tmp2\n"); dle potreby
+    fprintf(file, "JUMP $$main\n");
 
     // space for sth before main
     // exit labels for error handling
 
-    printf("LABEL $$main\n");
-    printf("CREATEFRAME\n");
-    printf("PUSHFRAME\n");
+    fprintf(file, "LABEL $$main\n");
+    fprintf(file, "CREATEFRAME\n");
+    fprintf(file, "PUSHFRAME\n");
 }
 
 void codegen_concat(instruction *inst) {
-    printf("DEFVAR GF@$$s%d$$\n", inst->cnt);
-    printf("DEFVAR GF@$$s%d$$\n", inst->cnt + 1);
-    printf("POPS GF@$$s%d$$\n", inst->cnt + 1);
-    printf("POPS GF@$$s%d$$\n", inst->cnt);
-    printf("CONCAT GF@$$s%d$$ GF@$$s%d$$ GF@$$s%d$$\n", inst->cnt, inst->cnt, inst->cnt + 1);
-    printf("PUSHS GF@$$s%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$s%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$s%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS GF@$$s%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS GF@$$s%d$$\n", inst->cnt);
+    fprintf(file, "CONCAT GF@$$s%d$$ GF@$$s%d$$ GF@$$s%d$$\n", inst->cnt, inst->cnt, inst->cnt + 1);
+    fprintf(file, "PUSHS GF@$$s%d$$\n", inst->cnt);
 }
 
 
 void codegen_int2floats(instruction *inst) {
-    printf("DEFVAR GF@$$tmp%d$$\n", inst->cnt);
-    printf("POPS GF@$$tmp%d$$\n", inst->cnt);
-    printf("INT2FLOATS\n");
-    printf("PUSHS GF@$$tmp%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$tmp%d$$\n", inst->cnt);
+    fprintf(file, "POPS GF@$$tmp%d$$\n", inst->cnt);
+    fprintf(file, "INT2FLOATS\n");
+    fprintf(file, "PUSHS GF@$$tmp%d$$\n", inst->cnt);
 }
 
 
 void codegen_exclamation_rule(instruction *inst) {
-    printf("DEFVAR GF@$$excl%d\n", inst->cnt);
-    printf("POPS GF@$$excl%d\n", inst->cnt);
-    printf("PUSHS GF@$$excl%d\n", inst->cnt);
-    printf("PUSHS nil@nil\n");
-    printf("JUMPIFNEQS $RULE_EXCL_CORRECT$\n");
-    printf("LABEL $RULE_EXCL_ERROR$\n");
-    printf("WRITE string@Variable\\032is\\032NULL\n");
-    printf("EXIT int@7\n"); //doresit cislo chyby
-    printf("LABEL $RULE_EXCL_CORRECT$\n");
-    printf("PUSHS GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "POPS GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "PUSHS GF@$$excl%d\n", inst->cnt);
+    fprintf(file, "PUSHS nil@nil\n");
+    fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT$\n");
+    fprintf(file, "LABEL $RULE_EXCL_ERROR$\n");
+    fprintf(file, "WRITE string@Variable\\032is\\032NULL\n");
+    fprintf(file, "EXIT int@7\n"); //doresit cislo chyby
+    fprintf(file, "LABEL $RULE_EXCL_CORRECT$\n");
+    fprintf(file, "PUSHS GF@$$excl%d\n", inst->cnt);
 }
 
 void codegen_leq_rule(instruction *inst) {
-    printf("LTS\n");
-    printf("DEFVAR GF@$$leq%d$$\n", inst->cnt);
-    printf("DEFVAR GF@$$leq%d$$\n", inst->cnt + 1);
-    printf("POPS GF@$$leq%d$$\n", inst->cnt);
-    printf("EQS\n");
-    printf("POPS GF@$$leq%d$$\n", inst->cnt + 1);
-    printf("PUSHS GF@$$leq%d$$\n", inst->cnt);
-    printf("PUSHS GF@$$leq%d$$\n", inst->cnt + 1);
-    printf("ORS\n");
+    fprintf(file, "LTS\n");
+    fprintf(file, "DEFVAR GF@$$leq%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$leq%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS GF@$$leq%d$$\n", inst->cnt);
+    fprintf(file, "EQS\n");
+    fprintf(file, "POPS GF@$$leq%d$$\n", inst->cnt + 1);
+    fprintf(file, "PUSHS GF@$$leq%d$$\n", inst->cnt);
+    fprintf(file, "PUSHS GF@$$leq%d$$\n", inst->cnt + 1);
+    fprintf(file, "ORS\n");
 }
 
 void codegen_geq_rule(instruction *inst) {
-    printf("GTS\n");
-    printf("DEFVAR GF@$$geq%d$$\n", inst->cnt);
-    printf("DEFVAR GF@$$geq%d$$\n", inst->cnt + 1);
-    printf("POPS GF@$$geq%d$$\n", inst->cnt);
-    printf("EQS\n");
-    printf("POPS GF@$$geq%d$$\n", inst->cnt + 1);
-    printf("PUSHS GF@$$geq%d$$\n", inst->cnt);
-    printf("PUSHS GF@$$geq%d$$\n", inst->cnt + 1);
-    printf("ORS\n");
+    fprintf(file, "GTS\n");
+    fprintf(file, "DEFVAR GF@$$geq%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$geq%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS GF@$$geq%d$$\n", inst->cnt);
+    fprintf(file, "EQS\n");
+    fprintf(file, "POPS GF@$$geq%d$$\n", inst->cnt + 1);
+    fprintf(file, "PUSHS GF@$$geq%d$$\n", inst->cnt);
+    fprintf(file, "PUSHS GF@$$geq%d$$\n", inst->cnt + 1);
+    fprintf(file, "ORS\n");
 }
 
 void codegen_qms_rule(instruction *inst) {
-    printf("DEFVAR GF@$$rule_qms%d\n", inst->cnt);
-    printf("DEFVAR GF@$$rule_qms%d\n", inst->cnt + 1);
-    printf("POPS GF@$$rule_qms%d\n", inst->cnt);
-    printf("POPS GF@$$rule_qms%d\n", inst->cnt + 1);
-    printf("PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
-    printf("PUSHS nil@nil\n");
-    printf("JUMPIFNEQS $RULE_QMS_NOT_NILL$\n");
+    fprintf(file, "DEFVAR GF@$$rule_qms%d\n", inst->cnt);
+    fprintf(file, "DEFVAR GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "POPS GF@$$rule_qms%d\n", inst->cnt);
+    fprintf(file, "POPS GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "PUSHS nil@nil\n");
+    fprintf(file, "JUMPIFNEQS $RULE_QMS_NOT_NILL$\n");
 
-    printf("LABEL $RULE_QMS_NILL$\n");
-    printf("PUSHS GF@$$rule_qms%d\n", inst->cnt);
-    printf("JUMP $END_RULE_QMS\n");
+    fprintf(file, "LABEL $RULE_QMS_NILL$\n");
+    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt);
+    fprintf(file, "JUMP $END_RULE_QMS\n");
 
-    printf("LABEL $RULE_QMS_NOT_NILL$\n");
-    printf("PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "LABEL $RULE_QMS_NOT_NILL$\n");
+    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
 
-    printf("LABEL $END_RULE_QMS\n$");
+    fprintf(file, "LABEL $END_RULE_QMS\n$");
 }
 
 

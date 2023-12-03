@@ -29,6 +29,6 @@ alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 FILE *file;
 
 int main() {
-    //file = fopen("code.txt", "w");
+    file = fopen("code.txt", "w");
     return parser_parse_please();
 }
