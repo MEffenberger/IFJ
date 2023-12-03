@@ -674,7 +674,7 @@ void call_expr_parser(data_type return_type){
             // Check ze vracime spravny typ
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
 
-                if(return_type == DOUBLE && stack_top(&stack)->exp_value == INT && stack_top(&stack)->was_id == false){
+                if(return_type == DOUBLE && stack_top(&stack)->exp_value == INT && stack_top(&stack)->was_exp == false){
                     instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
                 } else if(return_type == INT_QM && stack_top(&stack)->exp_value == INT){
@@ -897,10 +897,6 @@ void call_expr_parser(data_type return_type){
                     inst_list_insert_last(inst_list, inst);
                 }
 
-                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
-                    tmp1->was_id = true;
-                }
-
                 stack_push(&stack, tmp1);
                 break;
             case RULE_MUL:
@@ -908,10 +904,6 @@ void call_expr_parser(data_type return_type){
                 // CODEGEN
                 instruction *inst = inst_init(MULS, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-
-                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
-                    tmp1->was_id = true;
-                }
 
                 stack_push(&stack, tmp1);
                 break;
@@ -921,18 +913,14 @@ void call_expr_parser(data_type return_type){
                 instruction *inst1 = inst_init(SUBS, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst1);
 
-                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
-                    tmp1->was_id = true;
-                }
+                tmp1->was_exp = true;
 
                 stack_push(&stack, tmp1);
                 break;
             case RULE_DIV:
                 check_types(tmp1, tmp2, tmp3);
 
-                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
-                    tmp1->was_id = true;
-                }
+                tmp1->was_exp = true;
 
                 stack_push(&stack, tmp1);
                 break;
