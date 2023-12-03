@@ -110,8 +110,20 @@ void inst_list_insert_before(instruction_list *list, instruction *new_inst) {
     list->active = new_inst;
 }
 
-void inst_list_dispose(instruction_list *list) {
 
+void inst_list_delete_after(instruction_list *list) {
+    instruction *inst = list->active->next;
+    if (inst == list->last) {
+        list->last = list->active;
+    }
+    else {
+        inst->next->prev = list->active;
+    }
+    list->active->next = inst->next;
+    free(inst);
+}
+
+void inst_list_dispose(instruction_list *list) {
 	instruction* inst = list->first;
 	while (list->first != NULL) {
 		list->first = list->first->next;
@@ -126,13 +138,22 @@ void inst_list_dispose(instruction_list *list) {
 
 // search outermost while loop
 void inst_list_search_while(instruction_list *list, char *while_name) {
-    // move list->active based on the name of the node found of the outermost while loop found by forest_search_while (while_X)
+    // move list->active based on the name of the node
     while (strcmp(list->active->name, while_name) != 0 || list->active->inst_type != WHILE_START) {
         list->active = list->active->prev;
     }
     // list->active is now outermost while loop, you can insert before it
 }
 
+// search call of void function
+void inst_list_search_void_func_call(instruction_list *list, char *func_name) {
+    // move list->active based on the name of the node found 
+    list->active = list->last;
+    while (strcmp(list->active->name, func_name) != 0 || list->active->inst_type != FUNC_CALL) {
+        list->active = list->active->prev;
+    }
+    // list->active is now void_function call, you can delete the instruction after it
+}
 
 
 
@@ -173,11 +194,11 @@ void codegen_generate_code_please(instruction_list *list) {
             case ADD_ARG:
                 codegen_add_arg(inst);
                 break;
-            case FUNC_CALL_END:
-                codegen_func_call_end(inst);
+            case FUNC_CALL:
+                fprintf(file, "CALL %s\n", inst->name);
                 break;
-            case FUNC_CALL_END_VOID:
-                codegen_func_call_end_void(inst);
+            case FUNC_CALL_RETVAL:
+                fprintf(file, "PUSHS TF@$retval$\n");
                 break;
             case IF_LET:
                 codegen_if_let(inst);
@@ -380,16 +401,6 @@ void codegen_add_arg(instruction *inst) {
     fprintf(file, "DEFVAR TF@$%d\n", ++add_arg_cnt);
     fprintf(file, "POPS TF@$%d\n", add_arg_cnt);
 }
-
-void codegen_func_call_end(instruction *inst) {
-    fprintf(file, "CALL %s\n", inst->name);
-    fprintf(file, "PUSHS TF@$retval$\n");
-}
-
-void codegen_func_call_end_void(instruction *inst) {
-    fprintf(file, "CALL %s\n", inst->name);
-}
-
 
 
 

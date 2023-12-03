@@ -1181,34 +1181,13 @@ void func_call() {
 
     if (current_token->type == TOKEN_RPAR) {
         if (!function_write) {
-            forest_node *global = active;
-            while (global->parent != NULL) {
-                global = global->parent;
-            }
-            forest_node *func = forest_search_function(global, func_name);
-            if (func == NULL) {
-                // function is not defined yet, cant say whether it is void or not
-
-            }
-            else {
-                AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
-
-                // if the called function is void, it does not return anything and the return value cannot be assigned to variable (codegen problem)
-                if (func_symbol->data.return_type == VOID) {
-                    // CODEGEN
-                    instruction *inst = inst_init(FUNC_CALL_END_VOID, 'G', func_name, 0, 0, 0.0, NULL);
-                    inst_list_insert_last(inst_list, inst);
-                    //codegen_func_call_end_void(func_name);
-                }
-                else {
-                    // CODEGEN
-                    instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
-                    inst_list_insert_last(inst_list, inst);
-                    //codegen_func_call_end(func_name);
-                }
-            }
+            // CODEGEN
+            instruction *inst = inst_init(FUNC_CALL, 'G', func_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+            // CODEGEN
+            instruction *inst1 = inst_init(FUNC_CALL_RETVAL, 'G', NULL, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst1);
         }
-
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
         printf("-- returning...\n\n");
@@ -1682,6 +1661,11 @@ void callee_validation(forest_node *global){
         if (tmp == NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
+        // if the function is void, there has to be removed the expected return value ftom the ifjcode
+        if (callee_list_first->callee->return_type == VOID && (symtable_search(tmp->symtable, tmp->name))->data.return_type == VOID && strcmp(tmp->name, "write") != 0) {
+            inst_list_search_void_func_call(inst_list, callee_list_first->callee->name);
+            inst_list_delete_after(inst_list);
+        }
         else {
             if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
@@ -1743,6 +1727,11 @@ void callee_validation(forest_node *global){
         }
         callee_list_first = callee_list_first->next;
     }
+}
+
+
+void delete_retval_void () {
+
 }
 
 void return_logic_validation (forest_node *global) {
