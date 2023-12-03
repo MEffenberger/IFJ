@@ -647,7 +647,7 @@ void codegen_qms_rule(instruction *inst) {
 
     fprintf(file, "LABEL $RULE_QMS_NILL%d$\n", inst->cnt);
     fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt);
-    fprintf(file, "JUMP $END_RULE_QMS%d\n",  inst->cnt);
+    fprintf(file, "JUMP $END_RULE_QMS%d$\n",  inst->cnt);
 
     fprintf(file, "LABEL $RULE_QMS_NOT_NILL%d$\n", inst->cnt);
     fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
