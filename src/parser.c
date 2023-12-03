@@ -738,10 +738,18 @@ void var_def() {
 
 
         if (tmp->data.defined) {
-            // CODEGEN
-            instruction *inst = inst_init(VAR_ASSIGN, active->frame, tmp_name, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-            //codegen_var_assign(tmp_name);
+            if (type_of_expr == NIL) {
+                // CODEGEN
+                instruction *inst = inst_init(VAR_ASSIGN_NIL, active->frame, tmp_name, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_var_assign_nil(tmp_name);
+            }
+            else {
+                // CODEGEN
+                instruction *inst = inst_init(VAR_ASSIGN, active->frame, tmp_name, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_var_assign(tmp_name);
+            }
         }
         if (!tmp->data.defined && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
             // CODEGEN
@@ -1134,7 +1142,6 @@ void func_call() {
     char *func_name = malloc(sizeof(char) * strlen(current_token->value.vector->array) + 1);
     func_name = strcpy(func_name, current_token->value.vector->array);
 
-
     insert_callee_into_list(callee_list, func_name);
 
     if (var_name == NULL) {
@@ -1159,7 +1166,6 @@ void func_call() {
         callee_list->callee->return_type = type_of_assignee; 
     }
 
-
     if (!function_write) {
         // CODEGEN
         instruction *inst = inst_init(FUNC_CALL_START, 'G', NULL, 0, 0, 0.0, NULL);
@@ -1180,20 +1186,26 @@ void func_call() {
                 global = global->parent;
             }
             forest_node *func = forest_search_function(global, func_name);
-            AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
+            if (func == NULL) {
+                // function is not defined yet, cant say whether it is void or not
 
-            // if the called function is void, it does not return anything and the return value cannot be assigned to variable (codegen problem)
-            if (func_symbol->data.return_type == VOID) {
-                // CODEGEN
-                instruction *inst = inst_init(FUNC_CALL_END_VOID, 'G', func_name, 0, 0, 0.0, NULL);
-                inst_list_insert_last(inst_list, inst);
-                //codegen_func_call_end_void(func_name);
             }
             else {
-                // CODEGEN
-                instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
-                inst_list_insert_last(inst_list, inst);
-                //codegen_func_call_end(func_name);
+                AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
+
+                // if the called function is void, it does not return anything and the return value cannot be assigned to variable (codegen problem)
+                if (func_symbol->data.return_type == VOID) {
+                    // CODEGEN
+                    instruction *inst = inst_init(FUNC_CALL_END_VOID, 'G', func_name, 0, 0, 0.0, NULL);
+                    inst_list_insert_last(inst_list, inst);
+                    //codegen_func_call_end_void(func_name);
+                }
+                else {
+                    // CODEGEN
+                    instruction *inst = inst_init(FUNC_CALL_END, 'G', func_name, 0, 0, 0.0, NULL);
+                    inst_list_insert_last(inst_list, inst);
+                    //codegen_func_call_end(func_name);
+                }
             }
         }
 
@@ -1281,14 +1293,13 @@ void arg() {
             error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable in function call passed as argument is not declared");
         }
         else {
-            printf("here, tmp->data.defined = %d\n", tmp->data.defined);
-            // if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
-            //     // in built-in function write, when passing argument of optional type and uninitialized, it is implicitly set to nil and printing ""
-            //     insert_bool_into_callee(callee_list->callee, true);
-            // }
-            // else {
+            if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+                // in built-in function write, when passing argument of optional type and uninitialized, it is implicitly set to nil and printing ""
+                insert_bool_into_callee(callee_list->callee, true);
+            }
+            else {
                 insert_bool_into_callee(callee_list->callee, tmp->data.defined);
-            //}
+            }
         }
     }
     else {
@@ -1680,7 +1691,7 @@ void callee_validation(forest_node *global){
                 } else {
                     for (int i = 1; i <= tmp->param_cnt; i++) {
                         // check if the variables given as args was initialized
-                        if (callee_list_first->callee->args_initialized[i] == false) {
+                        if (callee_list_first->callee->args_initialized[1] == false) {
                             error_exit(ERROR_SEM_TYPE, "PARSER", "Argument in function call is not initialized");
                         }
 
@@ -1717,6 +1728,14 @@ void callee_validation(forest_node *global){
                                 break;
                             default:
                                 break;
+                        }
+                    }
+                    // write() has to be treated separately, since it have various number of arguments
+                    if (strcmp(tmp->name, "write") == 0) {
+                        for (int i = 1; i <= callee_list_first->callee->arg_count; i++) {
+                            if (callee_list_first->callee->args_initialized[1] == false) {
+                                error_exit(ERROR_SEM_TYPE, "PARSER", "Argument in function call is not initialized");
+                            }
                         }
                     }
                 }

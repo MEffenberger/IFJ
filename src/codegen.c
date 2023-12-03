@@ -149,6 +149,9 @@ void codegen_generate_code_please(instruction_list *list) {
             case VAR_ASSIGN:
                 codegen_var_assign(inst);
                 break;
+            case VAR_ASSIGN_NIL:
+                codegen_var_assign_nil(inst);
+                break;
             case IMPLICIT_NIL:
                 fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
                 break;
@@ -238,6 +241,7 @@ void codegen_generate_code_please(instruction_list *list) {
                 break;
             case INT2FLOATS_2:
                 codegen_int2floats(inst);
+                break;
             case DIVS:
                 fprintf(file, "DIVS\n");
                 break;
@@ -327,6 +331,10 @@ void codegen_var_def(instruction *inst) {
 
 void codegen_var_assign(instruction *inst) {
     fprintf(file, "POPS %cF@%s\n", inst->frame, inst->name);
+}
+
+void codegen_var_assign_nil(instruction *inst) {
+    fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
 }
 
 
@@ -644,7 +652,7 @@ void codegen_qms_rule(instruction *inst) {
     fprintf(file, "LABEL $RULE_QMS_NOT_NILL$\n");
     fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
 
-    fprintf(file, "LABEL $END_RULE_QMS\n$");
+    fprintf(file, "LABEL $END_RULE_QMS$\n");
 }
 
 

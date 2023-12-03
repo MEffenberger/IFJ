@@ -20,6 +20,7 @@ typedef enum instruction_type {
     MAIN,
     VAR_DEF,
     VAR_ASSIGN,
+    VAR_ASSIGN_NIL,
     IMPLICIT_NIL,
     FUNC_DEF,
     FUNC_DEF_RETURN,
@@ -137,6 +138,7 @@ void inst_list_search_while(instruction_list *list, char *while_name);
 
 void codegen_var_def(instruction *inst);
 void codegen_var_assign(instruction *inst);
+void codegen_var_assign_nil(instruction *inst);
 
 void codegen_func_def(instruction *inst);
 void codegen_func_def_return_void(instruction *inst);
