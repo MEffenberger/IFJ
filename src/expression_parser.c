@@ -897,6 +897,10 @@ void call_expr_parser(data_type return_type){
                     inst_list_insert_last(inst_list, inst);
                 }
 
+                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    tmp1->was_exp = true;
+                }
+
                 stack_push(&stack, tmp1);
                 break;
             case RULE_MUL:
@@ -904,6 +908,10 @@ void call_expr_parser(data_type return_type){
                 // CODEGEN
                 instruction *inst = inst_init(MULS, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
+
+                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    tmp1->was_exp = true;
+                }
 
                 stack_push(&stack, tmp1);
                 break;
@@ -913,14 +921,18 @@ void call_expr_parser(data_type return_type){
                 instruction *inst1 = inst_init(SUBS, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst1);
 
-                tmp1->was_exp = true;
+                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    tmp1->was_exp = true;
+                }
 
                 stack_push(&stack, tmp1);
                 break;
             case RULE_DIV:
                 check_types(tmp1, tmp2, tmp3);
 
-                tmp1->was_exp = true;
+                if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    tmp1->was_exp = true;
+                }
 
                 stack_push(&stack, tmp1);
                 break;
