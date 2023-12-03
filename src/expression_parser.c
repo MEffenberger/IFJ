@@ -283,8 +283,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         variable_counter++;
                     }
                 }
-            }
-            else if (tmp3->exp_type == CONST){
+            } else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
                     if(tmp1->exp_value == DOUBLE){
                         
@@ -321,7 +320,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     }
                 }
             }
-            else{
+            else{  
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not sum 2 IDs of different types");
             }
         }
@@ -1010,6 +1009,10 @@ void call_expr_parser(data_type return_type){
                     //fprintf(file, "POPS GF@$$qms%d$$\n", variable_counter);
                     //stack_push(&stack, tmp3);
                     //variable_counter++;
+
+                    if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
+                    }
               
 
                     // CODEGEN
