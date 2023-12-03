@@ -226,13 +226,13 @@ void convert_qm(token_t* tmp1){
 // kontrola typu => tri prdele case splitu, pokud je to token id konstanta tak ji lze pretypovat ale pouze z int na double
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
-    
-    if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
-        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
-    }
 
     // klasicke operace kde se resi jen typy
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
+
+        if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
+        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
+        }
 
         convert_qm(tmp1);
         convert_qm(tmp3);
@@ -346,6 +346,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     // tady se resi celociselne a desetinne deleni (div x idiv)
     } else if(tmp2->type == TOKEN_DIVIDE){
 
+        if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
+            error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
+        }
         convert_qm(tmp1);
         convert_qm(tmp3);
 
@@ -679,7 +682,7 @@ void call_expr_parser(data_type return_type){
         if(!stop_expression){
             stack_index = get_index(terminal->type);
             next_token_index = get_index(current_token->type);
-            if(current_token->type == TOKEN_KEYWORD){
+            if(current_token->type == TOKEN_KEYWORD && current_token->value.keyword != KW_NIL){
                 table_result = '>';
                 next_token_index = 15;
             } else {
@@ -773,8 +776,8 @@ void call_expr_parser(data_type return_type){
 
             // E -> i, ziskani vsech informaci o tokenu - typ,...
             case RULE_OPERAND:
+
                 if(tmp1->type == TOKEN_ID){
-                    
                     forest_node* forest = forest_search_scope(active, tmp1->value.vector->array);
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
 
