@@ -504,7 +504,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         } else {
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
-                    if(tmp3->exp_value == DOUBLE){
+                    if(tmp3->exp_value == DOUBLE && tmp1->exp_value == INT){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -516,7 +516,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     }
                 } else{
 
-                    if (tmp1->exp_value == INT){
+                    if (tmp1->exp_value == INT && tmp3->exp_value == DOUBLE){
 
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -524,7 +524,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                         tmp1->exp_value = BOOL;
                     }
-                    else if (tmp3->exp_value == INT){
+                    else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
@@ -537,7 +537,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
             else if (tmp3->exp_type == CONST){
                 if (tmp1->exp_type == ID){
-                    if(tmp1->exp_value == DOUBLE){
+                    if(tmp1->exp_value == DOUBLE && tmp3->exp_value == INT){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
@@ -550,7 +550,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     }
                 }
                 else{
-                    if (tmp1->exp_value == INT){
+                    if (tmp1->exp_value == INT && tmp3->exp_value == DOUBLE){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
@@ -558,7 +558,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                         
                         tmp1->exp_value = BOOL;
                     }
-                    else if (tmp3->exp_value == INT){
+                    else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
                         instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
