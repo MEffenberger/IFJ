@@ -582,75 +582,75 @@ void codegen_main(instruction *inst) {
 }
 
 void codegen_concat(instruction *inst) {
-    fprintf(file, "DEFVAR GF@$$s%d$$\n", inst->cnt);
-    fprintf(file, "DEFVAR GF@$$s%d$$\n", inst->cnt + 1);
-    fprintf(file, "POPS GF@$$s%d$$\n", inst->cnt + 1);
-    fprintf(file, "POPS GF@$$s%d$$\n", inst->cnt);
-    fprintf(file, "CONCAT GF@$$s%d$$ GF@$$s%d$$ GF@$$s%d$$\n", inst->cnt, inst->cnt, inst->cnt + 1);
-    fprintf(file, "PUSHS GF@$$s%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$s%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$s%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$s%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$s%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "CONCAT %cF@$$s%d$$ %cF@$$s%d$$ %cF@$$s%d$$\n", inst->frame, inst->cnt, inst->frame, inst->cnt, inst->frame, inst->cnt + 1);
+    fprintf(file, "PUSHS %cF@$$s%d$$\n", inst->frame, inst->cnt);
 }
 
 
 void codegen_int2floats(instruction *inst) {
-    fprintf(file, "DEFVAR GF@$$tmp%d$$\n", inst->cnt);
-    fprintf(file, "POPS GF@$$tmp%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "POPS %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "INT2FLOATS\n");
-    fprintf(file, "PUSHS GF@$$tmp%d$$\n", inst->cnt);
+    fprintf(file, "PUSHS %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
 }
 
 
 void codegen_exclamation_rule(instruction *inst) {
-    fprintf(file, "DEFVAR LF@$$excl%d\n", inst->cnt);
-    fprintf(file, "POPS LF@$$excl%d\n", inst->cnt);
-    fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$excl%d\n", inst->frame, inst->cnt);
+    fprintf(file, "POPS %cF@$$excl%d\n", inst->frame, inst->cnt);
+    fprintf(file, "PUSHS %cF@$$excl%d\n", inst->frame, inst->cnt);
     fprintf(file, "PUSHS nil@nil\n");
     fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT%d$\n", inst->cnt);
     fprintf(file, "LABEL $RULE_EXCL_ERROR%d$\n", inst->cnt);
     fprintf(file, "WRITE string@Variable\\032is\\032NULL\n");
     fprintf(file, "EXIT int@7\n"); //doresit cislo chyby
     fprintf(file, "LABEL $RULE_EXCL_CORRECT%d$\n", inst->cnt);
-    fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
+    fprintf(file, "PUSHS %cF@$$excl%d\n", inst->frame, inst->cnt);
 }
 
 void codegen_leq_rule(instruction *inst) {
     fprintf(file, "LTS\n");
-    fprintf(file, "DEFVAR GF@$$leq%d$$\n", inst->cnt);
-    fprintf(file, "DEFVAR GF@$$leq%d$$\n", inst->cnt + 1);
-    fprintf(file, "POPS GF@$$leq%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$leq%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$leq%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$leq%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "EQS\n");
-    fprintf(file, "POPS GF@$$leq%d$$\n", inst->cnt + 1);
-    fprintf(file, "PUSHS GF@$$leq%d$$\n", inst->cnt);
-    fprintf(file, "PUSHS GF@$$leq%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$leq%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "PUSHS %cF@$$leq%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "PUSHS %cF@$$leq%d$$\n", inst->frame, inst->cnt + 1);
     fprintf(file, "ORS\n");
 }
 
 void codegen_geq_rule(instruction *inst) {
     fprintf(file, "GTS\n");
-    fprintf(file, "DEFVAR GF@$$geq%d$$\n", inst->cnt);
-    fprintf(file, "DEFVAR GF@$$geq%d$$\n", inst->cnt + 1);
-    fprintf(file, "POPS GF@$$geq%d$$\n", inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$geq%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$geq%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$geq%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "EQS\n");
-    fprintf(file, "POPS GF@$$geq%d$$\n", inst->cnt + 1);
-    fprintf(file, "PUSHS GF@$$geq%d$$\n", inst->cnt);
-    fprintf(file, "PUSHS GF@$$geq%d$$\n", inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$geq%d$$\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "PUSHS %cF@$$geq%d$$\n", inst->frame, inst->cnt);
+    fprintf(file, "PUSHS %cF@$$geq%d$$\n", inst->frame, inst->cnt + 1);
     fprintf(file, "ORS\n");
 }
 
 void codegen_qms_rule(instruction *inst) {
-    fprintf(file, "DEFVAR GF@$$rule_qms%d\n", inst->cnt);
-    fprintf(file, "DEFVAR GF@$$rule_qms%d\n", inst->cnt + 1);
-    fprintf(file, "POPS GF@$$rule_qms%d\n", inst->cnt);
-    fprintf(file, "POPS GF@$$rule_qms%d\n", inst->cnt + 1);
-    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "DEFVAR %cF@$$rule_qms%d\n", inst->frame, inst->cnt);
+    fprintf(file, "DEFVAR %cF@$$rule_qms%d\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "POPS %cF@$$rule_qms%d\n", inst->frame, inst->cnt);
+    fprintf(file, "POPS %cF@$$rule_qms%d\n", inst->frame, inst->cnt + 1);
+    fprintf(file, "PUSHS %cF@$$rule_qms%d\n", inst->frame, inst->cnt + 1);
     fprintf(file, "PUSHS nil@nil\n");
     fprintf(file, "JUMPIFNEQS $RULE_QMS_NOT_NILL%d$\n", inst->cnt);
 
     fprintf(file, "LABEL $RULE_QMS_NILL%d$\n", inst->cnt);
-    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt);
+    fprintf(file, "PUSHS %cF@$$rule_qms%d\n", inst->frame, inst->cnt);
     fprintf(file, "JUMP $END_RULE_QMS%d$\n",  inst->cnt);
 
     fprintf(file, "LABEL $RULE_QMS_NOT_NILL%d$\n", inst->cnt);
-    fprintf(file, "PUSHS GF@$$rule_qms%d\n", inst->cnt + 1);
+    fprintf(file, "PUSHS %cF@$$rule_qms%d\n", inst->frame, inst->cnt + 1);
 
     fprintf(file, "LABEL $END_RULE_QMS%d$\n",  inst->cnt);
 }
