@@ -719,7 +719,7 @@ token_t* get_me_token(){
 
                 if(readchar == ' '){
                     cnt_array[cnt_array_size]++;
-                    vector_append(buffer, readchar);
+                    vector_str_append(buffer, "\\032");
                     break;
                 } else if(readchar == '"'){
                     vector_append(buffer, readchar);
@@ -753,7 +753,7 @@ token_t* get_me_token(){
             case(S_IS_MULTILINE):
 
                 if(readchar == '\n'){
-                    vector_append(buffer,'\n');
+                    vector_str_append(buffer,"\\010");
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
                     break;
@@ -794,6 +794,18 @@ token_t* get_me_token(){
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
+                            int whitespace_end_cnt = 0;
+                            for(int i = 0; i < cnt_array[cnt_array_size]; i++){
+                                whitespace_end_cnt++;
+                            }
+
+                            for(int i = 0; i < whitespace_end_cnt; i++){
+                                
+                                for(int j = 1; j < 5; j++){
+                                    buffer->array[buffer->size-2-j-i*4] = '\0';
+                                }
+                            }
+
                             a_state = S_START;
                             token->type = TOKEN_ML_STRING;
                             token->value.vector = buffer;
@@ -811,7 +823,7 @@ token_t* get_me_token(){
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
-                    vector_append(buffer, '\n');
+                    //vector_str_append(buffer, "\\010");
                     break;
                 } else {
                     a_state = S_IS_MULTILINE;
