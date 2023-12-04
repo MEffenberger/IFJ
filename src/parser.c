@@ -150,7 +150,7 @@ token_t* get_next_token() {
 }
 
 
-void define_built_in_functions() {
+void insert_built_in_functions_into_forest() {
     // func readString() -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
     data = set_data_func(&data, STRING_QM);
@@ -659,6 +659,21 @@ void body() {
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
                 }
 
+            case KW_RD_STR:
+            case KW_RD_INT:
+            case KW_RD_DBL:
+            case KW_INT_2_DBL:
+            case KW_DBL_2_INT:
+            case KW_LENGHT:
+            case KW_SUBSTR:
+            case KW_ORD:
+            case KW_CHR:
+                define_built_in_function();
+                func_call();
+                callee_list = callee_list->next;
+                break;
+
+
             default:
                 error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
                 break;
@@ -681,11 +696,9 @@ void var_def() {
 
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
-
-        //rename_keep_exit(); /// TODO: smazat funkci nebo coooo
         
         // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-        /// TODO: param-var shadowing mrdka
+        /// TODO: param-var shadowing 
         AVL_tree *symbol = symtable_search(active->symtable, current_token->value.vector->array);
         if (symbol != NULL && !(symbol->data.is_param)) { 
             error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
@@ -871,93 +884,15 @@ void assign() {
         else if (current_token->type == TOKEN_KEYWORD) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
-                    if (!readString_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readString();
-                        readString_defined = true;
-                    }
-                    break;
-                
                 case KW_RD_INT:
-                    if (!readInt_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readInt();
-                        readInt_defined = true;
-                    }
-                    break;
-                
                 case KW_RD_DBL:
-                    if (!readDouble_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readDouble();
-                        readDouble_defined = true;
-                    }
-                    break;
-
                 case KW_INT_2_DBL:
-                    if (!Int2Double_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_Int2Double();
-                        Int2Double_defined = true;
-                    }
-                    break;
-                
                 case KW_DBL_2_INT:
-                    if (!Double2Int_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_Double2Int();
-                        Double2Int_defined = true;
-                    }
-                    break;
-
                 case KW_LENGHT:
-                    if (!length_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_length();
-                        length_defined = true;
-                    }
-                    break;
-
                 case KW_SUBSTR:
-                    if (!substring_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_substring();
-                        substring_defined = true;
-                    }
-                    break;
-                
                 case KW_ORD:
-                    if (!ord_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_ord();
-                        ord_defined = true;
-                    }
-                    break;
-
                 case KW_CHR:
-                    if (!chr_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_chr();
-                        chr_defined = true;
-                    }
+                    define_built_in_function();
                     break;
 
                 case KW_NIL:
@@ -1027,95 +962,17 @@ void assign() {
         else if (current_token->type == TOKEN_KEYWORD) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
-                    if (!readString_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readString();
-                        readString_defined = true;
-                    }
-                    break;
-                
                 case KW_RD_INT:
-                    if (!readInt_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readInt();
-                        readInt_defined = true;
-                    }
-                    break;
-                
                 case KW_RD_DBL:
-                    if (!readDouble_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_readDouble();
-                        readDouble_defined = true;
-                    }
-                    break;
-
                 case KW_INT_2_DBL:
-                    if (!Int2Double_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_Int2Double();
-                        Int2Double_defined = true;
-                    }
-                    break;
-                
                 case KW_DBL_2_INT:
-                    if (!Double2Int_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_Double2Int();
-                        Double2Int_defined = true;
-                    }
-                    break;
-
                 case KW_LENGHT:
-                    if (!length_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_length();
-                        length_defined = true;
-                    }
-                    break;
-
                 case KW_SUBSTR:
-                    if (!substring_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_substring();
-                        substring_defined = true;
-                    }
-                    break;
-                
                 case KW_ORD:
-                    if (!ord_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_ord();
-                        ord_defined = true;
-                    }
+                case KW_CHR:
+                    define_built_in_function();
                     break;
 
-                case KW_CHR:
-                    if (!chr_defined) {
-                        // CODEGEN
-                        instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
-                        inst_list_insert_last(inst_list, inst);
-                        //codegen_chr();
-                        chr_defined = true;
-                    }
-                    break;
-               
                 case KW_NIL:
                     // assigning nil
                     type_of_expr = NIL;
@@ -1589,7 +1446,7 @@ int parser_parse_please () {
     active = global;
     
     
-    define_built_in_functions();
+    insert_built_in_functions_into_forest();
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -1842,6 +1699,102 @@ void convert_optional_data_type (AVL_tree *node, int mode) {
     }
 }
 
+
+void define_built_in_function() {
+    switch (current_token->value.keyword) {
+        case KW_RD_STR:
+            if (!readString_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_readString();
+                readString_defined = true;
+            }
+            break;
+        
+        case KW_RD_INT:
+            if (!readInt_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_readInt();
+                readInt_defined = true;
+            }
+            break;
+        
+        case KW_RD_DBL:
+            if (!readDouble_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_readDouble();
+                readDouble_defined = true;
+            }
+            break;
+
+        case KW_INT_2_DBL:
+            if (!Int2Double_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_Int2Double();
+                Int2Double_defined = true;
+            }
+            break;
+        
+        case KW_DBL_2_INT:
+            if (!Double2Int_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_Double2Int();
+                Double2Int_defined = true;
+            }
+            break;
+
+        case KW_LENGHT:
+            if (!length_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_length();
+                length_defined = true;
+            }
+            break;
+
+        case KW_SUBSTR:
+            if (!substring_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_substring();
+                substring_defined = true;
+            }
+            break;
+        
+        case KW_ORD:
+            if (!ord_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_ord();
+                ord_defined = true;
+            }
+            break;
+
+        case KW_CHR:
+            if (!chr_defined) {
+                // CODEGEN
+                instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+                //codegen_chr();
+                chr_defined = true;
+            }
+            break;
+        default:
+            break;
+    }
+}
 
 
 

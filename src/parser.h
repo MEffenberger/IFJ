@@ -54,11 +54,6 @@ f_keyword_t convert_kw(keyword_t kw);
  */
 char *get_name(keyword_t kw);
 
-/**
- * @brief Insert built-in functions to the global symbol table
- * 
- */
-void built_in_functions();
 
 void peek();
 token_t* get_next_token();
@@ -177,6 +172,9 @@ void return_logic_validation (forest_node *global);
 void validate_forest(forest_node *func);
 bool validate_forest_node(forest_node *node);
 void convert_optional_data_type (AVL_tree *node, int mode);
+
+void define_built_in_function();
+
 
 
 

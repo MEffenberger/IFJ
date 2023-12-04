@@ -337,14 +337,6 @@ void codegen_generate_code_please(instruction_list *list) {
 }
 
 
-
-
-
-
-
-
-//V případě chybějícího inicializačního výrazu se u proměnných typu zahrnujícího nil provádí implicitní inicializace hodnotou nil. 
-//Proměnné ostatních typů nejsou bez inicializačního výrazu inicializovány.
 void codegen_var_def(instruction *inst) {
     fprintf(file, "DEFVAR %cF@%s\n", inst->frame, inst->name);
 }
@@ -356,8 +348,6 @@ void codegen_var_assign(instruction *inst) {
 void codegen_var_assign_nil(instruction *inst) {
     fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
 }
-
-
 
 
 void codegen_func_def(instruction *inst) {
@@ -465,7 +455,7 @@ void codegen_readDouble(instruction *inst) {
     fprintf(file, "LABEL readDouble\n");
     fprintf(file, "PUSHFRAME\n");
     fprintf(file, "DEFVAR LF@$retval$\n");
-    fprintf(file, "READ LF@$retval$ double\n");
+    fprintf(file, "READ LF@$retval$ float\n");
     fprintf(file, "POPFRAME\n");
     fprintf(file, "RETURN\n");
     fprintf(file, "LABEL !!skip_readDouble\n");

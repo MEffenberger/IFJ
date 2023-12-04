@@ -467,7 +467,9 @@ token_t* get_me_token(){
                     if(readchar == ' '){
                         vector_str_append(buffer, "\\032");
                         break;
-                    } else {
+                    } else if (readchar == '#'){
+                        vector_str_append(buffer,"\\035");
+                    }else {
                         vector_append(buffer, readchar);
                         break;
                     }
@@ -498,9 +500,7 @@ token_t* get_me_token(){
                         vector_str_append(buffer, "\\034");
                     } else if (readchar == '\\'){
                         vector_str_append(buffer,"\\092");
-                    } else if (readchar == '#'){
-                        vector_str_append(buffer,"\\035");
-                    }
+                    } 
                     
                     break;
                 } else if(readchar == 'n'){
