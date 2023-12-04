@@ -257,7 +257,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 concat = true;
 
                 // CODEGEN
-                instruction *inst = inst_init(CONCAT, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                instruction *inst = inst_init(CONCAT, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
 
                 variable_counter++;
@@ -298,7 +298,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
                         variable_counter++;
@@ -309,7 +309,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE || tmp1->exp_value == DOUBLE_QM){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
                         variable_counter++;
@@ -334,7 +334,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
                         variable_counter++;
@@ -432,7 +432,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT){
                       
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
                         // CODEGEN
@@ -448,7 +448,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
                         // CODEGEN
@@ -480,7 +480,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT){
 
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
                         // CODEGEN
@@ -557,7 +557,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
                         tmp1->exp_value = BOOL;
@@ -570,7 +570,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE && tmp3->exp_value == INT){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
                         tmp1->exp_value = BOOL;
@@ -591,7 +591,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        instruction *inst = inst_init(INT2FLOATS_2, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                        instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
                         tmp1->exp_value = BOOL;
@@ -900,7 +900,7 @@ void call_expr_parser(data_type return_type) {
                 if(tmp2->exp_value == INT_QM || tmp2->exp_value == DOUBLE_QM || tmp2->exp_value == STRING_QM){
 
                     // CODEGEN
-                    instruction *inst = inst_init(EXCLAMATION_RULE, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                    instruction *inst = inst_init(EXCLAMATION_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
 
                     variable_counter++;
@@ -981,7 +981,7 @@ void call_expr_parser(data_type return_type) {
                 check_types(tmp1, tmp2, tmp3);
 
                 // CODEGEN
-                instruction *inst3 = inst_init(LEQ_RULE, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                instruction *inst3 = inst_init(LEQ_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst3);
 
                 stack_push(&stack, tmp1);
@@ -1001,7 +1001,7 @@ void call_expr_parser(data_type return_type) {
                 check_types(tmp1, tmp2, tmp3);
 
                 // CODEGEN
-                instruction *inst5 = inst_init(GEQ_RULE, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                instruction *inst5 = inst_init(GEQ_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst5);
 
                 stack_push(&stack, tmp1);
@@ -1039,7 +1039,7 @@ void call_expr_parser(data_type return_type) {
               
 
                     // CODEGEN
-                    instruction *inst = inst_init(QMS_RULE, 'G', NULL, variable_counter, 0, 0.0, NULL);
+                    instruction *inst = inst_init(QMS_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
 
 
