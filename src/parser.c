@@ -272,9 +272,14 @@ void func_def() {
     if (current_token->type == TOKEN_ID) {
 
         // check if the function is already defined
-        forest_node *tmp = forest_search_function(active, current_token->value.vector->array);
-        if (tmp != NULL) {
+        forest_node *func_check = forest_search_function(active, current_token->value.vector->array);
+        if (func_check != NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is already defined and cannot be redefined");
+        }
+
+        AVL_tree *sym_check = symtable_search(active->symtable, current_token->value.vector->array);
+        if (sym_check != NULL) {
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Cannot use the same name for function as was used for variable");
         }
      
         MAKE_CHILDREN_IN_FOREST(W_FUNCTION, current_token->value.vector->array);
@@ -571,7 +576,7 @@ void ret() {
         call_expr_parser(tmp_data->return_type); 
         printf("COMING BACK FROM EXPR_PARSER\n");
         return_expr = false;
-        
+
         // CODEGEN
         instruction *inst = inst_init(FUNC_DEF_RETURN, 'G', tmp->name, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
@@ -699,11 +704,17 @@ void var_def() {
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
         
+        // case, where variable is declared with the same name as function already existing
+        forest_node *func_check = forest_search_function(active, var_name);
+        if (func_check != NULL) {
+            error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable cannot have the same name as function");
+        }
+
         // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-        /// TODO: param-var shadowing 
-        AVL_tree *symbol = symtable_search(active->symtable, current_token->value.vector->array);
+        /// TODO: param-var shadowing & func-var shadowing & func-par shadowing
+        AVL_tree *symbol = symtable_search(active->symtable, var_name);
         if (symbol != NULL && !(symbol->data.is_param)) { 
-            error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+            error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Multiple declarations of the same name are not allowed");
         }
 
         queue_push(queue, current_token);
@@ -931,6 +942,11 @@ void assign() {
         forest_node *scope = forest_search_scope(active, var_name);
         AVL_tree *symbol = symtable_search(scope->symtable, var_name);
         type_of_assignee = symbol->data.data_type;
+
+        // cannot assign to a parameter in function definition
+        if (symbol->data.is_param) {
+            error_exit(ERROR_SEM_OTHER, "PARSER", "Cannot assign to parameter");
+        }
 
         
         // get TOKEN_EQ from buffer 
@@ -1538,24 +1554,27 @@ void callee_validation(forest_node *global){
 
                     AVL_tree *param = symtable_find_param(tmp->symtable, i);
                     if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
-                        error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's name does not match the parameter's name in function definition");
+                        error_exit(ERROR_SEM_OTHER, "PARSER", "Argument's name does not match the parameter's name in function definition");
                     }
                     // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
                     switch (param->data.param_type) {
                         case INT_QM:
-                            if (callee_list_first->callee->args_types[i] != INT &&
+                            if (callee_list_first->callee->args_types[i] != INT_QM && 
+                                callee_list_first->callee->args_types[i] != INT &&
                                 callee_list_first->callee->args_types[i] != NIL) {
                                 error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                             }
                             break;
                         case DOUBLE_QM:
-                            if (callee_list_first->callee->args_types[i] != DOUBLE &&
+                            if (callee_list_first->callee->args_types[i] != DOUBLE_QM &&
+                                callee_list_first->callee->args_types[i] != DOUBLE &&
                                 callee_list_first->callee->args_types[i] != NIL) {
                                 error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                             }
                             break;
                         case STRING_QM:
-                            if (callee_list_first->callee->args_types[i] != STRING &&
+                            if (callee_list_first->callee->args_types[i] != STRING_QM &&
+                                callee_list_first->callee->args_types[i] != STRING &&
                                 callee_list_first->callee->args_types[i] != NIL) {
                                 error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                             }

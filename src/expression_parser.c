@@ -627,20 +627,12 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 
         }
     } else {
-        forest_node* forest = forest_search_scope(active, tmp3->value.vector->array);
-        char* name = malloc(sizeof(tmp3->value.vector->array) + 1);
-        strcpy(name, tmp3->value.vector->array);
-        if (tmp3->exp_value == INT){
+        forest_node* scope = forest_search_scope(active, tmp3->value.vector->array);
+        AVL_tree* node = forest_search_symbol(active, tmp3->value.vector->array);
+        char *nickname = renamer(node);
+        if (tmp3->exp_value == INT || tmp3->exp_value == DOUBLE || tmp3->exp_value == STRING){
             // CODEGEN
-            instruction *inst = inst_init(PUSHS_INT, forest->frame, tmp3->value.vector->array, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-        } else if (tmp3->exp_value == DOUBLE){
-            // CODEGEN
-            instruction *inst = inst_init(PUSHS_FLOAT, forest->frame, tmp3->value.vector->array, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-        } else if (tmp3->exp_value == STRING){
-            // CODEGEN
-            instruction *inst = inst_init(PUSHS_STRING, forest->frame, tmp3->value.vector->array, 0, 0, 0.0, NULL);
+            instruction *inst = inst_init(PUSHS, scope->frame, nickname, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
         }
     }
@@ -662,20 +654,12 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 
         }
     } else {
-        forest_node* forest2 = forest_search_scope(active, tmp1->value.vector->array);
-        char* name = malloc(sizeof(tmp1->value.vector->array) + 1);
-        strcpy(name, tmp1->value.vector->array);
-        if (tmp1->exp_value == INT){
+        forest_node* scope = forest_search_scope(active, tmp1->value.vector->array);
+        AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
+        char *nickname = renamer(node);
+        if (tmp1->exp_value == INT || tmp1->exp_value == DOUBLE || tmp1->exp_value == STRING){
             // CODEGEN
-            instruction *inst = inst_init(PUSHS, forest2->frame, name, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-        } else if (tmp1->exp_value == DOUBLE){
-            // CODEGEN
-            instruction *inst = inst_init(PUSHS_FLOAT, forest2->frame, tmp1->value.vector->array, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-        } else if (tmp1->exp_value == STRING){
-            // CODEGEN
-            instruction *inst = inst_init(PUSHS_STRING, forest2->frame, tmp1->value.vector->array, 0, 0, 0.0, NULL);
+            instruction *inst = inst_init(PUSHS, scope->frame, nickname, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
         }
     }
@@ -683,7 +667,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 
 
 // hlavni fce
-void call_expr_parser(data_type return_type){
+void call_expr_parser(data_type return_type) {
 
     token_stack stack;
     stack_init(&stack);
