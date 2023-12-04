@@ -734,7 +734,7 @@ void call_expr_parser(data_type return_type){
             // Check ze vracime spravny typ
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
 
-                if(return_type == DOUBLE && stack_top(&stack)->exp_value == INT && stack_top(&stack)->was_exp == false){
+                if((return_type == DOUBLE || return_type == DOUBLE_QM) && stack_top(&stack)->exp_value == INT && stack_top(&stack)->was_exp == false){
                     instruction *inst = inst_init(INT2FLOATS, 'G', NULL, 0, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
                 } else if(return_type == INT_QM && stack_top(&stack)->exp_value == INT){
