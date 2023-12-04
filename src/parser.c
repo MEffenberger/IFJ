@@ -1246,7 +1246,7 @@ void condition() {
                 // CODEGEN
                 instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst1);
-                vardef_outermost_while(IF_DEFVAR, renamer(tmp), 0);
+                vardef_outermost_while(IF_DEFVAR, renamer(tmp), active->cond_cnt);
                 instruction *inst = inst_init(IF_LET, active->frame, renamer(tmp), active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
                 //codegen_if_let(renamer(tmp));
@@ -1264,7 +1264,7 @@ void condition() {
         // CODEGEN
         instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst1);
-        vardef_outermost_while(IF_DEFVAR, NULL, 0);
+        vardef_outermost_while(IF_DEFVAR, NULL, active->cond_cnt);
         instruction *inst = inst_init(IF, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
         //codegen_if();
