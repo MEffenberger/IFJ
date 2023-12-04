@@ -113,6 +113,7 @@ token_t* get_me_token(){
     int cnt_array_alloc_size = 8;
     int* cnt_array = NULL;
     bool is_multiline = false;
+    bool empty_line = true;
 
 
     while ((readchar = (char) getc(stdin))){
@@ -746,17 +747,26 @@ token_t* get_me_token(){
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
                     break;
+                } else if(readchar == '\n'){
+                    vector_str_append(buffer, "\\010");
+                    a_state = S_IS_MULTILINE;
+                    //cnt_array_size++;
+                    break;
                 } else {
                     a_state = S_IS_MULTILINE;
                     vector_append(buffer, readchar);
+                    empty_line = false;
                     break;
                 }
 
             case(S_IS_MULTILINE):
 
                 if(readchar == '\n'){
-                    vector_str_append(buffer,"\\010");
+                    //if(empty_line = false){
+                        vector_str_append(buffer,"\\010");
+                    //}
                     a_state = S_START_MULTILINE;
+                    cnt_array[cnt_array_size] = 99;
                     cnt_array_size++;
                     break;
                 } else if(readchar == '"'){
@@ -777,6 +787,9 @@ token_t* get_me_token(){
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
                     break;
+                } else if(readchar == ' '){
+                    vector_str_append(buffer, "\\032");
+                    break;
                 } else {
                     vector_append(buffer, readchar);
                     break;
@@ -796,15 +809,18 @@ token_t* get_me_token(){
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
+                            buffer->size--;
+                            buffer->size--;
+                            
                             int whitespace_end_cnt = 0;
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-
+                            //whitespace_end_cnt++;
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){
-                                    buffer->array[buffer->size-2-j-i*4] = '\0';
+                                    buffer->array[buffer->size-j-i*4] = '\0';
                                 }
                             }
 
@@ -835,6 +851,35 @@ token_t* get_me_token(){
             
             case(S_FAKE_END_MULTILINE):
                 if(readchar == '"'){
+                            if(buffer->array[buffer->size-3] != '0'){
+                                free(cnt_array);
+                                vector_dispose(buffer);
+                                free(token);
+                                token = NULL;
+                                error_exit(ERROR_LEX, "SCANNER", "END ML not on single line Lexical error");
+                            }
+
+
+                            if(check_indent(cnt_array, cnt_array_size)){
+                                buffer->array[buffer->size-1] = '\0';
+                                buffer->array[buffer->size-2] = '\0';
+                                buffer->size--;
+                                buffer->size--;
+                                a_state = S_START;
+                                token->type = TOKEN_ML_STRING;
+                                //vector_str_append(buffer, "\\010");
+                                token->value.vector = buffer;
+                                free(cnt_array);
+                                is_multiline=false;
+                                return token;
+                            } else {
+                                free(cnt_array);
+                                vector_dispose(buffer);
+                                free(token);
+                                token = NULL;
+                                error_exit(ERROR_LEX, "SCANNER", "INDENT ML Lexical error");
+                            }
+
                         free(cnt_array);
                         vector_dispose(buffer);
                         free(token);
@@ -847,7 +892,7 @@ token_t* get_me_token(){
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
-                    vector_append(buffer, '\n');
+                    vector_str_append(buffer, "\\010");
                     break;
                 } else {
                     a_state = S_IS_MULTILINE;
