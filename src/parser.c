@@ -242,12 +242,7 @@ void prog() {
     printf("-- entering PROG --\n");
     print_debug(current_token, 2, debug_cnt);
 
-    
-
     if (current_token->type == TOKEN_EOF) {
-        // printf("Printing global symtable in order:\n");
-        // inorder(&(active->symtable));
-        // printf("\n");
         printf("-- returning...\n\n");
         return;
     }
@@ -680,6 +675,9 @@ void body() {
                 callee_list = callee_list->next;
                 break;
 
+            case KW_FUNC:
+                error_exit(ERROR_SEM_OTHER, "PARSER", "Cannot define function inside another function");
+                break;
 
             default:
                 error_exit(ERROR_SYN, "PARSER", "Unexpected token in body");
@@ -755,44 +753,30 @@ void var_def() {
 
         AVL_tree *tmp = symtable_search(active->symtable, var_name);
         tmp->nickname = active->node_cnt;
-        char *tmp_name = renamer(tmp);
+        char *nickname = renamer(tmp);
 
-
-        forest_node *outermost_while = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
-        if (outermost_while == NULL) { 
-            // CODEGEN
-            instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
-            //codegen_var_def(tmp_name);
-        }
-        else {
-            inst_list_search_while(inst_list, outermost_while->name); // int_list->active is now set on the outermost while -> insert before it
-            // CODEGEN
-            instruction *inst = inst_init(VAR_DEF, active->frame, tmp_name, 0, 0, 0.0, NULL);
-            inst_list_insert_before(inst_list, inst);
-            //codegen_var_def(tmp_name);
-        }
-
+        // if the variable is defined in while loop, it has to be defined before the outermost while loop (in codegen)
+        vardef_outermost_while(VAR_DEF, nickname);
 
         if (tmp->data.defined) {
             if (type_of_expr == NIL) {
                 // CODEGEN
-                instruction *inst = inst_init(VAR_ASSIGN_NIL, active->frame, tmp_name, 0, 0, 0.0, NULL);
+                instruction *inst = inst_init(VAR_ASSIGN_NIL, active->frame, nickname, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign_nil(tmp_name);
+                //codegen_var_assign_nil(nickname);
             }
             else {
                 // CODEGEN
-                instruction *inst = inst_init(VAR_ASSIGN, active->frame, tmp_name, 0, 0, 0.0, NULL);
+                instruction *inst = inst_init(VAR_ASSIGN, active->frame, nickname, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign(tmp_name);
+                //codegen_var_assign(nickname);
             }
         }
         if (!tmp->data.defined && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
             // CODEGEN
-            instruction *inst = inst_init(IMPLICIT_NIL, active->frame, tmp_name, 0, 0, 0.0, NULL);
+            instruction *inst = inst_init(IMPLICIT_NIL, active->frame, nickname, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_var_assign(tmp_name);
+            //codegen_var_assign(nickname);
             // tmp->data.defined = true; 
         }
 
@@ -1260,6 +1244,9 @@ void condition() {
                 print_debug(current_token, 1, debug_cnt++);
                 
                 // CODEGEN
+                instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst1);
+                vardef_outermost_while(IF_DEFVAR, renamer(tmp));
                 instruction *inst = inst_init(IF_LET, active->frame, renamer(tmp), active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
                 //codegen_if_let(renamer(tmp));
@@ -1275,6 +1262,9 @@ void condition() {
         printf("COMING BACK FROM EXPR_PARSER\n");
 
         // CODEGEN
+        instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst1);
+        vardef_outermost_while(IF_DEFVAR, NULL);
         instruction *inst = inst_init(IF, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
         //codegen_if();
@@ -1658,6 +1648,23 @@ bool validate_forest_node(forest_node *node) {
         }
     }
     return false;
+}
+
+
+
+void vardef_outermost_while(inst_type type, char *nickname) {
+    forest_node *outermost_while = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
+    if (outermost_while == NULL) { 
+        // CODEGEN
+        instruction *inst = inst_init(type, active->frame, nickname, 0, 0, 0.0, NULL);
+        inst_list_insert_last(inst_list, inst);
+    }
+    else {
+        inst_list_search_while(inst_list, outermost_while->name); // int_list->active is now set on the outermost while -> insert before it
+        // CODEGEN
+        instruction *inst = inst_init(type, active->frame, nickname, 0, 0, 0.0, NULL);
+        inst_list_insert_before(inst_list, inst);
+    }
 }
 
 
