@@ -46,13 +46,6 @@ bool vector_append(vector* v, char c);
 bool vector_str_append(vector *v, char *s);
 
 /**
- * @brief Clears vector elements
- * 
- * @param v pointer to vector
- */
-void vector_clear(vector* v);
-
-/**
  * @brief Free vector
  * 
  * @param v pointer to vector

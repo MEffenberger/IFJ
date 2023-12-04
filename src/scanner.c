@@ -752,20 +752,20 @@ token_t* get_me_token(){
                     break;
                 } else if(readchar == '\n'){
                     //cnt_array[cnt_array_size] = 999;
+                    vector_str_append(buffer, "\\010");
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
                         ungetc(next_char, stdin);
                         vector_str_append(buffer, "\\010");
-                        vector_str_append(buffer, "\\010");
                         a_state = S_START_MULTILINE;
                         break;
                     } else if(next_char == ' ' && only_whitespace == false){
+                        vector_str_append(buffer, "\\010");
                         ungetc(next_char, stdin);
                         a_state = S_START_MULTILINE;
                         //cnt_array_size++;
                         break;
                     } else if(next_char == ' ' && only_whitespace == true){
-                        vector_str_append(buffer, "\\010");
                         ungetc(next_char, stdin);
                         a_state = S_START_MULTILINE;
                         cnt_array_size++;
@@ -773,11 +773,9 @@ token_t* get_me_token(){
                         break;
                     } else if(next_char == '\n'){
                         vector_str_append(buffer, "\\010");
-                        vector_str_append(buffer, "\\010");
                         a_state = S_START_MULTILINE;
                         break;
                     } else {
-                        vector_str_append(buffer, "\\010");
                         ungetc(next_char, stdin);
                         a_state = S_IS_MULTILINE;
                         break;
@@ -845,7 +843,7 @@ token_t* get_me_token(){
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-                            whitespace_end_cnt++; //Pro EOL
+                            whitespace_end_cnt++;
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){

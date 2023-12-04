@@ -70,11 +70,6 @@ bool vector_str_append(vector* v, char* c){
     return true;
 }
 
-void vector_clear(vector* v){
-    v->size = 0;
-    v->array[0] = '\0';
-}
-
 void vector_dispose(vector* v){
     v->size = 0;
     v->size_of_alloc = 0;
