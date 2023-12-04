@@ -116,6 +116,9 @@ int get_index(token_type_t token){
         case TOKEN_STRING:
         return 14;
 
+        case TOKEN_ML_STRING:
+        return 14;
+
         case TOKEN_DOLLAR:
         return 15;
 
@@ -874,7 +877,7 @@ void call_expr_parser(data_type return_type){
                     instruction *inst = inst_init(PUSHS_FLOAT_CONST, 'G', NULL, 0, 0, tmp1->value.type_double, NULL);
                     inst_list_insert_last(inst_list, inst);
 
-                } else if (tmp1->type == TOKEN_STRING){
+                } else if (tmp1->type == TOKEN_STRING || tmp1->type == TOKEN_ML_STRING){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
                     tmp1->exp_value = STRING;
