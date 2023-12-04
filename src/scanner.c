@@ -842,7 +842,7 @@ token_t* get_me_token(){
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-                            //whitespace_end_cnt++;
+                            whitespace_end_cnt++; //Pro EOL
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){
