@@ -831,9 +831,9 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "ML Lexical error");
                     } else {
                         ungetc(next_char, stdin);
-                        printf("CNTARRAY:%d\n", cnt_array[0]);
-                        printf("CNTARRAY1:%d\n", cnt_array[1]);
-                        printf("CNTARRAYLAST:%d\n", cnt_array[cnt_array_size]);
+                        //printf("CNTARRAY:%d\n", cnt_array[0]);
+                        //printf("CNTARRAY1:%d\n", cnt_array[1]);
+                        //printf("CNTARRAYLAST:%d\n", cnt_array[cnt_array_size]);
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
