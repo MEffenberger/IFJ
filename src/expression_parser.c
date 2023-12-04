@@ -814,10 +814,11 @@ void call_expr_parser(data_type return_type) {
                 if(tmp1->type == TOKEN_ID){
                     forest_node* forest = forest_search_scope(active, tmp1->value.vector->array);
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
-
-
                     if(node == NULL){
                         error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable does not exist");
+                    }
+                    else if (!node->data.defined) {
+                        error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable is not initialized");
                     }
 
                     char *nickname = renamer(node);

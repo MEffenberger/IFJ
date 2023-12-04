@@ -892,13 +892,13 @@ void assign() {
                     define_built_in_function();
                     break;
 
-                case KW_NIL:
-                    // assigning nil
-                    type_of_expr = NIL;
+                // case KW_NIL:
+                //     // assigning nil
+                //     type_of_expr = NIL;
 
-                    current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
-                    return;
+                //     current_token = get_next_token();
+                //     print_debug(current_token, 1, debug_cnt++);
+                //     return;
                 
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to variable while defining it");
@@ -975,13 +975,13 @@ void assign() {
                     define_built_in_function();
                     break;
 
-                case KW_NIL:
-                    // assigning nil
-                    type_of_expr = NIL;
+                // case KW_NIL:
+                //     // assigning nil
+                //     type_of_expr = NIL;
                     
-                    current_token = get_next_token();
-                    print_debug(current_token, 1, debug_cnt++);
-                    return;
+                //     current_token = get_next_token();
+                //     print_debug(current_token, 1, debug_cnt++);
+                //     return;
 
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to already defined variable");
