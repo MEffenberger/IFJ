@@ -149,12 +149,11 @@ void inst_list_search_while(instruction_list *list, char *while_name) {
 void inst_list_search_void_func_call(instruction_list *list, char *func_name) {
     // move list->active based on the name of the node found 
     list->active = list->last;
-    while (strcmp(list->active->name, func_name) != 0 || list->active->inst_type != FUNC_CALL) {
+    while (strcmp(list->active->name, func_name) != 0 || list->active->inst_type != FUNC_CALL || list->active->next == NULL || list->active->next->inst_type != FUNC_CALL_RETVAL) {
         list->active = list->active->prev;
     }
     // list->active is now void_function call, you can delete the instruction after it
 }
-
 
 
 void codegen_generate_code_please(instruction_list *list) {
@@ -564,7 +563,12 @@ void codegen_ord(instruction *inst) {
     fprintf(file, "LABEL ord\n");
     fprintf(file, "PUSHFRAME\n");
     fprintf(file, "DEFVAR LF@$retval$\n");
-    fprintf(file, "STR2INT LF@$retval$ LF@$1 int@0\n");
+    fprintf(file, "JUMPIFNEQ !!valid_param LF@$1 string@\n");
+    fprintf(file, "MOVE LF@$retval$ int@0\n");
+    fprintf(file, "JUMP !!end_ord\n");
+    fprintf(file, "LABEL !!valid_param\n");
+    fprintf(file, "STRI2INT LF@$retval$ LF@$1 int@0\n");
+    fprintf(file, "LABEL !!end_ord\n");
     fprintf(file, "POPFRAME\n");
     fprintf(file, "RETURN\n");
     fprintf(file, "LABEL !!skip_ord\n");  

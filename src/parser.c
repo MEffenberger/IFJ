@@ -682,7 +682,15 @@ void var_def() {
     if (current_token->type == TOKEN_ID) {
         var_name = current_token->value.vector->array; // for case: let/var id = <exp>
 
-        rename_keep_exit(); /// TODO: smazat funkci nebo coooo
+        //rename_keep_exit(); /// TODO: smazat funkci nebo coooo
+        
+        // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
+        /// TODO: param-var shadowing mrdka
+        AVL_tree *symbol = symtable_search(active->symtable, current_token->value.vector->array);
+        if (symbol != NULL && !(symbol->data.is_param)) { 
+            error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
+        }
+
         queue_push(queue, current_token);
         opt_var_def();
 
@@ -1192,11 +1200,11 @@ void func_call() {
     if (current_token->type == TOKEN_RPAR) {
         if (!function_write) {
             // CODEGEN
-            instruction *inst = inst_init(FUNC_CALL, 'G', func_name, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst);
+            instruction *func_call = inst_init(FUNC_CALL, 'G', func_name, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, func_call);
             // CODEGEN
-            instruction *inst1 = inst_init(FUNC_CALL_RETVAL, 'G', NULL, 0, 0, 0.0, NULL);
-            inst_list_insert_last(inst_list, inst1);
+            instruction *retval = inst_init(FUNC_CALL_RETVAL, 'G', NULL, 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, retval);
         }
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -1588,12 +1596,12 @@ int parser_parse_please () {
 
     prog();
 
-
     callee_validation(global);
     return_logic_validation(global);
 
 
     //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
+
 
     codegen_generate_code_please(inst_list);
     ////////////
@@ -1737,9 +1745,6 @@ void callee_validation(forest_node *global){
 }
 
 
-void delete_retval_void () {
-
-}
 
 void return_logic_validation (forest_node *global) {
     // go through all functions in global scope (starting after all built-in functions)
