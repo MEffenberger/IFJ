@@ -36,7 +36,7 @@ extern int ifelse_cnt; // Count of get_next_token calls
 // extern int while_cnt; // Count of get_next_token calls
 extern data_type type_of_expr;
 extern instruction_list *inst_list;
-
+extern bool return_expr;
 
 /**
  * @brief Converts token keyword to a forest related keyword

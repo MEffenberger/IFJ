@@ -56,6 +56,7 @@ bool length_defined = false;
 bool substring_defined = false;
 bool ord_defined = false;
 bool chr_defined = false;
+bool return_expr = false; // for expression parser to know that the expression is in return statement
 extern FILE *file;
 
 
@@ -565,11 +566,12 @@ void ret() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
 
-    
+        return_expr = true;
         printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", tmp_data->return_type);
         call_expr_parser(tmp_data->return_type); 
         printf("COMING BACK FROM EXPR_PARSER\n");
-
+        return_expr = false;
+        
         // CODEGEN
         instruction *inst = inst_init(FUNC_DEF_RETURN, 'G', tmp->name, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
@@ -1471,24 +1473,6 @@ int parser_parse_please () {
     return 0;
 }
 
-
-void rename_keep_exit() {
-        AVL_tree *tmp = symtable_search(active->symtable, current_token->value.vector->array);
-        if (tmp == NULL) {
-            // // the node is not in any symtable above the current node, the name can be kept
-            // if (forest_search_symbol(active->parent, current_token->value.vector->array) == NULL) {
-            //     return;
-            // }
-            // else { // the node is in any symtable above, no matter what, the name must be changed to unique identifier
-            //     // nickname is set based on node_cnt from forest node (active), which is incremented after each insertions
-            //     tmp->nickname = active->node_cnt;
-            //     return;
-            // }
-        }
-        else { // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
-            error_exit(ERROR_SEM_UNDEF_FUN, "REDECLARATION", "Multiple declarations of the same name are not allowed");
-        }
-}
 
 
 // function for renaming the node  
