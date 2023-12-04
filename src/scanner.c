@@ -113,7 +113,7 @@ token_t* get_me_token(){
     int cnt_array_alloc_size = 8;
     int* cnt_array = NULL;
     bool is_multiline = false;
-
+    bool only_whitespace = false;
 
     while ((readchar = (char) getc(stdin))){
 
@@ -722,8 +722,10 @@ token_t* get_me_token(){
                 if(readchar == ' '){
                     cnt_array[cnt_array_size]++;
                     vector_str_append(buffer, "\\032");
+                    only_whitespace = true;
                     break;
                 } else if(readchar == '"'){
+                    only_whitespace = false;
                     vector_append(buffer, readchar);
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
@@ -738,20 +740,51 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "Lexical error");
                     }
                 } else if ((int) readchar == EOF) {
+                    only_whitespace = false;
                     free(cnt_array);
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "EOF Lexical error");
                 } else if(readchar == '\\'){
+                    only_whitespace = false;
                     a_state = S_START_ESC_SENTENCE;
                     break;
                 } else if(readchar == '\n'){
-                    vector_str_append(buffer, "\\010");
-                    a_state = S_IS_MULTILINE;
-                    break;
+                    //cnt_array[cnt_array_size] = 999;
+                    next_char = (char) getc (stdin);
+                    if(next_char == '"'){
+                        ungetc(next_char, stdin);
+                        vector_str_append(buffer, "\\010");
+                        vector_str_append(buffer, "\\010");
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else if(next_char == ' ' && only_whitespace == false){
+                        ungetc(next_char, stdin);
+                        a_state = S_START_MULTILINE;
+                        //cnt_array_size++;
+                        break;
+                    } else if(next_char == ' ' && only_whitespace == true){
+                        vector_str_append(buffer, "\\010");
+                        ungetc(next_char, stdin);
+                        a_state = S_START_MULTILINE;
+                        cnt_array_size++;
+                        //cnt_array_size++;
+                        break;
+                    } else if(next_char == '\n'){
+                        vector_str_append(buffer, "\\010");
+                        vector_str_append(buffer, "\\010");
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else {
+                        vector_str_append(buffer, "\\010");
+                        ungetc(next_char, stdin);
+                        a_state = S_IS_MULTILINE;
+                        break;
+                    }
                 } else {
                     a_state = S_IS_MULTILINE;
+                    only_whitespace = false;
                     vector_append(buffer, readchar);
                     break;
                 }
@@ -767,16 +800,16 @@ token_t* get_me_token(){
                     vector_append(buffer, readchar);
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
-                        //ungetc(next_char, stdin);
-                        vector_append(buffer, next_char);
-                        a_state = S_FAKE_END_MULTILINE;
+                        ungetc(next_char, stdin);
+                        //vector_append(buffer, next_char);
+                        a_state = S_START_MULTILINE;
                         break;
                     } else {
                         free(cnt_array);
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "2x uvozovky Lexical error");
                     }
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
@@ -800,6 +833,9 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "ML Lexical error");
                     } else {
                         ungetc(next_char, stdin);
+                        printf("CNTARRAY:%d\n", cnt_array[0]);
+                        printf("CNTARRAY1:%d\n", cnt_array[1]);
+                        printf("CNTARRAYLAST:%d\n", cnt_array[cnt_array_size]);
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
@@ -809,7 +845,7 @@ token_t* get_me_token(){
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-                            //whitespace_end_cnt++;
+                            whitespace_end_cnt++; //Pro EOL
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){
