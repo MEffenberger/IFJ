@@ -174,6 +174,7 @@ bool validate_forest_node(forest_node *node);
 void convert_optional_data_type (AVL_tree *node, int mode);
 
 void define_built_in_function();
+void vardef_outermost_while(inst_type type, char *nickname, int cnt);
 
 
 

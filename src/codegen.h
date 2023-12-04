@@ -30,6 +30,8 @@ typedef enum instruction_type {
     ADD_ARG,
     FUNC_CALL,
     FUNC_CALL_RETVAL,
+    IF_LABEL,
+    IF_DEFVAR,
     IF_LET,
     IF,
     ELSE,
@@ -49,8 +51,10 @@ typedef enum instruction_type {
     ORD,
     CHR,
     CONCAT,
+    CONCAT_DEFVAR,
     INT2FLOATS,
     INT2FLOATS_2,
+    INT2FLOATS_2_DEFVAR,
     IDIVS,
     DIVS,
     PUSHS_INT_CONST,
@@ -59,6 +63,7 @@ typedef enum instruction_type {
     PUSHS_NIL,
     PUSHS,
     EXCLAMATION_RULE,
+    EXCLAMATION_RULE_DEFVAR,
     ADDS,
     MULS,
     SUBS,
@@ -68,8 +73,11 @@ typedef enum instruction_type {
     GTS,
     NOTS,
     LEQ_RULE,
+    LEQ_RULE_DEFVAR,
     GEQ_RULE,
-    QMS_RULE
+    GEQ_RULE_DEFVAR,
+    QMS_RULE,
+    QMS_RULE_DEFVAR
 
 
 
