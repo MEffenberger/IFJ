@@ -496,6 +496,30 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     // relacni operatory
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
         
+
+        if(tmp3->value.keyword == KW_NIL){
+            if(tmp1->exp_value != INT_QM){
+                if(tmp1->exp_value != DOUBLE_QM){
+                    if(tmp1->exp_value != STRING_QM){
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare non nill types");
+                    }
+                }
+            }
+            tmp1->exp_value = BOOL;
+            return;
+        } else if(tmp1->value.keyword == KW_NIL){
+            if(tmp3->exp_value != INT_QM){
+                if(tmp3->exp_value != DOUBLE_QM){
+                    if(tmp3->exp_value != STRING_QM){
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare non nill types");
+                    }
+                }
+            }
+            tmp1->exp_value = BOOL;
+            return;
+        }
+
+
         convert_qm(tmp1);
         convert_qm(tmp3);
 

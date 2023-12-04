@@ -619,11 +619,11 @@ void codegen_exclamation_rule(instruction *inst) {
     fprintf(file, "POPS LF@$$excl%d\n", inst->cnt);
     fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
     fprintf(file, "PUSHS nil@nil\n");
-    fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT$\n");
-    fprintf(file, "LABEL $RULE_EXCL_ERROR$\n");
+    fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT%d$\n", inst->cnt);
+    fprintf(file, "LABEL $RULE_EXCL_ERROR%d$\n", inst->cnt);
     fprintf(file, "WRITE string@Variable\\032is\\032NULL\n");
     fprintf(file, "EXIT int@7\n"); //doresit cislo chyby
-    fprintf(file, "LABEL $RULE_EXCL_CORRECT$\n");
+    fprintf(file, "LABEL $RULE_EXCL_CORRECT%d$\n", inst->cnt);
     fprintf(file, "PUSHS LF@$$excl%d\n", inst->cnt);
 }
 
