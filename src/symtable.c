@@ -208,7 +208,7 @@ void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
         symtable_insert(&((*tree)->right), key, data);
     }
     else { // strcmp((*tree)->key, key) == 0
-        error_exit(ERROR_SEM_OTHER, "SYMTABLE", "Key already exists in the symbol table.");
+        error_exit(ERROR_SEM_UNDEF_FUN, "SYMTABLE", "Key already exists in the symbol table.");
     }
 
     // correct the height and continue with balancing
