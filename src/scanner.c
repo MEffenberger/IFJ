@@ -761,6 +761,7 @@ token_t* get_me_token(){
                     vector_append(buffer, readchar);
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
+                        //ungetc(next_char, stdin);
                         vector_append(buffer, next_char);
                         a_state = S_FAKE_END_MULTILINE;
                         break;
@@ -787,7 +788,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "ML Lexical error");
                     } else {
                         ungetc(next_char, stdin);
                         if(check_indent(cnt_array, cnt_array_size)){
@@ -804,7 +805,7 @@ token_t* get_me_token(){
                             vector_dispose(buffer);
                             free(token);
                             token = NULL;
-                            error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                            error_exit(ERROR_LEX, "SCANNER", "INDENT ML Lexical error");
                         }
                     }
                 } else if(readchar == '\n'){
@@ -824,7 +825,11 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "FAKE END ML Lexical error");
+                        //ungetc(readchar, stdin);
+                        //a_state = S_END_MULTILINE;
+                        //break;
+
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
