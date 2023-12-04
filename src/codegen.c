@@ -280,15 +280,6 @@ void codegen_generate_code_please(instruction_list *list) {
             case PUSHS_NIL:
                 fprintf(file, "PUSHS nil@nil\n");
                 break;
-            case PUSHS_INT:
-                fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
-                break;
-            case PUSHS_FLOAT:
-                fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
-                break;
-            case PUSHS_STRING:
-                fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
-                break;
             case PUSHS:
                 fprintf(file, "PUSHS %cF@%s\n", inst->frame, inst->name);
                 break;
