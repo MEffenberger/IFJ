@@ -760,7 +760,7 @@ token_t* get_me_token(){
                         a_state = S_START_MULTILINE;
                         break;
                     } else if(next_char == ' ' && only_whitespace == false){
-                        vector_str_append(buffer, "\\010");
+                        //vector_str_append(buffer, "\\010");
                         ungetc(next_char, stdin);
                         a_state = S_START_MULTILINE;
                         //cnt_array_size++;
