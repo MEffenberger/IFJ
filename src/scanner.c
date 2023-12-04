@@ -707,7 +707,6 @@ token_t* get_me_token(){
                 }
 
             case(S_START_MULTILINE):
-                
                 if(cnt_array_size + 1 == cnt_array_alloc_size){
                     int *new_vec = realloc(cnt_array, cnt_array_alloc_size * 2 * sizeof(int));
                     if(!(new_vec)){
@@ -748,7 +747,9 @@ token_t* get_me_token(){
                     a_state = S_START_ESC_SENTENCE;
                     break;
                 } else if(readchar == '\n'){
-                    vector_str_append(buffer, "\\010");
+                    /*if(empty_line == true){
+                        vector_str_append(buffer, "\\010");
+                    }*/
                     a_state = S_IS_MULTILINE;
                     //cnt_array_size++;
                     break;
@@ -760,14 +761,18 @@ token_t* get_me_token(){
                 }
 
             case(S_IS_MULTILINE):
-
+            
                 if(readchar == '\n'){
-                    //if(empty_line = false){
+                    if(empty_line == false){
                         vector_str_append(buffer,"\\010");
-                    //}
+                        
+                    }
                     a_state = S_START_MULTILINE;
-                    cnt_array[cnt_array_size] = 99;
+                    if(empty_line == true){
+                        cnt_array[cnt_array_size] = 99;
+                    }
                     cnt_array_size++;
+                    empty_line = true;
                     break;
                 } else if(readchar == '"'){
                     vector_append(buffer, readchar);
