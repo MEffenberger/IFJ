@@ -756,7 +756,7 @@ void var_def() {
         char *nickname = renamer(tmp);
 
         // if the variable is defined in while loop, it has to be defined before the outermost while loop (in codegen)
-        vardef_outermost_while(VAR_DEF, nickname);
+        vardef_outermost_while(VAR_DEF, nickname, 0);
 
         if (tmp->data.defined) {
             if (type_of_expr == NIL) {
@@ -1246,7 +1246,7 @@ void condition() {
                 // CODEGEN
                 instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst1);
-                vardef_outermost_while(IF_DEFVAR, renamer(tmp));
+                vardef_outermost_while(IF_DEFVAR, renamer(tmp), 0);
                 instruction *inst = inst_init(IF_LET, active->frame, renamer(tmp), active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
                 //codegen_if_let(renamer(tmp));
@@ -1264,7 +1264,7 @@ void condition() {
         // CODEGEN
         instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst1);
-        vardef_outermost_while(IF_DEFVAR, NULL);
+        vardef_outermost_while(IF_DEFVAR, NULL, 0);
         instruction *inst = inst_init(IF, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
         //codegen_if();
@@ -1652,17 +1652,17 @@ bool validate_forest_node(forest_node *node) {
 
 
 
-void vardef_outermost_while(inst_type type, char *nickname) {
+void vardef_outermost_while(inst_type type, char *nickname, int cnt) {
     forest_node *outermost_while = forest_search_while(active); // NULL if not anywhere in while, outermost while otherwise
     if (outermost_while == NULL) { 
         // CODEGEN
-        instruction *inst = inst_init(type, active->frame, nickname, 0, 0, 0.0, NULL);
+        instruction *inst = inst_init(type, active->frame, nickname, cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
     }
     else {
         inst_list_search_while(inst_list, outermost_while->name); // int_list->active is now set on the outermost while -> insert before it
         // CODEGEN
-        instruction *inst = inst_init(type, active->frame, nickname, 0, 0, 0.0, NULL);
+        instruction *inst = inst_init(type, active->frame, nickname, cnt, 0, 0.0, NULL);
         inst_list_insert_before(inst_list, inst);
     }
 }

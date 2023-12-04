@@ -257,7 +257,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 concat = true;
 
                 // CODEGEN
-                vardef_outermost_while(CONCAT_DEFVAR, NULL);
+                vardef_outermost_while(CONCAT_DEFVAR, NULL, variable_counter);
                 instruction *inst = inst_init(CONCAT, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
 
@@ -299,7 +299,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
@@ -311,7 +311,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE || tmp1->exp_value == DOUBLE_QM){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
@@ -337,7 +337,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT || tmp3->exp_value == INT_QM){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
@@ -436,7 +436,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT){
                       
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
@@ -453,7 +453,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
@@ -486,7 +486,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT){
 
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
 
@@ -564,7 +564,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
@@ -578,7 +578,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     if(tmp1->exp_value == DOUBLE && tmp3->exp_value == INT){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
@@ -600,7 +600,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     else if (tmp3->exp_value == INT && tmp1->exp_value == DOUBLE){
                         
                         // CODEGEN
-                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL);
+                        vardef_outermost_while(INT2FLOATS_2_DEFVAR, NULL, variable_counter);
                         instruction *inst = inst_init(INT2FLOATS_2, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                         
@@ -910,7 +910,7 @@ void call_expr_parser(data_type return_type) {
                 if(tmp2->exp_value == INT_QM || tmp2->exp_value == DOUBLE_QM || tmp2->exp_value == STRING_QM){
 
                     // CODEGEN
-                    vardef_outermost_while(EXCLAMATION_RULE_DEFVAR, NULL);
+                    vardef_outermost_while(EXCLAMATION_RULE_DEFVAR, NULL, variable_counter);
                     instruction *inst = inst_init(EXCLAMATION_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
 
@@ -994,7 +994,7 @@ void call_expr_parser(data_type return_type) {
                 // CODEGEN
                 instruction *inst31 = inst_init(LTS, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst31);
-                vardef_outermost_while(LEQ_RULE_DEFVAR, NULL);
+                vardef_outermost_while(LEQ_RULE_DEFVAR, NULL, variable_counter);
                 instruction *inst3 = inst_init(LEQ_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst3);
 
@@ -1017,7 +1017,7 @@ void call_expr_parser(data_type return_type) {
                 // CODEGEN
                 instruction *inst51 = inst_init(GTS,'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst51);
-                vardef_outermost_while(GEQ_RULE_DEFVAR, NULL);
+                vardef_outermost_while(GEQ_RULE_DEFVAR, NULL, variable_counter);
                 instruction *inst5 = inst_init(GEQ_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst5);
 
@@ -1056,7 +1056,7 @@ void call_expr_parser(data_type return_type) {
               
 
                     // CODEGEN
-                    vardef_outermost_while(QMS_RULE_DEFVAR, NULL);
+                    vardef_outermost_while(QMS_RULE_DEFVAR, NULL, variable_counter);
                     instruction *inst = inst_init(QMS_RULE, active->frame, NULL, variable_counter, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
 
