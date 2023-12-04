@@ -752,9 +752,16 @@ void call_expr_parser(data_type return_type){
                 } else if(return_type == INT && stack_top(&stack)->exp_value == INT_QM){
                     type_of_expr = INT;
                 } else {
-                    printf("RETTYPE:%d\n", return_type);
-                    printf("TOP:%d", stack_top(&stack)->exp_value);
-                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
+                    if (return_expr) {
+                        printf("RETTYPE:%d\n", return_type);
+                        printf("TOP:%d", stack_top(&stack)->exp_value);
+                        error_exit(ERROR_SEM_TYPE, "EXPRESSION PARSER", "Wrong data type of the return value");
+                    }
+                    else {
+                        printf("RETTYPE:%d\n", return_type);
+                        printf("TOP:%d", stack_top(&stack)->exp_value);
+                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
+                    }
                 }
             }
 
