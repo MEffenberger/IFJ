@@ -747,9 +747,28 @@ token_t* get_me_token(){
                     a_state = S_START_ESC_SENTENCE;
                     break;
                 } else if(readchar == '\n'){
+                    //cnt_array[cnt_array_size] = 999;
                     vector_str_append(buffer, "\\010");
-                    a_state = S_IS_MULTILINE;
-                    break;
+                    next_char = (char) getc (stdin);
+                    if(next_char == '"'){
+                        ungetc(next_char, stdin);
+                        vector_str_append(buffer, "\\010");
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else if(next_char == ' '){
+                        ungetc(next_char, stdin);
+                        //cnt_array_size++;
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else if(next_char == '\n'){
+                        vector_str_append(buffer, "\\010");
+                        a_state = S_START_MULTILINE;
+                        break;
+                    } else {
+                        ungetc(next_char, stdin);
+                        a_state = S_IS_MULTILINE;
+                        break;
+                    }
                 } else {
                     a_state = S_IS_MULTILINE;
                     vector_append(buffer, readchar);
@@ -767,9 +786,9 @@ token_t* get_me_token(){
                     vector_append(buffer, readchar);
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
-                        //ungetc(next_char, stdin);
-                        vector_append(buffer, next_char);
-                        a_state = S_FAKE_END_MULTILINE;
+                        ungetc(next_char, stdin);
+                        //vector_append(buffer, next_char);
+                        a_state = S_START_MULTILINE;
                         break;
                     } else {
                         free(cnt_array);
@@ -800,6 +819,7 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "ML Lexical error");
                     } else {
                         ungetc(next_char, stdin);
+                        printf("CNTARRAY:%d", cnt_array[0]);
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
