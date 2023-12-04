@@ -781,6 +781,9 @@ token_t* get_me_token(){
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
                     break;
+                } else if(readchar == ' '){
+                    vector_str_append(buffer, "\\032");
+                    break;
                 } else {
                     vector_append(buffer, readchar);
                     break;
