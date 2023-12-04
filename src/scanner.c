@@ -318,7 +318,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Single questionmark is not valid token");
                 }
             case(S_ID):
                 if(isalpha(readchar) || isdigit(readchar) || readchar == '_'){
@@ -384,7 +384,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Invalid num value");
                     }
                 }
 
@@ -396,7 +396,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Numbers have to follow afte dot");
                 }
             
             case(S_DEC):
@@ -417,7 +417,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Invalid dec value");
                     }
                 }
             case(S_NUM_E):
@@ -432,7 +432,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Exponent has to be signed or unsigned digit");
                 }
             case(S_NUM_E_SIGN):
                 if(isdigit(readchar)){
@@ -442,7 +442,7 @@ token_t* get_me_token(){
                 } else {
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Exponent has to be digit");
                 }
             case(S_EXP):
                 if(isdigit(readchar)){
@@ -458,7 +458,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Invalid exp value");
                     }
 
                 }
@@ -467,7 +467,9 @@ token_t* get_me_token(){
                     if(readchar == ' '){
                         vector_str_append(buffer, "\\032");
                         break;
-                    } else {
+                    } else if (readchar == '#'){
+                        vector_str_append(buffer,"\\035");
+                    }else {
                         vector_append(buffer, readchar);
                         break;
                     }
@@ -484,7 +486,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Invalid character in string");
                 }
             case(S_START_ESC_SENTENCE):
                 if(readchar == '"' || readchar == '\\'){
@@ -498,7 +500,7 @@ token_t* get_me_token(){
                         vector_str_append(buffer, "\\034");
                     } else if (readchar == '\\'){
                         vector_str_append(buffer,"\\092");
-                    }
+                    } 
                     
                     break;
                 } else if(readchar == 'n'){
@@ -555,7 +557,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Wrong escape sequence letter");
                 }
             case(S_START_HEX):
                 if(readchar == '{'){
@@ -565,7 +567,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Wrong hex format '\\u{dd}'");
                 }
             case(S_LEFT_BRACKET):
                 if(isdigit(readchar) || isalpha(readchar)){
@@ -577,7 +579,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format");
                 }
             case(S_FIRST_HEX):
                 if(isdigit(readchar) || isalpha(readchar)){
@@ -586,7 +588,7 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format");
                     }
 
                     hex[hex_counter] = readchar;
@@ -608,14 +610,14 @@ token_t* get_me_token(){
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                        error_exit(ERROR_LEX, "SCANNER", "Invalid hex value");
                     }
 
                 } else {
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Wrong hex format '\\u{dd}'");
                 }
             
             case(S_SL_COM):
@@ -634,7 +636,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Opening and closing comment symbols do not match");
                 }
 
                 if(readchar == '/'){
@@ -699,7 +701,7 @@ token_t* get_me_token(){
                     vector_dispose(buffer);
                     free(token);
                     token = NULL;
-                    error_exit(ERROR_LEX, "SCANNER", "Lexical error");
+                    error_exit(ERROR_LEX, "SCANNER", "Incorrect number of quotes");
                     }
                 }
 
@@ -719,7 +721,7 @@ token_t* get_me_token(){
 
                 if(readchar == ' '){
                     cnt_array[cnt_array_size]++;
-                    vector_append(buffer, readchar);
+                    vector_str_append(buffer, "\\032");
                     break;
                 } else if(readchar == '"'){
                     vector_append(buffer, readchar);
@@ -753,7 +755,7 @@ token_t* get_me_token(){
             case(S_IS_MULTILINE):
 
                 if(readchar == '\n'){
-                    vector_append(buffer,'\n');
+                    vector_str_append(buffer,"\\010");
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
                     break;
@@ -794,6 +796,18 @@ token_t* get_me_token(){
                         if(check_indent(cnt_array, cnt_array_size)){
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
+                            int whitespace_end_cnt = 0;
+                            for(int i = 0; i < cnt_array[cnt_array_size]; i++){
+                                whitespace_end_cnt++;
+                            }
+
+                            for(int i = 0; i < whitespace_end_cnt; i++){
+                                
+                                for(int j = 1; j < 5; j++){
+                                    buffer->array[buffer->size-2-j-i*4] = '\0';
+                                }
+                            }
+
                             a_state = S_START;
                             token->type = TOKEN_ML_STRING;
                             token->value.vector = buffer;
@@ -811,7 +825,7 @@ token_t* get_me_token(){
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
-                    vector_append(buffer, '\n');
+                    //vector_str_append(buffer, "\\010");
                     break;
                 } else {
                     a_state = S_IS_MULTILINE;

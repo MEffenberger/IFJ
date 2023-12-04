@@ -667,7 +667,6 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
         strcpy(name, tmp1->value.vector->array);
         if (tmp1->exp_value == INT){
             // CODEGEN
-            printf("%s\n", tmp1->value.vector->array);
             instruction *inst = inst_init(PUSHS, forest2->frame, name, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
         } else if (tmp1->exp_value == DOUBLE){
