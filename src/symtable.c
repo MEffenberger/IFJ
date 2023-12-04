@@ -63,6 +63,7 @@ sym_data set_data_func(sym_data *data, data_type return_type) {
 
 sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
     data_init(data);
+    data->defined = true;
     data->is_param = true;
     data->param_type = param_type;
     data->param_name = param_name;
