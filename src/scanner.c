@@ -113,7 +113,6 @@ token_t* get_me_token(){
     int cnt_array_alloc_size = 8;
     int* cnt_array = NULL;
     bool is_multiline = false;
-    bool empty_line = true;
 
 
     while ((readchar = (char) getc(stdin))){
@@ -707,6 +706,7 @@ token_t* get_me_token(){
                 }
 
             case(S_START_MULTILINE):
+                
                 if(cnt_array_size + 1 == cnt_array_alloc_size){
                     int *new_vec = realloc(cnt_array, cnt_array_alloc_size * 2 * sizeof(int));
                     if(!(new_vec)){
@@ -747,32 +747,21 @@ token_t* get_me_token(){
                     a_state = S_START_ESC_SENTENCE;
                     break;
                 } else if(readchar == '\n'){
-                    /*if(empty_line == true){
-                        vector_str_append(buffer, "\\010");
-                    }*/
+                    vector_str_append(buffer, "\\010");
                     a_state = S_IS_MULTILINE;
-                    //cnt_array_size++;
                     break;
                 } else {
                     a_state = S_IS_MULTILINE;
                     vector_append(buffer, readchar);
-                    empty_line = false;
                     break;
                 }
 
             case(S_IS_MULTILINE):
-            
+
                 if(readchar == '\n'){
-                    if(empty_line == false){
-                        vector_str_append(buffer,"\\010");
-                        
-                    }
+                    vector_str_append(buffer,"\\010");
                     a_state = S_START_MULTILINE;
-                    if(empty_line == true){
-                        cnt_array[cnt_array_size] = 99;
-                    }
                     cnt_array_size++;
-                    empty_line = true;
                     break;
                 } else if(readchar == '"'){
                     vector_append(buffer, readchar);
@@ -791,9 +780,6 @@ token_t* get_me_token(){
                     }
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
-                    break;
-                } else if(readchar == ' '){
-                    vector_str_append(buffer, "\\032");
                     break;
                 } else {
                     vector_append(buffer, readchar);
@@ -816,7 +802,6 @@ token_t* get_me_token(){
                             buffer->array[buffer->size-2] = '\0';
                             buffer->size--;
                             buffer->size--;
-                            
                             int whitespace_end_cnt = 0;
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
