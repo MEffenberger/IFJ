@@ -290,12 +290,11 @@ void func_def() {
                     current_token = get_next_token();
                     print_debug(current_token, 1, debug_cnt++);
 
-                        printf("Printing active->symtable in order:\n");
-                        //inorder(&(active->symtable));
-                        printf("\n");
-
+                    MAKE_CHILDREN_IN_FOREST(W_FUNCTION_BODY, "body");
 
                     local_body();
+
+                    BACK_TO_PARENT_IN_FOREST;
 
                     if (current_token->type == TOKEN_RIGHT_BRACKET) {
                         // func_def ends, go back to parent in forest
@@ -907,6 +906,10 @@ void assign() {
             if (token_buffer->type == TOKEN_LPAR) {
                 // expecting user-defined function
                 func_call();
+                
+                instruction *inst = inst_init(VAR_ASSIGN, scope->frame, renamer(symbol), 0, 0, 0.0, NULL);
+                inst_list_insert_last(inst_list, inst);
+
                 callee_list = callee_list->next;
             }
             else { // variable is already defined, so it's data_type is known
@@ -938,6 +941,10 @@ void assign() {
                     break;
             }
             func_call();
+        
+            instruction *inst = inst_init(VAR_ASSIGN, scope->frame, renamer(symbol), 0, 0, 0.0, NULL);
+            inst_list_insert_last(inst_list, inst);
+
             callee_list = callee_list->next;
 
         }
@@ -1276,6 +1283,8 @@ void condition() {
                         printf("-- returning...\n\n");
                         free(node_name2);
                         free(node_name3);
+                        node_name2 = NULL;
+                        node_name3 = NULL;
                         return;
                     }
                     else {
@@ -1552,7 +1561,7 @@ void return_logic_validation (forest_node *global) {
     for (int i = AFTER_BUILTIN; i < global->children_count; i++) {
         if (global->children[i]->keyword == W_FUNCTION) { // work only with non-void functions
             if (symtable_search(global->children[i]->symtable, global->children[i]->name)->data->return_type != VOID) {
-                validate_forest(global->children[i]);
+                validate_forest(global->children[i]->children[0]);
             }
         }
     }

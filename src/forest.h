@@ -19,6 +19,7 @@
 typedef enum f_keyword {
     W_GLOBAL,
     W_FUNCTION,
+    W_FUNCTION_BODY,
     W_IF,
     W_ELSE,
     W_WHILE,
