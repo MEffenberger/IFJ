@@ -91,7 +91,46 @@ void destroy_token(token_t* token){
     token = NULL;
 }
 
+void cut_indent(vector* vector, int indent, int lines){
+    if(lines == 0){
+        return;
+    }
+    int len = strlen(vector->array);
+    printf("LINES:%d\n", lines);
+    
+    for(int i = 0; i < indent*2; i++){
+        for(int j = 0; j < len; j++){
+            vector->array[j] = vector->array[j+2];
+        }
+        
+    }
+    char* result = strstr(vector->array, "\\010");
+    int index = result - vector->array;
+    index = index + 4;
+    printf("BUFFER:%s\n", vector->array);
+    //printf("PRVEK:%c\n", vector->array[index]);
+    while(vector->array[index+2] == '1'){
+        index = index + 4;
+    }
+    
+    //printf("Index: %d\n", index);
+    
+    while(lines != 1){
+        for(int i = 0; i < indent*2; i++){
+            for(int j = index; j < len; j++){
+                vector->array[j] = vector->array[j+2];
+            }
+        }
 
+        char* result = strstr(vector->array, "\\032");
+        if(result == NULL){
+            break;
+        }
+        int index = result - vector->array;
+        lines--;
+    }
+    printf("BUFFERAFTER:%s\n", vector->array);  
+}
 
 token_t* get_me_token(){
 
@@ -853,6 +892,11 @@ token_t* get_me_token(){
 
                             a_state = S_START;
                             token->type = TOKEN_ML_STRING;
+                            whitespace_end_cnt--;
+                            printf("BUFFER:%s\n", buffer->array);
+                            printf("WS%d\n", whitespace_end_cnt);
+                            //printf("STRLEN:%ld", strlen(buffer->array));
+                            cut_indent(buffer, whitespace_end_cnt, cnt_array_size);
                             token->value.vector = buffer;
                             free(cnt_array);
                             is_multiline=false;
