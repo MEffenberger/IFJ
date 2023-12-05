@@ -119,6 +119,7 @@ void cut_indent(vector* vector, int indent, int lines){
         index = index + 4;
         eol_cnt++;
     }
+    printf("EOL_cnt:%d\n", eol_cnt);
     //printf("PRVEKAFTER:%c\n", vector->array[index]);
     //printf("PRVEKAFTER:%c\n", vector->array[index+1]);
     //printf("PRVEKAFTER:%c\n", vector->array[index+2]);
@@ -622,10 +623,19 @@ token_t* get_me_token(){
                 }
             case(S_LEFT_BRACKET):
                 if(isdigit(readchar) || isalpha(readchar)){
-                    hex[hex_counter] = readchar;
-                    hex_counter++;
-                    a_state = S_FIRST_HEX;
-                    break;
+
+                    if((readchar >= 'A' && readchar <= 'F') || (readchar >= 'a' && readchar <= 'f') || (readchar >= '0' && readchar <= '9')){
+                        hex[hex_counter] = readchar;
+                        hex_counter++;
+                        a_state = S_FIRST_HEX;
+                        break;
+                    } else {
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format"); 
+                    }
+
                 } else {
                     vector_dispose(buffer);
                     free(token);
@@ -635,17 +645,26 @@ token_t* get_me_token(){
             case(S_FIRST_HEX):
                 if(isdigit(readchar) || isalpha(readchar)){
 
-                    if(hex_counter == 8){
+                    if((readchar >= 'A' && readchar <= 'F') || (readchar >= 'a' && readchar <= 'f') || (readchar >= '0' && readchar <= '9')){
+                            
+                        if(hex_counter == 8){
+                            vector_dispose(buffer);
+                            free(token);
+                            token = NULL;
+                            error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format");
+                        }
+
+                        hex[hex_counter] = readchar;
+                        hex_counter++;
+                        a_state = S_FIRST_HEX;
+                        break;
+
+                    } else {
                         vector_dispose(buffer);
                         free(token);
                         token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format");
+                        error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format"); 
                     }
-
-                    hex[hex_counter] = readchar;
-                    hex_counter++;
-                    a_state = S_FIRST_HEX;
-                    break;
                 } else if(readchar == '}'){
                     int hex_num = 0;
                     if(sscanf(hex, "%x", &hex_num) != EOF){
