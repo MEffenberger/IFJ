@@ -530,8 +530,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         }
 
 
-        //convert_qm(tmp1);
-        //convert_qm(tmp3);
+        convert_qm(tmp1);
+        convert_qm(tmp3);
 
         // typy se rovnaji a navratova hodnota bude bool
         if(tmp1->exp_value == tmp3->exp_value){
