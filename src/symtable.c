@@ -67,6 +67,7 @@ sym_data *set_data_param(data_type param_type, char *param_name, int param_order
     data->is_param = true;
     data->param_type = param_type;
     data->param_name = (char *)malloc(sizeof(char) * (strlen(param_name) + 2));
+    strcpy(data->param_name, param_name);
     data->param_order = param_order;
     return data;
 }
