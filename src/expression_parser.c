@@ -237,8 +237,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
         }
 
-        convert_qm(tmp1);
-        convert_qm(tmp3);
+        //convert_qm(tmp1);
+        //convert_qm(tmp3);
             
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with booleans");
@@ -356,8 +356,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
         }
-        convert_qm(tmp1);
-        convert_qm(tmp3);
+        //convert_qm(tmp1);
+        //convert_qm(tmp3);
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not divide bool");
@@ -530,8 +530,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         }
 
 
-        convert_qm(tmp1);
-        convert_qm(tmp3);
+        //convert_qm(tmp1);
+        //convert_qm(tmp3);
 
         // typy se rovnaji a navratova hodnota bude bool
         if(tmp1->exp_value == tmp3->exp_value){
@@ -758,7 +758,8 @@ void call_expr_parser(data_type return_type) {
                     }
                 }
             }
-
+            printf("RETTYPE:%d\n", return_type);
+            printf("TOP:%d", stack_top(&stack)->exp_value);
             dispose_stack(&stack);
             stop_expression = false;
             break;
