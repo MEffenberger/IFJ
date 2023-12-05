@@ -149,31 +149,47 @@ void insert_bool_into_callee(callee_t* callee, bool is_initialized) {
 }
 
 
-void callee_list_dispose(callee_list_t* list) {
-    // Iterate over the list and free all callees
-    callee_list_t* current = list;
-    while (current != NULL) {
-        // Free the callee
-        callee_dispose(current->callee);
 
-        // Move to the next node
-        callee_list_t* next = current->next;
-        free(current);
-        current = next;
+void callee_list_dispose(callee_list_t *element) {
+    if (element) {
+        if (element->callee) {
+            callee_t *callee = element->callee;
+
+            // Free name
+            if (callee->name) {
+                free(callee->name);
+                callee->name = NULL;
+            }
+
+            // Free args_names
+            if (callee->args_names) {
+                for (int i = 0; i < callee->arg_count; ++i) {
+                    if (callee->args_names[i]) {
+                        free(callee->args_names[i]);
+                        callee->args_names[i] = NULL;
+                    }
+                }
+                free(callee->args_names);
+                callee->args_names = NULL;
+            }
+
+            // Free args_initialized and args_types
+            if (callee->args_initialized) {
+                free(callee->args_initialized);
+                callee->args_initialized = NULL;
+            }
+            if (callee->args_types) {
+                free(callee->args_types);
+                callee->args_types = NULL;
+            }
+
+            // Free callee structure
+            free(callee);
+            element->callee = NULL;
+        }
+        // Free element of callee_list
+        free(element);
+        element = NULL;
     }
 }
 
-void callee_dispose(callee_t* callee) {
-    // Free the name
-    free(callee->name);
-
-    // Free the args_names
-    for (int i = 0; i < callee->arg_count; i++) {
-        free(callee->args_names[i]);
-    }
-    free(callee->args_names);
-    free(callee->args_types);
-
-    // Free the callee
-    free(callee);
-}

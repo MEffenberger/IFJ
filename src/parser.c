@@ -353,7 +353,7 @@ void func_def() {
         }
     }
     else {
-        error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Missing identifier of funciton");
+        error_exit(ERROR_SYN, "PARSER", "Missing identifier of funciton");
     }
 
 }
@@ -891,14 +891,6 @@ void assign() {
                 case KW_CHR:
                     define_built_in_function();
                     break;
-
-                // case KW_NIL:
-                //     // assigning nil
-                //     type_of_expr = NIL;
-
-                //     current_token = get_next_token();
-                //     print_debug(current_token, 1, debug_cnt++);
-                //     return;
                 
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to variable while defining it");
@@ -974,14 +966,6 @@ void assign() {
                 case KW_CHR:
                     define_built_in_function();
                     break;
-
-                // case KW_NIL:
-                //     // assigning nil
-                //     type_of_expr = NIL;
-                    
-                //     current_token = get_next_token();
-                //     print_debug(current_token, 1, debug_cnt++);
-                //     return;
 
                 default:
                     error_exit(ERROR_SYN, "PARSER", "Unexpected token in assignment to already defined variable");
