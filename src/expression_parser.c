@@ -556,7 +556,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
         }
         if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
             if(tmp1->exp_value == NIL){
-                if(tmp3->exp_value != INT_QM || tmp3->exp_value != DOUBLE_QM || tmp3->exp_value != STRING_QM){
+                if(tmp3->exp_value != INT_QM || tmp3->exp_value != DOUBLE_QM || tmp3->exp_value != STRING_QM){ //idk mozna sem budou patrit i klasicke typy
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
                 } else {
                     tmp1->exp_value = BOOL;
@@ -571,7 +571,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 }
             }
         }
-        //convert_qm(tmp1);
+        //convert_qm(tmp1); //mozna ten konvert bude potreba, podpora int a int? ze sedi
         //convert_qm(tmp3);
 
         // typy se rovnaji a navratova hodnota bude bool
