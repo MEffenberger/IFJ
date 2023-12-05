@@ -647,7 +647,7 @@ token_t* get_me_token(){
                 if(isdigit(readchar) || isalpha(readchar)){
 
                     if((readchar >= 'A' && readchar <= 'F') || (readchar >= 'a' && readchar <= 'f') || (readchar >= '0' && readchar <= '9')){
-                            
+
                         if(hex_counter == 8){
                             vector_dispose(buffer);
                             free(token);
@@ -667,6 +667,20 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format"); 
                     }
                 } else if(readchar == '}'){
+                    //Toto asi do funkce
+                    int non_null_cnt = 0;
+                    for(int i = 0; i < strlen(hex); i++){
+                        if(hex[i] != '0'){
+                            non_null_cnt++;
+                        }
+                    }
+                    if(non_null_cnt > 2){
+                        vector_dispose(buffer);
+                        free(token);
+                        token = NULL;
+                        error_exit(ERROR_LEX, "SCANNER", "Hex value has more than 2 digits");
+                    }
+
                     int hex_num = 0;
                     if(sscanf(hex, "%x", &hex_num) != EOF){
                         char* c = (char*) &hex_num;
