@@ -923,6 +923,13 @@ void call_expr_parser(data_type return_type) {
                     inst_list_insert_last(inst_list, inst);
 
                     variable_counter++;
+                    if(tmp2->exp_value == INT_QM){
+                        tmp2->exp_value = INT;
+                    } else if(tmp2->exp_value == DOUBLE_QM){
+                        tmp2->exp_value = DOUBLE;
+                    } else {
+                        tmp2->exp_value = STRING;
+                    }
                     stack_push(&stack, tmp2);
                 } else {
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not apply ! to non qm operands");

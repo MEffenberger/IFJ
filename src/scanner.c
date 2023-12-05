@@ -96,7 +96,7 @@ void cut_indent(vector* vector, int indent, int lines){
         return;
     }
     int len = strlen(vector->array);
-    //printf("LINES:%d\n", lines);
+    printf("LINES:%d\n", lines);
     
     for(int i = 0; i < indent*2; i++){
         for(int j = 0; j < len; j++){
@@ -107,11 +107,15 @@ void cut_indent(vector* vector, int indent, int lines){
     char* result = strstr(vector->array, "\\010");
     int index = result - vector->array;
     index = index + 4;
-    //printf("BUFFER:%s\n", vector->array);
-    //printf("PRVEK:%c\n", vector->array[index]);
-    while(vector->array[index+2] == '1'){
+    printf("BUFFER:%s\n", vector->array);
+    printf("PRVEK:%c\n", vector->array[index]);
+    while(vector->array[index+2] == '1' && vector->array[index+3] == '0'){
         index = index + 4;
     }
+    //printf("PRVEKAFTER:%c\n", vector->array[index]);
+    //printf("PRVEKAFTER:%c\n", vector->array[index+1]);
+    //printf("PRVEKAFTER:%c\n", vector->array[index+2]);
+
     
     //printf("Index: %d\n", index);
     
@@ -121,15 +125,16 @@ void cut_indent(vector* vector, int indent, int lines){
                 vector->array[j] = vector->array[j+2];
             }
         }
-
-        char* result = strstr(vector->array, "\\032");
+        printf("BUFFERAFTERONE:%s\n", vector->array);  
+        char* result = strstr(vector->array, "\\032"); //Je potreba pocitat pocet 010 a potom od te pozice mazat 010
         if(result == NULL){
             break;
         }
         int index = result - vector->array;
+        printf("INDEX:%d\n", index);
         lines--;
     }
-    //printf("BUFFERAFTER:%s\n", vector->array);  
+    printf("BUFFERAFTER:%s\n", vector->array);  
 }
 
 token_t* get_me_token(){
