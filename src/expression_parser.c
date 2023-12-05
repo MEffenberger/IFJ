@@ -697,7 +697,7 @@ void call_expr_parser(data_type return_type) {
     char table_result;
 
     bool eval_expr = true; 
-
+    current_token->was_exp = false;
     int stack_index;
     int next_token_index;
     
