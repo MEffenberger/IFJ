@@ -878,7 +878,7 @@ void assign() {
                 }
             }
         }
-        else if (current_token->type == TOKEN_KEYWORD) {
+        else if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword != KW_NIL) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
                 case KW_RD_INT:
@@ -961,7 +961,7 @@ void assign() {
                 printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
-        else if (current_token->type == TOKEN_KEYWORD) {
+        else if (current_token->type == TOKEN_KEYWORD && current_token->value.keyword != KW_NIL) {
             switch (current_token->value.keyword) {
                 case KW_RD_STR:
                 case KW_RD_INT:

@@ -844,14 +844,15 @@ void call_expr_parser(data_type return_type) {
                         // CODEGEN
                         instruction *inst = inst_init(PUSHS, forest->frame, nickname, 0, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
-                    } else if(variable_type == NIL){
-                        //
                     } else if(variable_type == STRING || variable_type == STRING_QM){
                         // CODEGEN
                         instruction *inst = inst_init(PUSHS, forest->frame, nickname, 0, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                     }
-                    
+
+                } else if (tmp1->type == TOKEN_KEYWORD && tmp1->value.keyword == KW_NIL) {
+                    /// TODO: handle nil 
+
                 } else if(tmp1->type == TOKEN_DEC){
                     tmp1->type = TOKEN_EXPRESSION;
                     tmp1->exp_type = CONST;
