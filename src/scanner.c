@@ -521,7 +521,7 @@ token_t* get_me_token(){
                         break;
                     } else if (readchar == '#'){
                         vector_str_append(buffer,"\\035");
-                        break;
+                        
                     }else {
                         vector_append(buffer, readchar);
                         break;
