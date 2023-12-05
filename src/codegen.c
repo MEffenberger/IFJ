@@ -275,8 +275,17 @@ void codegen_generate_code_please(instruction_list *list) {
             case INT2FLOATS_2_DEFVAR:
                 fprintf(file, "DEFVAR %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
                 break;
+            case DIV_ZERO_DEFVAR:
+                fprintf(file, "DEFVAR %cF@div_zero_%d\n", inst->frame, inst->cnt);
+                break;
+            case DIV_BY_ZERO:
+                codegen_div_zero(inst);
+                break;
             case DIVS:
                 fprintf(file, "DIVS\n");
+                break;
+            case IDIV_BY_ZERO:
+                codegen_idiv_zero(inst);
                 break;
             case IDIVS:
                 fprintf(file, "IDIVS\n");
@@ -591,14 +600,6 @@ void codegen_chr(instruction *inst) {
 
 void codegen_main(instruction *inst) {
     fprintf(file, ".IFJcode23\n");
-    //fprintf(file, "DEFVAR GF$check1\n"); pomocne promenne
-    //fprintf(file, "DEFVAR GF$tmp2\n"); dle potreby
-    fprintf(file, "JUMP $$main\n");
-
-    // space for sth before main
-    // exit labels for error handling
-
-    fprintf(file, "LABEL $$main\n");
     fprintf(file, "CREATEFRAME\n");
     fprintf(file, "PUSHFRAME\n");
 }
@@ -666,4 +667,23 @@ void codegen_qms_rule(instruction *inst) {
     fprintf(file, "LABEL $END_RULE_QMS%d$\n",  inst->cnt);
 }
 
+void codegen_idiv_zero(instruction *inst) {
+    fprintf(file, "POPS %cF@div_zero_%d\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMPIFEQ !!DIV_BY_ZERO %cF@%s%d int@0\n", inst->frame, inst->name, inst->cnt);
+    fprintf(file, "PUSHS %cF@div_zero_%d\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMP !!NOT_DIV_BY_ZERO\n");
+    fprintf(file, "LABEL !!DIV_BY_ZERO\n");
+    fprintf(file, "EXIT int@7\n");
+    fprintf(file, "LABEL !!NOT_DIV_BY_ZERO\n");
+}
+
+void codegen_div_zero(instruction *inst) {
+    fprintf(file, "POPS %cF@div_zero_%d\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMPIFEQ !!IDIV_BY_ZERO %cF@%s%d float@0x0p+0\n", inst->frame, inst->name, inst->cnt);
+    fprintf(file, "PUSHS %cF@div_zero_%d\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMP !!NOT_IDIV_BY_ZERO\n");
+    fprintf(file, "LABEL !!IDIV_BY_ZERO\n");
+    fprintf(file, "EXIT int@7\n");
+    fprintf(file, "LABEL !!NOT_IDIV_BY_ZERO\n");
+}
 

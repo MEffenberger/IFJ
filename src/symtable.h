@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief Symbol table using AVL tree: header file
+ * @brief Symbol table using self-balancing binary search tree (AVL tree)
  *
  * @author Adam Valík <xvalik05>
  * @author Marek Effenberger <xeffen00>
@@ -17,10 +17,7 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-
-
-
-
+// Data types
 typedef enum e_data_type {
     INT,
     DOUBLE,
@@ -34,6 +31,7 @@ typedef enum e_data_type {
     UNKNOWN
 } data_type;
 
+// Variable type (modifiable or unmodifiable)
 typedef enum e_var_type {
     VAR,
     LET
@@ -54,76 +52,57 @@ typedef struct symbol_data {
 
     // Parameter
     bool is_param;
-    const char *param_name;
+    char *param_name;
     data_type param_type;
     int param_order;
-
 } sym_data;
 
 // Struct for the AVL tree
 typedef struct avl_tree {
-    char *key;          // name of the symbol (identifier)
-    sym_data data;
+    char *key;  // name of the symbol (identifier)
+    sym_data *data;
     struct avl_tree *left;
     struct avl_tree *right;
     int height; 
-    int nickname; // for renaming purposes for codegen, number of special characters in the name     
+    int nickname; // for renaming purposes (codegen)
 } AVL_tree;
 
-
-/**
- * @brief Symbol table initialization
- * 
- * @param tree Pointer to the root of the tree
- */
-void symtable_init(AVL_tree **tree);
 
 /**
  * @brief Data initialization
  * 
  * @param data Pointer to the data
  */
-void data_init(sym_data *data);
+sym_data *data_init(sym_data *data);
+
 
 /**
  * @brief Set the variable's data
  * 
- * @param data Data to be set
  * @param initialized If the variable is initialized
- * @param data_type Data type of the variable (T_INT/DOUBLE/...)
- * @param var_type LET/VAR
- * @param int_value Integer value when T_INT(_Q)
- * @param double_value Double value when T_DOUBLE(_Q)
- * @param string_value String value when T_STRING(_Q)
+ * @param data_type Data type of the variable 
+ * @param var_type modifiable or unmodifiable (VAR/LET)
  */
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type); //int int_value, double double_value, char *string_value);
+sym_data *set_data_var(bool initialized, data_type data_type, var_type var_type);
+
 
 /**
  * @brief Set the function's data
  * 
- * @param data Data to be set
  * @param return_type Return type of the function
  */
-sym_data set_data_func(sym_data *data, data_type return_type);
+sym_data *set_data_func(data_type return_type);
+
 
 /**
  * @brief Set the parameter's data
  * 
- * @param data Data to be set
  * @param param_type Data type of the parameter
  * @param param_name Name of the parameter
  * @param param_order Order of the parameter
  */
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order);
+sym_data *set_data_param(data_type param_type, char *param_name, int param_order);
 
-/**
- * @brief Symbol insertion
- * 
- * @param tree Pointer to the root of the tree
- * @param key Key of the node
- * @param value Value of the node
- */
-void symtable_insert(AVL_tree **tree, char *key, sym_data data);
 
 /**
  * @brief Symbol search in the symbol table
@@ -136,13 +115,13 @@ AVL_tree *symtable_search(AVL_tree *tree, char *key);
 
 
 /**
- * @brief Symbol lookup
- * 
+ * @brief Traverse the tree and find the parameter with the given order
+ *
  * @param tree Pointer to the root of the tree
- * @param key Key of the node
- * @return sym_data* Pointer to the data of the node
+ * @param order_arg Order of the parameter
+ * @return AVL_tree* Pointer to the node (symbol)
  */
-sym_data *symtable_lookup(AVL_tree *tree, char *key);
+AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg);
 
 
 /**
@@ -180,6 +159,16 @@ void left_rotate(AVL_tree **tree);
 
 
 /**
+ * @brief Insertion of the symbol into the symbol table
+ * 
+ * @param tree Pointer to the root of the tree
+ * @param key Key of the node
+ * @param data Data of the node
+ */
+void symtable_insert(AVL_tree **tree, char *key, sym_data *data);
+
+
+/**
  * @brief Symbol deletion
  * 
  * @param tree Pointer to the root of the tree
@@ -195,15 +184,5 @@ void symtable_delete(AVL_tree **tree, char *key);
  */
 void symtable_dispose(AVL_tree **tree);
 
-
-/**
- * @brief Prints the keys in the symbol table in order
- * 
- * @param tree Pointer to the root of the tree
- */
-void inorder(AVL_tree **tree);
-
-AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg);
-bool validation_of_id(AVL_tree *tree, char *key, int order_arg);
 
 #endif //IFJ_SYMTABLE_H

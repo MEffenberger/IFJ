@@ -150,18 +150,20 @@ void insert_bool_into_callee(callee_t* callee, bool is_initialized) {
 
 
 
-void callee_list_dispose(callee_list_t *element) {
-    if (element) {
-        if (element->callee) {
-            callee_t *callee = element->callee;
+void callee_list_dispose(callee_list_t *first) {
+    callee_list_t *current = first;
+    callee_list_t *next;
 
-            // Free name
+    while (current != NULL) {
+        if (current->callee) {
+            callee_t *callee = current->callee;
+
+            // Free callee structure members
             if (callee->name) {
                 free(callee->name);
                 callee->name = NULL;
             }
 
-            // Free args_names
             if (callee->args_names) {
                 for (int i = 0; i < callee->arg_count; ++i) {
                     if (callee->args_names[i]) {
@@ -173,23 +175,24 @@ void callee_list_dispose(callee_list_t *element) {
                 callee->args_names = NULL;
             }
 
-            // Free args_initialized and args_types
             if (callee->args_initialized) {
                 free(callee->args_initialized);
                 callee->args_initialized = NULL;
             }
+
             if (callee->args_types) {
                 free(callee->args_types);
                 callee->args_types = NULL;
             }
 
-            // Free callee structure
+            // Free callee structure itself
             free(callee);
-            element->callee = NULL;
+            current->callee = NULL;
         }
-        // Free element of callee_list
-        free(element);
-        element = NULL;
+
+        next = current->next;
+        free(current);
+        current = next;
     }
 }
 

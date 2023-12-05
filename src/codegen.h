@@ -57,6 +57,9 @@ typedef enum instruction_type {
     INT2FLOATS_2_DEFVAR,
     IDIVS,
     DIVS,
+    DIV_BY_ZERO,
+    IDIV_BY_ZERO,
+    DIV_ZERO_DEFVAR,
     PUSHS_INT_CONST,
     PUSHS_FLOAT_CONST,
     PUSHS_STRING_CONST,
@@ -77,11 +80,7 @@ typedef enum instruction_type {
     GEQ_RULE,
     GEQ_RULE_DEFVAR,
     QMS_RULE,
-    QMS_RULE_DEFVAR
-
-
-
-
+    QMS_RULE_DEFVAR,
 } inst_type;
 
 
@@ -181,6 +180,9 @@ void codegen_exclamation_rule(instruction *inst);
 void codegen_leq_rule(instruction *inst);
 void codegen_geq_rule(instruction *inst);
 void codegen_qms_rule(instruction *inst);
+
+void codegen_div_zero(instruction *inst);
+void codegen_idiv_zero(instruction *inst);
 
 
 
