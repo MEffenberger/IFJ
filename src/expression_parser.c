@@ -246,6 +246,11 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
         // typy jsou stejne
         if (tmp1->exp_value == tmp3->exp_value){
+
+            if((tmp1->exp_value == INT_QM && tmp3->exp_value == INT_QM) || (tmp1->exp_value == DOUBLE_QM && tmp3->exp_value == DOUBLE_QM) || (tmp1->exp_value == STRING_QM && tmp3->exp_value == STRING_QM)){
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
+            }
+
             if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == INT && tmp3->exp_type == CONST)){
                 tmp1->exp_type = ID;
             }
@@ -374,8 +379,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     error_exit(ERROR_SEM_OTHER, "EXPRESSION PARSER", "Division by zero");
             }
 
-            if(tmp1->exp_value == STRING && tmp3->exp_value == STRING){
+            if((tmp1->exp_value == STRING || tmp1->exp_value == STRING_QM) && (tmp3->exp_value == STRING || tmp3->exp_value == STRING_QM)){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
+            }
+
+            if((tmp1->exp_value == INT_QM && tmp3->exp_value == INT_QM) || (tmp1->exp_value == DOUBLE_QM && tmp3->exp_value == DOUBLE_QM) || (tmp1->exp_value == STRING_QM && tmp3->exp_value == STRING_QM)){
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
             }
 
             if(tmp1->exp_value == INT){
@@ -539,9 +548,31 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             return;
         }
 
-
-        convert_qm(tmp1);
-        convert_qm(tmp3);
+        if(tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+            if((tmp1->exp_value == INT_QM || tmp3->exp_value == INT_QM || tmp1->exp_value == DOUBLE_QM || tmp3->exp_value == DOUBLE_QM || tmp1->exp_value == STRING_QM || tmp3->exp_value == STRING_QM)){
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
+        
+            }
+        }
+        if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
+            if(tmp1->exp_value == NIL){
+                if(tmp3->exp_value != INT_QM || tmp3->exp_value != DOUBLE_QM || tmp3->exp_value != STRING_QM){
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
+                } else {
+                    tmp1->exp_value = BOOL;
+                    return;
+                }
+            } else if(tmp3->exp_value == NIL){
+                if(tmp1->exp_value != INT_QM || tmp1->exp_value != DOUBLE_QM || tmp1->exp_value != STRING_QM){
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
+                } else {
+                    tmp1->exp_value = BOOL;
+                    return;
+                }
+            }
+        }
+        //convert_qm(tmp1);
+        //convert_qm(tmp3);
 
         // typy se rovnaji a navratova hodnota bude bool
         if(tmp1->exp_value == tmp3->exp_value){
