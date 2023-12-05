@@ -45,7 +45,7 @@ bool vardef_assign = false; // for assign() to know where to get info about the 
 bool function_write = false; // for parser to know that the function being handled is write() and needs special treatment
 // flags for defining built-in functions in codegen, so they are not defined multiple times
 bool return_expr = false; // for expression parser to know that the expression is in return statement
-builtin_defs built_in_defs = {false, false, false, false, false, false, false, false, false};
+builtin_defs *built_in_defs = NULL;
 extern FILE *file;
 
 
@@ -558,8 +558,6 @@ void body() {
 
     var_name = NULL;
     type_of_assignee = UNKNOWN;
-
-    // note: když je <body> -> eps, tak body() se vůbec nezavolá
 
     if (current_token->type == TOKEN_ID) {
         peek();
@@ -1383,6 +1381,9 @@ int parser_parse_please () {
     inst_list = (instruction_list*)malloc(sizeof(instruction_list));
     inst_list_init(inst_list);
 
+    built_in_defs = (builtin_defs*)malloc(sizeof(builtin_defs));
+    builtin_defs_init(built_in_defs);
+
 
     callee_list = init_callee_list();
     callee_list_first = callee_list;
@@ -1649,86 +1650,100 @@ void convert_optional_data_type (AVL_tree *node, int mode) {
 }
 
 
-void define_built_in_function(builtin_defs built_in_defs) {
+
+void builtin_defs_init(builtin_defs *defs) {
+    defs->readInt_defined = false;
+    defs->readDouble_defined = false;
+    defs->readString_defined = false;
+    defs->Int2Double_defined = false;
+    defs->Double2Int_defined = false;
+    defs->length_defined = false;
+    defs->substring_defined = false;
+    defs->ord_defined = false;
+    defs->chr_defined = false;
+}
+
+
+void define_built_in_function(builtin_defs *built_in_defs) {
     switch (current_token->value.keyword) {
         case KW_RD_STR:
-            if (!built_in_defs.readString_defined) {
+            if (!built_in_defs->readString_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.readString_defined = true;
+                built_in_defs->readString_defined = true;
             }
             break;
         
         case KW_RD_INT:
-            if (!built_in_defs.readInt_defined) {
+            if (!built_in_defs->readInt_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.readInt_defined = true;
+                built_in_defs->readInt_defined = true;
             }
             break;
         
         case KW_RD_DBL:
-            if (!built_in_defs.readDouble_defined) {
+            if (!built_in_defs->readDouble_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.readDouble_defined = true;
+                built_in_defs->readDouble_defined = true;
             }
             break;
 
         case KW_INT_2_DBL:
-            if (!built_in_defs.Int2Double_defined) {
+            if (!built_in_defs->Int2Double_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.Int2Double_defined = true;
+                built_in_defs->Int2Double_defined = true;
             }
             break;
         
         case KW_DBL_2_INT:
-            if (!built_in_defs.Double2Int_defined) {
+            if (!built_in_defs->Double2Int_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.Double2Int_defined = true;
+                built_in_defs->Double2Int_defined = true;
             }
             break;
 
         case KW_LENGHT:
-            if (!built_in_defs.length_defined) {
+            if (!built_in_defs->length_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.length_defined = true;
+                built_in_defs->length_defined = true;
             }
             break;
 
         case KW_SUBSTR:
-            if (!built_in_defs.substring_defined) {
+            if (!built_in_defs->substring_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.substring_defined = true;
+                built_in_defs->substring_defined = true;
             }
             break;
         
         case KW_ORD:
-            if (!built_in_defs.ord_defined) {
+            if (!built_in_defs->ord_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.ord_defined = true;
+                built_in_defs->ord_defined = true;
             }
             break;
 
         case KW_CHR:
-            if (!built_in_defs.chr_defined) {
+            if (!built_in_defs->chr_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                built_in_defs.chr_defined = true;
+                built_in_defs->chr_defined = true;
             }
             break;
         default:

@@ -237,10 +237,17 @@ void convert_optional_data_type (AVL_tree *node, int mode);
 
 
 /**
+ * @brief Initialize built-in function flags
+ * 
+ * @param defs Struct with flags informing whether a built-in function was defined or not
+ */
+void builtin_defs_init(builtin_defs *defs);
+
+/**
  * @brief Define built-in function (in codegen) if it has not been defined yet
  * 
  * @param built_in_defs Struct with flags informing whether a built-in function was defined or not
  */
-void define_built_in_function(builtin_defs built_in_defs);
+void define_built_in_function(builtin_defs *built_in_defs);
 
 #endif //IFJ_PARSER_H
