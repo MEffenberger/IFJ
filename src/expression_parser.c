@@ -382,10 +382,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
                 // CODEGEN
                 vardef_outermost_while(IDIV_ZERO_DEFVAR, NULL, variable_counter);
-                instruction *inst_zero = inst_init(IDIV_BY_ZERO, active->frame, "div_zero_", variable_counter, 0, 0.0, NULL);
+                instruction *inst_zero = inst_init(IDIV_BY_ZERO, active->frame, "idiv_zero_", variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst_zero);
                 instruction *inst = inst_init(IDIVS, 'G', NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
+                
+                variable_counter++;
 
             } else {
                 
@@ -396,6 +398,8 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 instruction *inst = inst_init(DIVS, 'G', NULL, variable_counter, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
 
+                variable_counter++;
+                
                 tmp1->exp_value = DOUBLE;
             }
 

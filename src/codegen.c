@@ -671,22 +671,18 @@ void codegen_qms_rule(instruction *inst) {
 }
 
 void codegen_idiv_zero(instruction *inst) {
-    fprintf(file, "POPS %cF@div_zero_%d\n", inst->frame, inst->cnt);
-    fprintf(file, "JUMPIFEQ !!DIV_BY_ZERO %cF@%s%d int@0\n", inst->frame, inst->name, inst->cnt);
-    fprintf(file, "PUSHS %cF@div_zero_%d\n", inst->frame, inst->cnt);
-    fprintf(file, "JUMP !!NOT_DIV_BY_ZERO\n");
-    fprintf(file, "LABEL !!DIV_BY_ZERO\n");
+    fprintf(file, "POPS %cF@idiv_zero_%d\n", inst->frame, inst->cnt);
+    fprintf(file, "JUMPIFNEQ !!SKIP_IDIV_BY_ZERO%d %cF@%s%d int@0\n", inst->cnt, inst->frame, inst->name, inst->cnt);
     fprintf(file, "EXIT int@7\n");
-    fprintf(file, "LABEL !!NOT_DIV_BY_ZERO\n");
+    fprintf(file, "LABEL !!SKIP_IDIV_BY_ZERO%d\n", inst->cnt);
+    fprintf(file, "PUSHS %cF@idiv_zero_%d\n", inst->frame, inst->cnt);
 }
 
 void codegen_div_zero(instruction *inst) {
     fprintf(file, "POPS %cF@div_zero_%d\n", inst->frame, inst->cnt);
-    fprintf(file, "JUMPIFEQ !!IDIV_BY_ZERO %cF@%s%d float@0x0p+0\n", inst->frame, inst->name, inst->cnt);
-    fprintf(file, "PUSHS %cF@div_zero_%d\n", inst->frame, inst->cnt);
-    fprintf(file, "JUMP !!NOT_IDIV_BY_ZERO\n");
-    fprintf(file, "LABEL !!IDIV_BY_ZERO\n");
+    fprintf(file, "JUMPIFNEQ !!SKIP_DIV_BY_ZERO%d %cF@%s%d float@0x0p+0\n", inst->cnt, inst->frame, inst->name, inst->cnt);
     fprintf(file, "EXIT int@7\n");
-    fprintf(file, "LABEL !!NOT_IDIV_BY_ZERO\n");
+    fprintf(file, "LABEL !!SKIP_DIV_BY_ZERO%d\n", inst->cnt);
+    fprintf(file, "PUSHS %cF@div_zero_%d\n", inst->frame, inst->cnt);
 }
 
