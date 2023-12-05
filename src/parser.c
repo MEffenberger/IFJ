@@ -961,7 +961,7 @@ void func_call() {
 
 
     // store the function's name for later usage (for codegen)
-    char *func_name = malloc(sizeof(char) * strlen(current_token->value.vector->array) + 1);
+    char *func_name = allocate_memory(sizeof(char) * strlen(current_token->value.vector->array) + 1);
     func_name = strcpy(func_name, current_token->value.vector->array);
 
     insert_callee_into_list(callee_list, func_name);
@@ -1153,7 +1153,7 @@ void condition() {
 
     cnt_push(cnt_stack); // push ifelse_cnt to stack and increment
     sprintf(node_name, "if_%d", ifelse_cnt);
-    char *node_name2 = malloc(sizeof(char) * 20);
+    char *node_name2 = allocate_memory(sizeof(char) * 20);
     strcpy(node_name2, node_name);
 
     MAKE_CHILDREN_IN_FOREST(W_IF, node_name2);
@@ -1239,7 +1239,7 @@ void condition() {
 
                 cnt = cnt_top(cnt_stack); // get ifelse_cnt from stack
                 sprintf(node_name, "else_%d", cnt);
-                char *node_name3 = malloc(sizeof(char) * 20);
+                char *node_name3 = allocate_memory(sizeof(char) * 20);
                 strcpy(node_name3, node_name);
                 MAKE_CHILDREN_IN_FOREST(W_ELSE, node_name3);
                 active->cond_cnt = cnt;
@@ -1274,6 +1274,8 @@ void condition() {
                         BACK_TO_PARENT_IN_FOREST;
 
                         printf("-- returning...\n\n");
+                        free(node_name2);
+                        free(node_name3);
                         return;
                     }
                     else {
@@ -1305,7 +1307,7 @@ void cycle() {
     print_debug(current_token, 2, debug_cnt);
 
     sprintf(node_name, "while_%d", while_cnt);
-    char *node_name1 = malloc(sizeof(char) * 20);
+    char *node_name1 = allocate_memory(sizeof(char) * 20);
     strcpy(node_name1, node_name);
   
     while_cnt++;
@@ -1362,6 +1364,7 @@ void cycle() {
             print_debug(current_token, 1, debug_cnt++);
 
             printf("-- returning...\n\n");
+            free(node_name1);
             return;
         }
         else {
@@ -1378,20 +1381,20 @@ int parser_parse_please () {
     printf("Parser parse please\n");
     printf("---------------------\n\n");
 
-    inst_list = (instruction_list*)malloc(sizeof(instruction_list));
+    inst_list = (instruction_list*)allocate_memory(sizeof(instruction_list));
     inst_list_init(inst_list);
 
-    built_in_defs = (builtin_defs*)malloc(sizeof(builtin_defs));
+    built_in_defs = (builtin_defs*)allocate_memory(sizeof(builtin_defs));
     builtin_defs_init(built_in_defs);
 
 
     callee_list = init_callee_list();
     callee_list_first = callee_list;
 
-    cnt_stack = (cnt_stack_t*)malloc(sizeof(cnt_stack_t));
+    cnt_stack = (cnt_stack_t*)allocate_memory(sizeof(cnt_stack_t));
     cnt_init(cnt_stack);
 
-    queue = (queue_t*)malloc(sizeof(queue_t));
+    queue = (queue_t*)allocate_memory(sizeof(queue_t));
     init_queue(queue);
 
     forest_node *global = forest_insert_global();
@@ -1405,6 +1408,8 @@ int parser_parse_please () {
 
     prog();
 
+
+
     callee_validation(global);
     return_logic_validation(global);
 
@@ -1412,6 +1417,12 @@ int parser_parse_please () {
     ////////////
     fclose(file);
     ////////////
+
+    callee_list_dispose(callee_list_first);
+    forest_dispose(global);
+    cnt_dispose_stack(cnt_stack);
+    inst_list_dispose(inst_list);
+    free(built_in_defs);
 
     printf("\n-------------------------------------------\n");
     printf("PARSER: Parsed successfully, you're welcome\n");
@@ -1478,7 +1489,7 @@ void callee_validation(forest_node *global){
             } else {
                 for (int i = 1; i <= func_def->param_cnt; i++) {
                     // check if the variables given as args was initialized
-                    if (callee_list_first->callee->args_initialized[1] == false) {
+                    if (callee_list_first->callee->args_initialized[i] == false) {
                         error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Argument in function call is not initialized");
                     }
 

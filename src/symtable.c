@@ -26,7 +26,7 @@
 
 
 sym_data *data_init(sym_data *data){
-    data = (sym_data *)malloc(sizeof(sym_data));
+    data = (sym_data *)allocate_memory(sizeof(sym_data));
 
     data->defined = false; // initialized
 
@@ -66,7 +66,7 @@ sym_data *set_data_param(data_type param_type, char *param_name, int param_order
     data->defined = true;
     data->is_param = true;
     data->param_type = param_type;
-    data->param_name = (char *)malloc(sizeof(char) * (strlen(param_name) + 2));
+    data->param_name = (char *)allocate_memory(sizeof(char) * (strlen(param_name) + 2));
     strcpy(data->param_name, param_name);
     data->param_order = param_order;
     return data;
@@ -160,7 +160,7 @@ void left_rotate(AVL_tree **tree) {
 
 void symtable_insert(AVL_tree **tree, char *key, sym_data *data) {
     if (*tree == NULL) { // insert first to an empty tree
-        *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
+        *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree));
         (*tree)->key = key;
         (*tree)->data = data;
         (*tree)->left = NULL;

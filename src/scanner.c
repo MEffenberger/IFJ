@@ -147,7 +147,7 @@ void cut_indent(vector* vector, int indent, int lines){
 
 token_t* get_me_token(){
 
-    token_t* token = malloc(sizeof(token_t));
+    token_t* token = (token_t*)allocate_memory(sizeof(token_t));
     char readchar, next_char;
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
@@ -762,7 +762,7 @@ token_t* get_me_token(){
                     if(next_char == '\n'){
                         a_state = S_START_MULTILINE;
                         is_multiline = true;
-                        cnt_array = malloc(8*sizeof(int));
+                        cnt_array = allocate_memory(8*sizeof(int));
                         for(int i =0; i < 8; i++){
                             cnt_array[i] = 0;
                         }

@@ -38,50 +38,25 @@ typedef enum e_error_code {
     ERROR_INTERNAL = 99
 } error_code_t;
 
-// Data types for allocated pointers
-typedef enum e_alloc_type {
-    BASIC,
-    VECTOR,
-    SYMTABLE,
-    FOREST,
-    INST_DLL
-} alloc_type;
-
-// Structure to represent a node in the stack of allocated pointers
-typedef struct allocated_pointer {
-    alloc_type type;
-    void *ptr;
-    struct allocated_pointer *next;
-} alloc_ptr;
-
-// Global top of the stack for allocated pointers
-extern alloc_ptr *allocated_pointers;
-
-/**
- * @brief Function to push an allocated pointer onto the stack
- * 
- * @param ptr to newly allocated memory
- * @param type type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
- */
-void push_alloc_ptr(void *ptr, alloc_type type);
-
-
-/**
- * @brief Function free allocated pointers from the stack
- * 
- */
-void free_alloc_memory();
-
 /**
  * @brief Function to allocate memory, check for malloc errors and push it onto the stack
  * 
- * @note example: AVL_tree *tree = (AVL_tree *) allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
+ * @note example: AVL_tree *tree = (AVL_tree *) allocate_memory(sizeof(AVL_tree), "tree node");
  * @param size Size of the memory to be allocated
- * @param whats_allocated String describing what is being allocated
- * @param type Type of the allocated memory (BASIC, VECTOR, TOKEN, ...)
  * @return void* Pointer to the allocated memory
  */
-void *allocate_memory(size_t size, const char* whats_allocated, alloc_type type);
+void *allocate_memory(size_t size);
+
+
+/**
+ * @brief Function to reallocate memory, check for realloc errors and push it onto the stack
+ * 
+ * @param to_be_reallocated Pointer to the memory to be reallocated
+ * @param size Size of the memory to be reallocated
+ * @return void* Pointer to the reallocated memory
+ */
+void *reallocate_memory(void *to_be_reallocated, size_t size);
+
 
 
 /**

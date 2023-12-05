@@ -70,19 +70,6 @@ void stack_pop(token_stack* token_stack);
  */
 token_t* stack_top(token_stack* token_stack);
 
-/**
- * @brief Checks if the stack is empty.
- * 
- * This function checks if the stack is empty and returns true if it is, false otherwise.
- * 
- * @param token_stack A pointer to the token stack.
- * @return True if the stack is empty, false otherwise.
- */
-bool stack_is_empty(token_stack* token_stack);
-
-
-
-token_t* stack_top_nonterminal(token_stack* token_stack);
 
 token_t* stack_top_terminal(token_stack* token_stack);
 

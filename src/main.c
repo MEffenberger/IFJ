@@ -25,7 +25,6 @@
 #include "token_stack.h"
 
 
-alloc_ptr *allocated_pointers = NULL; // Top of the stack for allocated pointers
 FILE *file;
 
 int main() {

@@ -27,11 +27,7 @@
 int arg_counter = 0;
 
 callee_list_t* init_callee_list() {
-    callee_list_t* list = (callee_list_t*)malloc(sizeof(callee_list_t));
-    if (list == NULL) {
-        // Handle memory allocation failure
-        return NULL;
-    }
+    callee_list_t* list = (callee_list_t*)allocate_memory(sizeof(callee_list_t));
 
     list->callee = NULL;
     list->next = NULL;
@@ -40,23 +36,10 @@ callee_list_t* init_callee_list() {
 }
 
 callee_t* init_callee(const char* name) {
-    callee_t* callee = (callee_t*)malloc(sizeof(callee_t));
-    if (callee == NULL) {
-        // Handle memory allocation failure
-        return NULL;
-    }
+    callee_t* callee = (callee_t*)allocate_memory(sizeof(callee_t));
 
-
-    // Allocate memory for the name
-
-    callee->name = (char*)malloc(strlen(name) + 1);
+    callee->name = (char*)allocate_memory(strlen(name) + 1);
     callee->name = strcpy(callee->name, name);
-
-    if (callee->name == NULL) {
-        // Handle memory allocation failure
-        free(callee);
-        return NULL;
-    }
 
     callee->return_type = UNKNOWN;
     arg_counter = 0;
@@ -71,83 +54,41 @@ callee_t* init_callee(const char* name) {
 void insert_callee_into_list(callee_list_t* list, const char* name) {
     // Initialize a new callee
     callee_t* new_callee = init_callee(name);
-    if (new_callee == NULL) {
-        // Handle initialization failure
-        return;
-    }
+    
     // Find the last node in the list
     callee_list_t* current = list;
     while (current->next != NULL) {
         current = current->next;
     }
-
-    // Set the new callee for the last list node
     current->callee = new_callee;
 
     // Create a new node for the next callee (if any)
     current->next = init_callee_list();
-    if (current->next == NULL) {
-        // Handle node creation failure
-        free(new_callee->name);
-        free(new_callee);
-        return;
-    }
 }
 
 void insert_name_into_callee(callee_t* callee, char* name) {
-    // Assuming that callee->args_names is initially NULL or allocated dynamically
-    // You need to reallocate the array to accommodate the new name
 
-    callee->args_names = realloc(callee->args_names, (callee->arg_count + 2) * sizeof(char*));
-    if (callee->args_names == NULL) {
-        // Handle memory reallocation failure
-        return;
-    }
-
+    callee->args_names = reallocate_memory(callee->args_names, (callee->arg_count + 2) * sizeof(char*));
+ 
     // Increment the arg_count
     arg_counter++;
     callee->arg_count = arg_counter;
 
-
-    // Allocate memory for the new name
-    callee->args_names[callee->arg_count] = (char*)malloc(strlen(name) + 1);
+    callee->args_names[callee->arg_count] = (char*)allocate_memory(strlen(name) + 1);
     callee->args_names[callee->arg_count] = name;
-
-    if (callee->args_names[callee->arg_count] == NULL) {
-        // Handle memory allocation failure
-        return;
-    }
 }
 
 
 void insert_type_into_callee(callee_t* callee, data_type type) {
-    // Assuming that callee->arg_types is initially NULL or allocated dynamically
-    // You need to reallocate the array to accommodate the new name
-
-    callee->args_types = realloc(callee->args_types, (callee->arg_count + 1) * sizeof(data_type));
-    if (callee->args_types == NULL) {
-        // Handle memory reallocation failure
-        return;
-    }
-
-    // Allocate memory for the new name
+    callee->args_types = reallocate_memory(callee->args_types, (callee->arg_count + 1) * sizeof(data_type));
     callee->args_types[callee->arg_count] = type; 
 }
 
 
 void insert_bool_into_callee(callee_t* callee, bool is_initialized) {
-    // Assuming that callee->arg_types is initially NULL or allocated dynamically
-    // You need to reallocate the array to accommodate the new name
-
-    callee->args_initialized = realloc(callee->args_initialized, (callee->arg_count + 1) * sizeof(bool));
-    if (callee->args_initialized == NULL) {
-        // Handle memory reallocation failure
-        return;
-    }
-
+    callee->args_initialized = reallocate_memory(callee->args_initialized, (callee->arg_count + 1) * sizeof(bool));
     callee->args_initialized[callee->arg_count] = is_initialized; 
 }
-
 
 
 void callee_list_dispose(callee_list_t *first) {

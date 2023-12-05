@@ -31,13 +31,6 @@ int add_arg_cnt = 0;
 int write_renamer = 0;
 extern FILE *file;
 
-// allocate mem for the list
-// inst_list_init(list);
-// set the first&active instruction manually
-// when adding new instruction, use:
-    // instruction *new_inst = inst_init(type, frame, name, cnt, int_value, float_value, string_value);
-    // inst_list_insert_before/after(list, new_inst);
-
 
 void inst_list_init(instruction_list *list) {
     instruction *inst = inst_init(MAIN, 'G', NULL, 0, 0, 0.0, NULL);
@@ -53,13 +46,13 @@ instruction* inst_init(inst_type type,
                         double float_value,
                         char *string_value
 ) {
-	instruction* new_inst = (instruction*) allocate_memory(sizeof(instruction), "instruction in DLL", BASIC);
+	instruction* new_inst = (instruction*) allocate_memory(sizeof(instruction));
 
     new_inst->relevant_node = active;
     new_inst->inst_type = type;
     new_inst->frame = frame;
     if (name == NULL) {
-        new_inst->name = (char*) allocate_memory(sizeof(char) * 6, "instruction name", BASIC);
+        new_inst->name = (char*) allocate_memory(sizeof(char) * 6);
         strcpy(new_inst->name, "null");
     }
     else {
@@ -82,23 +75,6 @@ void inst_list_insert_last(instruction_list *list, instruction *new_inst) {
 
     list->active = new_inst;
 }
-
-
-
-
-// void inst_list_insert_after(instruction_list *list, instruction *new_inst) {
-//     new_inst->next = list->active->next;
-//     new_inst->prev = list->active;
-
-//     if (list->last == list->active) {
-//         list->last = new_inst;
-//     }
-//     else {
-//         list->active->next->prev = new_inst;
-//     }
-//     list->active->next = new_inst;
-// }
-
 
 void inst_list_insert_before(instruction_list *list, instruction *new_inst) {
     new_inst->next = list->active;

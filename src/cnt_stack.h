@@ -12,6 +12,8 @@
 
 #include <stdbool.h>
 
+#define STACK_SIZE 4
+
 /**
  * @brief A stack data structure for cnts.
  * 

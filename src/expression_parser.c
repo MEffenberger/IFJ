@@ -131,7 +131,7 @@ int get_index(token_type_t token){
 
 // pomocna fce pro vytvoreni zarazky v zasobniku
 token_t* token_create(token_type_t token_type){
-    token_t* token = malloc(sizeof(token_t));
+    token_t* token = (token_t*)allocate_memory(sizeof(token_t));
     token->value.vector = NULL;
     token->value.integer = 0;
     token->value.type_double = 0.0;
@@ -399,7 +399,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 inst_list_insert_last(inst_list, inst);
 
                 variable_counter++;
-                
+
                 tmp1->exp_value = DOUBLE;
             }
 
@@ -641,7 +641,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
             inst_list_insert_last(inst_list, inst);
         } else if (tmp3->exp_value == STRING){
             // CODEGEN
-            char *string = malloc(strlen(tmp3->value.vector->array)+1); // new memory has to be allocated for string
+            char *string = allocate_memory(strlen(tmp3->value.vector->array)+1); // new memory has to be allocated for string
             instruction *inst = inst_init(PUSHS_STRING_CONST, 'G', NULL, 0, 0, 0.0, strcpy(string, tmp3->value.vector->array));
             inst_list_insert_last(inst_list, inst);
 
@@ -668,7 +668,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
             inst_list_insert_last(inst_list, inst);
         } else if (tmp1->exp_value == STRING){
             // CODEGEN
-            char *string = malloc(strlen(tmp1->value.vector->array)+1); // new memory has to be allocated for string
+            char *string = allocate_memory(strlen(tmp1->value.vector->array)+1); // new memory has to be allocated for string
             instruction *inst = inst_init(PUSHS_STRING_CONST, 'G', NULL, 0, 0, 0.0, strcpy(string, tmp1->value.vector->array));
             inst_list_insert_last(inst_list, inst);
 
@@ -895,7 +895,7 @@ void call_expr_parser(data_type return_type) {
                     tmp1->exp_value = STRING;
                                         
                     // CODEGEN
-                    char *string = malloc(strlen(tmp1->value.vector->array)+1); // new memory has to be allocated for string
+                    char *string = allocate_memory(strlen(tmp1->value.vector->array)+1); // new memory has to be allocated for string
                     instruction *inst = inst_init(PUSHS_STRING_CONST, 'G', NULL, 0, 0, 0.0, strcpy(string, tmp1->value.vector->array));
                     inst_list_insert_last(inst_list, inst);
 

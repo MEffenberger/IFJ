@@ -28,7 +28,7 @@ int forest_node_cnt = -10; // skip built-in functions
 
 
 forest_node *forest_insert_global() {
-    forest_node *root = (forest_node*)allocate_memory(sizeof(forest_node), "global forest node", FOREST);
+    forest_node *root = (forest_node*)allocate_memory(sizeof(forest_node));
     root->name = "global";
     root->keyword = W_GLOBAL;
     root->parent = NULL;
@@ -45,7 +45,7 @@ forest_node *forest_insert_global() {
 
 void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_node **active) {
     if (parent != NULL) {
-        forest_node *child = (forest_node*)allocate_memory(sizeof(forest_node), "forest node", FOREST);
+        forest_node *child = (forest_node*)allocate_memory(sizeof(forest_node));
         child->name = name;
         child->keyword = keyword;
         child->parent = parent;
@@ -57,7 +57,7 @@ void forest_insert(forest_node *parent, f_keyword_t keyword, char *name, forest_
         child->has_return = false;
 
         if (parent->children == NULL) {
-            parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)) , "forest node children", BASIC);
+            parent->children = (forest_node**)allocate_memory((sizeof(forest_node*)));
         } else {
             // Resize the existing array to accommodate the new child
             parent->children = (forest_node**)realloc(parent->children, (parent->children_count + 1) * sizeof(forest_node*));
