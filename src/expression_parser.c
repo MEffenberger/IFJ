@@ -745,6 +745,8 @@ void call_expr_parser(data_type return_type) {
                     type_of_expr = DOUBLE;
                 } else if(return_type == INT && stack_top(&stack)->exp_value == INT_QM){
                     type_of_expr = INT;
+                } else if((return_type == INT_QM || return_type == DOUBLE_QM || return_type == STRING_QM) && stack_top(&stack)->exp_value == NIL){
+                    type_of_expr = NIL;
                 } else {
                     if (return_expr) {
                         printf("RETTYPE:%d\n", return_type);
@@ -849,9 +851,6 @@ void call_expr_parser(data_type return_type) {
                         instruction *inst = inst_init(PUSHS, forest->frame, nickname, 0, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
                     }
-
-                } else if (tmp1->type == TOKEN_KEYWORD && tmp1->value.keyword == KW_NIL) {
-                    /// TODO: handle nil 
 
                 } else if(tmp1->type == TOKEN_DEC){
                     tmp1->type = TOKEN_EXPRESSION;
