@@ -548,6 +548,12 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             return;
         }
 
+        if(tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+            if((tmp1->exp_value == INT_QM || tmp3->exp_value == INT_QM || tmp1->exp_value == DOUBLE_QM || tmp3->exp_value == DOUBLE_QM || tmp1->exp_value == STRING_QM || tmp3->exp_value == STRING_QM)){
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
+        
+            }
+        }
 
         convert_qm(tmp1);
         convert_qm(tmp3);
