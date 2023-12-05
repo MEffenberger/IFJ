@@ -160,6 +160,7 @@ token_t* get_me_token(){
     int hex_counter = 0;
     int cnt_open = 0;
     int cnt_close = 0;
+    int non_null_cnt = 0;
 
     int cnt_array_size = 0;
     int cnt_array_alloc_size = 8;
@@ -668,7 +669,7 @@ token_t* get_me_token(){
                     }
                 } else if(readchar == '}'){
                     //Toto asi do funkce
-                    int non_null_cnt = 0;
+                    non_null_cnt = 0;
                     for(int i = 0; i < strlen(hex); i++){
                         if(hex[i] != '0'){
                             non_null_cnt++;
@@ -685,6 +686,10 @@ token_t* get_me_token(){
                     if(sscanf(hex, "%x", &hex_num) != EOF){
                         char* c = (char*) &hex_num;
                         vector_append(buffer, c[0]);
+                        hex_counter = 0;
+                        for(int i = 0; i < 8; i++){
+                            hex[i] = 0;
+                        }
                         if(is_multiline){
                             a_state = S_IS_MULTILINE;
                         } else {
