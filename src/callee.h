@@ -37,8 +37,8 @@ void insert_name_into_callee(callee_t* callee, char* id);
 void insert_type_into_callee(callee_t* callee, data_type type);
 void insert_bool_into_callee(callee_t* callee, bool is_initialized);
 
-void callee_list_dispose(callee_list_t* list);
-void callee_dispose(callee_t* callee);
+void callee_list_dispose(callee_list_t *first);
+
 
 
 

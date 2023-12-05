@@ -31,32 +31,21 @@ instruction_list *inst_list = NULL; // List of instructions for codegen
 cnt_stack_t *cnt_stack = NULL;
 callee_list_t *callee_list = NULL;
 callee_list_t *callee_list_first = NULL;
-sym_data data = {0};
 var_type letvar = 99;
 data_type type_of_expr = UNKNOWN; // for expression parser to return the data type of expression
 data_type type_of_assignee = UNKNOWN; // callee
-bool is_defined = false;
+bool is_initialized = false;
 int debug_cnt = 1;
 int ifelse_cnt = 0;
 int while_cnt = 0;
 char node_name[20] = {0};
-char *func_name_validate = NULL;
-int cnt = 0; // used for generating unique labels for if-else
 char *var_name = NULL; // to find the data type of variable for expression parser
 int param_order = 0;
 bool vardef_assign = false; // for assign() to know where to get info about the variable (from queue or from symtable)
 bool function_write = false; // for parser to know that the function being handled is write() and needs special treatment
 // flags for defining built-in functions in codegen, so they are not defined multiple times
-bool readString_defined = false;
-bool readInt_defined = false;
-bool readDouble_defined = false;
-bool Int2Double_defined = false;
-bool Double2Int_defined = false;
-bool length_defined = false;
-bool substring_defined = false;
-bool ord_defined = false;
-bool chr_defined = false;
 bool return_expr = false; // for expression parser to know that the expression is in return statement
+builtin_defs built_in_defs = {false, false, false, false, false, false, false, false, false};
 extern FILE *file;
 
 
@@ -98,15 +87,7 @@ data_type convert_dt(token_t* token) {
 }
 
 
-
-/**
- * @brief Looks to another token in the input using get_me_token()
- */
 void peek() {
-    if (token_buffer != NULL) {
-        printf("\nWARNING: peek() voláš podruhé a token_buffer se přepíše!!! exit(1)...\n");
-        exit(1);
-    }
     token_t *token = get_me_token();
     
     // mechanism for detecting EOLs
@@ -123,9 +104,6 @@ void peek() {
 }
 
 
-/**
- * @brief Function to call when want to get a token to current
- */
 token_t* get_next_token() {
     if (token_buffer == NULL) {
 
@@ -154,83 +132,83 @@ token_t* get_next_token() {
 void insert_built_in_functions_into_forest() {
     // func readString() -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readString");
-    data = set_data_func(&data, STRING_QM);
-    symtable_insert(&active->symtable, "readString", data);
+    sym_data *readString = set_data_func(STRING_QM);
+    symtable_insert(&active->symtable, "readString", readString);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readInt() -> Int?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readInt");
-    data = set_data_func(&data, INT_QM);
-    symtable_insert(&active->symtable, "readInt", data);
+    sym_data *readInt = set_data_func(INT_QM);
+    symtable_insert(&active->symtable, "readInt", readInt);
     BACK_TO_PARENT_IN_FOREST;
 
     // func readDouble() -> Double?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "readDouble");
-    data = set_data_func(&data, DOUBLE_QM);
-    symtable_insert(&active->symtable, "readDouble", data);
+    sym_data *readDouble = set_data_func(DOUBLE_QM);
+    symtable_insert(&active->symtable, "readDouble", readDouble);
     BACK_TO_PARENT_IN_FOREST;
 
     // func write(term_1, term_2, ..., term_n)
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "write");
-    data = set_data_func(&data, VOID);
-    symtable_insert(&active->symtable, "write", data);
+    sym_data *write = set_data_func(VOID);
+    symtable_insert(&active->symtable, "write", write);
     BACK_TO_PARENT_IN_FOREST;
 
     // func Int2Double(_ term : Int) -> Double
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Int2Double");
-    data = set_data_func(&data, DOUBLE);
-    symtable_insert(&active->symtable, "Int2Double", data);
-    data = set_data_param(&data, INT, "_", 1);
-    symtable_insert(&active->symtable, "term", data);
+    sym_data *Int2Double = set_data_func(DOUBLE);
+    symtable_insert(&active->symtable, "Int2Double", Int2Double);
+    sym_data *Int2Double_param_data = set_data_param(INT, "_", 1);
+    symtable_insert(&active->symtable, "term", Int2Double_param_data);
     active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func Double2Int(_ term : Double) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "Double2Int");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "Double2Int", data);
-    data = set_data_param(&data, DOUBLE, "_", 1);
-    symtable_insert(&active->symtable, "term", data);
+    sym_data *Double2Int = set_data_func(INT);
+    symtable_insert(&active->symtable, "Double2Int", Double2Int);
+    sym_data *Double2Int_param_data = set_data_param(DOUBLE, "_", 1);
+    symtable_insert(&active->symtable, "term", Double2Int_param_data);
     active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func length(_ s : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "length");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "length", data);
-    data = set_data_param(&data, STRING, "_", 1);
-    symtable_insert(&active->symtable, "s", data);
+    sym_data *length = set_data_func(INT);
+    symtable_insert(&active->symtable, "length", length);
+    sym_data *length_param_data = set_data_param(STRING, "_", 1);
+    symtable_insert(&active->symtable, "s", length_param_data);
     active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func substring(of s : String, startingAt i : Int, endingBefore j : Int) -> String?
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "substring");
-    data = set_data_func(&data, STRING_QM);
-    symtable_insert(&active->symtable, "substring", data);
-    data = set_data_param(&data, STRING, "of", 1);
-    symtable_insert(&active->symtable, "s", data);
-    data = set_data_param(&data, INT, "startingAt", 2);
-    symtable_insert(&active->symtable, "i", data);
-    data = set_data_param(&data, INT, "endingBefore", 3);
-    symtable_insert(&active->symtable, "j", data);
+    sym_data *substring = set_data_func(STRING_QM);
+    symtable_insert(&active->symtable, "substring", substring);
+    sym_data *substring_param_data1 = set_data_param(STRING, "of", 1);
+    symtable_insert(&active->symtable, "s", substring_param_data1);
+    sym_data *substring_param_data2 = set_data_param(INT, "startingAt", 2);
+    symtable_insert(&active->symtable, "i", substring_param_data2);
+    sym_data *substring_param_data3 = set_data_param(INT, "endingBefore", 3);
+    symtable_insert(&active->symtable, "j", substring_param_data3);
     active->param_cnt = 3;
     BACK_TO_PARENT_IN_FOREST;
 
     // func ord(_ c : String) -> Int
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "ord");
-    data = set_data_func(&data, INT);
-    symtable_insert(&active->symtable, "ord", data);
-    data = set_data_param(&data, STRING, "_", 1);
-    symtable_insert(&active->symtable, "c", data);
+    sym_data *ord = set_data_func(INT);
+    symtable_insert(&active->symtable, "ord", ord);
+    sym_data *ord_param_data = set_data_param(STRING, "_", 1);
+    symtable_insert(&active->symtable, "c", ord_param_data);
     active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 
     // func chr(_ i : Int) -> String
     MAKE_CHILDREN_IN_FOREST(W_FUNCTION, "chr");
-    data = set_data_func(&data, STRING);
-    symtable_insert(&active->symtable, "chr", data);
-    data = set_data_param(&data, INT, "_", 1);
-    symtable_insert(&active->symtable, "i", data);
+    sym_data *chr = set_data_func(STRING);
+    symtable_insert(&active->symtable, "chr", chr);
+    sym_data *chr_param_data = set_data_param(INT, "_", 1);
+    symtable_insert(&active->symtable, "i", chr_param_data);
     active->param_cnt = 1;
     BACK_TO_PARENT_IN_FOREST;
 }
@@ -295,18 +273,16 @@ void func_def() {
             // CODEGEN
             instruction *inst = inst_init(FUNC_DEF, 'G', active->name, active->param_cnt, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_func_def();
 
             if (current_token->type == TOKEN_RPAR) {
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
 
                 ret_type();
-                //printf("RETURN TYPE: %d\n", convert_dt(queue->first->token));
 
                 // insert function with its return type to symtable
-                data = set_data_func(&data, convert_dt(queue->first->token));
-                symtable_insert(&active->symtable, active->name, data);
+                sym_data *func_data = set_data_func(convert_dt(queue->first->token));
+                symtable_insert(&active->symtable, active->name, func_data);
                 queue_dispose(queue);
 
                 if (current_token->type == TOKEN_LEFT_BRACKET) {
@@ -329,7 +305,6 @@ void func_def() {
                         // CODEGEN
                         instruction *inst = inst_init(FUNC_DEF_END, 'G', active->name, 0, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
-                        //codegen_func_def_end();
 
                         BACK_TO_PARENT_IN_FOREST;
                         
@@ -405,10 +380,8 @@ void params() {
     }
     
     // insert parameter to function's symtable
-    data = set_data_param(&data, convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
-
-    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, data);
-
+    sym_data *param_data = set_data_param(convert_dt(current_token), queue->first->token->value.vector->array, ++param_order);
+    symtable_insert(&active->symtable, queue->first->next->token->value.vector->array, param_data);
     queue_dispose(queue);
 
     current_token = get_next_token();
@@ -548,7 +521,8 @@ void ret() {
     }
     
     
-    sym_data *tmp_data = symtable_lookup(tmp->symtable, tmp->name);
+    sym_data *tmp_data = symtable_search(tmp->symtable, tmp->name)->data;
+
 
     if (tmp_data->return_type == VOID) { // void function 
         current_token = get_next_token();
@@ -557,7 +531,6 @@ void ret() {
         // CODEGEN
         instruction *inst = inst_init(FUNC_DEF_RETURN_VOID, 'G', tmp->name, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_func_def_return_void(tmp->name);
 
         printf("-- returning...\n\n");
         return;
@@ -575,7 +548,6 @@ void ret() {
         // CODEGEN
         instruction *inst = inst_init(FUNC_DEF_RETURN, 'G', tmp->name, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_func_def_return(tmp->name);
     }
 }
 
@@ -599,11 +571,11 @@ void body() {
             if (tmp == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
-            if (tmp->data.var_type == LET && tmp->data.defined) {
+            if (tmp->data->var_type == LET && tmp->data->defined) {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Unmodifiable variable cannot be redefined");
             }
-            if (!(tmp->data.defined)) {
-                tmp->data.defined = true;
+            if (!(tmp->data->defined)) {
+                tmp->data->defined = true;
             }
             vardef_assign = false;
             assign();
@@ -653,7 +625,6 @@ void body() {
                     // CODEGEN
                     instruction *inst = inst_init(WRITE, 'G', NULL, callee_list->callee->arg_count, 0, 0.0, NULL);
                     inst_list_insert_last(inst_list, inst);
-                    //codegen_write(callee_list->callee->arg_count);
                     callee_list = callee_list->next;
                     break;
                 }
@@ -670,7 +641,7 @@ void body() {
             case KW_SUBSTR:
             case KW_ORD:
             case KW_CHR:
-                define_built_in_function();
+                define_built_in_function(built_in_defs);
                 func_call();
                 callee_list = callee_list->next;
                 break;
@@ -710,13 +681,15 @@ void var_def() {
 
         // the node is in the current symtable, error is thrown as multiple declarations of the same name are not allowed
         /// TODO: param-var shadowing & func-var shadowing & func-par shadowing
-        AVL_tree *symbol = symtable_search(active->symtable, var_name);
-        if (symbol != NULL && !(symbol->data.is_param)) { 
+        AVL_tree *check = symtable_search(active->symtable, var_name);
+        if (check != NULL && !(check->data->is_param)) { 
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Multiple declarations of the same name are not allowed");
         }
 
         queue_push(queue, current_token);
         opt_var_def();
+
+        sym_data *var_data = NULL;
 
         // insert variable to symtable
         if (queue->first->next == NULL) { // the data type is not specified, expression parser determined it
@@ -728,10 +701,10 @@ void var_def() {
             } 
             else {
                 if (type_of_assignee != UNKNOWN) {
-                    data = set_data_var(data, is_defined, type_of_assignee, letvar);
+                    var_data = set_data_var(is_initialized, type_of_assignee, letvar);
                 }
                 else {
-                    data = set_data_var(data, is_defined, type_of_expr, letvar);
+                    var_data = set_data_var(is_initialized, type_of_expr, letvar);
                 }
             }
         }
@@ -745,39 +718,35 @@ void var_def() {
                     error_exit(ERROR_SEM_EXPR_TYPE, "PARSER", "Variable cannot be of type nil");
                 }
             }
-            data = set_data_var(data, is_defined, convert_dt(queue->first->next->token), letvar);
+            var_data = set_data_var(is_initialized, convert_dt(queue->first->next->token), letvar);
         }        
 
-        symtable_insert(&active->symtable, queue->first->token->value.vector->array, data);
+        symtable_insert(&active->symtable, queue->first->token->value.vector->array, var_data);
         queue_dispose(queue);
 
-        AVL_tree *tmp = symtable_search(active->symtable, var_name);
-        tmp->nickname = active->node_cnt;
-        char *nickname = renamer(tmp);
+        AVL_tree *symbol = symtable_search(active->symtable, var_name);
+        symbol->nickname = active->node_cnt;
+        char *nickname = renamer(symbol);
 
         // if the variable is defined in while loop, it has to be defined before the outermost while loop (in codegen)
         vardef_outermost_while(VAR_DEF, nickname, 0);
 
-        if (tmp->data.defined) {
+        if (symbol->data->defined) {
             if (type_of_expr == NIL) {
                 // CODEGEN
                 instruction *inst = inst_init(VAR_ASSIGN_NIL, active->frame, nickname, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign_nil(nickname);
             }
             else {
                 // CODEGEN
                 instruction *inst = inst_init(VAR_ASSIGN, active->frame, nickname, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign(nickname);
             }
         }
-        if (!tmp->data.defined && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+        if (!symbol->data->defined && (symbol->data->data_type == INT_QM || symbol->data->data_type == DOUBLE_QM || symbol->data->data_type == STRING_QM)) {
             // CODEGEN
             instruction *inst = inst_init(IMPLICIT_NIL, active->frame, nickname, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_var_assign(nickname);
-            // tmp->data.defined = true; 
         }
 
 
@@ -807,14 +776,14 @@ void opt_var_def() {
         type();
 
         // variable is declared
-        is_defined = false;
+        is_initialized = false;
 
         peek();
         if (token_buffer->type == TOKEN_EQ) {
             vardef_assign = true;
             assign();
             // variable is defined
-            is_defined = true;
+            is_initialized = true;
         }
         else {
             // let a : Int
@@ -827,7 +796,7 @@ void opt_var_def() {
         vardef_assign = true;
         assign();
         // variable is defined
-        is_defined = true;
+        is_initialized = true;
         printf("-- returning...\n\n");
     }
     else {
@@ -889,7 +858,7 @@ void assign() {
                 case KW_SUBSTR:
                 case KW_ORD:
                 case KW_CHR:
-                    define_built_in_function();
+                    define_built_in_function(built_in_defs);
                     break;
                 
                 default:
@@ -917,10 +886,10 @@ void assign() {
     else { // assigning to already defined variable
         forest_node *scope = forest_search_scope(active, var_name);
         AVL_tree *symbol = symtable_search(scope->symtable, var_name);
-        type_of_assignee = symbol->data.data_type;
+        type_of_assignee = symbol->data->data_type;
 
         // cannot assign to a parameter in function definition
-        if (symbol->data.is_param) {
+        if (symbol->data->is_param) {
             error_exit(ERROR_SEM_OTHER, "PARSER", "Cannot assign to parameter");
         }
 
@@ -943,13 +912,12 @@ void assign() {
                 callee_list = callee_list->next;
             }
             else { // variable is already defined, so it's data_type is known
-                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data.data_type);
-                call_expr_parser(symbol->data.data_type);
+                printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data->data_type);
+                call_expr_parser(symbol->data->data_type);
 
                 // CODEGEN
                 instruction *inst = inst_init(VAR_ASSIGN, scope->frame, renamer(symbol), 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_var_assign(renamer(symbol));
                 printf("COMING BACK FROM EXPR_PARSER\n");
             }
         }
@@ -964,7 +932,7 @@ void assign() {
                 case KW_SUBSTR:
                 case KW_ORD:
                 case KW_CHR:
-                    define_built_in_function();
+                    define_built_in_function(built_in_defs);
                     break;
 
                 default:
@@ -976,13 +944,12 @@ void assign() {
 
         }
         else {
-            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data.data_type);
-            call_expr_parser(symbol->data.data_type);
+            printf("ENTERING WORLD OF EXPRESSION PARSER with %d\n", symbol->data->data_type);
+            call_expr_parser(symbol->data->data_type);
 
             // CODEGEN
             instruction *inst = inst_init(VAR_ASSIGN, active->frame, renamer(symbol), 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_var_assign(renamer(symbol));
             printf("COMING BACK FROM EXPR_PARSER\n");
         }
     }    
@@ -1015,11 +982,10 @@ void func_call() {
             error_exit(ERROR_SEM_DERIV, "PARSER", "Function is not defined when assigning to variable while defining it, cannot derive its type");
         }
         AVL_tree *func_symbol = symtable_search(func->symtable, func_name);
-        if (func_symbol->data.return_type == VOID) {
+        if (func_symbol->data->return_type == VOID) {
             error_exit(ERROR_SEM_EXPR_TYPE, "PARSER", "Void function call cannot be assigned to a variable");
         }
-        printf("\n\n\nFUNC_SYMBOL->DATA.RETURN_TYPE: %d\n\n\n", func_symbol->data.return_type);
-        type_of_assignee = func_symbol->data.return_type;
+        type_of_assignee = func_symbol->data->return_type;
         type_of_expr = type_of_assignee; // variable's type for symtable
         callee_list->callee->return_type = type_of_assignee; // for callee validation to work smoothly
     }
@@ -1031,7 +997,6 @@ void func_call() {
         // CODEGEN
         instruction *inst = inst_init(FUNC_CALL_START, 'G', NULL, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_func_call_start();
     }
 
     // get TOKEN_LPAR from buffer
@@ -1128,20 +1093,20 @@ void arg() {
     }
 
     if (current_token->type == TOKEN_ID) {
-        AVL_tree *tmp = forest_search_symbol(active, current_token->value.vector->array);
-        if (tmp == NULL) {
+        AVL_tree *symbol = forest_search_symbol(active, current_token->value.vector->array);
+        if (symbol == NULL) {
             error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable in function call passed as argument is not declared");
         }
         else {
-            if (tmp->data.is_param) {
+            if (symbol->data->is_param) {
                 insert_bool_into_callee(callee_list->callee, true);
             }
-            else if (function_write && (tmp->data.data_type == INT_QM || tmp->data.data_type == DOUBLE_QM || tmp->data.data_type == STRING_QM)) {
+            else if (function_write && (symbol->data->data_type == INT_QM || symbol->data->data_type == DOUBLE_QM || symbol->data->data_type == STRING_QM)) {
                 // in built-in function write, when passing argument of optional type and uninitialized, it is implicitly set to nil and printing ""
                 insert_bool_into_callee(callee_list->callee, true);
             }
             else {
-                insert_bool_into_callee(callee_list->callee, tmp->data.defined);
+                insert_bool_into_callee(callee_list->callee, symbol->data->defined);
             }
         }
     }
@@ -1152,14 +1117,12 @@ void arg() {
     printf("ENTERING WORLD OF EXPRESSION PARSER with unknown\n");
     call_expr_parser(UNKNOWN);
     printf("COMING BACK FROM EXPR_PARSER\n");
-    printf("\n\nTYPE OF EXPR aftrer expr_par: %d\n", type_of_expr);
     insert_type_into_callee(callee_list->callee, type_of_expr);
 
     if (!function_write) {
         // CODEGEN
         instruction *inst = inst_init(ADD_ARG, 'G', NULL, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_add_arg();
     }
 }
 
@@ -1188,6 +1151,8 @@ void condition() {
     printf("-- entering CONDITION --\n");
     print_debug(current_token, 2, debug_cnt);
 
+    int cnt = 0;
+
     cnt_push(cnt_stack); // push ifelse_cnt to stack and increment
     sprintf(node_name, "if_%d", ifelse_cnt);
     char *node_name2 = malloc(sizeof(char) * 20);
@@ -1197,7 +1162,7 @@ void condition() {
     active->cond_cnt = ifelse_cnt;
 
     bool if_let = false;
-    AVL_tree *tmp1 = NULL;
+    AVL_tree *symbol_q = NULL;
 
     current_token = get_next_token();
     print_debug(current_token, 1, debug_cnt++);
@@ -1209,15 +1174,15 @@ void condition() {
 
         if (current_token->type == TOKEN_ID) {
             // check if the id is in symtable, so the variable is declared
-            AVL_tree *tmp = forest_search_symbol(active, current_token->value.vector->array);
-            tmp1 = tmp; // for later usage (converting optional type to non-optional and back)
-            if (tmp == NULL) {
+            AVL_tree *symbol = forest_search_symbol(active, current_token->value.vector->array);
+            symbol_q = symbol; // for later usage (converting optional type to non-optional and back)
+            if (symbol == NULL) {
                 error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Variable is not declared");
             }
-            else if (tmp->data.var_type == VAR) {
+            else if (symbol->data->var_type == VAR) {
                 error_exit(ERROR_SEM_OTHER, "PARSER", "Modifiable variable \"var\" cannot be used as follows: \"if let id\"");
             }
-            else if (tmp->data.data_type != INT_QM && tmp->data.data_type != DOUBLE_QM && tmp->data.data_type != STRING_QM) {
+            else if (symbol->data->data_type != INT_QM && symbol->data->data_type != DOUBLE_QM && symbol->data->data_type != STRING_QM) {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Initializer for conditional binding must have optional type");
             }
             else {
@@ -1230,10 +1195,9 @@ void condition() {
                 // CODEGEN
                 instruction *inst1 = inst_init(IF_LABEL, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst1);
-                vardef_outermost_while(IF_DEFVAR, renamer(tmp), active->cond_cnt);
-                instruction *inst = inst_init(IF_LET, active->frame, renamer(tmp), active->cond_cnt, 0, 0.0, NULL);
+                vardef_outermost_while(IF_DEFVAR, renamer(symbol), active->cond_cnt);
+                instruction *inst = inst_init(IF_LET, active->frame, renamer(symbol), active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_if_let(renamer(tmp));
             }
         }
         else {
@@ -1251,7 +1215,6 @@ void condition() {
         vardef_outermost_while(IF_DEFVAR, NULL, active->cond_cnt);
         instruction *inst = inst_init(IF, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_if();
     }
 
 
@@ -1262,11 +1225,11 @@ void condition() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
         
-        convert_optional_data_type(tmp1, 1); // convert optional type to non-optional
+        convert_optional_data_type(symbol_q, 1); // convert optional type to non-optional
         // IF BODY
         local_body();
 
-        convert_optional_data_type(tmp1, 2); // convert non-optional type back to optional
+        convert_optional_data_type(symbol_q, 2); // convert non-optional type back to optional
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
             // closing bracket of if statement, go back to parent in forest
@@ -1286,7 +1249,6 @@ void condition() {
                 // CODEGEN
                 instruction *inst = inst_init(ELSE, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_else();
 
                 current_token = get_next_token();
                 print_debug(current_token, 1, debug_cnt++);
@@ -1308,7 +1270,6 @@ void condition() {
                         // CODEGEN
                         instruction *inst = inst_init(IFELSE_END, active->frame, NULL, active->cond_cnt, 0, 0.0, NULL);
                         inst_list_insert_last(inst_list, inst);
-                        //codegen_ifelse_end();  
 
                         cnt_pop(cnt_stack); // pop ifelse_cnt from stack
 
@@ -1385,7 +1346,6 @@ void cycle() {
         // CODEGEN
         instruction *inst = inst_init(WHILE_DO, active->frame, node_name1, 0, 0, 0.0, NULL);
         inst_list_insert_last(inst_list, inst);
-        //codegen_while_do();
 
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
@@ -1397,7 +1357,6 @@ void cycle() {
             // CODEGEN
             instruction *inst = inst_init(WHILE_END, active->frame, node_name1, 0, 0, 0.0, NULL);
             inst_list_insert_last(inst_list, inst);
-            //codegen_while_end();
             
             // closing bracket of while statement, go back to parent in forest
             BACK_TO_PARENT_IN_FOREST;
@@ -1447,10 +1406,6 @@ int parser_parse_please () {
 
     callee_validation(global);
     return_logic_validation(global);
-
-
-    //traverse_forest(global); // printing the forest // IS SEGFAULTING (not on mac though)
-
 
     codegen_generate_code_please(inst_list);
     ////////////
@@ -1504,34 +1459,34 @@ forest_node* check_return_stmt(forest_node *node) {
 // validating function calls, since function definitions can be after function calls
 void callee_validation(forest_node *global){
     while (callee_list_first->next != NULL) {
-        forest_node *tmp = forest_search_function(global, callee_list_first->callee->name);
-        if (tmp == NULL) {
+        forest_node *func_def = forest_search_function(global, callee_list_first->callee->name);
+        if (func_def == NULL) {
             error_exit(ERROR_SEM_UNDEF_FUN, "PARSER", "Function is not defined");
         }
         // if the function is void, there has to be removed the expected return value ftom the ifjcode
-        if (callee_list_first->callee->return_type == VOID && strcmp(tmp->name, "write") != 0) {
+        if (callee_list_first->callee->return_type == VOID && strcmp(func_def->name, "write") != 0) {
             inst_list_search_void_func_call(inst_list, callee_list_first->callee->name);
             inst_list_delete_after(inst_list);
         }
-        if (callee_list_first->callee->arg_count != tmp->param_cnt && strcmp(tmp->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
+        if (callee_list_first->callee->arg_count != func_def->param_cnt && strcmp(func_def->name, "write") != 0) { // in case of built-in write function, the number of arguments is not checked
             error_exit(ERROR_SEM_TYPE, "PARSER", "Number of arguments in function call does not match the number of parameters in function definition");
         } else {
             // check if the return type of the function call matches the return type in function definition (ignore when the callee's return type is void -> not assigning retval)
-            if (callee_list_first->callee->return_type != (symtable_search(tmp->symtable, tmp->name))->data.return_type && callee_list_first->callee->return_type != VOID) {
+            if (callee_list_first->callee->return_type != (symtable_search(func_def->symtable, func_def->name))->data->return_type && callee_list_first->callee->return_type != VOID) {
                 error_exit(ERROR_SEM_TYPE, "PARSER", "Function's return type does not match the return type in function definition");
             } else {
-                for (int i = 1; i <= tmp->param_cnt; i++) {
+                for (int i = 1; i <= func_def->param_cnt; i++) {
                     // check if the variables given as args was initialized
                     if (callee_list_first->callee->args_initialized[1] == false) {
                         error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Argument in function call is not initialized");
                     }
 
-                    AVL_tree *param = symtable_find_param(tmp->symtable, i);
-                    if (strcmp(callee_list_first->callee->args_names[i], param->data.param_name) != 0) {
+                    AVL_tree *param = symtable_find_param(func_def->symtable, i);
+                    if (strcmp(callee_list_first->callee->args_names[i], param->data->param_name) != 0) {
                         error_exit(ERROR_SEM_OTHER, "PARSER", "Argument's name does not match the parameter's name in function definition");
                     }
                     // check if the argument's type matches the parameter's type, if the parameter's type include '?', the argument's type can be nil
-                    switch (param->data.param_type) {
+                    switch (param->data->param_type) {
                         case INT_QM:
                             if (callee_list_first->callee->args_types[i] != INT_QM && 
                                 callee_list_first->callee->args_types[i] != INT &&
@@ -1556,7 +1511,7 @@ void callee_validation(forest_node *global){
                         case INT:
                         case DOUBLE:
                         case STRING:
-                            if (callee_list_first->callee->args_types[i] != param->data.param_type) {
+                            if (callee_list_first->callee->args_types[i] != param->data->param_type) {
                                 error_exit(ERROR_SEM_TYPE, "PARSER", "Argument's type does not match the parameter's type in function definition");
                             }
                             break;
@@ -1565,7 +1520,7 @@ void callee_validation(forest_node *global){
                     }
                 }
                 // write() has to be treated separately, since it have various number of arguments
-                if (strcmp(tmp->name, "write") == 0) {
+                if (strcmp(func_def->name, "write") == 0) {
                     for (int i = 1; i <= callee_list_first->callee->arg_count; i++) {
                         if (callee_list_first->callee->args_initialized[1] == false) {
                             error_exit(ERROR_SEM_UNDEF_VAR, "PARSER", "Argument in function call is not initialized");
@@ -1584,7 +1539,7 @@ void return_logic_validation (forest_node *global) {
     // go through all functions in global scope (starting after all built-in functions)
     for (int i = AFTER_BUILTIN; i < global->children_count; i++) {
         if (global->children[i]->keyword == W_FUNCTION) { // work only with non-void functions
-            if (symtable_search(global->children[i]->symtable, global->children[i]->name)->data.return_type != VOID) {
+            if (symtable_search(global->children[i]->symtable, global->children[i]->name)->data->return_type != VOID) {
                 validate_forest(global->children[i]);
             }
         }
@@ -1658,30 +1613,30 @@ void vardef_outermost_while(inst_type type, char *nickname, int cnt) {
 void convert_optional_data_type (AVL_tree *node, int mode) {
     if (node != NULL) {
         if (mode == 1) {
-            switch (node->data.data_type) {
+            switch (node->data->data_type) {
                 case INT_QM:
-                    node->data.data_type = INT;
+                    node->data->data_type = INT;
                     break;
                 case DOUBLE_QM:
-                    node->data.data_type = DOUBLE;
+                    node->data->data_type = DOUBLE;
                     break;
                 case STRING_QM:
-                    node->data.data_type = STRING;
+                    node->data->data_type = STRING;
                     break;
                 default:
                     break;
             }
         }
         else if (mode == 2) {
-            switch (node->data.data_type) {
+            switch (node->data->data_type) {
                 case INT:
-                    node->data.data_type = INT_QM;
+                    node->data->data_type = INT_QM;
                     break;
                 case DOUBLE:
-                    node->data.data_type = DOUBLE_QM;
+                    node->data->data_type = DOUBLE_QM;
                     break;
                 case STRING:
-                    node->data.data_type = STRING_QM;
+                    node->data->data_type = STRING_QM;
                     break;
                 default:
                     break;
@@ -1694,95 +1649,86 @@ void convert_optional_data_type (AVL_tree *node, int mode) {
 }
 
 
-void define_built_in_function() {
+void define_built_in_function(builtin_defs built_in_defs) {
     switch (current_token->value.keyword) {
         case KW_RD_STR:
-            if (!readString_defined) {
+            if (!built_in_defs.readString_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_STRING, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_readString();
-                readString_defined = true;
+                built_in_defs.readString_defined = true;
             }
             break;
         
         case KW_RD_INT:
-            if (!readInt_defined) {
+            if (!built_in_defs.readInt_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_INT, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_readInt();
-                readInt_defined = true;
+                built_in_defs.readInt_defined = true;
             }
             break;
         
         case KW_RD_DBL:
-            if (!readDouble_defined) {
+            if (!built_in_defs.readDouble_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(READ_DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_readDouble();
-                readDouble_defined = true;
+                built_in_defs.readDouble_defined = true;
             }
             break;
 
         case KW_INT_2_DBL:
-            if (!Int2Double_defined) {
+            if (!built_in_defs.Int2Double_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(INT2DOUBLE, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_Int2Double();
-                Int2Double_defined = true;
+                built_in_defs.Int2Double_defined = true;
             }
             break;
         
         case KW_DBL_2_INT:
-            if (!Double2Int_defined) {
+            if (!built_in_defs.Double2Int_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(DOUBLE2INT, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_Double2Int();
-                Double2Int_defined = true;
+                built_in_defs.Double2Int_defined = true;
             }
             break;
 
         case KW_LENGHT:
-            if (!length_defined) {
+            if (!built_in_defs.length_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(LENGTH, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_length();
-                length_defined = true;
+                built_in_defs.length_defined = true;
             }
             break;
 
         case KW_SUBSTR:
-            if (!substring_defined) {
+            if (!built_in_defs.substring_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(SUBSTRING, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_substring();
-                substring_defined = true;
+                built_in_defs.substring_defined = true;
             }
             break;
         
         case KW_ORD:
-            if (!ord_defined) {
+            if (!built_in_defs.ord_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(ORD, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_ord();
-                ord_defined = true;
+                built_in_defs.ord_defined = true;
             }
             break;
 
         case KW_CHR:
-            if (!chr_defined) {
+            if (!built_in_defs.chr_defined) {
                 // CODEGEN
                 instruction *inst = inst_init(CHR, 'G', NULL, 0, 0, 0.0, NULL);
                 inst_list_insert_last(inst_list, inst);
-                //codegen_chr();
-                chr_defined = true;
+                built_in_defs.chr_defined = true;
             }
             break;
         default:

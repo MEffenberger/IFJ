@@ -19,44 +19,59 @@
 #define MAKE_CHILDREN_IN_FOREST(kw, name) forest_insert(active, kw, name , &active);
 #define BACK_TO_PARENT_IN_FOREST active = active->parent;
 
+// First 10 function definitions in global scope are built-in functions
 #define AFTER_BUILTIN 10
 
-
-/**
- * @brief info message
- * 
- * @param token Current token
- * @param mode 1 after get_next_token, 2 after entering rule
- * @param cnt Count of get_next_token calls 
- */
-void print_debug(token_t *token, int mode, int cnt);
-
 extern token_t *current_token; // Pointer to the current token
-extern int ifelse_cnt; // Count of get_next_token calls
-// extern int while_cnt; // Count of get_next_token calls
-extern data_type type_of_expr;
-extern instruction_list *inst_list;
-extern bool return_expr;
+extern int ifelse_cnt; // Count of if-else statements for unique labels 
+extern data_type type_of_expr; // Store the type of the expression for expr_parser
+extern instruction_list *inst_list; // List of instructions for codegen
+extern bool return_expr; // Flag informing expr_parser that the expression is in a return statement
+
+// Struct holding flags informing whether a built-in function was defined or not
+typedef struct s_builtin_defs {
+    bool readString_defined;
+    bool readInt_defined;
+    bool readDouble_defined;
+    bool Int2Double_defined;
+    bool Double2Int_defined;
+    bool length_defined;
+    bool substring_defined;
+    bool ord_defined;
+    bool chr_defined;
+} builtin_defs;
+
+//--------------------------------------------------
+void print_debug(token_t *token, int mode, int cnt);
+//--------------------------------------------------
 
 /**
- * @brief Converts token keyword to a forest related keyword
+ * @brief Convert token's keyword to compatible data_type
  * 
- * @param kw Token's keyword
- * @return f_keyword_t Forest keyword
+ * @param token Given token
+ * @return data_type Converted data_type
  */
-f_keyword_t convert_kw(keyword_t kw);
+data_type convert_dt(token_t* token);
+
 
 /**
- * @brief Get the name for the forest node (scope name)
- * 
- * @param kw Token's keyword
- * @return char* Name for the scope
+ * @brief Peek to the next token before calling get_next_token
  */
-char *get_name(keyword_t kw);
-
-
 void peek();
+
+
+/**
+ * @brief Get the next token from the scanner
+ * 
+ * @return token_t* Next token
+ */
 token_t* get_next_token();
+
+/**
+ * @brief Insert built-in functions into the forest
+ */
+void insert_built_in_functions_into_forest();
+
 
 /**
  * @brief <prog> -> EOF | <func_def> <prog> | <body> <prog>
@@ -103,6 +118,10 @@ void params_n();
  */
 void ret_type();
 
+/**
+ * @brief <ret> -> return <exp> | return
+ */
+void ret();
 
 /**
  * @brief <body> -> eps | <var_def> | <condition> | <cycle> | <assign> | <func_call> | <ret>
@@ -150,42 +169,78 @@ void args_n();
 void condition();
 
 /**
- * @brief <ret> -> return <exp> | return
- */
-void ret();
-
-/**
  * @brief <cycle -> while <exp> { <local_body> }
  */
 void cycle();
 
 
+/**
+ * @brief Main function of the parser
+ * 
+ * @return int Returns 0 if the program was parsed successfully, error_exit otherwise
+ */
 int parser_parse_please();
 
-void rename_keep_exit();
 
-void callee_validation(forest_node *global);
-
+/**
+ * @brief Renamer for unique names for variables to codegen
+ * 
+ * @param node Node to be renamed based on the nickname
+ * @return char* New name of the node
+ */
 char *renamer(AVL_tree *node);
-
-void return_logic_validation (forest_node *global);
-void validate_forest(forest_node *func);
-bool validate_forest_node(forest_node *node);
-void convert_optional_data_type (AVL_tree *node, int mode);
-
-void define_built_in_function();
-void vardef_outermost_while(inst_type type, char *nickname, int cnt);
-
-
 
 
 /**
  * @brief When a return statement is encountered, check if it is somewhere in a function
  * 
- * @param node 
+ * @param node Active node, where the return statement was encountered
  * @return forest_node* returns the function node if return statement is in a function, NULL otherwise
  */
 forest_node* check_return_stmt(forest_node *node);
 
+
+/**
+ * @brief Validating function calls, since function definitions can be after function calls
+ * 
+ * @param global Global forest node
+ */
+void callee_validation(forest_node *global);
+
+
+/**
+ * @brief Validating return logic in all function definitions (if all paths return)
+ * 
+ * @param global Global forest node
+ */
+void return_logic_validation (forest_node *global);
+void validate_forest(forest_node *func);
+bool validate_forest_node(forest_node *node);
+
+/**
+ * @brief Generate instruction for variable definition in while cycle (needs to be moved)
+ * 
+ * @param type Instruction type
+ * @param nickname Name for the instruction
+ * @param cnt Counter for the instruction
+ */
+void vardef_outermost_while(inst_type type, char *nickname, int cnt);
+
+
+/**
+ * @brief Convert optional data type (Int?, Double?, String?) to compatible data type (Int, Double, String)
+ * 
+ * @param node Symbol, which data type is to be converted
+ * @param mode 0 for optional to non-optional, 1 for non-optional to optional
+ */
+void convert_optional_data_type (AVL_tree *node, int mode);
+
+
+/**
+ * @brief Define built-in function (in codegen) if it has not been defined yet
+ * 
+ * @param built_in_defs Struct with flags informing whether a built-in function was defined or not
+ */
+void define_built_in_function(builtin_defs built_in_defs);
 
 #endif //IFJ_PARSER_H

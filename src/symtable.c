@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief Symbol table using AVL tree: implementation
+ * @brief Symbol table using self-balancing binary search tree (AVL tree)
  *
  * @author Adam Valík <xvalik05>
  * @author Marek Effenberger <xeffen00>
@@ -24,11 +24,10 @@
 #include <string.h>
 
 
-// void symtable_init(AVL_tree **tree) {
-//     *tree = NULL;
-// }
 
-void data_init(sym_data *data){
+sym_data *data_init(sym_data *data){
+    data = (sym_data *)malloc(sizeof(sym_data));
+
     data->defined = false; // initialized
 
     data->is_var = false;
@@ -42,33 +41,34 @@ void data_init(sym_data *data){
     data->param_name = NULL;
     data->param_type = NIL;
     data->param_order = 0;
-}
-
-sym_data set_data_var(sym_data data, bool initialized, data_type data_type, var_type var_type) { 
-    data_init(&data);
-    data.is_var = true;
-    data.defined = initialized;
-    data.data_type = data_type;
-    data.var_type = var_type;
     return data;
 }
 
-sym_data set_data_func(sym_data *data, data_type return_type) {
-    data_init(data);
+sym_data *set_data_var(bool initialized, data_type data_type, var_type var_type) { 
+    sym_data *data = data_init(data);
+    data->is_var = true;
+    data->defined = initialized;
+    data->data_type = data_type;
+    data->var_type = var_type;
+    return data;
+}
+
+sym_data *set_data_func(data_type return_type) {
+    sym_data *data = data_init(data);
     data->is_func = true;
     data->defined = true;
     data->return_type = return_type;
-    return *data;
+    return data;
 }
 
-sym_data set_data_param(sym_data *data, data_type param_type, char *param_name, int param_order) {
-    data_init(data);
+sym_data *set_data_param(data_type param_type, char *param_name, int param_order) {
+    sym_data *data = data_init(data);
     data->defined = true;
     data->is_param = true;
     data->param_type = param_type;
-    data->param_name = param_name;
+    data->param_name = (char *)malloc(sizeof(char) * (strlen(param_name) + 2));
     data->param_order = param_order;
-    return *data;
+    return data;
 }
 
 
@@ -87,12 +87,12 @@ AVL_tree *symtable_search(AVL_tree *tree, char *key) {
     }
 }
 
-// traverse the tree and find the parameter with the given order
+
 AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg) {
     if (tree == NULL) {
         return NULL;
     }
-    else if (tree->data.is_param && tree->data.param_order == order_arg) {
+    else if (tree->data->is_param && tree->data->param_order == order_arg) {
         return tree;
     }
     else {
@@ -110,38 +110,6 @@ AVL_tree *symtable_find_param(AVL_tree *tree, int order_arg) {
     }
 }
 
-
-sym_data *symtable_lookup(AVL_tree *tree, char *key) {
-    if (tree == NULL || key == NULL) {
-        return NULL;
-    }
-    else if (strcmp(tree->key, key) == 0) {
-        return &(tree->data);
-    } 
-    else if (strcmp(tree->key, key) > 0) {
-        return symtable_lookup(tree->left, key);
-    }
-    else { // strcmp(tree->key, key) < 0
-        return symtable_lookup(tree->right, key);
-    }
-}
-
-bool validation_of_id(AVL_tree *tree, char *key, int order_arg) {
-    if (tree == NULL || key == NULL) {
-        return false;
-    }
-    else if (strcmp(tree->key, key) == 0 && order_arg == tree->data.param_order && tree->data.is_param) {
-        return true;
-    }
-    else if (strcmp(tree->key, key) > 0) {
-        return validation_of_id(tree->left, key, order_arg);
-    }
-    else { // strcmp(tree->key, key) < 0
-        return validation_of_id(tree->right, key, order_arg);
-    }
-    return false;
-}
-
 int height(AVL_tree *tree) {
     if (tree == NULL) {
         return 0;
@@ -151,7 +119,6 @@ int height(AVL_tree *tree) {
     }
 }
 
-
 int get_balance(AVL_tree *tree) {
     if (tree == NULL) {
         return 0;
@@ -160,7 +127,6 @@ int get_balance(AVL_tree *tree) {
         return (height(tree->left) - height(tree->right));
     }
 }
-
 
 void right_rotate(AVL_tree **tree) {
     AVL_tree *x = *tree;
@@ -175,7 +141,6 @@ void right_rotate(AVL_tree **tree) {
 
     *tree = y;
 }
-
 
 void left_rotate(AVL_tree **tree) {
     AVL_tree *x = *tree;
@@ -192,7 +157,7 @@ void left_rotate(AVL_tree **tree) {
 }
 
 
-void symtable_insert(AVL_tree **tree, char *key, sym_data data) {
+void symtable_insert(AVL_tree **tree, char *key, sym_data *data) {
     if (*tree == NULL) { // insert first to an empty tree
         *tree = (AVL_tree *)allocate_memory(sizeof(AVL_tree), "tree node", SYMTABLE);
         (*tree)->key = key;
@@ -320,42 +285,16 @@ void symtable_dispose(AVL_tree **tree) {
             symtable_dispose(&((*tree)->right));
         }
         else { // (*tree)->left == NULL && (*tree)->right == NULL
+            if ((*tree)->data->param_name) {
+                free((*tree)->data->param_name);
+                (*tree)->data->param_name = NULL;
+            }
+            if ((*tree)->data) {
+                free((*tree)->data);
+                (*tree)->data = NULL;
+            }
             free(*tree);
             *tree = NULL;
         }
     }
 }
-
-
-void inorder(AVL_tree **tree) { 
-    if (*tree != NULL) {
-        inorder(&((*tree)->left));
-        char *type;
-        if ((*tree)->data.is_var) {
-            type = "var";
-        }
-        else if ((*tree)->data.is_func) {
-            type = "func";
-        }
-        else if ((*tree)->data.is_param) {
-            type = "param";
-        }
-        else {
-            type = "unknown";
-        }
-        if ((*tree)->data.is_param) {
-            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.param_type);
-        }
-        else if ((*tree)->data.is_func) {
-            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.return_type);
-        }
-        else if ((*tree)->data.is_var) {
-            printf("key: %s - %s - %d\n", (*tree)->key, type, (*tree)->data.data_type);
-        }
-        else {
-            printf("key: %s - %s\n", (*tree)->key, type);
-        }
-        inorder(&((*tree)->right));
-    }
-}
-

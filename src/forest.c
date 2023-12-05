@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief A structure to better represent the hierarchy between the nodes of symtable and ast
+ * @brief Hierarchical tree structure to represent the scopes of the program
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
@@ -92,7 +92,6 @@ forest_node* forest_search_function(forest_node *global, char *key) {
 
 
 bool forest_check_inside_func(forest_node *node) {
-
     // function gets to the global scope, so it is not part of the function
     if (node->parent == NULL) {
         return false;
@@ -106,6 +105,7 @@ bool forest_check_inside_func(forest_node *node) {
         }
     }
 }
+
 
 // search for the outermost while loop (codegen problem)
 forest_node* forest_search_while(forest_node *node) {
@@ -121,7 +121,7 @@ forest_node* forest_search_while(forest_node *node) {
 }
 
 
-// search for a symbol in a symtable, if not found, search in the parent's symtable and return the symbol
+// search for a symbol in a symtable, if not found, search in the parent's symtable
 AVL_tree *forest_search_symbol(forest_node *node, char *key) {
     if (node != NULL) {
         if (node->symtable != NULL) {
@@ -136,7 +136,6 @@ AVL_tree *forest_search_symbol(forest_node *node, char *key) {
 }
 
 
-// search for a symbol in a symtable, if not found, search in the parent's symtable and return the forest node
 forest_node *forest_search_scope(forest_node *node, char *key) {
     if (node != NULL) {
         if (node->symtable != NULL) {
@@ -165,19 +164,5 @@ void forest_dispose(forest_node *global) {
         }
         free(global);
         global = NULL;
-    }
-}
-
-void traverse_forest(forest_node *node) {
-    if (node == NULL) {
-        return;
-    }
-
-    // Process the current node
-    printf("Node Name: %s %p\n", node->name, node);
-
-    // Recursively traverse the children
-    for (int i = 0; i < node->children_count; i++) {
-        traverse_forest(node->children[i]);
     }
 }
