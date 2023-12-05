@@ -537,8 +537,8 @@ void codegen_substring(instruction *inst) {
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
     fprintf(file, "GT LF@$check LF@$2 LF@$3\n");
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "EQ LF@$check LF@$2 LF@$3\n"); //
-    fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n"); //
+    fprintf(file, "EQ LF@$check LF@$2 LF@$3\n");
+    fprintf(file, "JUMPIFEQ !!load_result LF@$check bool@true\n");
     fprintf(file, "DEFVAR LF@$tmp_strlen\n");
     fprintf(file, "STRLEN LF@$tmp_strlen LF@$1\n");
     fprintf(file, "GT LF@$check LF@$2 LF@$tmp_strlen\n");
@@ -550,7 +550,6 @@ void codegen_substring(instruction *inst) {
     fprintf(file, "LABEL !!substring_loop\n");
     fprintf(file, "GETCHAR LF@$tmp1 LF@$1 LF@$2\n");
     fprintf(file, "CONCAT LF@$retval$ LF@$retval$ LF@$tmp1\n");
-    //fprintf(file, "JUMPIFEQ !!load_result LF@$2 LF@$3\n");
     fprintf(file, "ADD LF@$2 LF@$2 int@1\n");
     fprintf(file, "JUMPIFNEQ !!substring_loop LF@$2 LF@$3\n");
     fprintf(file, "JUMP !!load_result\n");
