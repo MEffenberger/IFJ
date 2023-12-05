@@ -96,6 +96,7 @@ void cut_indent(vector* vector, int indent, int lines){
         return;
     }
     int len = strlen(vector->array);
+    int eol_cnt = 0;
     printf("LINES:%d\n", lines);
     
     for(int i = 0; i < indent*2; i++){
@@ -105,12 +106,18 @@ void cut_indent(vector* vector, int indent, int lines){
         
     }
     char* result = strstr(vector->array, "\\010");
+    if(result == NULL){
+        return;
+    } else {
+        eol_cnt++;
+    }
     int index = result - vector->array;
     index = index + 4;
     printf("BUFFER:%s\n", vector->array);
     printf("PRVEK:%c\n", vector->array[index]);
     while(vector->array[index+2] == '1' && vector->array[index+3] == '0'){
         index = index + 4;
+        eol_cnt++;
     }
     //printf("PRVEKAFTER:%c\n", vector->array[index]);
     //printf("PRVEKAFTER:%c\n", vector->array[index+1]);
