@@ -284,6 +284,9 @@ void codegen_generate_code_please(instruction_list *list) {
             case DIVS:
                 fprintf(file, "DIVS\n");
                 break;
+            case IDIV_ZERO_DEFVAR:
+                fprintf(file, "DEFVAR %cF@idiv_zero_%d\n", inst->frame, inst->cnt);
+                break;
             case IDIV_BY_ZERO:
                 codegen_idiv_zero(inst);
                 break;

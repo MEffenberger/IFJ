@@ -60,6 +60,7 @@ typedef enum instruction_type {
     DIV_BY_ZERO,
     IDIV_BY_ZERO,
     DIV_ZERO_DEFVAR,
+    IDIV_ZERO_DEFVAR,
     PUSHS_INT_CONST,
     PUSHS_FLOAT_CONST,
     PUSHS_STRING_CONST,
