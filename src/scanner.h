@@ -16,6 +16,9 @@
 #include "string_vector.h"
 #include "symtable.h"
 
+#define ASCII_BEGIN 31 //Beginning of supported ascii characters
+#define DEFAULT_TOKEN_VAL 1000 //Value that compare_keyword returns when no keyword found
+
 /// Enumeration of all types of tokens
 typedef enum token_types {
 
