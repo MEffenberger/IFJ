@@ -1,0 +1,34 @@
+\doxysection{cnt\+\_\+stack.\+h}
+\hypertarget{cnt__stack_8h_source}{}\label{cnt__stack_8h_source}\mbox{\hyperlink{cnt__stack_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00012}00012\ \textcolor{preprocessor}{\#ifndef\ CNT\_STACK\_H}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00013}00013\ \textcolor{preprocessor}{\#define\ CNT\_STACK\_H}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00017}00017\ \textcolor{comment}{//default\ stack\ size}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00018}00018\ \textcolor{preprocessor}{\#define\ STACK\_SIZE\ 4}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00020}00020\ \textcolor{comment}{//\ Structure\ representing\ a\ stack\ holding\ integers}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00021}\mbox{\hyperlink{structcntstack}{00021}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcntstack}{cntstack}}\ \{}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{int}*\ cnt\_array;}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00023}00023\ \ \ \ \ \textcolor{keywordtype}{int}\ size;}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{int}\ capacity;}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00025}00025\ \}\ \mbox{\hyperlink{structcntstack}{cnt\_stack\_t}};}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00027}00027\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}\ *cnt\_stack;\ \textcolor{comment}{//\ for\ parser}}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00034}00034\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{cnt__stack_8h_a62247acc4151c24c383fbbcec0110936}{cnt\_init}}(\mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}*\ cnt\_stack);}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00042}00042\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{cnt__stack_8h_a08bf04264f20eb1265da966c2cb5a8d7}{cnt\_push}}(\mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}*\ cnt\_stack);}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00050}00050\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{cnt__stack_8h_a3ae41f5290d85de90f6b4438929f5a03}{cnt\_pop}}(\mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}*\ cnt\_stack);}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00058}00058\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{cnt__stack_8h_a7461a9a36d608c97150ec3cfb93482b5}{cnt\_top}}(\mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}*\ cnt\_stack);}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00065}00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{cnt__stack_8h_a2c5aa18ffa2dd55b4a10cca6bd313052}{cnt\_dispose\_stack}}(\mbox{\hyperlink{structcntstack}{cnt\_stack\_t}}*\ cnt\_stack);}
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{cnt__stack_8h_source_l00067}00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ cnt\_STACK\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

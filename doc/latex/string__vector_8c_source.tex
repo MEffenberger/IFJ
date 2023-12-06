@@ -1,0 +1,77 @@
+\doxysection{string\+\_\+vector.\+c}
+\hypertarget{string__vector_8c_source}{}\label{string__vector_8c_source}\mbox{\hyperlink{string__vector_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{callee_8h}{callee.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cnt__stack_8h}{cnt\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{codegen_8h}{codegen.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00014}00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{error_8h}{error.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{expression__parser_8h}{expression\_parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{forest_8h}{forest.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{parser_8h}{parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00019}00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{scanner_8h}{scanner.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00020}00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{string__vector_8h}{string\_vector.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00021}00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00022}00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{token__stack_8h}{token\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00025}\mbox{\hyperlink{string__vector_8c_ab7c6a47aed2bcb67897728f41dafbae9}{00025}}\ \mbox{\hyperlink{structstring__vector}{vector}}*\ \mbox{\hyperlink{string__vector_8c_ab7c6a47aed2bcb67897728f41dafbae9}{vector\_init}}()\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00027}00027\ \ \ \ \ \mbox{\hyperlink{structstring__vector}{vector}}*\ v\ =\ (\mbox{\hyperlink{structstring__vector}{vector}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structstring__vector}{vector}}));}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00029}00029\ \ \ \ \ v-\/>size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00030}00030\ \ \ \ \ v-\/>size\_of\_alloc\ =\ VECTOR\_LENGTH;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00031}00031\ \ \ \ \ v-\/>array\ =\ (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(VECTOR\_LENGTH*\ (\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char})));}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00032}00032\ \ \ \ \ v-\/>array[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00034}00034\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00036}\mbox{\hyperlink{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}{00036}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}{vector\_append}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v,\ \textcolor{keywordtype}{char}\ c)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00037}00037\ \ \ \ \ \textcolor{keywordflow}{if}(v-\/>size\ +\ 1\ ==\ v-\/>size\_of\_alloc)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Vector\ has\ always\ 2\ times\ bigger\ capacity\ than\ previous\ one}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *new\_vec\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(v-\/>array,\ v-\/>size\_of\_alloc\ *\ 2\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}));\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ v-\/>array\ =\ new\_vec;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ v-\/>size\_of\_alloc\ *=\ 2;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00043}00043\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00045}00045\ \ \ \ \ v-\/>array[v-\/>size]\ =\ c;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00046}00046\ \ \ \ \ v-\/>size++;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00047}00047\ \ \ \ \ v-\/>array[v-\/>size]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00048}00048\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00049}00049\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00051}\mbox{\hyperlink{string__vector_8c_ac8d14e698653e06a3fdf9cbd80a3a52d}{00051}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8c_ac8d14e698653e06a3fdf9cbd80a3a52d}{vector\_str\_append}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v,\ \textcolor{keywordtype}{char}*\ c)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00052}00052\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ strlen(c);\ i++)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00053}00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!(\mbox{\hyperlink{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}{vector\_append}}(v,\ c[i])))\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00056}00056\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00057}00057\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00058}00058\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00060}\mbox{\hyperlink{string__vector_8c_a2ba9c5df6c357b6bb12ea2baeb3f322d}{00060}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{string__vector_8c_a2ba9c5df6c357b6bb12ea2baeb3f322d}{vector\_dispose}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00061}00061\ \ \ \ \ v-\/>size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00062}00062\ \ \ \ \ v-\/>size\_of\_alloc\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00063}00063\ \ \ \ \ \textcolor{keywordflow}{if}(v-\/>array)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ free(v-\/>array);}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00065}00065\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00066}00066\ \ \ \ \ v-\/>array\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00067}00067\ \ \ \ \ free(v);}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00068}00068\ \ \ \ \ v\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00069}00069\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00071}\mbox{\hyperlink{string__vector_8c_a7945d35bff9a2bfe3a066f1dff9220f4}{00071}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8c_a7945d35bff9a2bfe3a066f1dff9220f4}{vector\_str\_cmp}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v,\ \textcolor{keywordtype}{char}*\ s)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00073}00073\ \ \ \ \ \textcolor{keywordflow}{return}\ !(strcmp(v-\/>array,\ s));\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00074}00074\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00076}\mbox{\hyperlink{string__vector_8c_aa6a1e26e7d26552925e2981d4b3d2499}{00076}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{string__vector_8c_aa6a1e26e7d26552925e2981d4b3d2499}{vector\_size}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{return}\ v-\/>size;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00078}00078\ \}}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00080}\mbox{\hyperlink{string__vector_8c_acf1286e8772df7f9605bca1034fc576d}{00080}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{string__vector_8c_acf1286e8772df7f9605bca1034fc576d}{vector\_alloc\_size}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v)\{}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{return}\ v-\/>size\_of\_alloc;}
+\DoxyCodeLine{\Hypertarget{string__vector_8c_source_l00082}00082\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,288 @@
+\doxysection{string\+\_\+vector.\+c File Reference}
+\hypertarget{string__vector_8c}{}\label{string__vector_8c}\index{string\_vector.c@{string\_vector.c}}
+
+
+String vector file.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{string__vector_8c_ab7c6a47aed2bcb67897728f41dafbae9}{vector\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em inicialization of the vector \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}{vector\+\_\+append}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v, char c)
+\begin{DoxyCompactList}\small\item\em Adds char to the array. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{string__vector_8c_ac8d14e698653e06a3fdf9cbd80a3a52d}{vector\+\_\+str\+\_\+append}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v, char \texorpdfstring{$\ast$}{*}c)
+\begin{DoxyCompactList}\small\item\em Adds string to the end of the actual vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{string__vector_8c_a2ba9c5df6c357b6bb12ea2baeb3f322d}{vector\+\_\+dispose}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v)
+\begin{DoxyCompactList}\small\item\em Free vector. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{string__vector_8c_a7945d35bff9a2bfe3a066f1dff9220f4}{vector\+\_\+str\+\_\+cmp}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v, char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Compares vector and string. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{string__vector_8c_aa6a1e26e7d26552925e2981d4b3d2499}{vector\+\_\+size}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v)
+\begin{DoxyCompactList}\small\item\em Return size of vector. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{string__vector_8c_acf1286e8772df7f9605bca1034fc576d}{vector\+\_\+alloc\+\_\+size}} (\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}v)
+\begin{DoxyCompactList}\small\item\em Return size of allocated space in vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+String vector file. 
+
+IFJ compiler 2023
+
+\begin{DoxyAuthor}{Author}
+Samuel Hejnicek $<$hejni00$>$ 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2023-\/10-\/21 
+\end{DoxyDate}
+
+
+Definition in file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{string__vector_8c_acf1286e8772df7f9605bca1034fc576d}\label{string__vector_8c_acf1286e8772df7f9605bca1034fc576d} 
+\index{string\_vector.c@{string\_vector.c}!vector\_alloc\_size@{vector\_alloc\_size}}
+\index{vector\_alloc\_size@{vector\_alloc\_size}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_alloc\_size()}{vector\_alloc\_size()}}
+{\footnotesize\ttfamily int vector\+\_\+alloc\+\_\+size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v }\end{DoxyParamCaption})}
+
+
+
+Return size of allocated space in vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & pointer to vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size of allocated space for chars in vector 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00080}{80}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{return}\ v-\/>size\_of\_alloc;}
+\DoxyCodeLine{00082\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}\label{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998} 
+\index{string\_vector.c@{string\_vector.c}!vector\_append@{vector\_append}}
+\index{vector\_append@{vector\_append}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_append()}{vector\_append()}}
+{\footnotesize\ttfamily bool vector\+\_\+append (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v,  }\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Adds char to the array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & pointer to vector \\
+\hline
+{\em c} & char to be added \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if done correctly, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00036}{36}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordflow}{if}(v-\/>size\ +\ 1\ ==\ v-\/>size\_of\_alloc)\{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Vector\ has\ always\ 2\ times\ bigger\ capacity\ than\ previous\ one}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *new\_vec\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(v-\/>array,\ v-\/>size\_of\_alloc\ *\ 2\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}));\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ v-\/>array\ =\ new\_vec;}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ v-\/>size\_of\_alloc\ *=\ 2;}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ v-\/>array[v-\/>size]\ =\ c;}
+\DoxyCodeLine{00046\ \ \ \ \ v-\/>size++;}
+\DoxyCodeLine{00047\ \ \ \ \ v-\/>array[v-\/>size]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00049\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_a2ba9c5df6c357b6bb12ea2baeb3f322d}\label{string__vector_8c_a2ba9c5df6c357b6bb12ea2baeb3f322d} 
+\index{string\_vector.c@{string\_vector.c}!vector\_dispose@{vector\_dispose}}
+\index{vector\_dispose@{vector\_dispose}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_dispose()}{vector\_dispose()}}
+{\footnotesize\ttfamily void vector\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v }\end{DoxyParamCaption})}
+
+
+
+Free vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & pointer to vector \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00060}{60}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ v-\/>size\ =\ 0;}
+\DoxyCodeLine{00062\ \ \ \ \ v-\/>size\_of\_alloc\ =\ 0;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordflow}{if}(v-\/>array)\{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ free(v-\/>array);}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ v-\/>array\ =\ NULL;}
+\DoxyCodeLine{00067\ \ \ \ \ free(v);}
+\DoxyCodeLine{00068\ \ \ \ \ v\ =\ NULL;}
+\DoxyCodeLine{00069\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_ab7c6a47aed2bcb67897728f41dafbae9}\label{string__vector_8c_ab7c6a47aed2bcb67897728f41dafbae9} 
+\index{string\_vector.c@{string\_vector.c}!vector\_init@{vector\_init}}
+\index{vector\_init@{vector\_init}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_init()}{vector\_init()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*} vector\+\_\+init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+inicialization of the vector 
+
+\begin{DoxyReturn}{Returns}
+pointer to allocated vector 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00025}{25}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{structstring__vector}{vector}}*\ v\ =\ (\mbox{\hyperlink{structstring__vector}{vector}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structstring__vector}{vector}}));}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ v-\/>size\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ v-\/>size\_of\_alloc\ =\ VECTOR\_LENGTH;}
+\DoxyCodeLine{00031\ \ \ \ \ v-\/>array\ =\ (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(VECTOR\_LENGTH*\ (\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char})));}
+\DoxyCodeLine{00032\ \ \ \ \ v-\/>array[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00034\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_aa6a1e26e7d26552925e2981d4b3d2499}\label{string__vector_8c_aa6a1e26e7d26552925e2981d4b3d2499} 
+\index{string\_vector.c@{string\_vector.c}!vector\_size@{vector\_size}}
+\index{vector\_size@{vector\_size}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_size()}{vector\_size()}}
+{\footnotesize\ttfamily int vector\+\_\+size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v }\end{DoxyParamCaption})}
+
+
+
+Return size of vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & pointer to vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size of vector 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00076}{76}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{return}\ v-\/>size;}
+\DoxyCodeLine{00078\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_ac8d14e698653e06a3fdf9cbd80a3a52d}\label{string__vector_8c_ac8d14e698653e06a3fdf9cbd80a3a52d} 
+\index{string\_vector.c@{string\_vector.c}!vector\_str\_append@{vector\_str\_append}}
+\index{vector\_str\_append@{vector\_str\_append}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_str\_append()}{vector\_str\_append()}}
+{\footnotesize\ttfamily bool vector\+\_\+str\+\_\+append (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v,  }\item[{char \texorpdfstring{$\ast$}{*}}]{s }\end{DoxyParamCaption})}
+
+
+
+Adds string to the end of the actual vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & pointer to vector \\
+\hline
+{\em s} & pointer to string to be added \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if done correctly, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00051}{51}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ strlen(c);\ i++)\{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!(\mbox{\hyperlink{string__vector_8c_a54faf1f0382b319dcc649ae9392b9998}{vector\_append}}(v,\ c[i])))\{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00058\ \}}
+
+\end{DoxyCode}
+\Hypertarget{string__vector_8c_a7945d35bff9a2bfe3a066f1dff9220f4}\label{string__vector_8c_a7945d35bff9a2bfe3a066f1dff9220f4} 
+\index{string\_vector.c@{string\_vector.c}!vector\_str\_cmp@{vector\_str\_cmp}}
+\index{vector\_str\_cmp@{vector\_str\_cmp}!string\_vector.c@{string\_vector.c}}
+\doxysubsubsection{\texorpdfstring{vector\_str\_cmp()}{vector\_str\_cmp()}}
+{\footnotesize\ttfamily bool vector\+\_\+str\+\_\+cmp (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structstring__vector}{vector}} \texorpdfstring{$\ast$}{*}}]{v1,  }\item[{char \texorpdfstring{$\ast$}{*}}]{s }\end{DoxyParamCaption})}
+
+
+
+Compares vector and string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & pointer to 1st vector \\
+\hline
+{\em v2} & pointer to string to be compared \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if vectors match, false otherwise 
+\end{DoxyReturn}
+strcmp because strcmp returns 0 if strings equal and 0 is treated like false
+
+Definition at line \mbox{\hyperlink{string__vector_8c_source_l00071}{71}} of file \mbox{\hyperlink{string__vector_8c_source}{string\+\_\+vector.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{return}\ !(strcmp(v-\/>array,\ s));\ }
+\DoxyCodeLine{00074\ \}}
+
+\end{DoxyCode}

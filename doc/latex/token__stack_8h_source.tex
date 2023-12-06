@@ -1,0 +1,36 @@
+\doxysection{token\+\_\+stack.\+h}
+\hypertarget{token__stack_8h_source}{}\label{token__stack_8h_source}\mbox{\hyperlink{token__stack_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00010}00010\ \textcolor{preprocessor}{\#ifndef\ TOKEN\_STACK\_H}}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00011}00011\ \textcolor{preprocessor}{\#define\ TOKEN\_STACK\_H}}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{scanner_8h}{scanner.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00019}\mbox{\hyperlink{structtoken__stack}{00019}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00020}00020\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}**\ token\_array;}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00021}00021\ \ \ \ \ \textcolor{keywordtype}{int}\ size;}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{int}\ capacity;}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00023}00023\ \}\ \mbox{\hyperlink{structtoken__stack}{token\_stack}};}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00031}00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{token__stack_8h_ad4bb2b5ed621c5319699bd5a4395f519}{stack\_init}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00040}00040\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{token__stack_8h_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}},\ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{structtoken}{token}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00047}00047\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{token__stack_8h_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00056}00056\ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{token__stack_8h_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00066}00066\ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{token__stack_8h_a7b3ed3304b7b78ddf06f7800d9a50db7}{stack\_top\_terminal}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00074}00074\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{token__stack_8h_a2a1b1bcee3718ed8e435725c7b624ded}{dispose\_stack}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ \mbox{\hyperlink{structtoken__stack}{token\_stack}});}
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{token__stack_8h_source_l00076}00076\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ TOKEN\_STACK\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

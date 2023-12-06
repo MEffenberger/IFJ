@@ -1,0 +1,46 @@
+\doxysection{error.\+h}
+\hypertarget{error_8h_source}{}\label{error_8h_source}\mbox{\hyperlink{error_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00012}00012\ \textcolor{preprocessor}{\#ifndef\ IFJ\_ERROR\_H}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00013}00013\ \textcolor{preprocessor}{\#define\ IFJ\_ERROR\_H}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00017}00017\ \textcolor{comment}{//\ Error\ codes}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00018}00018\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ e\_error\_code\ \{}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00019}00019\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ lexical\ analysis,\ bad\ structure\ of\ the\ lexeme}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00020}00020\ \ \ \ \ ERROR\_LEX\ =\ 1,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00021}00021\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ syntax\ analysis,\ wrong\ syntax\ of\ the\ source\ code,\ missing\ header,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00022}00022\ \ \ \ \ ERROR\_SYN\ =\ 2,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ undefined\ function,\ redefinition\ of\ a\ variable,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00024}00024\ \ \ \ \ ERROR\_SEM\_UNDEF\_FUN\ =\ 3,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00025}00025\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ wrong\ type\ of\ a\ variable,\ wrong\ number\ of\ parameters,\ wrong\ return\ value\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00026}00026\ \ \ \ \ ERROR\_SEM\_TYPE\ =\ 4,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00027}00027\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ use\ of\ undefined/uninitialized\ variable,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00028}00028\ \ \ \ \ ERROR\_SEM\_UNDEF\_VAR\ =\ 5,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00029}00029\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ missing/redundant\ return\ value,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00030}00030\ \ \ \ \ ERROR\_SEM\_EXPR\_RET\ =\ 6,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00031}00031\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ type\ compatibility\ in\ expressions,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00032}00032\ \ \ \ \ ERROR\_SEM\_EXPR\_TYPE\ =\ 7,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ wrong\ parameter\ type\ where\ there's\ no\ possibility\ to\ derive\ the\ type,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00034}00034\ \ \ \ \ ERROR\_SEM\_DERIV\ =\ 8,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ other\ semantic\ errors\ not\ covered\ by\ the\ previous\ error\ codes.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00036}00036\ \ \ \ \ ERROR\_SEM\_OTHER\ =\ 9,}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//\ Error\ unrelated\ to\ input\ files,\ memory\ allocation,\ etc.}}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00038}00038\ \ \ \ \ ERROR\_INTERNAL\ =\ 99}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00039}00039\ \}\ error\_code\_t;}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00048}00048\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{error_8h_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00058}00058\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{error_8h_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(\textcolor{keywordtype}{void}\ *to\_be\_reallocated,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00069}00069\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{error_8h_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(error\_code\_t\ error\_code,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ module,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message);}
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{error_8h_source_l00072}00072\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_ERROR\_H}}
+
+\end{DoxyCode}

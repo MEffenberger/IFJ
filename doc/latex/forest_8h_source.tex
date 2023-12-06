@@ -1,0 +1,65 @@
+\doxysection{forest.\+h}
+\hypertarget{forest_8h_source}{}\label{forest_8h_source}\mbox{\hyperlink{forest_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00012}00012\ \textcolor{preprocessor}{\#ifndef\ IFJ\_FOREST\_H}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00013}00013\ \textcolor{preprocessor}{\#define\ IFJ\_FOREST\_H}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00018}00018\ \textcolor{comment}{//\ Keyword\ of\ the\ node}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00019}00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ f\_keyword\ \{}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00020}00020\ \ \ \ \ W\_GLOBAL,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00021}00021\ \ \ \ \ W\_FUNCTION,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00022}00022\ \ \ \ \ W\_FUNCTION\_BODY,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00023}00023\ \ \ \ \ W\_IF,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00024}00024\ \ \ \ \ W\_ELSE,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00025}00025\ \ \ \ \ W\_WHILE,}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00026}00026\ \ \ \ \ W\_NONE}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00027}00027\ \}\ f\_keyword\_t;}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00029}00029\ \textcolor{comment}{//\ Structure\ of\ the\ forest\ node}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00030}\mbox{\hyperlink{structs__forest__node}{00030}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structs__forest__node}{s\_forest\_node}}\ \{}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00031}00031\ \ \ \ \ f\_keyword\_t\ \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}};\ \textcolor{comment}{//\ type\ of\ the\ node}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00032}00032\ \ \ \ \ \textcolor{keywordtype}{char}\ *name;}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00033}00033\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structs__forest__node}{s\_forest\_node}}\ *parent;}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00034}00034\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structs__forest__node}{s\_forest\_node}}\ **children;\ \textcolor{comment}{//\ array\ of\ pointers\ to\ children\ nodes}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{int}\ children\_count;\ \textcolor{comment}{//\ number\ of\ children\ (last\ index\ +\ 1)}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *symtable;\ \textcolor{comment}{//\ pointer\ to\ the\ scope's\ symbol\ table}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00037}00037\ \ \ \ \ \textcolor{keywordtype}{int}\ cond\_cnt;\ \textcolor{comment}{//\ counter\ for\ if/else}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00038}00038\ \ \ \ \ \textcolor{keywordtype}{int}\ param\_cnt;\ \textcolor{comment}{//\ counter\ for\ parameters}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00039}00039\ \ \ \ \ \textcolor{keywordtype}{int}\ node\_cnt;\ \textcolor{comment}{//\ counter\ for\ nodes,\ used\ for\ renaming}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00040}00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_return;\ \textcolor{comment}{//\ true\ if\ the\ scope\ has\ return\ statement\ in\ it}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00041}00041\ \ \ \ \ \textcolor{keywordtype}{char}\ frame;\ \textcolor{comment}{//\ frame\ of\ the\ scope\ (G/L)}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00042}00042\ \}\ \mbox{\hyperlink{structs__forest__node}{forest\_node}};}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00044}00044\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *active;\ \textcolor{comment}{//\ Global\ pointer\ to\ the\ active\ node\ in\ forest}}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00051}00051\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *\mbox{\hyperlink{forest_8h_ac8d733013eecb67a4c1e4afe3c507725}{forest\_insert\_global}}();}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00062}00062\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{forest_8h_aefdc9fa365f78dc91b827ee0bca74716}{forest\_insert}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *parent,\ f\_keyword\_t\ \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}},\ \textcolor{keywordtype}{char}\ *name,\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ **active);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00072}00072\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}*\ \mbox{\hyperlink{forest_8h_ad81ea7ce8f90455086c452bb14de7f6c}{forest\_search\_function}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *global,\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00082}00082\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{forest_8h_a18e7a6154dfb46c3315fbeb932e71c7b}{forest\_check\_inside\_func}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *node);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00091}00091\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}*\ \mbox{\hyperlink{forest_8h_a814b0567b1cad828d3313480fbb07bad}{forest\_search\_while}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *node);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00101}00101\ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *\mbox{\hyperlink{forest_8h_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\_search\_symbol}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *node,\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00111}00111\ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *\mbox{\hyperlink{forest_8h_a619f25159598d0052096dd647035525c}{forest\_search\_scope}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *node,\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00119}00119\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{forest_8h_a899c973104f527e67289854621706eaf}{forest\_dispose}}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *global);}
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{forest_8h_source_l00122}00122\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_FOREST\_H}}
+
+\end{DoxyCode}

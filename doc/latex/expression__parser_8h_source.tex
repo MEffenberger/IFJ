@@ -1,0 +1,55 @@
+\doxysection{expression\+\_\+parser.\+h}
+\hypertarget{expression__parser_8h_source}{}\label{expression__parser_8h_source}\mbox{\hyperlink{expression__parser_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00012}00012\ \textcolor{preprocessor}{\#ifndef\ IFJ\_EXPRESSION\_PARSER\_H}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00013}00013\ \textcolor{preprocessor}{\#define\ IFJ\_EXPRESSION\_PARSER\_H}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{token__stack_8h}{token\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00017}00017\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ expression\_rules\{}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00019}00019\ \ \ \ \ RULE\_PAR,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ (E)}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00020}00020\ \ \ \ \ RULE\_OPERAND,\ \ \ \textcolor{comment}{//\ E\ -\/>\ i}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00021}00021\ \ \ \ \ RULE\_ADD,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E+E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00022}00022\ \ \ \ \ RULE\_SUB,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E-\/E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00023}00023\ \ \ \ \ RULE\_MUL,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E*E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00024}00024\ \ \ \ \ RULE\_DIV,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E/E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00025}00025\ \ \ \ \ RULE\_LESS,\ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E<E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00026}00026\ \ \ \ \ RULE\_GTR,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E>E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00027}00027\ \ \ \ \ RULE\_LEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E<=E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00028}00028\ \ \ \ \ RULE\_GEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E>=E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00029}00029\ \ \ \ \ RULE\_EQ,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E==E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00030}00030\ \ \ \ \ RULE\_NEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E!=E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00031}00031\ \ \ \ \ RULE\_EXCL,\ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E!}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00032}00032\ \ \ \ \ RULE\_QMS,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E??E}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00033}00033\ \ \ \ \ NOT\_RULE\ \ \ \ \ \ \ \ \textcolor{comment}{//\ NOT\ A\ RULE}}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00035}00035\ \}\ expression\_rules\_t;}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00046}00046\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{expression__parser_8h_ac66a178aa09460dc7c0f17aad9e583e9}{get\_index}}(\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\_type\_t}}\ \mbox{\hyperlink{structtoken}{token}});}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00054}00054\ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{expression__parser_8h_a4de2f719aeb5d3f8de400ec1eaa5a787}{token\_create}}(\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\_type\_t}}\ token\_type);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00062}00062\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{expression__parser_8h_acc1c95d7f138e3e233baa89d6429aa84}{token\_shift}}(\mbox{\hyperlink{structtoken__stack}{token\_stack}}*\ stack);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00073}00073\ expression\_rules\_t\ \mbox{\hyperlink{expression__parser_8h_ad736ee1e72b14115057e6ad07188a7b9}{find\_reduce\_rule}}(\mbox{\hyperlink{structtoken}{token\_t}}*\ token1,\ \mbox{\hyperlink{structtoken}{token\_t}}*\ token2,\ \mbox{\hyperlink{structtoken}{token\_t}}*\ token3,\ \textcolor{keywordtype}{int}\ number\_of\_tokens);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00082}00082\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{expression__parser_8h_aa543cf70a00956bcae4bfd38338019f9}{convert\_qm}}(\mbox{\hyperlink{structtoken}{token\_t}}*\ token1);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00092}00092\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{expression__parser_8h_af20a08af025114e96fc67278283d909b}{check\_types}}(\mbox{\hyperlink{structtoken}{token\_t}}*\ token1,\ \mbox{\hyperlink{structtoken}{token\_t}}*\ token2,\ \mbox{\hyperlink{structtoken}{token\_t}}*\ token3);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00100}00100\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{expression__parser_8h_a0d1056ec10ae7b664a990158f51616ea}{push\_for\_leq\_geq}}(\mbox{\hyperlink{structtoken}{token\_t}}*\ token1,\ \mbox{\hyperlink{structtoken}{token\_t}}*\ token2);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00107}00107\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{expression__parser_8h_a3b13944bbf020cdd44f50022b0fe2b22}{call\_expr\_parser}}(data\_type\ return\_type);}
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{expression__parser_8h_source_l00109}00109\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_EXPRESSION\_PARSER\_H}}
+
+\end{DoxyCode}

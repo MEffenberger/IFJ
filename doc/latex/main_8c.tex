@@ -1,0 +1,64 @@
+\doxysection{main.\+c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{main.c@{main.c}}
+
+
+Main function.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main function. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+
+Samuel Hejnicek $<$xhejni00$>$ 
+
+Dominik Horut $<$xhorut01$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{main_8c_source_l00028}{28}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{parser_8c_a8ea3f48126ff591dbfa0f1a2be0028af}{parser\_parse\_please}}();}
+\DoxyCodeLine{00030\ \}}
+
+\end{DoxyCode}

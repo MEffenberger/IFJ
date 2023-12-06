@@ -1,0 +1,453 @@
+\doxysection{forest.\+h File Reference}
+\hypertarget{forest_8h}{}\label{forest_8h}\index{forest.h@{forest.h}}
+
+
+Hierarchical tree structure to represent the scopes of the program.  
+
+
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structs__forest__node}{s\+\_\+forest\+\_\+node}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{forest_8h_ae00e8441281688009c97b13c901779d6}\label{forest_8h_ae00e8441281688009c97b13c901779d6} 
+typedef enum f\+\_\+keyword {\bfseries f\+\_\+keyword\+\_\+t}
+\item 
+\Hypertarget{forest_8h_a2219ec870a49a5c086771fa485d83505}\label{forest_8h_a2219ec870a49a5c086771fa485d83505} 
+typedef struct \mbox{\hyperlink{structs__forest__node}{s\+\_\+forest\+\_\+node}} {\bfseries forest\+\_\+node}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries f\+\_\+keyword} \{ \newline
+{\bfseries W\+\_\+\+GLOBAL}
+, {\bfseries W\+\_\+\+FUNCTION}
+, {\bfseries W\+\_\+\+FUNCTION\+\_\+\+BODY}
+, {\bfseries W\+\_\+\+IF}
+, \newline
+{\bfseries W\+\_\+\+ELSE}
+, {\bfseries W\+\_\+\+WHILE}
+, {\bfseries W\+\_\+\+NONE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_ac8d733013eecb67a4c1e4afe3c507725}{forest\+\_\+insert\+\_\+global}} ()
+\begin{DoxyCompactList}\small\item\em Inserts a global node into the forest. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{forest_8h_aefdc9fa365f78dc91b827ee0bca74716}{forest\+\_\+insert}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}parent, f\+\_\+keyword\+\_\+t \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}}, char \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}active)
+\begin{DoxyCompactList}\small\item\em Inserts a new node into the forest. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_ad81ea7ce8f90455086c452bb14de7f6c}{forest\+\_\+search\+\_\+function}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}global, char \texorpdfstring{$\ast$}{*}key)
+\begin{DoxyCompactList}\small\item\em Search the function in the global scope. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{forest_8h_a18e7a6154dfb46c3315fbeb932e71c7b}{forest\+\_\+check\+\_\+inside\+\_\+func}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}node)
+\begin{DoxyCompactList}\small\item\em Checks if the node is inside a function. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_a814b0567b1cad828d3313480fbb07bad}{forest\+\_\+search\+\_\+while}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}node)
+\begin{DoxyCompactList}\small\item\em Search for the outermost while loop (codegen problem) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\+\_\+search\+\_\+symbol}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}node, char \texorpdfstring{$\ast$}{*}key)
+\begin{DoxyCompactList}\small\item\em Searches for a symbol in the symbol table of the node (and its parents if not found) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_a619f25159598d0052096dd647035525c}{forest\+\_\+search\+\_\+scope}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}node, char \texorpdfstring{$\ast$}{*}key)
+\begin{DoxyCompactList}\small\item\em Searches for a scope where the symbol is (and its parents if not found) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{forest_8h_a899c973104f527e67289854621706eaf}{forest\+\_\+dispose}} (\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}global)
+\begin{DoxyCompactList}\small\item\em Forest dispose. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{forest_8h_acd11f90bed6280a98991c60ca73cdead}{active}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Hierarchical tree structure to represent the scopes of the program. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{forest_8h_source}{forest.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{forest_8h_a69bbc8124d112dea414d290dc1f19c6e}\label{forest_8h_a69bbc8124d112dea414d290dc1f19c6e} 
+\index{forest.h@{forest.h}!f\_keyword@{f\_keyword}}
+\index{f\_keyword@{f\_keyword}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{f\_keyword}{f\_keyword}}
+{\footnotesize\ttfamily enum f\+\_\+keyword}
+
+
+
+Definition at line \mbox{\hyperlink{forest_8h_source_l00019}{19}} of file \mbox{\hyperlink{forest_8h_source}{forest.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00020\ \ \ \ \ W\_GLOBAL,}
+\DoxyCodeLine{00021\ \ \ \ \ W\_FUNCTION,}
+\DoxyCodeLine{00022\ \ \ \ \ W\_FUNCTION\_BODY,}
+\DoxyCodeLine{00023\ \ \ \ \ W\_IF,}
+\DoxyCodeLine{00024\ \ \ \ \ W\_ELSE,}
+\DoxyCodeLine{00025\ \ \ \ \ W\_WHILE,}
+\DoxyCodeLine{00026\ \ \ \ \ W\_NONE}
+\DoxyCodeLine{00027\ \}\ f\_keyword\_t;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{forest_8h_a18e7a6154dfb46c3315fbeb932e71c7b}\label{forest_8h_a18e7a6154dfb46c3315fbeb932e71c7b} 
+\index{forest.h@{forest.h}!forest\_check\_inside\_func@{forest\_check\_inside\_func}}
+\index{forest\_check\_inside\_func@{forest\_check\_inside\_func}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_check\_inside\_func()}{forest\_check\_inside\_func()}}
+{\footnotesize\ttfamily bool forest\+\_\+check\+\_\+inside\+\_\+func (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{node }\end{DoxyParamCaption})}
+
+
+
+Checks if the node is inside a function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Pointer to the node to be checked \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true Node is inside a function 
+
+false Node is not inside a function 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00094}{94}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//\ function\ gets\ to\ the\ global\ scope,\ so\ it\ is\ not\ part\ of\ the\ function}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>parent\ ==\ NULL)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>keyword\ ==\ W\_FUNCTION)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{forest_8c_a18e7a6154dfb46c3315fbeb932e71c7b}{forest\_check\_inside\_func}}(node-\/>parent);}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_a899c973104f527e67289854621706eaf}\label{forest_8h_a899c973104f527e67289854621706eaf} 
+\index{forest.h@{forest.h}!forest\_dispose@{forest\_dispose}}
+\index{forest\_dispose@{forest\_dispose}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_dispose()}{forest\_dispose()}}
+{\footnotesize\ttfamily void forest\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{global }\end{DoxyParamCaption})}
+
+
+
+Forest dispose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em global} & Pointer to the global node (root of the forest) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00154}{154}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordflow}{if}\ (global\ !=\ NULL)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (global-\/>children\ !=\ NULL)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ global-\/>children\_count;\ i++)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{forest_8c_a899c973104f527e67289854621706eaf}{forest\_dispose}}(global-\/>children[i]);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ free(global-\/>children);}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (global-\/>symtable\ !=\ NULL)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\&(global-\/>symtable));}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ free(global);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ global\ =\ NULL;}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_aefdc9fa365f78dc91b827ee0bca74716}\label{forest_8h_aefdc9fa365f78dc91b827ee0bca74716} 
+\index{forest.h@{forest.h}!forest\_insert@{forest\_insert}}
+\index{forest\_insert@{forest\_insert}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_insert()}{forest\_insert()}}
+{\footnotesize\ttfamily void forest\+\_\+insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{parent,  }\item[{f\+\_\+keyword\+\_\+t}]{keyword,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{active }\end{DoxyParamCaption})}
+
+
+
+Inserts a new node into the forest. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & Pointer to the parent node \\
+\hline
+{\em keyword} & Keyword of the node \\
+\hline
+{\em name} & Name of the node \\
+\hline
+{\em active} & Pointer to the active node in forest \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00046}{46}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{if}\ (parent\ !=\ NULL)\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *child\ =\ (\mbox{\hyperlink{structs__forest__node}{forest\_node}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}));}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ child-\/>name\ =\ name;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ child-\/>keyword\ =\ \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ child-\/>parent\ =\ parent;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ child-\/>children\ =\ NULL;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ child-\/>children\_count\ =\ 0;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ child-\/>cond\_cnt\ =\ 0;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ child-\/>param\_cnt\ =\ 0;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ child-\/>node\_cnt\ =\ ++forest\_node\_cnt;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ child-\/>has\_return\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (parent-\/>children\ ==\ NULL)\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ parent-\/>children\ =\ (\mbox{\hyperlink{structs__forest__node}{forest\_node}}**)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}((\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}*)));}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Resize\ the\ existing\ array\ to\ accommodate\ the\ new\ child}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ parent-\/>children\ =\ (\mbox{\hyperlink{structs__forest__node}{forest\_node}}**)realloc(parent-\/>children,\ (parent-\/>children\_count\ +\ 1)\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}*));}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (parent-\/>children\ ==\ NULL)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}REALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ reallocation\ for\ forest\ node\ children\ failed"{}});}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ parent-\/>children[parent-\/>children\_count]\ =\ child;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ parent-\/>children\_count++;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ child-\/>symtable\ =\ NULL;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ *active\ =\ child;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{forest_8c_a18e7a6154dfb46c3315fbeb932e71c7b}{forest\_check\_inside\_func}}(child))\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ child-\/>frame\ =\ \textcolor{charliteral}{'L'};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ child-\/>frame\ =\ \textcolor{charliteral}{'G'};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_ac8d733013eecb67a4c1e4afe3c507725}\label{forest_8h_ac8d733013eecb67a4c1e4afe3c507725} 
+\index{forest.h@{forest.h}!forest\_insert\_global@{forest\_insert\_global}}
+\index{forest\_insert\_global@{forest\_insert\_global}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_insert\_global()}{forest\_insert\_global()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} forest\+\_\+insert\+\_\+global (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Inserts a global node into the forest. 
+
+\begin{DoxyReturn}{Returns}
+forest\+\_\+node\texorpdfstring{$\ast$}{*} pointer to the global node 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00030}{30}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *root\ =\ (\mbox{\hyperlink{structs__forest__node}{forest\_node}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__forest__node}{forest\_node}}));}
+\DoxyCodeLine{00032\ \ \ \ \ root-\/>name\ =\ \textcolor{stringliteral}{"{}global"{}};}
+\DoxyCodeLine{00033\ \ \ \ \ root-\/>keyword\ =\ W\_GLOBAL;}
+\DoxyCodeLine{00034\ \ \ \ \ root-\/>parent\ =\ NULL;}
+\DoxyCodeLine{00035\ \ \ \ \ root-\/>children\ =\ NULL;}
+\DoxyCodeLine{00036\ \ \ \ \ root-\/>children\_count\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ root-\/>symtable\ =\ NULL;}
+\DoxyCodeLine{00038\ \ \ \ \ root-\/>cond\_cnt\ =\ 0;}
+\DoxyCodeLine{00039\ \ \ \ \ root-\/>param\_cnt\ =\ 0;}
+\DoxyCodeLine{00040\ \ \ \ \ root-\/>node\_cnt\ =\ 0;}
+\DoxyCodeLine{00041\ \ \ \ \ root-\/>has\_return\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00042\ \ \ \ \ root-\/>frame\ =\ \textcolor{charliteral}{'G'};}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordflow}{return}\ root;\ }
+\DoxyCodeLine{00044\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_ad81ea7ce8f90455086c452bb14de7f6c}\label{forest_8h_ad81ea7ce8f90455086c452bb14de7f6c} 
+\index{forest.h@{forest.h}!forest\_search\_function@{forest\_search\_function}}
+\index{forest\_search\_function@{forest\_search\_function}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_search\_function()}{forest\_search\_function()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} forest\+\_\+search\+\_\+function (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{global,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key }\end{DoxyParamCaption})}
+
+
+
+Search the function in the global scope. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em global} & Pointer to the global node (root of the forest) \\
+\hline
+{\em key} & Key of the function to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+forest\+\_\+node\texorpdfstring{$\ast$}{*} Pointer to the function if found, NULL otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00082}{82}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordflow}{if}\ (global-\/>children\ !=\ NULL)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ global-\/>children\_count;\ i++)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (global-\/>children[i]-\/>keyword\ ==\ W\_FUNCTION\ \&\&\ strcmp(global-\/>children[i]-\/>name,\ key)\ ==\ 0)\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ global-\/>children[i];}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00091\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_a619f25159598d0052096dd647035525c}\label{forest_8h_a619f25159598d0052096dd647035525c} 
+\index{forest.h@{forest.h}!forest\_search\_scope@{forest\_search\_scope}}
+\index{forest\_search\_scope@{forest\_search\_scope}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_search\_scope()}{forest\_search\_scope()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} forest\+\_\+search\+\_\+scope (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{node,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key }\end{DoxyParamCaption})}
+
+
+
+Searches for a scope where the symbol is (and its parents if not found) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Pointer to the node where to start searching \\
+\hline
+{\em key} & Key of the symbol to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+forest\+\_\+node\texorpdfstring{$\ast$}{*} Pointer to the scope if found, NULL otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00139}{139}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordflow}{if}\ (node\ !=\ NULL)\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>symtable\ !=\ NULL)\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *found\ =\ \mbox{\hyperlink{symtable_8c_ab74a109202f0993add15765a5261fd4e}{symtable\_search}}(node-\/>symtable,\ key);}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ NULL)\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ node;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{forest_8c_a619f25159598d0052096dd647035525c}{forest\_search\_scope}}(node-\/>parent,\ key);}
+\DoxyCodeLine{00148\ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00150\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_aaec9905b456776ed75cd0e0ba54ca1c0}\label{forest_8h_aaec9905b456776ed75cd0e0ba54ca1c0} 
+\index{forest.h@{forest.h}!forest\_search\_symbol@{forest\_search\_symbol}}
+\index{forest\_search\_symbol@{forest\_search\_symbol}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_search\_symbol()}{forest\_search\_symbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} forest\+\_\+search\+\_\+symbol (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{node,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key }\end{DoxyParamCaption})}
+
+
+
+Searches for a symbol in the symbol table of the node (and its parents if not found) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Pointer to the node where to start searching \\
+\hline
+{\em key} & Key of the symbol to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+AVL\+\_\+tree\texorpdfstring{$\ast$}{*} Pointer to the symbol if found, NULL otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00125}{125}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordflow}{if}\ (node\ !=\ NULL)\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>symtable\ !=\ NULL)\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *found\ =\ \mbox{\hyperlink{symtable_8c_ab74a109202f0993add15765a5261fd4e}{symtable\_search}}(node-\/>symtable,\ key);}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (found\ !=\ NULL)\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ found;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{forest_8c_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\_search\_symbol}}(node-\/>parent,\ key);}
+\DoxyCodeLine{00134\ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00136\ \}}
+
+\end{DoxyCode}
+\Hypertarget{forest_8h_a814b0567b1cad828d3313480fbb07bad}\label{forest_8h_a814b0567b1cad828d3313480fbb07bad} 
+\index{forest.h@{forest.h}!forest\_search\_while@{forest\_search\_while}}
+\index{forest\_search\_while@{forest\_search\_while}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{forest\_search\_while()}{forest\_search\_while()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*} forest\+\_\+search\+\_\+while (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}} \texorpdfstring{$\ast$}{*}}]{node }\end{DoxyParamCaption})}
+
+
+
+Search for the outermost while loop (codegen problem) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Pointer to the node where to start searching \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+forest\+\_\+node\texorpdfstring{$\ast$}{*} Pointer to the outermost while loop 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{forest_8c_source_l00111}{111}} of file \mbox{\hyperlink{forest_8c_source}{forest.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}\ *while\_node\ =\ NULL;}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordflow}{while}\ (node-\/>parent\ !=\ NULL)\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node-\/>keyword\ ==\ W\_WHILE)\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ while\_node\ =\ node;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ node\ =\ node-\/>parent;}
+\DoxyCodeLine{00118\ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{return}\ while\_node;}
+\DoxyCodeLine{00121\ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{forest_8h_acd11f90bed6280a98991c60ca73cdead}\label{forest_8h_acd11f90bed6280a98991c60ca73cdead} 
+\index{forest.h@{forest.h}!active@{active}}
+\index{active@{active}!forest.h@{forest.h}}
+\doxysubsubsection{\texorpdfstring{active}{active}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__forest__node}{forest\+\_\+node}}\texorpdfstring{$\ast$}{*} active\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Definition at line \mbox{\hyperlink{parser_8c_source_l00026}{26}} of file \mbox{\hyperlink{parser_8c_source}{parser.\+c}}.
+

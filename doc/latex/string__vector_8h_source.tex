@@ -1,0 +1,33 @@
+\doxysection{string\+\_\+vector.\+h}
+\hypertarget{string__vector_8h_source}{}\label{string__vector_8h_source}\mbox{\hyperlink{string__vector_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00010}00010\ \textcolor{preprocessor}{\#ifndef\ STRING\_VECTOR\_H}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00011}00011\ \textcolor{preprocessor}{\#define\ STRING\_VECTOR\_H}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00015}00015\ \textcolor{preprocessor}{\#define\ VECTOR\_LENGTH\ 8\ }\textcolor{comment}{//default\ size\ of\ dynamic\ array}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00017}\mbox{\hyperlink{structstring__vector}{00017}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structstring__vector}{string\_vector}}\ \{}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00018}00018\ \ \ \ \ \textcolor{keywordtype}{char}*\ array;\ \textcolor{comment}{//array\ of\ strings}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00019}00019\ \ \ \ \ \textcolor{keywordtype}{int}\ size;\ \textcolor{comment}{//size\ of\ the\ vector}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00020}00020\ \ \ \ \ \textcolor{keywordtype}{int}\ size\_of\_alloc;\ \textcolor{comment}{//size\ of\ allocated\ chars}}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00021}00021\ \}\ \mbox{\hyperlink{structstring__vector}{vector}};}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00028}00028\ \mbox{\hyperlink{structstring__vector}{vector}}*\ \mbox{\hyperlink{string__vector_8h_ab7c6a47aed2bcb67897728f41dafbae9}{vector\_init}}();}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00037}00037\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8h_a54faf1f0382b319dcc649ae9392b9998}{vector\_append}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v,\ \textcolor{keywordtype}{char}\ c);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00046}00046\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8h_aa11a618566e7d51f82718d44c8df4e70}{vector\_str\_append}}(\mbox{\hyperlink{structstring__vector}{vector}}\ *v,\ \textcolor{keywordtype}{char}\ *s);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00053}00053\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{string__vector_8h_a2ba9c5df6c357b6bb12ea2baeb3f322d}{vector\_dispose}}(\mbox{\hyperlink{structstring__vector}{vector}}\ *v);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00062}00062\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{string__vector_8h_aa6ad19dca8928d80c49bd3f0738617ca}{vector\_str\_cmp}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v1,\ \textcolor{keywordtype}{char}*\ s);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00070}00070\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{string__vector_8h_aa6a1e26e7d26552925e2981d4b3d2499}{vector\_size}}(\mbox{\hyperlink{structstring__vector}{vector}}\ *v);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00078}00078\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{string__vector_8h_acf1286e8772df7f9605bca1034fc576d}{vector\_alloc\_size}}(\mbox{\hyperlink{structstring__vector}{vector}}\ *v);}
+\DoxyCodeLine{\Hypertarget{string__vector_8h_source_l00079}00079\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

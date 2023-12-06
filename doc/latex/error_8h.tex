@@ -1,0 +1,201 @@
+\doxysection{error.\+h File Reference}
+\hypertarget{error_8h}{}\label{error_8h}\index{error.h@{error.h}}
+
+
+Error handling and safe allocation of memory.  
+
+
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{error_8h_a1ed228a50749df6ffa763770ed39490c}\label{error_8h_a1ed228a50749df6ffa763770ed39490c} 
+typedef enum e\+\_\+error\+\_\+code {\bfseries error\+\_\+code\+\_\+t}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries e\+\_\+error\+\_\+code} \{ \newline
+{\bfseries ERROR\+\_\+\+LEX} = 1
+, {\bfseries ERROR\+\_\+\+SYN} = 2
+, {\bfseries ERROR\+\_\+\+SEM\+\_\+\+UNDEF\+\_\+\+FUN} = 3
+, {\bfseries ERROR\+\_\+\+SEM\+\_\+\+TYPE} = 4
+, \newline
+{\bfseries ERROR\+\_\+\+SEM\+\_\+\+UNDEF\+\_\+\+VAR} = 5
+, {\bfseries ERROR\+\_\+\+SEM\+\_\+\+EXPR\+\_\+\+RET} = 6
+, {\bfseries ERROR\+\_\+\+SEM\+\_\+\+EXPR\+\_\+\+TYPE} = 7
+, {\bfseries ERROR\+\_\+\+SEM\+\_\+\+DERIV} = 8
+, \newline
+{\bfseries ERROR\+\_\+\+SEM\+\_\+\+OTHER} = 9
+, {\bfseries ERROR\+\_\+\+INTERNAL} = 99
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{error_8h_a08672f1381d39b459aa779748bf40143}{allocate\+\_\+memory}} (size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Function to allocate memory, check for malloc errors and push it onto the stack. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{error_8h_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\+\_\+memory}} (void \texorpdfstring{$\ast$}{*}to\+\_\+be\+\_\+reallocated, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Function to reallocate memory, check for realloc errors and push it onto the stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{error_8h_a2f6658959c571cea3d1d03dc785a7e9a}{error\+\_\+exit}} (error\+\_\+code\+\_\+t error\+\_\+code, const char \texorpdfstring{$\ast$}{*}module, const char \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Error handler for IFJ23 compiler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Error handling and safe allocation of memory. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{error_8h_source}{error.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{error_8h_a162dcaa7a55e199266a2c2fb91c86f67}\label{error_8h_a162dcaa7a55e199266a2c2fb91c86f67} 
+\index{error.h@{error.h}!e\_error\_code@{e\_error\_code}}
+\index{e\_error\_code@{e\_error\_code}!error.h@{error.h}}
+\doxysubsubsection{\texorpdfstring{e\_error\_code}{e\_error\_code}}
+{\footnotesize\ttfamily enum e\+\_\+error\+\_\+code}
+
+
+
+Definition at line \mbox{\hyperlink{error_8h_source_l00018}{18}} of file \mbox{\hyperlink{error_8h_source}{error.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ lexical\ analysis,\ bad\ structure\ of\ the\ lexeme}}
+\DoxyCodeLine{00020\ \ \ \ \ ERROR\_LEX\ =\ 1,}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ syntax\ analysis,\ wrong\ syntax\ of\ the\ source\ code,\ missing\ header,\ etc.}}
+\DoxyCodeLine{00022\ \ \ \ \ ERROR\_SYN\ =\ 2,}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ undefined\ function,\ redefinition\ of\ a\ variable,\ etc.}}
+\DoxyCodeLine{00024\ \ \ \ \ ERROR\_SEM\_UNDEF\_FUN\ =\ 3,}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ wrong\ type\ of\ a\ variable,\ wrong\ number\ of\ parameters,\ wrong\ return\ value\ etc.}}
+\DoxyCodeLine{00026\ \ \ \ \ ERROR\_SEM\_TYPE\ =\ 4,}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ use\ of\ undefined/uninitialized\ variable,\ etc.}}
+\DoxyCodeLine{00028\ \ \ \ \ ERROR\_SEM\_UNDEF\_VAR\ =\ 5,}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ missing/redundant\ return\ value,\ etc.}}
+\DoxyCodeLine{00030\ \ \ \ \ ERROR\_SEM\_EXPR\_RET\ =\ 6,}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ type\ compatibility\ in\ expressions,\ etc.}}
+\DoxyCodeLine{00032\ \ \ \ \ ERROR\_SEM\_EXPR\_TYPE\ =\ 7,}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ wrong\ parameter\ type\ where\ there's\ no\ possibility\ to\ derive\ the\ type,\ etc.}}
+\DoxyCodeLine{00034\ \ \ \ \ ERROR\_SEM\_DERIV\ =\ 8,}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Error\ related\ to\ semantic\ analysis,\ other\ semantic\ errors\ not\ covered\ by\ the\ previous\ error\ codes.}}
+\DoxyCodeLine{00036\ \ \ \ \ ERROR\_SEM\_OTHER\ =\ 9,}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ Error\ unrelated\ to\ input\ files,\ memory\ allocation,\ etc.}}
+\DoxyCodeLine{00038\ \ \ \ \ ERROR\_INTERNAL\ =\ 99}
+\DoxyCodeLine{00039\ \}\ error\_code\_t;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{error_8h_a08672f1381d39b459aa779748bf40143}\label{error_8h_a08672f1381d39b459aa779748bf40143} 
+\index{error.h@{error.h}!allocate\_memory@{allocate\_memory}}
+\index{allocate\_memory@{allocate\_memory}!error.h@{error.h}}
+\doxysubsubsection{\texorpdfstring{allocate\_memory()}{allocate\_memory()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} allocate\+\_\+memory (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to allocate memory, check for malloc errors and push it onto the stack. 
+
+\begin{DoxyNote}{Note}
+example\+: AVL\+\_\+tree \texorpdfstring{$\ast$}{*}tree = (AVL\+\_\+tree \texorpdfstring{$\ast$}{*}) allocate\+\_\+memory(sizeof(\+AVL\+\_\+tree), "{}tree node"{}); 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em size} & Size of the memory to be allocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} Pointer to the allocated memory 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00026}{26}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ malloc(size);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}MALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ allocation\ failed."{}});}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{00032\ \}}
+
+\end{DoxyCode}
+\Hypertarget{error_8h_a2f6658959c571cea3d1d03dc785a7e9a}\label{error_8h_a2f6658959c571cea3d1d03dc785a7e9a} 
+\index{error.h@{error.h}!error\_exit@{error\_exit}}
+\index{error\_exit@{error\_exit}!error.h@{error.h}}
+\doxysubsubsection{\texorpdfstring{error\_exit()}{error\_exit()}}
+{\footnotesize\ttfamily void error\+\_\+exit (\begin{DoxyParamCaption}\item[{error\+\_\+code\+\_\+t}]{error\+\_\+code,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{module,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Error handler for IFJ23 compiler. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+\_\+code} & Error code \\
+\hline
+{\em module} & Module where the error occured \\
+\hline
+{\em message} & Custom formatted error message \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00043}{43}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ }
+\DoxyCodeLine{00044\ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s:\ \%s\(\backslash\)n"{}},\ module,\ message);}
+\DoxyCodeLine{00045\ \ \ \ \ exit(error\_code);}
+\DoxyCodeLine{00046\ \}}
+
+\end{DoxyCode}
+\Hypertarget{error_8h_aa65cf3e9fee53947e61bfd4e57956094}\label{error_8h_aa65cf3e9fee53947e61bfd4e57956094} 
+\index{error.h@{error.h}!reallocate\_memory@{reallocate\_memory}}
+\index{reallocate\_memory@{reallocate\_memory}!error.h@{error.h}}
+\doxysubsubsection{\texorpdfstring{reallocate\_memory()}{reallocate\_memory()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} reallocate\+\_\+memory (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{to\+\_\+be\+\_\+reallocated,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to reallocate memory, check for realloc errors and push it onto the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+\_\+be\+\_\+reallocated} & Pointer to the memory to be reallocated \\
+\hline
+{\em size} & Size of the memory to be reallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} Pointer to the reallocated memory 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00034}{34}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ realloc(to\_be\_reallocated,\ size);}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}REALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ reallocation\ failed."{}});}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{00040\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,105 @@
+\doxysection{symtable.\+h}
+\hypertarget{symtable_8h_source}{}\label{symtable_8h_source}\mbox{\hyperlink{symtable_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00012}00012\ \textcolor{preprocessor}{\#ifndef\ IFJ\_SYMTABLE\_H}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00013}00013\ \textcolor{preprocessor}{\#define\ IFJ\_SYMTABLE\_H}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <stdbool.h>}\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{error_8h}{error.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00018}00018\ \textcolor{preprocessor}{\#define\ MAX(a,\ b)\ ((a)\ >\ (b)\ ?\ (a)\ :\ (b))}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00020}00020\ \textcolor{comment}{//\ Data\ types}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00021}00021\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ e\_data\_type\ \{}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00022}00022\ \ \ \ \ INT,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00023}00023\ \ \ \ \ DOUBLE,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00024}00024\ \ \ \ \ STRING,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00025}00025\ \ \ \ \ NIL,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00026}00026\ \ \ \ \ BOOL,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00027}00027\ \ \ \ \ INT\_QM,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00028}00028\ \ \ \ \ DOUBLE\_QM,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00029}00029\ \ \ \ \ STRING\_QM,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00030}00030\ \ \ \ \ VOID,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00031}00031\ \ \ \ \ UNKNOWN}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00032}00032\ \}\ data\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00034}00034\ \textcolor{comment}{//\ Variable\ type\ (modifiable\ or\ unmodifiable)}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00035}00035\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ e\_var\_type\ \{}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00036}00036\ \ \ \ \ VAR,}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00037}00037\ \ \ \ \ LET}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00038}00038\ \}\ var\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00040}00040\ \textcolor{comment}{//\ Struct\ for\ the\ data\ of\ the\ symbol}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00041}\mbox{\hyperlink{structsymbol__data}{00041}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structsymbol__data}{symbol\_data}}\ \{}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00042}00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ defined;\ \textcolor{comment}{//\ initialized}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00044}00044\ \ \ \ \ \textcolor{comment}{//\ Variable}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00045}00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_var;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00046}00046\ \ \ \ \ var\_type\ var\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00047}00047\ \ \ \ \ data\_type\ data\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00049}00049\ \ \ \ \ \textcolor{comment}{//\ Function}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00050}00050\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_func;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00051}00051\ \ \ \ \ data\_type\ return\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ Parameter}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00054}00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_param;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00055}00055\ \ \ \ \ \textcolor{keywordtype}{char}\ *param\_name;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00056}00056\ \ \ \ \ data\_type\ param\_type;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00057}00057\ \ \ \ \ \textcolor{keywordtype}{int}\ param\_order;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00058}00058\ \}\ \mbox{\hyperlink{structsymbol__data}{sym\_data}};}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00060}00060\ \textcolor{comment}{//\ Struct\ for\ the\ AVL\ tree}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00061}\mbox{\hyperlink{structavl__tree}{00061}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structavl__tree}{avl\_tree}}\ \{}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00062}00062\ \ \ \ \ \textcolor{keywordtype}{char}\ *key;\ \ \textcolor{comment}{//\ name\ of\ the\ symbol\ (identifier)}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00063}00063\ \ \ \ \ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00064}00064\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structavl__tree}{avl\_tree}}\ *left;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00065}00065\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structavl__tree}{avl\_tree}}\ *right;}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00066}00066\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}};\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00067}00067\ \ \ \ \ \textcolor{keywordtype}{int}\ nickname;\ \textcolor{comment}{//\ for\ renaming\ purposes\ (codegen)}}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00068}00068\ \}\ \mbox{\hyperlink{structavl__tree}{AVL\_tree}};}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00076}00076\ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *\mbox{\hyperlink{symtable_8h_ae60c97f9785a1e431154c781d3930c24}{data\_init}}(\mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00086}00086\ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *\mbox{\hyperlink{symtable_8h_a803b7a2db0c22d58991dd5346f910a86}{set\_data\_var}}(\textcolor{keywordtype}{bool}\ initialized,\ data\_type\ data\_type,\ var\_type\ var\_type);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00094}00094\ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *\mbox{\hyperlink{symtable_8h_a96cd344df17af86f54462d1a7877b6fa}{set\_data\_func}}(data\_type\ return\_type);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00104}00104\ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *\mbox{\hyperlink{symtable_8h_a77948d5e89b27e337c65fcb5fad8a228}{set\_data\_param}}(data\_type\ param\_type,\ \textcolor{keywordtype}{char}\ *param\_name,\ \textcolor{keywordtype}{int}\ param\_order);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00114}00114\ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *\mbox{\hyperlink{symtable_8h_ab74a109202f0993add15765a5261fd4e}{symtable\_search}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tree,\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00124}00124\ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *\mbox{\hyperlink{symtable_8h_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\_find\_param}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tree,\ \textcolor{keywordtype}{int}\ order\_arg);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00133}00133\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{symtable_8h_ae5fa851b73b46f085651c39c2e254f65}{height}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tree);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00142}00142\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{symtable_8h_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tree);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00144}00144\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00150}00150\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{symtable_8h_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ **tree);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00158}00158\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{symtable_8h_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ **tree);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00168}00168\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{symtable_8h_aa82be05d129984b337f7deb5155f19c2}{symtable\_insert}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ **tree,\ \textcolor{keywordtype}{char}\ *key,\ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00177}00177\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{symtable_8h_a7deb288139525889ac699e9c86038cd7}{symtable\_delete}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ **tree,\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00185}00185\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{symtable_8h_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ **tree);}
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{symtable_8h_source_l00188}00188\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_SYMTABLE\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,752 @@
+\doxysection{symtable.\+h File Reference}
+\hypertarget{symtable_8h}{}\label{symtable_8h}\index{symtable.h@{symtable.h}}
+
+
+Symbol table using self-\/balancing binary search tree (AVL tree)  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structsymbol__data}{symbol\+\_\+data}}
+\item 
+struct \mbox{\hyperlink{structavl__tree}{avl\+\_\+tree}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{symtable_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f}{MAX}}(a,  b)~((a) $>$ (b) ? (a) \+: (b))
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{symtable_8h_add1fd2471c8ae252b1c472c163d348b1}\label{symtable_8h_add1fd2471c8ae252b1c472c163d348b1} 
+typedef enum e\+\_\+data\+\_\+type {\bfseries data\+\_\+type}
+\item 
+\Hypertarget{symtable_8h_a83d9d00864c7906d267c8dc3bfbeec6b}\label{symtable_8h_a83d9d00864c7906d267c8dc3bfbeec6b} 
+typedef enum e\+\_\+var\+\_\+type {\bfseries var\+\_\+type}
+\item 
+\Hypertarget{symtable_8h_a0d1fc3ab307e6f03faafe428684467a9}\label{symtable_8h_a0d1fc3ab307e6f03faafe428684467a9} 
+typedef struct \mbox{\hyperlink{structsymbol__data}{symbol\+\_\+data}} {\bfseries sym\+\_\+data}
+\item 
+\Hypertarget{symtable_8h_a883aea698e8428b70e541712338b4ecf}\label{symtable_8h_a883aea698e8428b70e541712338b4ecf} 
+typedef struct \mbox{\hyperlink{structavl__tree}{avl\+\_\+tree}} {\bfseries AVL\+\_\+tree}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries e\+\_\+data\+\_\+type} \{ \newline
+{\bfseries INT}
+, {\bfseries DOUBLE}
+, {\bfseries STRING}
+, {\bfseries NIL}
+, \newline
+{\bfseries BOOL}
+, {\bfseries INT\+\_\+\+QM}
+, {\bfseries DOUBLE\+\_\+\+QM}
+, {\bfseries STRING\+\_\+\+QM}
+, \newline
+{\bfseries VOID}
+, {\bfseries UNKNOWN}
+ \}
+\item 
+enum {\bfseries e\+\_\+var\+\_\+type} \{ {\bfseries VAR}
+, {\bfseries LET}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_ae60c97f9785a1e431154c781d3930c24}{data\+\_\+init}} (\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Data initialization. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_a803b7a2db0c22d58991dd5346f910a86}{set\+\_\+data\+\_\+var}} (bool initialized, data\+\_\+type data\+\_\+type, var\+\_\+type var\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Set the variable\textquotesingle{}s data. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_a96cd344df17af86f54462d1a7877b6fa}{set\+\_\+data\+\_\+func}} (data\+\_\+type return\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Set the function\textquotesingle{}s data. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_a77948d5e89b27e337c65fcb5fad8a228}{set\+\_\+data\+\_\+param}} (data\+\_\+type param\+\_\+type, char \texorpdfstring{$\ast$}{*}param\+\_\+name, int param\+\_\+order)
+\begin{DoxyCompactList}\small\item\em Set the parameter\textquotesingle{}s data. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_ab74a109202f0993add15765a5261fd4e}{symtable\+\_\+search}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}tree, char \texorpdfstring{$\ast$}{*}key)
+\begin{DoxyCompactList}\small\item\em Symbol search in the symbol table. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symtable_8h_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\+\_\+find\+\_\+param}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}tree, int order\+\_\+arg)
+\begin{DoxyCompactList}\small\item\em Traverse the tree and find the parameter with the given order. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{symtable_8h_ae5fa851b73b46f085651c39c2e254f65}{height}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}tree)
+\begin{DoxyCompactList}\small\item\em Get the geight of the tree. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{symtable_8h_a49c657fd52c2fcd2101c2febb053d646}{get\+\_\+balance}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}tree)
+\begin{DoxyCompactList}\small\item\em Get the balance of the tree. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{symtable_8h_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\+\_\+rotate}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tree)
+\begin{DoxyCompactList}\small\item\em Right rotation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{symtable_8h_afe9c9590b4a196bd827e6e1896b5e3c1}{left\+\_\+rotate}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tree)
+\begin{DoxyCompactList}\small\item\em Left rotation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{symtable_8h_aa82be05d129984b337f7deb5155f19c2}{symtable\+\_\+insert}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tree, char \texorpdfstring{$\ast$}{*}key, \mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Insertion of the symbol into the symbol table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{symtable_8h_a7deb288139525889ac699e9c86038cd7}{symtable\+\_\+delete}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tree, char \texorpdfstring{$\ast$}{*}key)
+\begin{DoxyCompactList}\small\item\em Symbol deletion. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{symtable_8h_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\+\_\+dispose}} (\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tree)
+\begin{DoxyCompactList}\small\item\em Symbol table dispose. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Symbol table using self-\/balancing binary search tree (AVL tree) 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Adam Valík $<$xvalik05$>$ 
+
+Marek Effenberger $<$xeffen00$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{symtable_8h_source}{symtable.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{symtable_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f}\label{symtable_8h_afa99ec4acc4ecb2dc3c2d05da15d0e3f} 
+\index{symtable.h@{symtable.h}!MAX@{MAX}}
+\index{MAX@{MAX}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{MAX}{MAX}}
+{\footnotesize\ttfamily \#define MAX(\begin{DoxyParamCaption}\item[{}]{a,  }\item[{}]{b }\end{DoxyParamCaption})~((a) $>$ (b) ? (a) \+: (b))}
+
+
+
+Definition at line \mbox{\hyperlink{symtable_8h_source_l00018}{18}} of file \mbox{\hyperlink{symtable_8h_source}{symtable.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{symtable_8h_a732897dc4e602ab5119398139e3f3499}\label{symtable_8h_a732897dc4e602ab5119398139e3f3499} 
+\index{symtable.h@{symtable.h}!e\_data\_type@{e\_data\_type}}
+\index{e\_data\_type@{e\_data\_type}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{e\_data\_type}{e\_data\_type}}
+{\footnotesize\ttfamily enum e\+\_\+data\+\_\+type}
+
+
+
+Definition at line \mbox{\hyperlink{symtable_8h_source_l00021}{21}} of file \mbox{\hyperlink{symtable_8h_source}{symtable.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ INT,}
+\DoxyCodeLine{00023\ \ \ \ \ DOUBLE,}
+\DoxyCodeLine{00024\ \ \ \ \ STRING,}
+\DoxyCodeLine{00025\ \ \ \ \ NIL,}
+\DoxyCodeLine{00026\ \ \ \ \ BOOL,}
+\DoxyCodeLine{00027\ \ \ \ \ INT\_QM,}
+\DoxyCodeLine{00028\ \ \ \ \ DOUBLE\_QM,}
+\DoxyCodeLine{00029\ \ \ \ \ STRING\_QM,}
+\DoxyCodeLine{00030\ \ \ \ \ VOID,}
+\DoxyCodeLine{00031\ \ \ \ \ UNKNOWN}
+\DoxyCodeLine{00032\ \}\ data\_type;}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_aba129d35a26ab66fe8b6389ab4da9af5}\label{symtable_8h_aba129d35a26ab66fe8b6389ab4da9af5} 
+\index{symtable.h@{symtable.h}!e\_var\_type@{e\_var\_type}}
+\index{e\_var\_type@{e\_var\_type}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{e\_var\_type}{e\_var\_type}}
+{\footnotesize\ttfamily enum e\+\_\+var\+\_\+type}
+
+
+
+Definition at line \mbox{\hyperlink{symtable_8h_source_l00035}{35}} of file \mbox{\hyperlink{symtable_8h_source}{symtable.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00036\ \ \ \ \ VAR,}
+\DoxyCodeLine{00037\ \ \ \ \ LET}
+\DoxyCodeLine{00038\ \}\ var\_type;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{symtable_8h_ae60c97f9785a1e431154c781d3930c24}\label{symtable_8h_ae60c97f9785a1e431154c781d3930c24} 
+\index{symtable.h@{symtable.h}!data\_init@{data\_init}}
+\index{data\_init@{data\_init}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{data\_init()}{data\_init()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} data\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Data initialization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Pointer to the data \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00028}{28}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ data\ =\ (\mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structsymbol__data}{sym\_data}}));}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ data-\/>defined\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ initialized}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ data-\/>is\_var\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00034\ \ \ \ \ data-\/>var\_type\ =\ VAR;}
+\DoxyCodeLine{00035\ \ \ \ \ data-\/>data\_type\ =\ NIL;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ data-\/>is\_func\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00038\ \ \ \ \ data-\/>return\_type\ =\ NIL;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ data-\/>is\_param\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00041\ \ \ \ \ data-\/>param\_name\ =\ NULL;}
+\DoxyCodeLine{00042\ \ \ \ \ data-\/>param\_type\ =\ NIL;}
+\DoxyCodeLine{00043\ \ \ \ \ data-\/>param\_order\ =\ 0;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordflow}{return}\ data;}
+\DoxyCodeLine{00045\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a49c657fd52c2fcd2101c2febb053d646}\label{symtable_8h_a49c657fd52c2fcd2101c2febb053d646} 
+\index{symtable.h@{symtable.h}!get\_balance@{get\_balance}}
+\index{get\_balance@{get\_balance}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{get\_balance()}{get\_balance()}}
+{\footnotesize\ttfamily int get\+\_\+balance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Get the balance of the tree. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Balance of the tree, 0 if failed 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00123}{123}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{if}\ (tree\ ==\ NULL)\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(tree-\/>left)\ -\/\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(tree-\/>right));}
+\DoxyCodeLine{00129\ \ \ \ \ \}}
+\DoxyCodeLine{00130\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_ae5fa851b73b46f085651c39c2e254f65}\label{symtable_8h_ae5fa851b73b46f085651c39c2e254f65} 
+\index{symtable.h@{symtable.h}!height@{height}}
+\index{height@{height}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{height()}{height()}}
+{\footnotesize\ttfamily int height (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Get the geight of the tree. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Height of the tree, 0 if failed 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00114}{114}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordflow}{if}\ (tree\ ==\ NULL)\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tree-\/>height;}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_afe9c9590b4a196bd827e6e1896b5e3c1}\label{symtable_8h_afe9c9590b4a196bd827e6e1896b5e3c1} 
+\index{symtable.h@{symtable.h}!left\_rotate@{left\_rotate}}
+\index{left\_rotate@{left\_rotate}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{left\_rotate()}{left\_rotate()}}
+{\footnotesize\ttfamily void left\+\_\+rotate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Left rotation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00146}{146}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *x\ =\ *tree;}
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *y\ =\ x-\/>right;}
+\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *T2\ =\ y-\/>left;}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ y-\/>left\ =\ x;}
+\DoxyCodeLine{00152\ \ \ \ \ x-\/>right\ =\ T2;}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ x-\/>height\ =\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(x-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(x-\/>right))\ +\ 1;}
+\DoxyCodeLine{00155\ \ \ \ \ y-\/>height\ =\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(y-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(y-\/>right))\ +\ 1;}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ *tree\ =\ y;}
+\DoxyCodeLine{00158\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a0ca7ec8327eea35c845e9fc06b1be7b9}\label{symtable_8h_a0ca7ec8327eea35c845e9fc06b1be7b9} 
+\index{symtable.h@{symtable.h}!right\_rotate@{right\_rotate}}
+\index{right\_rotate@{right\_rotate}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{right\_rotate()}{right\_rotate()}}
+{\footnotesize\ttfamily void right\+\_\+rotate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Right rotation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00132}{132}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *x\ =\ *tree;}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *y\ =\ x-\/>left;}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *T2\ =\ y-\/>right;}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ y-\/>right\ =\ x;}
+\DoxyCodeLine{00138\ \ \ \ \ x-\/>left\ =\ T2;}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ x-\/>height\ =\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(x-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(x-\/>right))\ +\ 1;}
+\DoxyCodeLine{00141\ \ \ \ \ y-\/>height\ =\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(y-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}(y-\/>right))\ +\ 1;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ *tree\ =\ y;}
+\DoxyCodeLine{00144\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a96cd344df17af86f54462d1a7877b6fa}\label{symtable_8h_a96cd344df17af86f54462d1a7877b6fa} 
+\index{symtable.h@{symtable.h}!set\_data\_func@{set\_data\_func}}
+\index{set\_data\_func@{set\_data\_func}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{set\_data\_func()}{set\_data\_func()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} set\+\_\+data\+\_\+func (\begin{DoxyParamCaption}\item[{data\+\_\+type}]{return\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Set the function\textquotesingle{}s data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em return\+\_\+type} & Return type of the function \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00056}{56}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data\ =\ \mbox{\hyperlink{symtable_8c_ae60c97f9785a1e431154c781d3930c24}{data\_init}}(data);}
+\DoxyCodeLine{00058\ \ \ \ \ data-\/>is\_func\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00059\ \ \ \ \ data-\/>defined\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00060\ \ \ \ \ data-\/>return\_type\ =\ return\_type;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordflow}{return}\ data;}
+\DoxyCodeLine{00062\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a77948d5e89b27e337c65fcb5fad8a228}\label{symtable_8h_a77948d5e89b27e337c65fcb5fad8a228} 
+\index{symtable.h@{symtable.h}!set\_data\_param@{set\_data\_param}}
+\index{set\_data\_param@{set\_data\_param}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{set\_data\_param()}{set\_data\_param()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} set\+\_\+data\+\_\+param (\begin{DoxyParamCaption}\item[{data\+\_\+type}]{param\+\_\+type,  }\item[{char \texorpdfstring{$\ast$}{*}}]{param\+\_\+name,  }\item[{int}]{param\+\_\+order }\end{DoxyParamCaption})}
+
+
+
+Set the parameter\textquotesingle{}s data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em param\+\_\+type} & Data type of the parameter \\
+\hline
+{\em param\+\_\+name} & Name of the parameter \\
+\hline
+{\em param\+\_\+order} & Order of the parameter \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00064}{64}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data\ =\ \mbox{\hyperlink{symtable_8c_ae60c97f9785a1e431154c781d3930c24}{data\_init}}(data);}
+\DoxyCodeLine{00066\ \ \ \ \ data-\/>defined\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00067\ \ \ \ \ data-\/>is\_param\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00068\ \ \ \ \ data-\/>param\_type\ =\ param\_type;}
+\DoxyCodeLine{00069\ \ \ \ \ data-\/>param\_name\ =\ (\textcolor{keywordtype}{char}\ *)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char})\ *\ (strlen(param\_name)\ +\ 2));}
+\DoxyCodeLine{00070\ \ \ \ \ strcpy(data-\/>param\_name,\ param\_name);}
+\DoxyCodeLine{00071\ \ \ \ \ data-\/>param\_order\ =\ param\_order;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordflow}{return}\ data;}
+\DoxyCodeLine{00073\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a803b7a2db0c22d58991dd5346f910a86}\label{symtable_8h_a803b7a2db0c22d58991dd5346f910a86} 
+\index{symtable.h@{symtable.h}!set\_data\_var@{set\_data\_var}}
+\index{set\_data\_var@{set\_data\_var}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{set\_data\_var()}{set\_data\_var()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*} set\+\_\+data\+\_\+var (\begin{DoxyParamCaption}\item[{bool}]{initialized,  }\item[{data\+\_\+type}]{data\+\_\+type,  }\item[{var\+\_\+type}]{var\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Set the variable\textquotesingle{}s data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initialized} & If the variable is initialized \\
+\hline
+{\em data\+\_\+type} & Data type of the variable \\
+\hline
+{\em var\+\_\+type} & modifiable or unmodifiable (VAR/\+LET) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00047}{47}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{structsymbol__data}{sym\_data}}\ *data\ =\ \mbox{\hyperlink{symtable_8c_ae60c97f9785a1e431154c781d3930c24}{data\_init}}(data);}
+\DoxyCodeLine{00049\ \ \ \ \ data-\/>is\_var\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00050\ \ \ \ \ data-\/>defined\ =\ initialized;}
+\DoxyCodeLine{00051\ \ \ \ \ data-\/>data\_type\ =\ data\_type;}
+\DoxyCodeLine{00052\ \ \ \ \ data-\/>var\_type\ =\ var\_type;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordflow}{return}\ data;}
+\DoxyCodeLine{00054\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a7deb288139525889ac699e9c86038cd7}\label{symtable_8h_a7deb288139525889ac699e9c86038cd7} 
+\index{symtable.h@{symtable.h}!symtable\_delete@{symtable\_delete}}
+\index{symtable\_delete@{symtable\_delete}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{symtable\_delete()}{symtable\_delete()}}
+{\footnotesize\ttfamily void symtable\+\_\+delete (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{tree,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key }\end{DoxyParamCaption})}
+
+
+
+Symbol deletion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+{\em key} & Key of the node \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00210}{210}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)\ !=\ NULL)\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strcmp((*tree)-\/>key,\ key)\ >\ 0)\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a7deb288139525889ac699e9c86038cd7}{symtable\_delete}}(\&((*tree)-\/>left),\ key);}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp((*tree)-\/>key,\ key)\ <\ 0)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a7deb288139525889ac699e9c86038cd7}{symtable\_delete}}(\&((*tree)-\/>right),\ key);}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \ \textcolor{comment}{//\ strcmp((*tree)-\/>key,\ key)\ ==\ 0\ -\/>\ found\ the\ node\ to\ delete}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)-\/>left\ ==\ NULL\ \&\&\ (*tree)-\/>right\ ==\ NULL)\ \{\ \textcolor{comment}{//\ no\ children}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(*tree);}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *tree\ =\ NULL;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((*tree)-\/>left\ !=\ NULL\ \&\&\ (*tree)-\/>right\ !=\ NULL)\ \{\ \textcolor{comment}{//\ both\ children}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tmp\ =\ (*tree)-\/>right;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (tmp-\/>left\ !=\ NULL)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ tmp-\/>left;}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*tree)-\/>key\ =\ tmp-\/>key;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*tree)-\/>data\ =\ tmp-\/>data;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a7deb288139525889ac699e9c86038cd7}{symtable\_delete}}(\&((*tree)-\/>right),\ tmp-\/>key);}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ only\ one\ child}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *tmp\ =\ *tree;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)-\/>left\ ==\ NULL)\ \{\ \textcolor{comment}{//\ only\ right\ child}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *tree\ =\ (*tree)-\/>right;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((*tree)-\/>right\ ==\ NULL)\ \{\ \textcolor{comment}{//\ only\ left\ child}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *tree\ =\ (*tree)-\/>left;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(tmp);}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ the\ tree\ is\ not\ empty,\ correct\ the\ height\ and\ continue\ with\ balancing}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*tree\ !=\ NULL)\ \{\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ (*tree)-\/>height\ =\ 1\ +\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}((*tree)-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}((*tree)-\/>right));}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ the\ tree\ is\ balanced:\ 0\ balanced,\ -\/1\ left\ higher,\ 1\ right\ higher}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ balance\ =\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}(*tree);}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (balance\ !=\ 0)\ \{\ \textcolor{comment}{//\ if\ the\ tree\ is\ not\ balanced}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ LL\ case}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (balance\ >\ 1\ \&\&\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}((*tree)-\/>left)\ >=\ 0)\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(tree);}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RR\ case}}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ <\ -\/1\ \&\&\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}((*tree)-\/>right)\ <=\ 0)\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(tree);}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ LR\ case}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ >\ 1\ \&\&\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}((*tree)-\/>left)\ <\ 0)\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(\&((*tree)-\/>left));}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(tree);}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RL\ case}}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ <\ -\/1\ \&\&\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}((*tree)-\/>right)\ >\ 0)\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(\&((*tree)-\/>right));}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(tree);}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_ac1d0e6e8fdc407f522b04354c0aa7e50}\label{symtable_8h_ac1d0e6e8fdc407f522b04354c0aa7e50} 
+\index{symtable.h@{symtable.h}!symtable\_dispose@{symtable\_dispose}}
+\index{symtable\_dispose@{symtable\_dispose}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{symtable\_dispose()}{symtable\_dispose()}}
+{\footnotesize\ttfamily void symtable\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Symbol table dispose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00276}{276}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)\ !=\ NULL)\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)-\/>left\ !=\ NULL\ \&\&\ (*tree)-\/>right\ !=\ NULL)\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\&((*tree)-\/>left));}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\&((*tree)-\/>right));}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((*tree)-\/>left\ !=\ NULL)\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\&((*tree)-\/>left));}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((*tree)-\/>right\ !=\ NULL)\ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_ac1d0e6e8fdc407f522b04354c0aa7e50}{symtable\_dispose}}(\&((*tree)-\/>right));}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ (*tree)-\/>left\ ==\ NULL\ \&\&\ (*tree)-\/>right\ ==\ NULL}}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)-\/>data-\/>param\_name)\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free((*tree)-\/>data-\/>param\_name);}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*tree)-\/>data-\/>param\_name\ =\ NULL;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((*tree)-\/>data)\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free((*tree)-\/>data);}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (*tree)-\/>data\ =\ NULL;}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ free(*tree);}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ *tree\ =\ NULL;}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00300\ \ \ \ \ \}}
+\DoxyCodeLine{00301\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_a609e08dcae854c73f2ff4991eab9ebfb}\label{symtable_8h_a609e08dcae854c73f2ff4991eab9ebfb} 
+\index{symtable.h@{symtable.h}!symtable\_find\_param@{symtable\_find\_param}}
+\index{symtable\_find\_param@{symtable\_find\_param}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{symtable\_find\_param()}{symtable\_find\_param()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} symtable\+\_\+find\+\_\+param (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}}]{tree,  }\item[{int}]{order\+\_\+arg }\end{DoxyParamCaption})}
+
+
+
+Traverse the tree and find the parameter with the given order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+{\em order\+\_\+arg} & Order of the parameter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+AVL\+\_\+tree\texorpdfstring{$\ast$}{*} Pointer to the node (symbol) 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00092}{92}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordflow}{if}\ (tree\ ==\ NULL)\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00095\ \ \ \ \ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tree-\/>data-\/>is\_param\ \&\&\ tree-\/>data-\/>param\_order\ ==\ order\_arg)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tree;}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *left\ =\ \mbox{\hyperlink{symtable_8c_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\_find\_param}}(tree-\/>left,\ order\_arg);}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *right\ =\ \mbox{\hyperlink{symtable_8c_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\_find\_param}}(tree-\/>right,\ order\_arg);}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (left\ !=\ NULL)\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ left;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (right\ !=\ NULL)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ right;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_aa82be05d129984b337f7deb5155f19c2}\label{symtable_8h_aa82be05d129984b337f7deb5155f19c2} 
+\index{symtable.h@{symtable.h}!symtable\_insert@{symtable\_insert}}
+\index{symtable\_insert@{symtable\_insert}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{symtable\_insert()}{symtable\_insert()}}
+{\footnotesize\ttfamily void symtable\+\_\+insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{tree,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key,  }\item[{\mbox{\hyperlink{structsymbol__data}{sym\+\_\+data}} \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Insertion of the symbol into the symbol table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+{\em key} & Key of the node \\
+\hline
+{\em data} & Data of the node \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00161}{161}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keywordflow}{if}\ (*tree\ ==\ NULL)\ \{\ \textcolor{comment}{//\ insert\ first\ to\ an\ empty\ tree}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ *tree\ =\ (\mbox{\hyperlink{structavl__tree}{AVL\_tree}}\ *)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structavl__tree}{AVL\_tree}}));}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ (*tree)-\/>key\ =\ key;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ (*tree)-\/>data\ =\ data;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ (*tree)-\/>left\ =\ NULL;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ (*tree)-\/>right\ =\ NULL;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ (*tree)-\/>height\ =\ 0;}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ (*tree)-\/>nickname\ =\ 0;}
+\DoxyCodeLine{00170\ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp((*tree)-\/>key,\ key)\ >\ 0)\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_aa82be05d129984b337f7deb5155f19c2}{symtable\_insert}}(\&((*tree)-\/>left),\ key,\ data);}
+\DoxyCodeLine{00173\ \ \ \ \ \}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp((*tree)-\/>key,\ key)\ <\ 0)\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_aa82be05d129984b337f7deb5155f19c2}{symtable\_insert}}(\&((*tree)-\/>right),\ key,\ data);}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ strcmp((*tree)-\/>key,\ key)\ ==\ 0}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_UNDEF\_FUN,\ \textcolor{stringliteral}{"{}SYMTABLE"{}},\ \textcolor{stringliteral}{"{}Key\ already\ exists\ in\ the\ symbol\ table."{}});}
+\DoxyCodeLine{00179\ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{//\ correct\ the\ height\ and\ continue\ with\ balancing}}
+\DoxyCodeLine{00182\ \ \ \ \ (*tree)-\/>height\ =\ 1\ +\ MAX(\mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}((*tree)-\/>left),\ \mbox{\hyperlink{symtable_8c_ae5fa851b73b46f085651c39c2e254f65}{height}}((*tree)-\/>right));}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{//\ check\ if\ the\ tree\ is\ balanced:\ 0\ balanced,\ -\/1\ left\ higher,\ 1\ right\ higher}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{int}\ balance\ =\ \mbox{\hyperlink{symtable_8c_a49c657fd52c2fcd2101c2febb053d646}{get\_balance}}(*tree);}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordflow}{if}\ (balance\ !=\ 0)\ \{\ \textcolor{comment}{//\ if\ the\ tree\ is\ not\ balanced}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ LL\ case}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (balance\ >\ 1\ \&\&\ strcmp((*tree)-\/>key,\ key)\ >\ 0)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(tree);}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RR\ case}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ <\ -\/1\ \&\&\ strcmp((*tree)-\/>key,\ key)\ <\ 0)\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(tree);}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ LR\ case}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ >\ 1\ \&\&\ strcmp((*tree)-\/>key,\ key)\ <\ 0)\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(\&((*tree)-\/>left));}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(tree);}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RL\ case}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (balance\ <\ -\/1\ \&\&\ strcmp((*tree)-\/>key,\ key)\ >\ 0)\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_a0ca7ec8327eea35c845e9fc06b1be7b9}{right\_rotate}}(\&((*tree)-\/>right));}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{symtable_8c_afe9c9590b4a196bd827e6e1896b5e3c1}{left\_rotate}}(tree);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ \}}
+
+\end{DoxyCode}
+\Hypertarget{symtable_8h_ab74a109202f0993add15765a5261fd4e}\label{symtable_8h_ab74a109202f0993add15765a5261fd4e} 
+\index{symtable.h@{symtable.h}!symtable\_search@{symtable\_search}}
+\index{symtable\_search@{symtable\_search}!symtable.h@{symtable.h}}
+\doxysubsubsection{\texorpdfstring{symtable\_search()}{symtable\_search()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*} symtable\+\_\+search (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structavl__tree}{AVL\+\_\+tree}} \texorpdfstring{$\ast$}{*}}]{tree,  }\item[{char \texorpdfstring{$\ast$}{*}}]{key }\end{DoxyParamCaption})}
+
+
+
+Symbol search in the symbol table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & Pointer to the root of the tree \\
+\hline
+{\em key} & Key of the node \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+AVL\+\_\+tree\texorpdfstring{$\ast$}{*} Pointer to the node (symbol) 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{symtable_8c_source_l00076}{76}} of file \mbox{\hyperlink{symtable_8c_source}{symtable.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (tree\ ==\ NULL\ ||\ key\ ==\ NULL)\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(tree-\/>key,\ key)\ ==\ 0)\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tree;}
+\DoxyCodeLine{00082\ \ \ \ \ \}\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(tree-\/>key,\ key)\ >\ 0)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{symtable_8c_ab74a109202f0993add15765a5261fd4e}{symtable\_search}}(tree-\/>left,\ key);}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ strcmp(tree-\/>key,\ key)\ <\ 0}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{symtable_8c_ab74a109202f0993add15765a5261fd4e}{symtable\_search}}(tree-\/>right,\ key);}
+\DoxyCodeLine{00088\ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \}}
+
+\end{DoxyCode}

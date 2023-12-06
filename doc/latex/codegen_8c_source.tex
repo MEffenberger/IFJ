@@ -1,0 +1,672 @@
+\doxysection{codegen.\+c}
+\hypertarget{codegen_8c_source}{}\label{codegen_8c_source}\mbox{\hyperlink{codegen_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{codegen_8h}{codegen.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00014}00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{error_8h}{error.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{expression__parser_8h}{expression\_parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{forest_8h}{forest.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{parser_8h}{parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00019}00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{scanner_8h}{scanner.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00020}00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{string__vector_8h}{string\_vector.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00021}00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00022}00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{token__stack_8h}{token\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00025}00025\ \textcolor{keywordtype}{int}\ add\_arg\_cnt\ =\ 0;\ \textcolor{comment}{//\ for\ codegen\_add\_arg\ for\ unique\ naming\ of\ arguments}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00026}00026\ \textcolor{keywordtype}{int}\ write\_renamer\ =\ 0;\ \textcolor{comment}{//\ for\ codegen\_write\ for\ unique\ naming\ of\ arguments}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00027}00027\ \textcolor{keyword}{extern}\ FILE\ *file;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00030}\mbox{\hyperlink{codegen_8c_a3df385a7cbc49eb334fe857e6d11f0ef}{00030}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a3df385a7cbc49eb334fe857e6d11f0ef}{inst\_list\_init}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00031}00031\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(MAIN,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00032}00032\ \ \ \ \ list-\/>active\ =\ list-\/>first\ =\ list-\/>last\ =\ inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00033}00033\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00036}\mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{00036}}\ \mbox{\hyperlink{structs__instruction}{instruction}}*\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(inst\_type\ \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}},}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ frame,}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *name,}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ cnt,}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ int\_value,}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ float\_value,}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *string\_value}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00043}00043\ )\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}*\ new\_inst\ =\ (\mbox{\hyperlink{structs__instruction}{instruction}}*)\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__instruction}{instruction}}));}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00046}00046\ \ \ \ \ new\_inst-\/>relevant\_node\ =\ active;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00047}00047\ \ \ \ \ new\_inst-\/>inst\_type\ =\ \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00048}00048\ \ \ \ \ new\_inst-\/>frame\ =\ frame;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00049}00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (name\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00050}00050\ \ \ \ \ \ \ \ \ new\_inst-\/>name\ =\ (\textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char})\ *\ 6);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ strcpy(new\_inst-\/>name,\ \textcolor{stringliteral}{"{}null"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00052}00052\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ new\_inst-\/>name\ =\ name;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00055}00055\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00056}00056\ \ \ \ \ new\_inst-\/>cnt\ =\ cnt;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00057}00057\ \ \ \ \ new\_inst-\/>int\_value\ =\ int\_value;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00058}00058\ \ \ \ \ new\_inst-\/>float\_value\ =\ float\_value;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00059}00059\ \ \ \ \ new\_inst-\/>string\_value\ =\ string\_value;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{return}\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00061}00061\ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00064}\mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{00064}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list,\ \mbox{\hyperlink{structs__instruction}{instruction}}\ *new\_inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00065}00065\ \ \ \ \ new\_inst-\/>next\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00066}00066\ \ \ \ \ new\_inst-\/>prev\ =\ list-\/>last;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00068}00068\ \ \ \ \ \textcolor{comment}{//\ re-\/setting\ already\ existing\ pointers}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00069}00069\ \ \ \ \ list-\/>last-\/>next\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00070}00070\ \ \ \ \ list-\/>last\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00072}00072\ \ \ \ \ \textcolor{comment}{//\ active\ is\ now\ the\ new\ instruction}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00073}00073\ \ \ \ \ list-\/>active\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00074}00074\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00076}\mbox{\hyperlink{codegen_8c_a3fded802dc4264e6902fcff7553d7c47}{00076}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a3fded802dc4264e6902fcff7553d7c47}{inst\_list\_insert\_before}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list,\ \mbox{\hyperlink{structs__instruction}{instruction}}\ *new\_inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00077}00077\ \ \ \ \ new\_inst-\/>next\ =\ list-\/>active;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00078}00078\ \ \ \ \ new\_inst-\/>prev\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00080}00080\ \ \ \ \ \textcolor{comment}{//\ re-\/setting\ already\ existing\ pointers}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00081}00081\ \ \ \ \ list-\/>active-\/>prev-\/>next\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00082}00082\ \ \ \ \ list-\/>active-\/>prev\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00084}00084\ \ \ \ \ \textcolor{comment}{//\ active\ is\ now\ the\ new\ instruction}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00085}00085\ \ \ \ \ list-\/>active\ =\ new\_inst;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00086}00086\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00089}\mbox{\hyperlink{codegen_8c_a425b111d8f74f0cf02e39bdee6f02801}{00089}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a425b111d8f74f0cf02e39bdee6f02801}{inst\_list\_delete\_after}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00090}00090\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ list-\/>active-\/>next;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00091}00091\ \ \ \ \ \textcolor{comment}{//\ re-\/pointing\ the\ pointers\ across\ the\ deleted\ node}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{if}\ (inst\ ==\ list-\/>last)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ list-\/>last\ =\ list-\/>active;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00094}00094\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00095}00095\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ inst-\/>next-\/>prev\ =\ list-\/>active;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00097}00097\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00098}00098\ \ \ \ \ list-\/>active-\/>next\ =\ inst-\/>next;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00099}00099\ \ \ \ \ free(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00100}00100\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00102}\mbox{\hyperlink{codegen_8c_a82c2d231a38ee6fb667c4db51b018be0}{00102}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a82c2d231a38ee6fb667c4db51b018be0}{inst\_list\_dispose}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00103}00103\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}*\ inst\ =\ list-\/>first;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00104}00104\ \ \ \ \ \textcolor{keywordflow}{while}\ (list-\/>first\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ list-\/>first\ =\ list-\/>first-\/>next;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00106}00106\ \ \ \ \ \ \ \ \ free(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ inst\ =\ list-\/>first;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00108}00108\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00110}00110\ \ \ \ \ list-\/>active\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00111}00111\ \ \ \ \ list-\/>first\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00112}00112\ \ \ \ \ list-\/>last\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00113}00113\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00115}00115\ \textcolor{comment}{//\ search\ outermost\ while\ loop}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00116}\mbox{\hyperlink{codegen_8c_a2ca30f77cb42279715d1d662f53a1787}{00116}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a2ca30f77cb42279715d1d662f53a1787}{inst\_list\_search\_while}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list,\ \textcolor{keywordtype}{char}\ *while\_name)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00117}00117\ \ \ \ \ \textcolor{comment}{//\ move\ list-\/>active\ based\ on\ the\ name\ of\ the\ node}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{while}\ (strcmp(list-\/>active-\/>name,\ while\_name)\ !=\ 0\ ||\ list-\/>active-\/>inst\_type\ !=\ WHILE\_START)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ list-\/>active\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00120}00120\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00121}00121\ \ \ \ \ \textcolor{comment}{//\ list-\/>active\ is\ now\ outermost\ while\ loop,\ you\ can\ insert\ before\ it}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00122}00122\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00124}00124\ \textcolor{comment}{//\ search\ call\ of\ void\ function}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00125}\mbox{\hyperlink{codegen_8c_adb7640fdcfebcd983e80184aea9212d4}{00125}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_adb7640fdcfebcd983e80184aea9212d4}{inst\_list\_search\_void\_func\_call}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list,\ \textcolor{keywordtype}{char}\ *func\_name)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00126}00126\ \ \ \ \ \textcolor{comment}{//\ move\ list-\/>active\ based\ on\ the\ name\ of\ the\ node\ found\ }}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00127}00127\ \ \ \ \ list-\/>active\ =\ list-\/>last;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{while}\ (strcmp(list-\/>active-\/>name,\ func\_name)\ !=\ 0\ ||\ list-\/>active-\/>inst\_type\ !=\ FUNC\_CALL\ ||\ list-\/>active-\/>next\ ==\ NULL\ ||\ list-\/>active-\/>next-\/>inst\_type\ !=\ FUNC\_CALL\_RETVAL)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00129}00129\ \ \ \ \ \ \ \ \ list-\/>active\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00130}00130\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00131}00131\ \ \ \ \ \textcolor{comment}{//\ list-\/>active\ is\ now\ void\_function\ call,\ you\ can\ delete\ the\ instruction\ after\ it}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00132}00132\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00134}00134\ \textcolor{comment}{//\ goes\ through\ the\ whole\ list\ and\ prints\ the\ instructions\ based\ on\ their\ type}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00135}\mbox{\hyperlink{codegen_8c_a21b00ea707a49cb7ee9de4456eb53818}{00135}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a21b00ea707a49cb7ee9de4456eb53818}{codegen\_generate\_code\_please}}(\mbox{\hyperlink{structinstruction__list}{instruction\_list}}\ *list)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00136}00136\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ list-\/>first;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00137}00137\ \ \ \ \ \textcolor{keywordflow}{while}\ (inst\ !=\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (inst-\/>inst\_type)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MAIN:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_main(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_DEF:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_a026ddfc72418def845721e1f52065fee}{codegen\_var\_def}}(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_ASSIGN:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_var\_assign(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_ASSIGN\_NIL:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_var\_assign\_nil(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IMPLICIT\_NIL:\ \textcolor{comment}{//\ implicit\ nil\ assignment}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ \%cF@\%s\ nil@nil\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_RETURN:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_return(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_RETURN\_VOID:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_return\_void(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_END:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_end(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL\_START:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_call\_start(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ADD\_ARG:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_add\_arg(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}CALL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL\_RETVAL:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ TF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_LABEL:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$cond\_\%d\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_LET:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_if\_let(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_if(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ELSE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_else(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IFELSE\_END:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_ifelse\_end(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_COND\_DEF:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$cond\_\%s\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_START:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_DO:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_while\_do(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_END:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_while\_end(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_STRING:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readString(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_INT:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00212}00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readInt(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00214}00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_DOUBLE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readDouble(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00216}00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00217}00217\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WRITE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00218}00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_write(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2DOUBLE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_Int2Double(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DOUBLE2INT:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00224}00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_Double2Int(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00225}00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00226}00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LENGTH:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_length(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ SUBSTRING:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_substring(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ORD:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_ord(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00234}00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00235}00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CHR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_chr(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00238}00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CONCAT:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00239}00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_concat(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CONCAT\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOATS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS\_2:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_int2floats(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS\_2\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIV\_ZERO\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIV\_BY\_ZERO:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_div\_zero(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIVS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DIVS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIV\_ZERO\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIV\_BY\_ZERO:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_idiv\_zero(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIVS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}IDIVS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_INT\_CONST:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ int@\%d\(\backslash\)n"{}},\ inst-\/>int\_value);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_FLOAT\_CONST:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ float@\%a\(\backslash\)n"{}},\ inst-\/>float\_value);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_STRING\_CONST:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ string@\%s\(\backslash\)n"{}},\ inst-\/>string\_value);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00280}00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_NIL:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EXCLAMATION\_RULE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_exclamation\_rule(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EXCLAMATION\_RULE\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00291}00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00292}00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ADDS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ADDS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MULS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MULS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ SUBS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00300}00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}SUBS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00301}00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LTS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LTS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EQS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00306}00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ORS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00309}00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00310}00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00311}00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GTS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00312}00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}GTS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00314}00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ NOTS:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00315}00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}NOTS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LEQ\_RULE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00318}00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_leq\_rule(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LEQ\_RULE\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GEQ\_RULE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00325}00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_geq\_rule(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00326}00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GEQ\_RULE\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ QMS\_RULE:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_qms\_rule(inst);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ QMS\_RULE\_DEFVAR:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00335}00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00337}00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00338}00338\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00339}00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00340}00340\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00341}00341\ \ \ \ \ \ \ \ \ inst\ =\ inst-\/>next;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00342}00342\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00343}00343\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00344}00344\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00345}00345\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00346}\mbox{\hyperlink{codegen_8c_a026ddfc72418def845721e1f52065fee}{00346}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{codegen_8c_a026ddfc72418def845721e1f52065fee}{codegen\_var\_def}}(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00347}00347\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00348}00348\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00349}00349\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00350}00350\ \textcolor{comment}{//\ assign\ value\ from\ the\ top\ of\ the\ stack\ to\ the\ variable}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00351}00351\ \textcolor{keywordtype}{void}\ codegen\_var\_assign(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00352}00352\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00353}00353\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00354}00354\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00355}00355\ \textcolor{comment}{//\ nil\ assignment}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00356}00356\ \textcolor{keywordtype}{void}\ codegen\_var\_assign\_nil(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00357}00357\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ \%cF@\%s\ nil@nil\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00358}00358\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00359}00359\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00360}00360\ \textcolor{comment}{//\ function\ definition}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00361}00361\ \textcolor{keywordtype}{void}\ codegen\_func\_def(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00362}00362\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00363}00363\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00364}00364\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00365}00365\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00366}00366\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ inst-\/>cnt;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00367}00367\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ the\ parameter\ in\ the\ symtable\ based\ on\ its\ param\_order}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00368}00368\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}*\ param\ =\ \mbox{\hyperlink{symtable_8c_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\_find\_param}}(inst-\/>relevant\_node-\/>symtable,\ i);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00369}00369\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\%s\(\backslash\)n"{}},\ param-\/>key);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00370}00370\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\%s\ LF@\$\%d\(\backslash\)n"{}},\ param-\/>key,\ i);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00371}00371\ \ \ \ \ \}\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00372}00372\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00374}00374\ \textcolor{comment}{//\ return\ value\ is\ on\ the\ top\ of\ the\ stack}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00375}00375\ \textcolor{keywordtype}{void}\ codegen\_func\_def\_return(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00376}00376\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00377}00377\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00378}00378\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00380}00380\ \textcolor{comment}{//\ void\ function\ without\ return\ value}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00381}00381\ \textcolor{keywordtype}{void}\ codegen\_func\_def\_return\_void(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00382}00382\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00383}00383\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00384}00384\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00385}00385\ \textcolor{comment}{//\ end\ of\ function\ definition}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00386}00386\ \textcolor{keywordtype}{void}\ codegen\_func\_def\_end(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00387}00387\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00388}00388\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00389}00389\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00390}00390\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00391}00391\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00392}00392\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00393}00393\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00394}00394\ \textcolor{keywordtype}{void}\ codegen\_func\_call\_start(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00395}00395\ \ \ \ \ add\_arg\_cnt\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00396}00396\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00397}00397\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00398}00398\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00399}00399\ \textcolor{keywordtype}{void}\ codegen\_add\_arg(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00400}00400\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ TF@\$\%d\(\backslash\)n"{}},\ ++add\_arg\_cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00401}00401\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ TF@\$\%d\(\backslash\)n"{}},\ add\_arg\_cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00402}00402\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00403}00403\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00404}00404\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00405}00405\ \textcolor{comment}{//\ if\ let\ -\/\ do\ the\ else\ statement\ if\ the\ variable\ is\ nil}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00406}00406\ \textcolor{keywordtype}{void}\ codegen\_if\_let(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00407}00407\ \ \ \ \ printf(\textcolor{stringliteral}{"{}TYPE\ \%cF@\$cond\_\%d\$\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00408}00408\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ else\_\%d\ \%cF@\$cond\_\%d\$\ string@nil\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt);\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00409}00409\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00411}00411\ \textcolor{comment}{//\ if\ -\/\ do\ the\ else\ statement\ if\ the\ condition\ is\ false}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00412}00412\ \textcolor{keywordtype}{void}\ codegen\_if(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00413}00413\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$cond\_\%d\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00414}00414\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ else\_\%d\ \%cF@\$cond\_\%d\$\ bool@false\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00415}00415\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00416}00416\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00417}00417\ \textcolor{comment}{//\ else\ statement}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00418}00418\ \textcolor{keywordtype}{void}\ codegen\_else(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00419}00419\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00420}00420\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ else\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00421}00421\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00422}00422\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00423}00423\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00424}00424\ \textcolor{keywordtype}{void}\ codegen\_ifelse\_end(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00425}00425\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00426}00426\ \}\ \ \ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00427}00427\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00428}00428\ \textcolor{comment}{//\ while\ -\/\ jump\ to\ the\ end\ of\ the\ while\ loop\ if\ the\ condition\ is\ false}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00429}00429\ \textcolor{keywordtype}{void}\ codegen\_while\_do(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00430}00430\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$cond\_\%s\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00431}00431\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ end\_\%s\ \%cF@\$cond\_\%s\$\ bool@false\(\backslash\)n"{}},\ inst-\/>name,\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00432}00432\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00433}00433\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00434}00434\ \textcolor{keywordtype}{void}\ codegen\_while\_end(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00435}00435\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00436}00436\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00437}00437\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00438}00438\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00439}00439\ \textcolor{comment}{//\ built-\/in\ functions}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00440}00440\ \textcolor{keywordtype}{void}\ codegen\_readString(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00441}00441\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readString\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00442}00442\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readString\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00443}00443\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00444}00444\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00445}00445\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ string\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00446}00446\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00447}00447\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00448}00448\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readString\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00449}00449\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00450}00450\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00451}00451\ \textcolor{keywordtype}{void}\ codegen\_readInt(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00452}00452\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00453}00453\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00454}00454\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00455}00455\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00456}00456\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ int\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00457}00457\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00458}00458\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00459}00459\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00460}00460\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00461}00461\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00462}00462\ \textcolor{keywordtype}{void}\ codegen\_readDouble(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00463}00463\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00464}00464\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00465}00465\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00466}00466\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00467}00467\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ float\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00468}00468\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00469}00469\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00470}00470\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00471}00471\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00472}00472\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00473}00473\ \textcolor{keywordtype}{void}\ codegen\_write(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00474}00474\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00475}00475\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00476}00476\ \ \ \ \ \textcolor{comment}{//\ get\ the\ arguments\ from\ the\ stack\ and\ print\ them\ in\ the\ correct\ order}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00477}00477\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ inst-\/>cnt;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00478}00478\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00479}00479\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00480}00480\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00481}00481\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ inst-\/>cnt;\ i\ >=\ 1;\ i-\/-\/)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00482}00482\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}WRITE\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00483}00483\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00484}00484\ \ \ \ \ write\_renamer\ +=\ inst-\/>cnt;}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00485}00485\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00486}00486\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00488}00488\ \textcolor{keywordtype}{void}\ codegen\_Int2Double(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00489}00489\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_Int2Double\(\backslash\)n"{}});\ \ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00490}00490\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ Int2Double\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00491}00491\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00492}00492\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00493}00493\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOAT\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00494}00494\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00495}00495\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00496}00496\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_Int2Double\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00497}00497\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00498}00498\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00499}00499\ \textcolor{keywordtype}{void}\ codegen\_Double2Int(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{\ \ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00500}00500\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00501}00501\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00502}00502\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00503}00503\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00504}00504\ \ \ \ \ printf(\textcolor{stringliteral}{"{}FLOAT2INT\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00505}00505\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00506}00506\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00507}00507\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00508}00508\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00509}00509\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00510}00510\ \textcolor{keywordtype}{void}\ codegen\_length(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00511}00511\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_length\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00512}00512\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ length\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00513}00513\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00514}00514\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00515}00515\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRLEN\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00516}00516\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00517}00517\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00518}00518\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_length\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00519}00519\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00520}00520\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00521}00521\ \textcolor{keywordtype}{void}\ codegen\_substring(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00522}00522\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_substring\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00523}00523\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ substring\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00524}00524\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00525}00525\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00526}00526\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ string@\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00527}00527\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$tmp1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00528}00528\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$check\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00529}00529\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$check\ bool@false\(\backslash\)n"{}});\ \textcolor{comment}{//\ retval\ is\ nil\ if:}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00530}00530\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LT\ LF@\$check\ LF@\$2\ int@0\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ <\ 0}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00531}00531\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00532}00532\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LT\ LF@\$check\ LF@\$3\ int@0\(\backslash\)n"{}});\ \textcolor{comment}{//\ endingBefore\ <\ 0}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00533}00533\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00534}00534\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$2\ LF@\$3\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ >\ endingBefore}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00535}00535\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00536}00536\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQ\ LF@\$check\ LF@\$2\ LF@\$3\(\backslash\)n"{}});\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00537}00537\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_result\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00538}00538\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00539}00539\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRLEN\ LF@\$tmp\_strlen\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00540}00540\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$2\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ >\ strlen}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00541}00541\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00542}00542\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQ\ LF@\$check\ LF@\$2\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ ==\ strlen\ }}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00543}00543\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00544}00544\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$3\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ endingBefore\ >\ strlen}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00545}00545\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00546}00546\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!substring\_loop\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00547}00547\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GETCHAR\ LF@\$tmp1\ LF@\$1\ LF@\$2\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00548}00548\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CONCAT\ LF@\$retval\$\ LF@\$retval\$\ LF@\$tmp1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00549}00549\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ADD\ LF@\$2\ LF@\$2\ int@1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00550}00550\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!substring\_loop\ LF@\$2\ LF@\$3\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00551}00551\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!load\_result\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00552}00552\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!load\_nil\(\backslash\)n"{}});\ \textcolor{comment}{//\ load\ nil\ if\ any\ of\ the\ conditions\ above\ is\ true}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00553}00553\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00554}00554\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!load\_result\(\backslash\)n"{}});\ \textcolor{comment}{//\ load\ result,\ if\ startingAt\ ==\ endingBefore,\ it's\ empty\ string}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00555}00555\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00556}00556\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00557}00557\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_substring\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00558}00558\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00559}00559\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00560}00560\ \textcolor{keywordtype}{void}\ codegen\_ord(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00561}00561\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00562}00562\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ ord\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00563}00563\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00564}00564\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00565}00565\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!valid\_param\ LF@\$1\ string@\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00566}00566\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ int@0\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00567}00567\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!end\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00568}00568\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!valid\_param\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00569}00569\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRI2INT\ LF@\$retval\$\ LF@\$1\ int@0\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00570}00570\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!end\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00571}00571\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00572}00572\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00573}00573\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_ord\(\backslash\)n"{}});\ \ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00574}00574\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00575}00575\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00576}00576\ \textcolor{keywordtype}{void}\ codegen\_chr(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00577}00577\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_chr\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00578}00578\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ chr\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00579}00579\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00580}00580\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00581}00581\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2CHAR\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00582}00582\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00583}00583\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00584}00584\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_chr\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00585}00585\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00586}00586\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00587}00587\ \textcolor{comment}{//\ main\ function\ -\/\ start\ of\ the\ program}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00588}00588\ \textcolor{keywordtype}{void}\ codegen\_main(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00589}00589\ \ \ \ \ printf(\textcolor{stringliteral}{"{}.IFJcode23\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00590}00590\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00591}00591\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00592}00592\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00593}00593\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00594}00594\ \textcolor{comment}{//\ vardefs\ in\ the\ following\ functions\ are\ separated\ in\ case\ of\ while\ loop:}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00595}00595\ \textcolor{comment}{//\ concatenation\ of\ two\ strings,}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00596}00596\ \textcolor{keywordtype}{void}\ codegen\_concat(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00597}00597\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00598}00598\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00599}00599\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CONCAT\ \%cF@\$\$s\%d\$\$\ \%cF@\$\$s\%d\$\$\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00600}00600\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00601}00601\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00602}00602\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00603}00603\ \textcolor{comment}{//\ int\ to\ float\ conversion}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00604}00604\ \textcolor{keywordtype}{void}\ codegen\_int2floats(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00605}00605\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00606}00606\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOATS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00607}00607\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00608}00608\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00609}00609\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00610}00610\ \textcolor{comment}{//\ exclamation\ rule}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00611}00611\ \textcolor{keywordtype}{void}\ codegen\_exclamation\_rule(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00612}00612\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00613}00613\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00614}00614\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00615}00615\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQS\ \$RULE\_EXCL\_CORRECT\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00616}00616\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_EXCL\_ERROR\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00617}00617\ \ \ \ \ printf(\textcolor{stringliteral}{"{}WRITE\ string@Variable\(\backslash\)\(\backslash\)032is\(\backslash\)\(\backslash\)032NULL\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00618}00618\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00619}00619\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_EXCL\_CORRECT\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00620}00620\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00621}00621\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00622}00622\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00623}00623\ \textcolor{comment}{//\ less\ than\ equal\ rule}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00624}00624\ \textcolor{keywordtype}{void}\ codegen\_leq\_rule(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00625}00625\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00626}00626\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00627}00627\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00628}00628\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00629}00629\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00630}00630\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00631}00631\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00632}00632\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00633}00633\ \textcolor{comment}{//\ greater\ than\ equal\ rule}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00634}00634\ \textcolor{keywordtype}{void}\ codegen\_geq\_rule(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00635}00635\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00636}00636\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00637}00637\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00638}00638\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00639}00639\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00640}00640\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00641}00641\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00642}00642\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00643}00643\ \textcolor{comment}{//\ question\ mark\ rule}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00644}00644\ \textcolor{keywordtype}{void}\ codegen\_qms\_rule(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00645}00645\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00646}00646\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00647}00647\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00648}00648\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00649}00649\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQS\ \$RULE\_QMS\_NOT\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00650}00650\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00651}00651\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_QMS\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00652}00652\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00653}00653\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ \$END\_RULE\_QMS\%d\$\(\backslash\)n"{}},\ \ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00654}00654\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00655}00655\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_QMS\_NOT\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00656}00656\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00657}00657\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00658}00658\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$END\_RULE\_QMS\%d\$\(\backslash\)n"{}},\ \ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00659}00659\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00660}00660\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00661}00661\ \textcolor{comment}{//\ checking\ division\ by\ zero\ for\ integers}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00662}00662\ \textcolor{keywordtype}{void}\ codegen\_idiv\_zero(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00663}00663\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00664}00664\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!SKIP\_IDIV\_BY\_ZERO\%d\ \%cF@\%s\%d\ int@0\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00665}00665\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00666}00666\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!SKIP\_IDIV\_BY\_ZERO\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00667}00667\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00668}00668\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00669}00669\ }
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00670}00670\ \textcolor{comment}{//\ checking\ division\ by\ zero\ for\ floats}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00671}00671\ \textcolor{keywordtype}{void}\ codegen\_div\_zero(\mbox{\hyperlink{structs__instruction}{instruction}}\ *inst)\ \{}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00672}00672\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00673}00673\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!SKIP\_DIV\_BY\_ZERO\%d\ \%cF@\%s\%d\ float@0x0p+0\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00674}00674\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00675}00675\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!SKIP\_DIV\_BY\_ZERO\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00676}00676\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00677}00677\ \}}
+\DoxyCodeLine{\Hypertarget{codegen_8c_source_l00678}00678\ }
+
+\end{DoxyCode}

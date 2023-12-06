@@ -1,0 +1,200 @@
+\doxysection{cnt\+\_\+stack.\+c File Reference}
+\hypertarget{cnt__stack_8c}{}\label{cnt__stack_8c}\index{cnt\_stack.c@{cnt\_stack.c}}
+
+
+Stack of integers for nested if\&else node naming.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{cnt__stack_8c_a62247acc4151c24c383fbbcec0110936}{cnt\+\_\+init}} (\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}cnt\+\_\+stack)
+\begin{DoxyCompactList}\small\item\em Initializes a stack with a given capacity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{cnt__stack_8c_a08bf04264f20eb1265da966c2cb5a8d7}{cnt\+\_\+push}} (\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}cnt\+\_\+stack)
+\begin{DoxyCompactList}\small\item\em Pushes a integer onto the top of the stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{cnt__stack_8c_a3ae41f5290d85de90f6b4438929f5a03}{cnt\+\_\+pop}} (\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}cnt\+\_\+stack)
+\begin{DoxyCompactList}\small\item\em Pops a integer from the top of the stack. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{cnt__stack_8c_a7461a9a36d608c97150ec3cfb93482b5}{cnt\+\_\+top}} (\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}cnt\+\_\+stack)
+\begin{DoxyCompactList}\small\item\em Returns the integer at the top of the stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{cnt__stack_8c_a2c5aa18ffa2dd55b4a10cca6bd313052}{cnt\+\_\+dispose\+\_\+stack}} (\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}cnt\+\_\+stack)
+\begin{DoxyCompactList}\small\item\em Dispose of the stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stack of integers for nested if\&else node naming. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Adam Valik $<$xvalik05$>$ 
+
+Marek Effenberger $<$xeffen00$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{cnt__stack_8c_a2c5aa18ffa2dd55b4a10cca6bd313052}\label{cnt__stack_8c_a2c5aa18ffa2dd55b4a10cca6bd313052} 
+\index{cnt\_stack.c@{cnt\_stack.c}!cnt\_dispose\_stack@{cnt\_dispose\_stack}}
+\index{cnt\_dispose\_stack@{cnt\_dispose\_stack}!cnt\_stack.c@{cnt\_stack.c}}
+\doxysubsubsection{\texorpdfstring{cnt\_dispose\_stack()}{cnt\_dispose\_stack()}}
+{\footnotesize\ttfamily void cnt\+\_\+dispose\+\_\+stack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cnt\+\_\+stack }\end{DoxyParamCaption})}
+
+
+
+Dispose of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cnt\+\_\+stack} & A pointer to the cnt stack to be disposed of \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{cnt__stack_8c_source_l00050}{50}} of file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00051\ \ \ \ \ free(cnt\_stack-\/>cnt\_array);}
+\DoxyCodeLine{00052\ \ \ \ \ cnt\_stack-\/>cnt\_array\ =\ NULL;}
+\DoxyCodeLine{00053\ \ \ \ \ free(cnt\_stack);}
+\DoxyCodeLine{00054\ \ \ \ \ cnt\_stack\ =\ NULL;}
+\DoxyCodeLine{00055\ \}}
+
+\end{DoxyCode}
+\Hypertarget{cnt__stack_8c_a62247acc4151c24c383fbbcec0110936}\label{cnt__stack_8c_a62247acc4151c24c383fbbcec0110936} 
+\index{cnt\_stack.c@{cnt\_stack.c}!cnt\_init@{cnt\_init}}
+\index{cnt\_init@{cnt\_init}!cnt\_stack.c@{cnt\_stack.c}}
+\doxysubsubsection{\texorpdfstring{cnt\_init()}{cnt\_init()}}
+{\footnotesize\ttfamily void cnt\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cnt\+\_\+stack }\end{DoxyParamCaption})}
+
+
+
+Initializes a stack with a given capacity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cnt\+\_\+stack} & A pointer to the cnt stack to be initialized \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{cnt__stack_8c_source_l00026}{26}} of file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ cnt\_stack-\/>cnt\_array\ =\ (\textcolor{keywordtype}{int}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(STACK\_SIZE\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{00028\ \ \ \ \ cnt\_stack-\/>size\ =\ 0;}
+\DoxyCodeLine{00029\ \ \ \ \ cnt\_stack-\/>capacity\ =\ STACK\_SIZE;}
+\DoxyCodeLine{00030\ \}}
+
+\end{DoxyCode}
+\Hypertarget{cnt__stack_8c_a3ae41f5290d85de90f6b4438929f5a03}\label{cnt__stack_8c_a3ae41f5290d85de90f6b4438929f5a03} 
+\index{cnt\_stack.c@{cnt\_stack.c}!cnt\_pop@{cnt\_pop}}
+\index{cnt\_pop@{cnt\_pop}!cnt\_stack.c@{cnt\_stack.c}}
+\doxysubsubsection{\texorpdfstring{cnt\_pop()}{cnt\_pop()}}
+{\footnotesize\ttfamily void cnt\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cnt\+\_\+stack }\end{DoxyParamCaption})}
+
+
+
+Pops a integer from the top of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cnt\+\_\+stack} & A pointer to the cnt stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The cnt popped from the top of the stack 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{cnt__stack_8c_source_l00042}{42}} of file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ cnt\_stack-\/>size-\/-\/;}
+\DoxyCodeLine{00044\ \}}
+
+\end{DoxyCode}
+\Hypertarget{cnt__stack_8c_a08bf04264f20eb1265da966c2cb5a8d7}\label{cnt__stack_8c_a08bf04264f20eb1265da966c2cb5a8d7} 
+\index{cnt\_stack.c@{cnt\_stack.c}!cnt\_push@{cnt\_push}}
+\index{cnt\_push@{cnt\_push}!cnt\_stack.c@{cnt\_stack.c}}
+\doxysubsubsection{\texorpdfstring{cnt\_push()}{cnt\_push()}}
+{\footnotesize\ttfamily void cnt\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cnt\+\_\+stack }\end{DoxyParamCaption})}
+
+
+
+Pushes a integer onto the top of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cnt\+\_\+stack} & A pointer to the cnt stack \\
+\hline
+{\em cnt} & The cnt to be pushed onto the stack \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{cnt__stack_8c_source_l00032}{32}} of file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Double\ the\ capacity\ if\ the\ stack\ is\ full}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{if}\ (cnt\_stack-\/>size\ ==\ cnt\_stack-\/>capacity-\/1)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ cnt\_stack-\/>capacity\ *=\ 2;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ cnt\_stack-\/>cnt\_array\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(cnt\_stack-\/>cnt\_array,\ cnt\_stack-\/>capacity\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}*));}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ Push\ ifelse\_cnt\ onto\ the\ stack}}
+\DoxyCodeLine{00039\ \ \ \ \ cnt\_stack-\/>cnt\_array[cnt\_stack-\/>size++]\ =\ ifelse\_cnt;}
+\DoxyCodeLine{00040\ \}}
+
+\end{DoxyCode}
+\Hypertarget{cnt__stack_8c_a7461a9a36d608c97150ec3cfb93482b5}\label{cnt__stack_8c_a7461a9a36d608c97150ec3cfb93482b5} 
+\index{cnt\_stack.c@{cnt\_stack.c}!cnt\_top@{cnt\_top}}
+\index{cnt\_top@{cnt\_top}!cnt\_stack.c@{cnt\_stack.c}}
+\doxysubsubsection{\texorpdfstring{cnt\_top()}{cnt\_top()}}
+{\footnotesize\ttfamily int cnt\+\_\+top (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcntstack}{cnt\+\_\+stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{cnt\+\_\+stack }\end{DoxyParamCaption})}
+
+
+
+Returns the integer at the top of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cnt\+\_\+stack} & A pointer to the cnt stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The cnt at the top of the stack 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{cnt__stack_8c_source_l00046}{46}} of file \mbox{\hyperlink{cnt__stack_8c_source}{cnt\+\_\+stack.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{return}\ cnt\_stack-\/>cnt\_array[cnt\_stack-\/>size-\/1];}
+\DoxyCodeLine{00048\ \}}
+
+\end{DoxyCode}

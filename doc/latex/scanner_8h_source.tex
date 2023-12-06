@@ -1,0 +1,179 @@
+\doxysection{scanner.\+h}
+\hypertarget{scanner_8h_source}{}\label{scanner_8h_source}\mbox{\hyperlink{scanner_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00011}00011\ \textcolor{preprocessor}{\#ifndef\ IFJ\_SCANNER\_H}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00012}00012\ \textcolor{preprocessor}{\#define\ IFJ\_SCANNER\_H}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{string__vector_8h}{string\_vector.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00019}00019\ \textcolor{preprocessor}{\#define\ ASCII\_BEGIN\ 31\ }\textcolor{comment}{//Beginning\ of\ supported\ ascii\ characters}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00020}00020\ \textcolor{preprocessor}{\#define\ DEFAULT\_TOKEN\_VAL\ 1000\ }\textcolor{comment}{//Value\ that\ compare\_keyword\ returns\ when\ no\ keyword\ found}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00023}\mbox{\hyperlink{scanner_8h_aef4106bfe800d27a3105349118f78438}{00023}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{scanner_8h_aef4106bfe800d27a3105349118f78438}{token\_types}}\ \{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00025}00025\ \ \ \ \ TOKEN\_WHITESPACE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00026}00026\ \ \ \ \ TOKEN\_TAB,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00027}00027\ \ \ \ \ TOKEN\_EOL,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00028}00028\ \ \ \ \ TOKEN\_EOF,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00029}00029\ \ \ \ \ TOKEN\_MINUS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00030}00030\ \ \ \ \ TOKEN\_PLUS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00031}00031\ \ \ \ \ TOKEN\_MULTIPLY,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00032}00032\ \ \ \ \ TOKEN\_LESS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00033}00033\ \ \ \ \ TOKEN\_LESS\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00034}00034\ \ \ \ \ TOKEN\_GREAT,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00035}00035\ \ \ \ \ TOKEN\_GREAT\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00036}00036\ \ \ \ \ TOKEN\_LPAR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00037}00037\ \ \ \ \ TOKEN\_RPAR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00038}00038\ \ \ \ \ TOKEN\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00039}00039\ \ \ \ \ TOKEN\_EQEQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00040}00040\ \ \ \ \ TOKEN\_EXCLAM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00041}00041\ \ \ \ \ TOKEN\_EXCLAMEQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00042}00042\ \ \ \ \ TOKEN\_COMMA,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00043}00043\ \ \ \ \ TOKEN\_COLON,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00044}00044\ \ \ \ \ TOKEN\_DOUBLE\_QM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00045}00045\ \ \ \ \ TOKEN\_RET\_TYPE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00046}00046\ \ \ \ \ TOKEN\_ID,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00047}00047\ \ \ \ \ TOKEN\_KEYWORD\_QM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00048}00048\ \ \ \ \ TOKEN\_NUM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00049}00049\ \ \ \ \ TOKEN\_EXP,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00050}00050\ \ \ \ \ TOKEN\_DEC,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00051}00051\ \ \ \ \ TOKEN\_STRING,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00052}00052\ \ \ \ \ TOKEN\_ML\_STRING,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00053}00053\ \ \ \ \ TOKEN\_KEYWORD,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00054}00054\ \ \ \ \ TOKEN\_UNDERSCORE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00055}00055\ \ \ \ \ TOKEN\_LEFT\_BRACKET,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00056}00056\ \ \ \ \ TOKEN\_RIGHT\_BRACKET,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00057}00057\ \ \ \ \ TOKEN\_DIVIDE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00059}00059\ \ \ \ \ TOKEN\_DOLLAR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00060}00060\ \ \ \ \ TOKEN\_SHIFT,\ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00061}00061\ \ \ \ \ TOKEN\_EXPRESSION,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00062}00062\ \ \ \ \ TOKEN\_LITERAL\_INT,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00063}00063\ \ \ \ \ TOKEN\_LITERAL\_DOUBLE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00064}00064\ \ \ \ \ TOKEN\_LITERAL\_STRING,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00065}00065\ \ \ \ \ TOKEN\_BOOL}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00067}\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{00067}}\ \}\ \mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\_type\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00070}\mbox{\hyperlink{scanner_8h_adc6e5733fc3c22f0a7b2914188c49c90}{00070}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{scanner_8h_adc6e5733fc3c22f0a7b2914188c49c90}{state}}\{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00072}00072\ \ \ \ \ S\_START,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00073}00073\ \ \ \ \ S\_COLON,\ \ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00074}00074\ \ \ \ \ S\_COMMA,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00075}00075\ \ \ \ \ S\_QM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00076}00076\ \ \ \ \ S\_DOUBLE\_QM,\ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00077}00077\ \ \ \ \ S\_GTR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00078}00078\ \ \ \ \ S\_GTR\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00079}00079\ \ \ \ \ S\_LESS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00080}00080\ \ \ \ \ S\_LESS\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00081}00081\ \ \ \ \ S\_EQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00082}00082\ \ \ \ \ S\_EQEQ,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00083}00083\ \ \ \ \ S\_EXCLAM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00084}00084\ \ \ \ \ S\_EXCLAMEQ,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00085}00085\ \ \ \ \ S\_MULTIPLY,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00086}00086\ \ \ \ \ S\_PLUS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00087}00087\ \ \ \ \ S\_MINUS,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00088}00088\ \ \ \ \ S\_RET\_TYPE,\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00089}00089\ \ \ \ \ S\_LPAR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00090}00090\ \ \ \ \ S\_RPAR,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00091}00091\ \ \ \ \ S\_UNDERSCORE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00092}00092\ \ \ \ \ S\_ID,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00093}00093\ \ \ \ \ S\_ID\_QM,\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00094}00094\ \ \ \ \ S\_NUM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00095}00095\ \ \ \ \ S\_NUM\_DOT,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00096}00096\ \ \ \ \ S\_NUM\_E,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00097}00097\ \ \ \ \ S\_NUM\_E\_SIGN,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00098}00098\ \ \ \ \ S\_DEC,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00099}00099\ \ \ \ \ S\_EXP,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00101}00101\ \ \ \ \ S\_START\_QUOTES,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00102}00102\ \ \ \ \ S\_END\_QUOTES,\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00103}00103\ \ \ \ \ S\_START\_ESC\_SENTENCE,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00104}00104\ \ \ \ \ S\_START\_HEX,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00105}00105\ \ \ \ \ S\_LEFT\_BRACKET,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00106}00106\ \ \ \ \ S\_FIRST\_HEX,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00108}00108\ \ \ \ \ S\_THREE\_QUOTES,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00109}00109\ \ \ \ \ S\_START\_MULTILINE,\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00111}00111\ \ \ \ \ S\_SL\_COM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00112}00112\ \ \ \ \ S\_NESTED\_COM,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00113}00113\ \ \ \ \ S\_NESTED\_END,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00115}00115\ \ \ \ \ S\_STR\_EMPTY,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00116}00116\ \ \ \ \ S\_IS\_MULTILINE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00117}00117\ \ \ \ \ S\_END\_MULTILINE,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00118}00118\ \ \ \ \ S\_FAKE\_END\_MULTILINE}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00120}\mbox{\hyperlink{scanner_8h_a4ad7c49d8c070a1dd5aa3befdccb57ea}{00120}}\ \}\ \mbox{\hyperlink{scanner_8h_a4ad7c49d8c070a1dd5aa3befdccb57ea}{automat\_state\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00124}\mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{00124}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}}\{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00126}00126\ \ \ \ \ KW\_DOUBLE,\ \ \textcolor{comment}{//\ Double}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00127}00127\ \ \ \ \ KW\_INT,\ \ \ \ \ \textcolor{comment}{//\ Int}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00128}00128\ \ \ \ \ KW\_STRING,\ \ \textcolor{comment}{//\ String}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00129}00129\ \ \ \ \ KW\_ELSE,\ \ \ \ \textcolor{comment}{//\ else\ }}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00130}00130\ \ \ \ \ KW\_FUNC,\ \ \ \ \textcolor{comment}{//\ func}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00131}00131\ \ \ \ \ KW\_IF,\ \ \ \ \ \ \textcolor{comment}{//\ if}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00132}00132\ \ \ \ \ KW\_LET,\ \ \ \ \ \textcolor{comment}{//\ let}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00133}00133\ \ \ \ \ KW\_NIL,\ \ \ \ \ \textcolor{comment}{//\ nil}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00134}00134\ \ \ \ \ KW\_RETURN,\ \ \textcolor{comment}{//\ return}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00135}00135\ \ \ \ \ KW\_VAR,\ \ \ \ \ \textcolor{comment}{//\ var}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00136}00136\ \ \ \ \ KW\_WHILE,\ \ \ \textcolor{comment}{//\ while}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00138}00138\ \ \ \ \ \textcolor{comment}{//\ In\ built\ functions}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00140}00140\ \ \ \ \ KW\_RD\_STR,\ \ \ \textcolor{comment}{//\ readString()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00141}00141\ \ \ \ \ KW\_RD\_INT,\ \ \ \textcolor{comment}{//\ readInt()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00142}00142\ \ \ \ \ KW\_RD\_DBL,\ \ \ \textcolor{comment}{//\ readDouble()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00143}00143\ \ \ \ \ KW\_WRT,\ \ \ \ \ \ \textcolor{comment}{//\ write()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00144}00144\ \ \ \ \ KW\_INT\_2\_DBL,\textcolor{comment}{//\ Int2Double()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00145}00145\ \ \ \ \ KW\_DBL\_2\_INT,\textcolor{comment}{//\ Double2Int()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00146}00146\ \ \ \ \ KW\_LENGHT,\ \ \ \textcolor{comment}{//\ lenght()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00147}00147\ \ \ \ \ KW\_SUBSTR,\ \ \ \textcolor{comment}{//\ substring()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00148}00148\ \ \ \ \ KW\_ORD,\ \ \ \ \ \ \textcolor{comment}{//\ ord()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00149}00149\ \ \ \ \ KW\_CHR,\ \ \ \ \ \ \textcolor{comment}{//\ chr()}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00151}00151\ \ \ \ \ KW\_GLOBAL,\ \ \ \textcolor{comment}{//\ global\ (for\ global\ forest\ node)}}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00153}\mbox{\hyperlink{scanner_8h_a43f5389da67390468ed162b0814a75ed}{00153}}\ \}\mbox{\hyperlink{scanner_8h_a43f5389da67390468ed162b0814a75ed}{keyword\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00156}\mbox{\hyperlink{scanner_8h_a5a6601c4e142145f0e87051cb21ece0f}{00156}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{scanner_8h_a5a6601c4e142145f0e87051cb21ece0f}{expression\_type}}\{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00157}00157\ \ \ \ \ ID,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00158}00158\ \ \ \ \ CONST,}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00159}\mbox{\hyperlink{scanner_8h_a6f1478e122003a4a2cd8fec8e8668d2e}{00159}}\ \}\ \mbox{\hyperlink{scanner_8h_a6f1478e122003a4a2cd8fec8e8668d2e}{expression\_type\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00162}\mbox{\hyperlink{structtoken__value}{00162}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structtoken__value}{token\_value}}\ \{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00163}00163\ \ \ \ \ \textcolor{keywordtype}{int}\ integer;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00164}00164\ \ \ \ \ \textcolor{keywordtype}{double}\ type\_double;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00165}00165\ \ \ \ \ \mbox{\hyperlink{scanner_8h_a43f5389da67390468ed162b0814a75ed}{keyword\_t}}\ \mbox{\hyperlink{scanner_8h_a2e528ed84c1b497487093f0fde426415}{keyword}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00166}00166\ \ \ \ \ \mbox{\hyperlink{structstring__vector}{vector}}*\ \mbox{\hyperlink{structstring__vector}{vector}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00167}\mbox{\hyperlink{scanner_8h_ae0e1a90c5f0e36a2eee1af339f6dcf65}{00167}}\ \}\ \mbox{\hyperlink{scanner_8h_ae0e1a90c5f0e36a2eee1af339f6dcf65}{value\_type\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00170}\mbox{\hyperlink{structtoken}{00170}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structtoken}{token}}\ \{}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00171}00171\ \ \ \ \ \mbox{\hyperlink{structtoken__value}{value\_type\_t}}\ value;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00172}00172\ \ \ \ \ \mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\_type\_t}}\ type;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00173}00173\ \ \ \ \ \textcolor{keywordtype}{bool}\ prev\_was\_eol;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00174}00174\ \ \ \ \ \mbox{\hyperlink{scanner_8h_a6f1478e122003a4a2cd8fec8e8668d2e}{expression\_type\_t}}\ exp\_type;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00175}00175\ \ \ \ \ data\_type\ exp\_value;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00176}00176\ \ \ \ \ \textcolor{keywordtype}{bool}\ was\_exp;}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00177}\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{00177}}\ \}\ \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\_t}};}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00185}00185\ \mbox{\hyperlink{scanner_8h_a43f5389da67390468ed162b0814a75ed}{keyword\_t}}\ \mbox{\hyperlink{scanner_8h_ae0b8dd05a5d96973c4b738ce26aa5e74}{compare\_keyword}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ v);}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00195}00195\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{scanner_8h_ac4fd891ceb75965bc8381c142b77ea59}{check\_indent}}(\textcolor{keywordtype}{int}*\ cnt\_array,\ \textcolor{keywordtype}{int}\ size);}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00196}00196\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00204}00204\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{scanner_8h_ae1e37516d0572a9f8bc6f0ab9c83d736}{cut\_indent}}(\mbox{\hyperlink{structstring__vector}{vector}}*\ \mbox{\hyperlink{structstring__vector}{vector}},\ \textcolor{keywordtype}{int}\ indent,\ \textcolor{keywordtype}{int}\ lines);}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00211}00211\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{scanner_8h_a1a51b85cff929727bd0ad10758160039}{destroy\_token}}(\mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{structtoken}{token}});}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00218}00218\ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{scanner_8h_ad263c3a9c887ee5b2ef33aadb26f018a}{get\_me\_token}}();}
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{scanner_8h_source_l00220}00220\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

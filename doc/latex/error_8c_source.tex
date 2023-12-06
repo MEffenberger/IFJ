@@ -1,0 +1,41 @@
+\doxysection{error.\+c}
+\hypertarget{error_8c_source}{}\label{error_8c_source}\mbox{\hyperlink{error_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{callee_8h}{callee.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cnt__stack_8h}{cnt\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00014}00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{codegen_8h}{codegen.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{error_8h}{error.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{expression__parser_8h}{expression\_parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{forest_8h}{forest.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{parser_8h}{parser.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00019}00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00020}00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{scanner_8h}{scanner.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00021}00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{string__vector_8h}{string\_vector.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00022}00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{token__stack_8h}{token\_stack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00026}\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{00026}}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00027}00027\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ malloc(size);}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00028}00028\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}MALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ allocation\ failed."{}});}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00030}00030\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00034}\mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{00034}}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(\textcolor{keywordtype}{void}\ *to\_be\_reallocated,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ realloc(to\_be\_reallocated,\ size);}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00036}00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}REALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ reallocation\ failed."{}});}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00038}00038\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00039}00039\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00040}00040\ \}}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00043}\mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{00043}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(error\_code\_t\ error\_code,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ module,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message)\ \{\ }
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00044}00044\ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s:\ \%s\(\backslash\)n"{}},\ module,\ message);}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00045}00045\ \ \ \ \ exit(error\_code);}
+\DoxyCodeLine{\Hypertarget{error_8c_source_l00046}00046\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,1391 @@
+\doxysection{expression\+\_\+parser.\+h File Reference}
+\hypertarget{expression__parser_8h}{}\label{expression__parser_8h}\index{expression\_parser.h@{expression\_parser.h}}
+
+
+Expression parser for IFJ23 compiler.  
+
+
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{expression__parser_8h_ab7c09af4dd5abc056977a0727d2f1e82}\label{expression__parser_8h_ab7c09af4dd5abc056977a0727d2f1e82} 
+typedef enum expression\+\_\+rules {\bfseries expression\+\_\+rules\+\_\+t}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries expression\+\_\+rules} \{ \newline
+{\bfseries RULE\+\_\+\+PAR}
+, {\bfseries RULE\+\_\+\+OPERAND}
+, {\bfseries RULE\+\_\+\+ADD}
+, {\bfseries RULE\+\_\+\+SUB}
+, \newline
+{\bfseries RULE\+\_\+\+MUL}
+, {\bfseries RULE\+\_\+\+DIV}
+, {\bfseries RULE\+\_\+\+LESS}
+, {\bfseries RULE\+\_\+\+GTR}
+, \newline
+{\bfseries RULE\+\_\+\+LEQ}
+, {\bfseries RULE\+\_\+\+GEQ}
+, {\bfseries RULE\+\_\+\+EQ}
+, {\bfseries RULE\+\_\+\+NEQ}
+, \newline
+{\bfseries RULE\+\_\+\+EXCL}
+, {\bfseries RULE\+\_\+\+QMS}
+, {\bfseries NOT\+\_\+\+RULE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{expression__parser_8h_ac66a178aa09460dc7c0f17aad9e583e9}{get\+\_\+index}} (\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\+\_\+type\+\_\+t}} \mbox{\hyperlink{structtoken}{token}})
+\begin{DoxyCompactList}\small\item\em Get the index of token from precedence table. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{expression__parser_8h_a4de2f719aeb5d3f8de400ec1eaa5a787}{token\+\_\+create}} (\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\+\_\+type\+\_\+t}} token\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Creates new token. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{expression__parser_8h_acc1c95d7f138e3e233baa89d6429aa84}{token\+\_\+shift}} (\mbox{\hyperlink{structtoken__stack}{token\+\_\+stack}} \texorpdfstring{$\ast$}{*}stack)
+\begin{DoxyCompactList}\small\item\em Puts a shift symbol on stack. \end{DoxyCompactList}\item 
+expression\+\_\+rules\+\_\+t \mbox{\hyperlink{expression__parser_8h_ad736ee1e72b14115057e6ad07188a7b9}{find\+\_\+reduce\+\_\+rule}} (\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token1, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token2, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token3, int number\+\_\+of\+\_\+tokens)
+\begin{DoxyCompactList}\small\item\em Function to find appropriate rule for reducing expressions on stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{expression__parser_8h_aa543cf70a00956bcae4bfd38338019f9}{convert\+\_\+qm}} (\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token1)
+\begin{DoxyCompactList}\small\item\em Converts QM token types to non qm token types. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{expression__parser_8h_af20a08af025114e96fc67278283d909b}{check\+\_\+types}} (\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token1, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token2, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token3)
+\begin{DoxyCompactList}\small\item\em Checks the tokens for sematic analysis and if possible converts them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{expression__parser_8h_a0d1056ec10ae7b664a990158f51616ea}{push\+\_\+for\+\_\+leq\+\_\+geq}} (\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token1, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}token2)
+\begin{DoxyCompactList}\small\item\em Prints specific tokens for operators Lequal and Gequal to stdout in IFJcode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{expression__parser_8h_a3b13944bbf020cdd44f50022b0fe2b22}{call\+\_\+expr\+\_\+parser}} (data\+\_\+type return\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Function core parser uses to process expressions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Expression parser for IFJ23 compiler. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Dominik Horut $<$xhorut01$>$ 
+
+Samuel Hejnicek $<$xhejni00$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{expression__parser_8h_source}{expression\+\_\+parser.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{expression__parser_8h_a54ebd326a22412002a6ad2dcda6a9273}\label{expression__parser_8h_a54ebd326a22412002a6ad2dcda6a9273} 
+\index{expression\_parser.h@{expression\_parser.h}!expression\_rules@{expression\_rules}}
+\index{expression\_rules@{expression\_rules}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{expression\_rules}{expression\_rules}}
+{\footnotesize\ttfamily enum expression\+\_\+rules}
+
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8h_source_l00017}{17}} of file \mbox{\hyperlink{expression__parser_8h_source}{expression\+\_\+parser.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ RULE\_PAR,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ (E)}}
+\DoxyCodeLine{00020\ \ \ \ \ RULE\_OPERAND,\ \ \ \textcolor{comment}{//\ E\ -\/>\ i}}
+\DoxyCodeLine{00021\ \ \ \ \ RULE\_ADD,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E+E}}
+\DoxyCodeLine{00022\ \ \ \ \ RULE\_SUB,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E-\/E}}
+\DoxyCodeLine{00023\ \ \ \ \ RULE\_MUL,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E*E}}
+\DoxyCodeLine{00024\ \ \ \ \ RULE\_DIV,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E/E}}
+\DoxyCodeLine{00025\ \ \ \ \ RULE\_LESS,\ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E<E}}
+\DoxyCodeLine{00026\ \ \ \ \ RULE\_GTR,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E>E}}
+\DoxyCodeLine{00027\ \ \ \ \ RULE\_LEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E<=E}}
+\DoxyCodeLine{00028\ \ \ \ \ RULE\_GEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E>=E}}
+\DoxyCodeLine{00029\ \ \ \ \ RULE\_EQ,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E==E}}
+\DoxyCodeLine{00030\ \ \ \ \ RULE\_NEQ,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E!=E}}
+\DoxyCodeLine{00031\ \ \ \ \ RULE\_EXCL,\ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E!}}
+\DoxyCodeLine{00032\ \ \ \ \ RULE\_QMS,\ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ E??E}}
+\DoxyCodeLine{00033\ \ \ \ \ NOT\_RULE\ \ \ \ \ \ \ \ \textcolor{comment}{//\ NOT\ A\ RULE}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}\ expression\_rules\_t;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{expression__parser_8h_a3b13944bbf020cdd44f50022b0fe2b22}\label{expression__parser_8h_a3b13944bbf020cdd44f50022b0fe2b22} 
+\index{expression\_parser.h@{expression\_parser.h}!call\_expr\_parser@{call\_expr\_parser}}
+\index{call\_expr\_parser@{call\_expr\_parser}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{call\_expr\_parser()}{call\_expr\_parser()}}
+{\footnotesize\ttfamily void call\+\_\+expr\+\_\+parser (\begin{DoxyParamCaption}\item[{data\+\_\+type}]{return\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Function core parser uses to process expressions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em return\+\_\+type} & Return type of of the expression parser expects \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00716}{716}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00717\ }
+\DoxyCodeLine{00718\ \ \ \ \ \mbox{\hyperlink{structtoken__stack}{token\_stack}}\ stack;}
+\DoxyCodeLine{00719\ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ad4bb2b5ed621c5319699bd5a4395f519}{stack\_init}}(\&stack);}
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00721\ \ \ \ \ \textcolor{comment}{//Dollar\ at\ the\ bottom\ of\ the\ stack}}
+\DoxyCodeLine{00722\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ stack\_bottom\ =\ \mbox{\hyperlink{expression__parser_8c_a4de2f719aeb5d3f8de400ec1eaa5a787}{token\_create}}(TOKEN\_DOLLAR);}
+\DoxyCodeLine{00723\ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ stack\_bottom);}
+\DoxyCodeLine{00724\ }
+\DoxyCodeLine{00725\ \ \ \ \ \textcolor{keywordtype}{int}\ rule\_params\_count\ =\ 0;}
+\DoxyCodeLine{00726\ \ \ \ \ }
+\DoxyCodeLine{00727\ \ \ \ \ \textcolor{keywordtype}{char}\ table\_result;}
+\DoxyCodeLine{00728\ }
+\DoxyCodeLine{00729\ \ \ \ \ \textcolor{keywordtype}{bool}\ eval\_expr\ =\ \textcolor{keyword}{true};\ }
+\DoxyCodeLine{00730\ \ \ \ \ current\_token-\/>was\_exp\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00731\ \ \ \ \ \textcolor{keywordtype}{int}\ stack\_index;}
+\DoxyCodeLine{00732\ \ \ \ \ \textcolor{keywordtype}{int}\ next\_token\_index;}
+\DoxyCodeLine{00733\ \ \ \ \ }
+\DoxyCodeLine{00734\ \ \ \ \ \textcolor{keywordflow}{while}(eval\_expr)\{}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ terminal\ =\ \mbox{\hyperlink{token__stack_8c_a7b3ed3304b7b78ddf06f7800d9a50db7}{stack\_top\_terminal}}(\&stack);}
+\DoxyCodeLine{00738\ \ \ \ \ }
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \textcolor{comment}{//If\ there\ is\ a\ token\ that\ we\ can\ not\ process\ we\ will\ start\ the\ reduction\ of\ current\ expression\ (stop\_expression\ will\ be\ true)\ and\ wont\ look\ for\ another\ result\ from\ precedence\ table}}
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!stop\_expression)\{}
+\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \ \ \ \ stack\_index\ =\ \mbox{\hyperlink{expression__parser_8c_ac66a178aa09460dc7c0f17aad9e583e9}{get\_index}}(terminal-\/>type);}
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \ \ \ \ next\_token\_index\ =\ \mbox{\hyperlink{expression__parser_8c_ac66a178aa09460dc7c0f17aad9e583e9}{get\_index}}(current\_token-\/>type);}
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current\_token-\/>type\ ==\ TOKEN\_KEYWORD\ \&\&\ current\_token-\/>value.keyword\ !=\ KW\_NIL)\{}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ table\_result\ =\ \textcolor{charliteral}{'>'};}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ next\_token\_index\ =\ 15;}
+\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ table\_result\ =\ precedence\_table[stack\_index][next\_token\_index];}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00750\ }
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Evaluation\ ends\ when\ next\ token\ index\ is\ 15\ which\ is\ default\ for\ all\ tokens\ not\ supported\ by\ precedence\ table\ and\ also\ when\ only\ dollar\ as\ a\ terminal\ is\ on\ the\ stack}}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(next\_token\_index\ ==\ 15\ \&\&\ \mbox{\hyperlink{token__stack_8c_a7b3ed3304b7b78ddf06f7800d9a50db7}{stack\_top\_terminal}}(\&stack)-\/>\mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}}\ ==\ TOKEN\_DOLLAR)\{}
+\DoxyCodeLine{00753\ }
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(stack.size\ <=\ 1)\{}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}empty\ expression"{}});}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ eval\_expr\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value;}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Check\ return\ type\ that\ parser\ wants\ with\ our\ return\ type\ in\ expression,\ conversion\ between\ QM\ and\ non\ QM\ types\ if\ needed}}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((return\_type\ !=\ UNKNOWN)\ \&\&\ (return\_type\ !=\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value))\{}
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((return\_type\ ==\ DOUBLE\ ||\ return\_type\ ==\ DOUBLE\_QM)\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ INT\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>was\_exp\ ==\ \textcolor{keyword}{false})\{}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ INT\_QM\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ INT;}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ DOUBLE\_QM\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ DOUBLE;}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ STRING\_QM\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ STRING;}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ STRING\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ STRING;}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ DOUBLE\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ DOUBLE;}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(return\_type\ ==\ INT\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ INT;}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}((return\_type\ ==\ INT\_QM\ ||\ return\_type\ ==\ DOUBLE\_QM\ ||\ return\_type\ ==\ STRING\_QM)\ \&\&\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type\_of\_expr\ =\ NIL;}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//If\ expression\ was\ in\ return\ statement\ it\ has\ different\ error\ code}}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (return\_expr)\ \{}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ data\ type\ of\ the\ return\ value"{}});}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ data\ type\ result\ of\ expression"{}});}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//return\ type\ was\ unknown,\ parser\ will\ know\ type\ of\ expression\ from\ global\ variable}}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a2a1b1bcee3718ed8e435725c7b624ded}{dispose\_stack}}(\&stack);}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \ \ \ \ stop\_expression\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Accoreding\ to\ table\ result\ we\ will\ shift\ or\ reduce\ }}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (table\_result)}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \textcolor{comment}{//shift\ rule}}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'<'}:}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_acc1c95d7f138e3e233baa89d6429aa84}{token\_shift}}(\&stack);}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ \ \ current\_token\ =\ \mbox{\hyperlink{parser_8c_a1b103e2dd90bb1d85b44808a1d91fd29}{get\_next\_token}}();}
+\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00805\ }
+\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \textcolor{comment}{//reduction\ rule}}
+\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'>'}:}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \ \ \ \ rule\_params\_count\ =\ 0;}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ tmp1,\ *tmp2,\ *tmp3\ =\ NULL;}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//find\ out\ number\ of\ operands}}
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack)-\/>\mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}}\ !=\ TOKEN\_SHIFT)\{}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rule\_params\_count\ ==\ 0)\{}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1\ =\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack);}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(\&stack);}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00818\ }
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rule\_params\_count\ ==\ 1)\{}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp2\ =\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack);}
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(\&stack);}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rule\_params\_count\ ==\ 2)\{}
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp3\ =\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(\&stack);}
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(\&stack);}
+\DoxyCodeLine{00827\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00828\ }
+\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rule\_params\_count\ >\ 2)\{}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}syntax\ error"{}});}
+\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rule\_params\_count++;}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00834\ }
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Pops\ token\_shift}}
+\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(\&stack);}
+\DoxyCodeLine{00837\ }
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//find\ the\ rule\ to\ reduce\ the\ expression}}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \ \ \ \ expression\_rules\_t\ rule\ =\ \mbox{\hyperlink{expression__parser_8c_ad736ee1e72b14115057e6ad07188a7b9}{find\_reduce\_rule}}(tmp1,\ tmp2,\ tmp3,\ rule\_params\_count);}
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (rule)}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ i}}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_OPERAND:}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>type\ ==\ TOKEN\_ID)\{}
+\DoxyCodeLine{00847\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}*\ forest\ =\ \mbox{\hyperlink{forest_8c_a619f25159598d0052096dd647035525c}{forest\_search\_scope}}(active,\ tmp1-\/>value.vector-\/>array);}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Search\ in\ AVL\ tree\ to\ find\ node\ with\ specific\ ID}}
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}*\ node\ =\ \mbox{\hyperlink{forest_8c_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\_search\_symbol}}(active,\ tmp1-\/>value.vector-\/>array);}
+\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node\ ==\ NULL)\{}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_UNDEF\_VAR,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Variable\ does\ not\ exist"{}});}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!node-\/>data-\/>defined\ \&\&\ !(node-\/>data-\/>data\_type\ ==\ INT\_QM\ ||\ node-\/>data-\/>data\_type\ ==\ DOUBLE\_QM\ ||\ node-\/>data-\/>data\_type\ ==\ STRING\_QM))\ \{}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_UNDEF\_VAR,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Variable\ is\ not\ initialized"{}});}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//creating\ unique\ nickname\ for\ the\ id,\ usefull\ later\ in\ codegen}}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *nickname\ =\ \mbox{\hyperlink{parser_8c_a015937b1d3bbcec4f14bf45d55b1f9c9}{renamer}}(node);}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ data\_type\ variable\_type;}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(node-\/>data-\/>is\_param\ ==\ \textcolor{keyword}{false})\{}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_type\ =\ node-\/>data-\/>data\_type;}
+\DoxyCodeLine{00862\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_type\ =\ node-\/>data-\/>param\_type;}
+\DoxyCodeLine{00864\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00866\ }
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ ID;}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ variable\_type;}
+\DoxyCodeLine{00870\ }
+\DoxyCodeLine{00871\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(variable\_type\ ==\ INT\ ||\ variable\_type\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00873\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS,\ forest-\/>frame,\ nickname,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (variable\_type\ ==\ DOUBLE\ ||\ variable\_type\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00877\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS,\ forest-\/>frame,\ nickname,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00878\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(variable\_type\ ==\ STRING\ ||\ variable\_type\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00881\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS,\ forest-\/>frame,\ nickname,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00884\ }
+\DoxyCodeLine{00885\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>type\ ==\ TOKEN\_DEC)\{}
+\DoxyCodeLine{00886\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ CONST;}
+\DoxyCodeLine{00888\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00889\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00890\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00891\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_FLOAT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ tmp1-\/>value.type\_double,\ NULL);}
+\DoxyCodeLine{00892\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00893\ }
+\DoxyCodeLine{00894\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>type\ ==\ TOKEN\_NUM)\{}
+\DoxyCodeLine{00895\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00896\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ CONST;}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ INT;}
+\DoxyCodeLine{00898\ }
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_INT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ tmp1-\/>value.integer,\ 0.0,\ NULL);}
+\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00902\ }
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp1-\/>type\ ==\ TOKEN\_EXP)\{}
+\DoxyCodeLine{00904\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ CONST;}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00908\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00909\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_FLOAT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ tmp1-\/>value.type\_double,\ NULL);}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00911\ }
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp1-\/>type\ ==\ TOKEN\_STRING\ ||\ tmp1-\/>type\ ==\ TOKEN\_ML\_STRING)\{}
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00914\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ CONST;}
+\DoxyCodeLine{00915\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ STRING;}
+\DoxyCodeLine{00916\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00918\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\textcolor{keywordtype}{string}\ =\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(strlen(tmp1-\/>value.vector-\/>array)+1);\ \textcolor{comment}{//\ new\ memory\ has\ to\ be\ allocated\ for\ string}}
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_STRING\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ strcpy(\textcolor{keywordtype}{string},\ tmp1-\/>value.vector-\/>array));}
+\DoxyCodeLine{00920\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00921\ }
+\DoxyCodeLine{00922\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>type\ ==\ TOKEN\_KEYWORD)\{}
+\DoxyCodeLine{00923\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>value.keyword\ !=\ KW\_NIL)\{}
+\DoxyCodeLine{00924\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ operations\ with\ keywords"{}});}
+\DoxyCodeLine{00925\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00926\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Exp.\ parser\ support\ only\ nil\ keyword\ as\ constant}}
+\DoxyCodeLine{00927\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>type\ =\ TOKEN\_EXPRESSION;}
+\DoxyCodeLine{00928\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ CONST;}
+\DoxyCodeLine{00929\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ NIL;}
+\DoxyCodeLine{00930\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00931\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00932\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_NIL,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00933\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00934\ }
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00936\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00937\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}It\ its\ not\ a\ valid\ operand"{}});}
+\DoxyCodeLine{00938\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00939\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{00940\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00941\ }
+\DoxyCodeLine{00942\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_EXCL:}
+\DoxyCodeLine{00943\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp2-\/>exp\_value\ ==\ INT\_QM\ ||\ tmp2-\/>exp\_value\ ==\ DOUBLE\_QM\ ||\ tmp2-\/>exp\_value\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00944\ }
+\DoxyCodeLine{00945\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00946\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(EXCLAMATION\_RULE\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00947\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(EXCLAMATION\_RULE,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00950\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00951\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Nillable\ value\ is\ now\ converted\ to\ nonnillable}}
+\DoxyCodeLine{00952\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp2-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00953\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp2-\/>exp\_value\ =\ INT;}
+\DoxyCodeLine{00954\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp2-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00955\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp2-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00956\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00957\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp2-\/>exp\_value\ =\ STRING;}
+\DoxyCodeLine{00958\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00959\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp2);}
+\DoxyCodeLine{00960\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00961\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ apply\ !\ to\ non\ qm\ operands"{}});}
+\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00963\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00964\ }
+\DoxyCodeLine{00965\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ E\ -\/>\ (E)}}
+\DoxyCodeLine{00966\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_PAR:}
+\DoxyCodeLine{00967\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp2);}
+\DoxyCodeLine{00968\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00969\ }
+\DoxyCodeLine{00970\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ vsehny\ easy\ binarni\ operace,\ neni\ moc\ co\ resit,\ check\ typu\ atd.\ viz\ check\_types}}
+\DoxyCodeLine{00971\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_ADD:}
+\DoxyCodeLine{00972\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,tmp2,\ tmp3);}
+\DoxyCodeLine{00973\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(concat)\{}
+\DoxyCodeLine{00974\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ concat\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00975\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00976\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{\ }
+\DoxyCodeLine{00977\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00978\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(ADDS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00979\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00981\ }
+\DoxyCodeLine{00982\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_type\ ==\ ID\ ||\ tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ID\ was\ used\ in\ addition,\ cant\ be\ converted\ later}}
+\DoxyCodeLine{00984\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>was\_exp\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00986\ }
+\DoxyCodeLine{00987\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{00988\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00989\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_MUL:}
+\DoxyCodeLine{00990\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{00991\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(MULS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00993\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00994\ }
+\DoxyCodeLine{00995\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_type\ ==\ ID\ ||\ tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00996\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ID\ was\ used\ in\ addition,\ cant\ be\ converted\ later}}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>was\_exp\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00998\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00999\ }
+\DoxyCodeLine{01000\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01001\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01002\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_SUB:}
+\DoxyCodeLine{01003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01005\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(SUBS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01006\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{01007\ }
+\DoxyCodeLine{01008\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_type\ ==\ ID\ ||\ tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{01009\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ID\ was\ used\ in\ addition,\ cant\ be\ converted\ later}}
+\DoxyCodeLine{01010\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>was\_exp\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01011\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01012\ }
+\DoxyCodeLine{01013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_DIV:}
+\DoxyCodeLine{01016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01017\ }
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_type\ ==\ ID\ ||\ tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//ID\ was\ used\ in\ addition,\ cant\ be\ converted\ later}}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>was\_exp\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01022\ }
+\DoxyCodeLine{01023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_LESS:}
+\DoxyCodeLine{01026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst2\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(LTS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst2);}
+\DoxyCodeLine{01030\ }
+\DoxyCodeLine{01031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01033\ }
+\DoxyCodeLine{01034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_LEQ:}
+\DoxyCodeLine{01035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Another\ codegen\ push\ because\ of\ more\ operations\ (Lower,\ equal\ and\ then\ OR)}}
+\DoxyCodeLine{01036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a0cef3a861b8e17198c9698f31bb367b5}{push\_for\_leq\_geq}}(tmp1,\ tmp3);}
+\DoxyCodeLine{01037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01038\ }
+\DoxyCodeLine{01039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst31\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(LTS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst31);}
+\DoxyCodeLine{01042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(LEQ\_RULE\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{01043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst3\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(LEQ\_RULE,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst3);}
+\DoxyCodeLine{01045\ }
+\DoxyCodeLine{01046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_GTR:}
+\DoxyCodeLine{01051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst4\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(GTS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst4);}
+\DoxyCodeLine{01055\ }
+\DoxyCodeLine{01056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_GEQ:}
+\DoxyCodeLine{01059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a0cef3a861b8e17198c9698f31bb367b5}{push\_for\_leq\_geq}}(tmp1,\ tmp3);}
+\DoxyCodeLine{01060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01061\ }
+\DoxyCodeLine{01062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst51\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(GTS,\textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst51);}
+\DoxyCodeLine{01065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(GEQ\_RULE\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{01066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst5\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(GEQ\_RULE,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst5);}
+\DoxyCodeLine{01068\ }
+\DoxyCodeLine{01069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_EQ:}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst6\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(EQS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst6);}
+\DoxyCodeLine{01078\ }
+\DoxyCodeLine{01079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_NEQ:}
+\DoxyCodeLine{01082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a2c8a1a87cd129095d812517620c59eb5}{check\_types}}(tmp1,\ tmp2,\ tmp3);}
+\DoxyCodeLine{01083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst7\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(EQS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst7);}
+\DoxyCodeLine{01086\ }
+\DoxyCodeLine{01087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst8\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(NOTS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst8);}
+\DoxyCodeLine{01090\ }
+\DoxyCodeLine{01091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01093\ }
+\DoxyCodeLine{01094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ RULE\_QMS:}
+\DoxyCodeLine{01095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Rule\ accepts\ only\ nillable\ value\ on\ left\ side\ or\ nil\ itself}}
+\DoxyCodeLine{01096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ INT\_QM\ ||\ tmp3-\/>exp\_value\ ==\ DOUBLE\_QM\ ||\ tmp3-\/>exp\_value\ ==\ STRING\_QM\ ||\ tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{01097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Right\ side\ has\ to\ be\ the\ same\ as\ left\ except\ it\ is\ non-\/nillable}}
+\DoxyCodeLine{01098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp3-\/>exp\_value\ ==\ INT\_QM\ \&\&\ tmp1-\/>exp\_value\ !=\ INT)\ ||\ (tmp3-\/>exp\_value\ ==\ DOUBLE\_QM\ \&\&\ tmp1-\/>exp\_value\ !=\ DOUBLE)\ ||\ (tmp3-\/>exp\_value\ ==\ STRING\_QM\ \&\&\ tmp1-\/>exp\_value\ !=\ STRING))\{}
+\DoxyCodeLine{01099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}wrong\ ID\ type\ for\ right\ side\ of\ ??"{}});}
+\DoxyCodeLine{01100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01102\ }
+\DoxyCodeLine{01103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(QMS\_RULE\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{01105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(QMS\_RULE,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{01106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{01107\ }
+\DoxyCodeLine{01108\ }
+\DoxyCodeLine{01109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{01111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ tmp1);}
+\DoxyCodeLine{01112\ }
+\DoxyCodeLine{01113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}wrong\ ID\ type\ for\ left\ side\ of\ ??"{}});}
+\DoxyCodeLine{01115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01119\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01120\ }
+\DoxyCodeLine{01121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01122\ \ \ \ \ \ \ \ \ \textcolor{comment}{//same\ as\ <,\ used\ for\ parenthesis}}
+\DoxyCodeLine{01123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'='}:}
+\DoxyCodeLine{01124\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(\&stack,\ current\_token);}
+\DoxyCodeLine{01125\ \ \ \ \ \ \ \ \ \ \ \ \ current\_token\ =\ \mbox{\hyperlink{parser_8c_a1b103e2dd90bb1d85b44808a1d91fd29}{get\_next\_token}}();}
+\DoxyCodeLine{01126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01127\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01129\ }
+\DoxyCodeLine{01130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Result\ from\ precedence\ table\ is\ empty,\ however\ if\ exp.\ parser\ got\ id\ or\ rpar\ expression\ reduction\ will\ start\ and\ current\ token\ will\ be\ handed\ to\ parser}}
+\DoxyCodeLine{01131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(current\_token-\/>type\ ==\ TOKEN\_ID\ ||\ current\_token-\/>type\ ==\ TOKEN\_RPAR)\{}
+\DoxyCodeLine{01132\ \ \ \ \ \ \ \ \ \ \ \ \ table\_result\ =\ \textcolor{charliteral}{'>'};}
+\DoxyCodeLine{01133\ \ \ \ \ \ \ \ \ \ \ \ \ next\_token\_index\ =\ 15;}
+\DoxyCodeLine{01134\ \ \ \ \ \ \ \ \ \ \ \ \ stop\_expression\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01137\ }
+\DoxyCodeLine{01138\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}syntax\ error"{}});}
+\DoxyCodeLine{01139\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01140\ }
+\DoxyCodeLine{01141\ \ \ \ \ \}}
+\DoxyCodeLine{01142\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_af20a08af025114e96fc67278283d909b}\label{expression__parser_8h_af20a08af025114e96fc67278283d909b} 
+\index{expression\_parser.h@{expression\_parser.h}!check\_types@{check\_types}}
+\index{check\_types@{check\_types}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{check\_types()}{check\_types()}}
+{\footnotesize\ttfamily void check\+\_\+types (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token1,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token2,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token3 }\end{DoxyParamCaption})}
+
+
+
+Checks the tokens for sematic analysis and if possible converts them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token1} & Pointer to the first token to be checked \\
+\hline
+{\em token2} & Pointer to the second token to be checked \\
+\hline
+{\em token3} & Pointer to the third token to be checked \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00227}{227}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{//First\ case,\ same\ for\ +,-\/,*}}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keywordflow}{if}(tmp2-\/>type\ ==\ TOKEN\_PLUS\ ||\ tmp2-\/>type\ ==\ TOKEN\_MINUS\ ||\ tmp2-\/>type\ ==\ TOKEN\_MULTIPLY)\{}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ NIL\ ||\ tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ arithmetic\ opeation\ with\ nils"{}});}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ BOOL\ ||\ tmp3-\/>exp\_value\ ==\ BOOL)\{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ arithmetic\ opeation\ with\ booleans"{}});}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Same\ token\ types}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ tmp3-\/>exp\_value)\{}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_value\ ==\ INT\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ INT\_QM)\ ||\ (tmp1-\/>exp\_value\ ==\ DOUBLE\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ DOUBLE\_QM)\ ||\ (tmp1-\/>exp\_value\ ==\ STRING\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ STRING\_QM))\{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ operation\ with\ 2\ QM\ types\ without\ !\ them"{}});}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_type\ ==\ CONST\ \&\&\ tmp3-\/>exp\_type\ ==\ ID)\ ||\ (tmp1-\/>exp\_type\ ==\ ID\ \&\&\ tmp3-\/>exp\_type\ ==\ CONST))\{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//tmp1\ is\ always\ token\ to\ be\ pushed\ onto\ stack,\ so\ it\ is\ changed\ to\ id}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ ID;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Strings\ are\ only\ allowed\ in\ concat}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ STRING\ \&\&\ tmp3-\/>exp\_value\ ==\ STRING\ \&\&\ tmp2-\/>type\ !=\ TOKEN\_PLUS)\{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ operator\ in\ concatenation"{}});}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ STRING\ \&\&\ tmp3-\/>exp\_value\ ==\ STRING\ \&\&\ tmp2-\/>type\ ==\ TOKEN\_PLUS)\{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ concat\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(CONCAT\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(CONCAT,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{comment}{//types\ are\ not\ the\ same}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//if\ one\ is\ id\ and\ other\ constant,\ it\ could\ be\ converted\ into\ double\ if\ possible}}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ DOUBLE\ ||\ tmp3-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}ID\ type\ mismatch"{}});}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ STRING\ ||\ tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}This\ cannot\ participate\ in\ concatenation"{}});}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT\ ||\ tmp1-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT\ ||\ tmp3-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ DOUBLE\ ||\ tmp1-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}ID\ type\ mismatch"{}});}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ STRING\ ||\ tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}This\ cannot\ participate\ in\ concatenation"{}});}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT\ ||\ tmp1-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT\ ||\ tmp3-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{\ \ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ sum\ 2\ IDs\ of\ different\ types"{}});}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{comment}{//Case\ for\ division}}
+\DoxyCodeLine{00354\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp2-\/>type\ ==\ TOKEN\_DIVIDE)\{}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ NIL\ ||\ tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ arithmetic\ opeation\ with\ nils"{}});}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ BOOL\ ||\ tmp3-\/>exp\_value\ ==\ BOOL)\{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ divide\ bool"{}});}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{comment}{//types\ are\ same}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ tmp3-\/>exp\_value)\{}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_type\ ==\ CONST\ \&\&\ tmp3-\/>exp\_type\ ==\ ID)\ ||\ (tmp1-\/>exp\_type\ ==\ ID\ \&\&\ tmp3-\/>exp\_type\ ==\ CONST))\{}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_type\ =\ ID;}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>value.integer\ ==\ 0\ \&\&\ tmp1-\/>exp\_value\ ==\ INT\ \&\&\ tmp1-\/>exp\_type\ ==\ CONST)\ ||\ (tmp1-\/>value.type\_double\ ==\ 0\ \&\&\ tmp1-\/>exp\_value\ ==\ DOUBLE\ \&\&\ tmp1-\/>exp\_type\ ==\ CONST))\{}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_OTHER,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Division\ by\ zero"{}});}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//String\ can\ not\ be\ in\ division}}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_value\ ==\ STRING\ ||\ tmp1-\/>exp\_value\ ==\ STRING\_QM)\ \&\&\ (tmp3-\/>exp\_value\ ==\ STRING\ ||\ tmp3-\/>exp\_value\ ==\ STRING\_QM))\{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ operator\ in\ concatenation"{}});}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_value\ ==\ INT\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ INT\_QM)\ ||\ (tmp1-\/>exp\_value\ ==\ DOUBLE\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ DOUBLE\_QM)\ ||\ (tmp1-\/>exp\_value\ ==\ STRING\_QM\ \&\&\ tmp3-\/>exp\_value\ ==\ STRING\_QM))\{}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ operation\ with\ 2\ QM\ types\ without\ !\ them"{}});}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Tokens\ are\ integers,\ it\ is\ gonna\ be\ IDIV}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(IDIV\_ZERO\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\_zero\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(IDIV\_BY\_ZERO,\ active-\/>frame,\ \textcolor{stringliteral}{"{}idiv\_zero\_"{}},\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst\_zero);}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(IDIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Tokens\ are\ floats,\ it\ is\ gonna\ be\ div}}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(DIV\_ZERO\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\_zero\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIV\_BY\_ZERO,\ active-\/>frame,\ \textcolor{stringliteral}{"{}div\_zero\_"{}},\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst\_zero);}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \textcolor{comment}{//types\ are\ not\ same\ in\ division}}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>value.integer\ ==\ 0\ \&\&\ tmp1-\/>exp\_value\ ==\ INT)\ ||\ (tmp1-\/>value.type\_double\ ==\ 0\ \&\&\ tmp1-\/>exp\_value\ ==\ DOUBLE))\{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_OTHER,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Division\ by\ zero"{}});}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}ID\ type\ mismatch"{}});}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ STRING\ ||\ tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}This\ cannot\ participate\ in\ concatenation"{}});}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}ID\ type\ mismatch"{}});}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ STRING\ ||\ tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}This\ cannot\ participate\ in\ concatenation"{}});}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00505\ }
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst1\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(DIVS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst1);}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ divide\ 2\ IDs\ of\ different\ types"{}});}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00519\ \ \ \ \ \textcolor{comment}{//Relational\ operators}}
+\DoxyCodeLine{00520\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp2-\/>type\ ==\ TOKEN\_EQEQ\ ||\ tmp2-\/>type\ ==\ TOKEN\_EXCLAMEQ\ ||\ tmp2-\/>type\ ==\ TOKEN\_LESS\ ||\ tmp2-\/>type\ ==\ TOKEN\_LESS\_EQ\ ||\ tmp2-\/>type\ ==\ TOKEN\_GREAT\ ||\ tmp2-\/>type\ ==\ TOKEN\_GREAT\_EQ)\{}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp2-\/>type\ ==\ TOKEN\_LESS\ ||\ tmp2-\/>type\ ==\ TOKEN\_LESS\_EQ\ ||\ tmp2-\/>type\ ==\ TOKEN\_GREAT\ ||\ tmp2-\/>type\ ==\ TOKEN\_GREAT\_EQ)\{}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Nillable\ types\ cannot\ be\ in\ <,\ >,\ <=,\ >=}}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((tmp1-\/>exp\_value\ ==\ INT\_QM\ ||\ tmp3-\/>exp\_value\ ==\ INT\_QM\ ||\ tmp1-\/>exp\_value\ ==\ DOUBLE\_QM\ ||\ tmp3-\/>exp\_value\ ==\ DOUBLE\_QM\ ||\ tmp1-\/>exp\_value\ ==\ STRING\_QM\ ||\ tmp3-\/>exp\_value\ ==\ STRING\_QM))\{}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ operation\ with\ 2\ QM\ types\ without\ !\ them"{}});}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Nil\ constant\ cannot\ be\ in\ <,\ >,\ <=,\ >=}}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ NIL\ ||\ tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ compare\ with\ nill\ constant"{}});}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp2-\/>type\ ==\ TOKEN\_EQEQ\ ||\ tmp2-\/>type\ ==\ TOKEN\_EXCLAMEQ)\{}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//If\ one\ of\ the\ operands\ is\ nil\ constant\ the\ other\ one\ has\ to\ be\ nillable\ or\ nil}}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ eq\ with\ non\ QM\ types"{}});}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ NIL)\{}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ do\ eq\ with\ non\ QM\ types"{}});}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Converts\ nillable\ types\ to\ nonnillable\ because\ they\ can\ be\ in\ expression\ with\ ==\ or\ !=}}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a4489a4057d93d4bd83ae3d62820c2522}{convert\_qm}}(tmp1);}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{expression__parser_8c_a4489a4057d93d4bd83ae3d62820c2522}{convert\_qm}}(tmp3);}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00572\ }
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Types\ are\ equal,\ value\ of\ expression\ is\ bool}}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ tmp3-\/>exp\_value)\{}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Not\ a\ match,\ conversion\ if\ possible}}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp3-\/>exp\_value\ ==\ DOUBLE\ \&\&\ tmp1-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00586\ }
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ compare\ 2\ values\ of\ different\ types"{}});}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT\ \&\&\ tmp3-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00594\ }
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00598\ }
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT\ \&\&\ tmp1-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ ID)\{}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ DOUBLE\ \&\&\ tmp3-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ compare\ 2\ values\ of\ different\ types"{}});}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT\ \&\&\ tmp3-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT\ \&\&\ tmp1-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{parser_8c_a22eab197bb540509ac901739ab3f02bc}{vardef\_outermost\_while}}(INT2FLOATS\_2\_DEFVAR,\ NULL,\ variable\_counter);}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(INT2FLOATS\_2,\ active-\/>frame,\ NULL,\ variable\_counter,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ BOOL;}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ variable\_counter++;}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SEM\_EXPR\_TYPE,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Can\ not\ compare\ 2\ values\ of\ different\ types"{}});}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00653\ \ \ \ \ \}}
+\DoxyCodeLine{00654\ \ \ \ \ }
+\DoxyCodeLine{00655\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_aa543cf70a00956bcae4bfd38338019f9}\label{expression__parser_8h_aa543cf70a00956bcae4bfd38338019f9} 
+\index{expression\_parser.h@{expression\_parser.h}!convert\_qm@{convert\_qm}}
+\index{convert\_qm@{convert\_qm}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{convert\_qm()}{convert\_qm()}}
+{\footnotesize\ttfamily void convert\+\_\+qm (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token1 }\end{DoxyParamCaption})}
+
+
+
+Converts QM token types to non qm token types. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp1} & Pointer to the token to be converted \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00215}{215}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ INT\_QM)\{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ INT;}
+\DoxyCodeLine{00218\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ DOUBLE\_QM)\{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ DOUBLE;}
+\DoxyCodeLine{00220\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(tmp1-\/>exp\_value\ ==\ STRING\_QM)\{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ tmp1-\/>exp\_value\ =\ STRING;}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_ad736ee1e72b14115057e6ad07188a7b9}\label{expression__parser_8h_ad736ee1e72b14115057e6ad07188a7b9} 
+\index{expression\_parser.h@{expression\_parser.h}!find\_reduce\_rule@{find\_reduce\_rule}}
+\index{find\_reduce\_rule@{find\_reduce\_rule}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{find\_reduce\_rule()}{find\_reduce\_rule()}}
+{\footnotesize\ttfamily expression\+\_\+rules\+\_\+t find\+\_\+reduce\+\_\+rule (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token1,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token2,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token3,  }\item[{int}]{number\+\_\+of\+\_\+tokens }\end{DoxyParamCaption})}
+
+
+
+Function to find appropriate rule for reducing expressions on stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token1} & Pointer to the token on top of the stack \\
+\hline
+{\em token2} & Pointer to the 2nd token \\
+\hline
+{\em token3} & Pointer to the 3rd token \\
+\hline
+{\em number\+\_\+of\+\_\+tokens} & Number of tokens for which the rule should be found \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+expression\+\_\+rules\+\_\+t Type of rule to be applied 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00158}{158}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{switch}\ (number\_of\_tokens)}
+\DoxyCodeLine{00160\ \ \ \ \ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{case}\ 1:\ \textcolor{comment}{//E-\/>i}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_OPERAND;}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{case}\ 2:\ \textcolor{comment}{//E-\/>E!}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(token1-\/>type\ ==\ TOKEN\_EXCLAM\ \&\&\ token2-\/>type\ ==\ TOKEN\_EXPRESSION)\{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_EXCL;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ operator"{}});}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(token1-\/>type\ ==\ TOKEN\_RPAR\ \&\&\ token3-\/>type\ ==\ TOKEN\_LPAR)\{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_PAR;\ \textcolor{comment}{//E-\/>(E)}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (token2-\/>type)\ \textcolor{comment}{//Rule\ found\ via\ operator\ in\ token2}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_PLUS:}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_ADD;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_MULTIPLY:}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_MUL;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_MINUS:}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_SUB;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DIVIDE:}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_DIV;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_LESS:}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_LESS;}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_LESS\_EQ:}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_LEQ;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_GREAT:}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_GTR;\ \ \ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_GREAT\_EQ:}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_GEQ;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EQEQ:}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_EQ;\ \ \ \ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EXCLAMEQ:}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_NEQ;\ \ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DOUBLE\_QM:}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ RULE\_QMS;\ \ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Wrong\ operator"{}});}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NOT\_RULE;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_SYN,\ \textcolor{stringliteral}{"{}EXPRESSION\ PARSER"{}},\ \textcolor{stringliteral}{"{}Rule\ does\ not\ exist"{}});}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NOT\_RULE;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordflow}{return}\ NOT\_RULE;}
+\DoxyCodeLine{00212\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_ac66a178aa09460dc7c0f17aad9e583e9}\label{expression__parser_8h_ac66a178aa09460dc7c0f17aad9e583e9} 
+\index{expression\_parser.h@{expression\_parser.h}!get\_index@{get\_index}}
+\index{get\_index@{get\_index}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{get\_index()}{get\_index()}}
+{\footnotesize\ttfamily int get\+\_\+index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\+\_\+type\+\_\+t}}}]{token }\end{DoxyParamCaption})}
+
+
+
+Get the index of token from precedence table. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token} & Type of token \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int index of token in precedence table 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00054}{54}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordflow}{switch}(\mbox{\hyperlink{structtoken}{token}})\{}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_PLUS:}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_MINUS:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_MULTIPLY:}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 2;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DIVIDE:\ \ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 3;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_LESS:}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 4;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_GREAT:}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 5;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_LESS\_EQ:}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 6;}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_GREAT\_EQ:}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 7;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EXCLAMEQ:}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 8;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EQEQ:}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 9;}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EXCLAM:}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 10;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DOUBLE\_QM:}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 11;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_LPAR:}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 12;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_RPAR:}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 13;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_ID:}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_KEYWORD:}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_NUM:}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DEC:}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_EXP:}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_STRING:}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_ML\_STRING:}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 14;}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TOKEN\_DOLLAR:}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 15;}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 15;}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_a0d1056ec10ae7b664a990158f51616ea}\label{expression__parser_8h_a0d1056ec10ae7b664a990158f51616ea} 
+\index{expression\_parser.h@{expression\_parser.h}!push\_for\_leq\_geq@{push\_for\_leq\_geq}}
+\index{push\_for\_leq\_geq@{push\_for\_leq\_geq}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{push\_for\_leq\_geq()}{push\_for\_leq\_geq()}}
+{\footnotesize\ttfamily void push\+\_\+for\+\_\+leq\+\_\+geq (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token1,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token2 }\end{DoxyParamCaption})}
+
+
+
+Prints specific tokens for operators Lequal and Gequal to stdout in IFJcode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token1} & Pointer to first token to be printed \\
+\hline
+{\em token2} & Pointer to second token to be printed \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00658}{658}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00659\ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT)\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_INT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ tmp3-\/>value.integer,\ 0.0,\ NULL);}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_FLOAT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ tmp3-\/>value.type\_double,\ NULL);}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\textcolor{keywordtype}{string}\ =\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(strlen(tmp3-\/>value.vector-\/>array)+1);\ \textcolor{comment}{//\ new\ memory\ has\ to\ be\ allocated\ for\ string}}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_STRING\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ strcpy(\textcolor{keywordtype}{string},\ tmp3-\/>value.vector-\/>array));}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00675\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}*\ scope\ =\ \mbox{\hyperlink{forest_8c_a619f25159598d0052096dd647035525c}{forest\_search\_scope}}(active,\ tmp3-\/>value.vector-\/>array);}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}*\ node\ =\ \mbox{\hyperlink{forest_8c_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\_search\_symbol}}(active,\ tmp3-\/>value.vector-\/>array);}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *nickname\ =\ \mbox{\hyperlink{parser_8c_a015937b1d3bbcec4f14bf45d55b1f9c9}{renamer}}(node);}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp3-\/>exp\_value\ ==\ INT\ ||\ tmp3-\/>exp\_value\ ==\ DOUBLE\ ||\ tmp3-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS,\ scope-\/>frame,\ nickname,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00684\ \ \ \ \ \}}
+\DoxyCodeLine{00685\ }
+\DoxyCodeLine{00686\ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_type\ ==\ CONST)\{}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT)\{}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_INT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ tmp1-\/>value.integer,\ 0.0,\ NULL);}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ DOUBLE)\{}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_FLOAT\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ tmp1-\/>value.type\_double,\ NULL);}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\textcolor{keywordtype}{string}\ =\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(strlen(tmp1-\/>value.vector-\/>array)+1);\ \textcolor{comment}{//\ new\ memory\ has\ to\ be\ allocated\ for\ string}}
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS\_STRING\_CONST,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ strcpy(\textcolor{keywordtype}{string},\ tmp1-\/>value.vector-\/>array));}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00700\ }
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00702\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__forest__node}{forest\_node}}*\ scope\ =\ \mbox{\hyperlink{forest_8c_a619f25159598d0052096dd647035525c}{forest\_search\_scope}}(active,\ tmp1-\/>value.vector-\/>array);}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}*\ node\ =\ \mbox{\hyperlink{forest_8c_aaec9905b456776ed75cd0e0ba54ca1c0}{forest\_search\_symbol}}(active,\ tmp1-\/>value.vector-\/>array);}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *nickname\ =\ \mbox{\hyperlink{parser_8c_a015937b1d3bbcec4f14bf45d55b1f9c9}{renamer}}(node);}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tmp1-\/>exp\_value\ ==\ INT\ ||\ tmp1-\/>exp\_value\ ==\ DOUBLE\ ||\ tmp1-\/>exp\_value\ ==\ STRING)\{}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CODEGEN}}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(PUSHS,\ scope-\/>frame,\ nickname,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\_list\_insert\_last}}(inst\_list,\ inst);}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00711\ \ \ \ \ \}}
+\DoxyCodeLine{00712\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_a4de2f719aeb5d3f8de400ec1eaa5a787}\label{expression__parser_8h_a4de2f719aeb5d3f8de400ec1eaa5a787} 
+\index{expression\_parser.h@{expression\_parser.h}!token\_create@{token\_create}}
+\index{token\_create@{token\_create}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{token\_create()}{token\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*} token\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{scanner_8h_aef7a4af0d3dea9771fdd6eee9c5cabf2}{token\+\_\+type\+\_\+t}}}]{token\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Creates new token. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token\+\_\+type} & specifies type of token to be created \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+token\+\_\+t\texorpdfstring{$\ast$}{*} pointer to newly allocated token 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00131}{131}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ \mbox{\hyperlink{structtoken}{token}}\ =\ (\mbox{\hyperlink{structtoken}{token\_t}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structtoken}{token\_t}}));}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structtoken}{token}}-\/>value.vector\ =\ NULL;}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{structtoken}{token}}-\/>value.integer\ =\ 0;}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{structtoken}{token}}-\/>value.type\_double\ =\ 0.0;}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{structtoken}{token}}-\/>type\ =\ token\_type;}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structtoken}{token}};}
+\DoxyCodeLine{00138\ \}}
+
+\end{DoxyCode}
+\Hypertarget{expression__parser_8h_acc1c95d7f138e3e233baa89d6429aa84}\label{expression__parser_8h_acc1c95d7f138e3e233baa89d6429aa84} 
+\index{expression\_parser.h@{expression\_parser.h}!token\_shift@{token\_shift}}
+\index{token\_shift@{token\_shift}!expression\_parser.h@{expression\_parser.h}}
+\doxysubsubsection{\texorpdfstring{token\_shift()}{token\_shift()}}
+{\footnotesize\ttfamily void token\+\_\+shift (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtoken__stack}{token\+\_\+stack}} \texorpdfstring{$\ast$}{*}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Puts a shift symbol on stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & Pointer to the stack of tokens \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{expression__parser_8c_source_l00141}{141}} of file \mbox{\hyperlink{expression__parser_8c_source}{expression\+\_\+parser.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ shift\ =\ \mbox{\hyperlink{expression__parser_8c_a4de2f719aeb5d3f8de400ec1eaa5a787}{token\_create}}(TOKEN\_SHIFT);}
+\DoxyCodeLine{00143\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}*\ top\ =\ \mbox{\hyperlink{token__stack_8c_ace4d4e0ece15774f4df864b730b293a1}{stack\_top}}(stack);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//expression\ is\ on\ top,\ shift\ is\ pushed\ before\ it}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordflow}{if}(top-\/>type\ ==\ TOKEN\_EXPRESSION)\{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_ab19e83ea17ecfb65941e2a82983cf0b4}{stack\_pop}}(stack);}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(stack,\ shift);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(stack,\ top);}
+\DoxyCodeLine{00150\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(stack,\ shift);}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{token__stack_8c_a5832d040dcb260d4c578ecd714421db6}{stack\_push}}(stack,\ current\_token);}
+\DoxyCodeLine{00155\ \}}
+
+\end{DoxyCode}

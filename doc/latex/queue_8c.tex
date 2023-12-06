@@ -1,0 +1,154 @@
+\doxysection{queue.\+c File Reference}
+\hypertarget{queue_8c}{}\label{queue_8c}\index{queue.c@{queue.c}}
+
+
+Queue implementation for tokens.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{queue_8c_ac8311258aa66913103c643f8375a8508}{init\+\_\+queue}} (\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structqueue}{queue}})
+\begin{DoxyCompactList}\small\item\em Initializes the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8c_aa6e1412ef35f1b03649f4ca6a24ee084}{queue\+\_\+push}} (\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structqueue}{queue}}, \mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structtoken}{token}})
+\begin{DoxyCompactList}\small\item\em Pushes a token to the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8c_a9f4e299d6d659979a35220b9a75d4d48}{queue\+\_\+dispose}} (\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structqueue}{queue}})
+\begin{DoxyCompactList}\small\item\em Cleaning of the queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Queue implementation for tokens. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{queue_8c_ac8311258aa66913103c643f8375a8508}\label{queue_8c_ac8311258aa66913103c643f8375a8508} 
+\index{queue.c@{queue.c}!init\_queue@{init\_queue}}
+\index{init\_queue@{init\_queue}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{init\_queue()}{init\_queue()}}
+{\footnotesize\ttfamily void init\+\_\+queue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Initializes the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the queue \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00027}{27}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>first\ =\ NULL;}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last\ =\ NULL;}
+\DoxyCodeLine{00030\ \}}
+
+\end{DoxyCode}
+\Hypertarget{queue_8c_a9f4e299d6d659979a35220b9a75d4d48}\label{queue_8c_a9f4e299d6d659979a35220b9a75d4d48} 
+\index{queue.c@{queue.c}!queue\_dispose@{queue\_dispose}}
+\index{queue\_dispose@{queue\_dispose}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{queue\_dispose()}{queue\_dispose()}}
+{\footnotesize\ttfamily void queue\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Cleaning of the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the queue \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00053}{53}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structqueue}{queue}}\ !=\ NULL\ ||\ \mbox{\hyperlink{structqueue}{queue}}-\/>first\ !=\ NULL)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}}\ *current\ =\ \mbox{\hyperlink{structqueue}{queue}}-\/>first;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\ !=\ NULL)\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}}\ *tmp\ =\ current;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ current\ =\ current-\/>next;}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ free(tmp);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>first\ =\ NULL;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last\ =\ NULL;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}\ =\ NULL;}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \}}
+
+\end{DoxyCode}
+\Hypertarget{queue_8c_aa6e1412ef35f1b03649f4ca6a24ee084}\label{queue_8c_aa6e1412ef35f1b03649f4ca6a24ee084} 
+\index{queue.c@{queue.c}!queue\_push@{queue\_push}}
+\index{queue\_push@{queue\_push}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{queue\_push()}{queue\_push()}}
+{\footnotesize\ttfamily void queue\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structqueue}{queue\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{queue,  }\item[{\mbox{\hyperlink{scanner_8h_afca089a78950c6e3e420d0e666899390}{token\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{token }\end{DoxyParamCaption})}
+
+
+
+Pushes a token to the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the queue \\
+\hline
+{\em token} & Pointer to the token \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00033}{33}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}}\ *new\_item\ =\ (\mbox{\hyperlink{structqueue__item}{queue\_item\_t}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structqueue__item}{queue\_item\_t}}));}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ new\_item-\/>next\ =\ NULL;}
+\DoxyCodeLine{00037\ \ \ \ \ new\_item-\/>token\ =\ \mbox{\hyperlink{structtoken}{token}};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structqueue}{queue}}-\/>first\ ==\ NULL)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>first\ =\ new\_item;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last\ =\ new\_item;}
+\DoxyCodeLine{00042\ \ \ \ \ \}\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structqueue}{queue}}-\/>first-\/>next\ ==\ NULL)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>first-\/>next\ =\ new\_item;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last\ =\ new\_item;}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last-\/>next\ =\ new\_item;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structqueue}{queue}}-\/>last\ =\ new\_item;}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \}}
+
+\end{DoxyCode}

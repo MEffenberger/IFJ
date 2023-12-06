@@ -1,0 +1,346 @@
+\doxysection{callee.\+c File Reference}
+\hypertarget{callee_8c}{}\label{callee_8c}\index{callee.c@{callee.c}}
+
+
+A structure to represent individual function calls and their parameters.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{callee_8c_a42ea173e035ad2bf52b5292c7d1d0b0f}{init\+\_\+callee\+\_\+list}} ()
+\begin{DoxyCompactList}\small\item\em Allocates memory for a new callee list and initializes it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{callee_8c_aad919c77267c47f14aa6576f01439c31}{init\+\_\+callee}} (const char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em Allocates memory for a new callee and initializes it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{callee_8c_a06a9522bc7618b9c91a0e58e04449383}{insert\+\_\+callee\+\_\+into\+\_\+list}} (\mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*}list, const char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em Inserts a new callee into the callee list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{callee_8c_acd791256b14e00575b976cbfed2f09e8}{insert\+\_\+name\+\_\+into\+\_\+callee}} (\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structcallee}{callee}}, char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em Inserts a argument\textquotesingle{}s name into callee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{callee_8c_a756684d961b59ca08dd3ab9bdfbe3112}{insert\+\_\+type\+\_\+into\+\_\+callee}} (\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structcallee}{callee}}, data\+\_\+type \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}})
+\begin{DoxyCompactList}\small\item\em Inserts a argument\textquotesingle{}s type into callee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{callee_8c_acb2118dfb237a488e289bfd51232128f}{insert\+\_\+bool\+\_\+into\+\_\+callee}} (\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{structcallee}{callee}}, bool is\+\_\+initialized)
+\begin{DoxyCompactList}\small\item\em Inserts a argument\textquotesingle{}s initialization into callee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{callee_8c_a9f1cc3853f1b1b41fb47d35946771cc8}{callee\+\_\+list\+\_\+dispose}} (\mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*}first)
+\begin{DoxyCompactList}\small\item\em Disposes the whole callee list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{callee_8c_ab19cece599f8c748489b133050257a3e}{arg\+\_\+counter}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A structure to represent individual function calls and their parameters. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{callee_8c_a9f1cc3853f1b1b41fb47d35946771cc8}\label{callee_8c_a9f1cc3853f1b1b41fb47d35946771cc8} 
+\index{callee.c@{callee.c}!callee\_list\_dispose@{callee\_list\_dispose}}
+\index{callee\_list\_dispose@{callee\_list\_dispose}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{callee\_list\_dispose()}{callee\_list\_dispose()}}
+{\footnotesize\ttfamily void callee\+\_\+list\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{first }\end{DoxyParamCaption})}
+
+
+
+Disposes the whole callee list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em first} & Pointer to the first element of the callee list \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00095}{95}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}}\ *current\ =\ first;}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}}\ *next;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{while}\ (current\ !=\ NULL)\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current-\/>callee)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee\_t}}\ *\mbox{\hyperlink{structcallee}{callee}}\ =\ current-\/>callee;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ callee\ structure\ members}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcallee}{callee}}-\/>name)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}}-\/>name);}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>name\ =\ NULL;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcallee}{callee}}-\/>args\_names)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count;\ ++i)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcallee}{callee}}-\/>args\_names[i])\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_names[i]);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names[i]\ =\ NULL;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_names);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names\ =\ NULL;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized);}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized\ =\ NULL;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcallee}{callee}}-\/>args\_types)\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_types);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_types\ =\ NULL;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ callee\ structure\ itself}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structcallee}{callee}});}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ current-\/>callee\ =\ NULL;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ next\ =\ current-\/>next;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ free(current);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ current\ =\ next;}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_aad919c77267c47f14aa6576f01439c31}\label{callee_8c_aad919c77267c47f14aa6576f01439c31} 
+\index{callee.c@{callee.c}!init\_callee@{init\_callee}}
+\index{init\_callee@{init\_callee}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{init\_callee()}{init\_callee()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*} init\+\_\+callee (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+Allocates memory for a new callee and initializes it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the callee \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+callee\+\_\+t\texorpdfstring{$\ast$}{*} Pointer to the new callee 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00039}{39}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee\_t}}*\ \mbox{\hyperlink{structcallee}{callee}}\ =\ (\mbox{\hyperlink{structcallee}{callee\_t}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structcallee}{callee\_t}}));}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>name\ =\ (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(strlen(name)\ +\ 1);}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>name\ =\ strcpy(\mbox{\hyperlink{structcallee}{callee}}-\/>name,\ name);}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>return\_type\ =\ UNKNOWN;}
+\DoxyCodeLine{00046\ \ \ \ \ arg\_counter\ =\ 0;}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count\ =\ arg\_counter;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names\ =\ NULL;\ \textcolor{comment}{//\ Initialize\ args\_names\ to\ NULL}}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_types\ =\ NULL;\ \textcolor{comment}{//\ Initialize\ args\_types\ to\ NULL}}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized\ =\ NULL;\ \textcolor{comment}{//\ Initialize\ args\_initialized\ to\ NULL}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcallee}{callee}};}
+\DoxyCodeLine{00053\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_a42ea173e035ad2bf52b5292c7d1d0b0f}\label{callee_8c_a42ea173e035ad2bf52b5292c7d1d0b0f} 
+\index{callee.c@{callee.c}!init\_callee\_list@{init\_callee\_list}}
+\index{init\_callee\_list@{init\_callee\_list}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{init\_callee\_list()}{init\_callee\_list()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*} init\+\_\+callee\+\_\+list (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Allocates memory for a new callee list and initializes it. 
+
+\begin{DoxyReturn}{Returns}
+callee\+\_\+list\+\_\+t\texorpdfstring{$\ast$}{*} Pointer to the new element of callee list 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00030}{30}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}}*\ list\ =\ (\mbox{\hyperlink{structcallee__list}{callee\_list\_t}}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structcallee__list}{callee\_list\_t}}));}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ list-\/>callee\ =\ NULL;}
+\DoxyCodeLine{00034\ \ \ \ \ list-\/>next\ =\ NULL;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{return}\ list;}
+\DoxyCodeLine{00037\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_acb2118dfb237a488e289bfd51232128f}\label{callee_8c_acb2118dfb237a488e289bfd51232128f} 
+\index{callee.c@{callee.c}!insert\_bool\_into\_callee@{insert\_bool\_into\_callee}}
+\index{insert\_bool\_into\_callee@{insert\_bool\_into\_callee}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{insert\_bool\_into\_callee()}{insert\_bool\_into\_callee()}}
+{\footnotesize\ttfamily void insert\+\_\+bool\+\_\+into\+\_\+callee (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{callee,  }\item[{bool}]{is\+\_\+initialized }\end{DoxyParamCaption})}
+
+
+
+Inserts a argument\textquotesingle{}s initialization into callee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em callee} & Pointer to the callee \\
+\hline
+{\em is\+\_\+initialized} & Whether the argument is initialized \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00089}{89}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized,\ (\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count\ +\ 1)\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{bool}));}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_initialized[\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count]\ =\ is\_initialized;\ }
+\DoxyCodeLine{00092\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_a06a9522bc7618b9c91a0e58e04449383}\label{callee_8c_a06a9522bc7618b9c91a0e58e04449383} 
+\index{callee.c@{callee.c}!insert\_callee\_into\_list@{insert\_callee\_into\_list}}
+\index{insert\_callee\_into\_list@{insert\_callee\_into\_list}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{insert\_callee\_into\_list()}{insert\_callee\_into\_list()}}
+{\footnotesize\ttfamily void insert\+\_\+callee\+\_\+into\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcallee__list}{callee\+\_\+list\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{list,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+Inserts a new callee into the callee list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Pointer to the callee list \\
+\hline
+{\em name} & Name of the callee \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00055}{55}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ Initialize\ a\ new\ callee}}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee\_t}}*\ new\_callee\ =\ \mbox{\hyperlink{callee_8c_aad919c77267c47f14aa6576f01439c31}{init\_callee}}(name);}
+\DoxyCodeLine{00058\ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ last\ node\ in\ the\ list}}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}}*\ current\ =\ list;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordflow}{while}\ (current-\/>next\ !=\ NULL)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ current\ =\ current-\/>next;}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \ \ current-\/>callee\ =\ new\_callee;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ Create\ a\ new\ node\ for\ the\ next\ callee\ (if\ any)}}
+\DoxyCodeLine{00067\ \ \ \ \ current-\/>next\ =\ \mbox{\hyperlink{callee_8c_a42ea173e035ad2bf52b5292c7d1d0b0f}{init\_callee\_list}}();}
+\DoxyCodeLine{00068\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_acd791256b14e00575b976cbfed2f09e8}\label{callee_8c_acd791256b14e00575b976cbfed2f09e8} 
+\index{callee.c@{callee.c}!insert\_name\_into\_callee@{insert\_name\_into\_callee}}
+\index{insert\_name\_into\_callee@{insert\_name\_into\_callee}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{insert\_name\_into\_callee()}{insert\_name\_into\_callee()}}
+{\footnotesize\ttfamily void insert\+\_\+name\+\_\+into\+\_\+callee (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{callee,  }\item[{char \texorpdfstring{$\ast$}{*}}]{id }\end{DoxyParamCaption})}
+
+
+
+Inserts a argument\textquotesingle{}s name into callee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em callee} & Pointer to the callee \\
+\hline
+{\em id} & Name of the argument \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00070}{70}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_names,\ (\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count\ +\ 2)\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}*));}
+\DoxyCodeLine{00073\ \ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ Increment\ the\ arg\_count}}
+\DoxyCodeLine{00075\ \ \ \ \ arg\_counter++;}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count\ =\ arg\_counter;}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names[\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count]\ =\ (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(strlen(name)\ +\ 1);}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_names[\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count]\ =\ name;}
+\DoxyCodeLine{00080\ \}}
+
+\end{DoxyCode}
+\Hypertarget{callee_8c_a756684d961b59ca08dd3ab9bdfbe3112}\label{callee_8c_a756684d961b59ca08dd3ab9bdfbe3112} 
+\index{callee.c@{callee.c}!insert\_type\_into\_callee@{insert\_type\_into\_callee}}
+\index{insert\_type\_into\_callee@{insert\_type\_into\_callee}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{insert\_type\_into\_callee()}{insert\_type\_into\_callee()}}
+{\footnotesize\ttfamily void insert\+\_\+type\+\_\+into\+\_\+callee (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcallee}{callee\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{callee,  }\item[{data\+\_\+type}]{type }\end{DoxyParamCaption})}
+
+
+
+Inserts a argument\textquotesingle{}s type into callee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em callee} & Pointer to the callee \\
+\hline
+{\em type} & Type of the argument \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00083}{83}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_types\ =\ \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\_memory}}(\mbox{\hyperlink{structcallee}{callee}}-\/>args\_types,\ (\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count\ +\ 1)\ *\ \textcolor{keyword}{sizeof}(data\_type));}
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee}}-\/>args\_types[\mbox{\hyperlink{structcallee}{callee}}-\/>arg\_count]\ =\ \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}};\ }
+\DoxyCodeLine{00086\ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{callee_8c_ab19cece599f8c748489b133050257a3e}\label{callee_8c_ab19cece599f8c748489b133050257a3e} 
+\index{callee.c@{callee.c}!arg\_counter@{arg\_counter}}
+\index{arg\_counter@{arg\_counter}!callee.c@{callee.c}}
+\doxysubsubsection{\texorpdfstring{arg\_counter}{arg\_counter}}
+{\footnotesize\ttfamily int arg\+\_\+counter = 0}
+
+
+
+Definition at line \mbox{\hyperlink{callee_8c_source_l00028}{28}} of file \mbox{\hyperlink{callee_8c_source}{callee.\+c}}.
+

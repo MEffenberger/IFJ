@@ -1,0 +1,1587 @@
+\doxysection{codegen.\+h File Reference}
+\hypertarget{codegen_8h}{}\label{codegen_8h}\index{codegen.h@{codegen.h}}
+
+
+Generator of IFJcode23 with doubly linked list of instructions.  
+
+
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structs__instruction}{s\+\_\+instruction}}
+\item 
+struct \mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{codegen_8h_a5a02c53acabbb4db197699c952049086}\label{codegen_8h_a5a02c53acabbb4db197699c952049086} 
+typedef enum instruction\+\_\+type {\bfseries inst\+\_\+type}
+\item 
+\Hypertarget{codegen_8h_a430cda38c9149aaeade82aa7460561d6}\label{codegen_8h_a430cda38c9149aaeade82aa7460561d6} 
+typedef struct \mbox{\hyperlink{structs__instruction}{s\+\_\+instruction}} {\bfseries instruction}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bfseries instruction\+\_\+type} \{ \newline
+{\bfseries MAIN}
+, {\bfseries VAR\+\_\+\+DEF}
+, {\bfseries VAR\+\_\+\+ASSIGN}
+, {\bfseries VAR\+\_\+\+ASSIGN\+\_\+\+NIL}
+, \newline
+{\bfseries IMPLICIT\+\_\+\+NIL}
+, {\bfseries FUNC\+\_\+\+DEF}
+, {\bfseries FUNC\+\_\+\+DEF\+\_\+\+RETURN}
+, {\bfseries FUNC\+\_\+\+DEF\+\_\+\+RETURN\+\_\+\+VOID}
+, \newline
+{\bfseries FUNC\+\_\+\+DEF\+\_\+\+END}
+, {\bfseries FUNC\+\_\+\+CALL\+\_\+\+START}
+, {\bfseries ADD\+\_\+\+ARG}
+, {\bfseries FUNC\+\_\+\+CALL}
+, \newline
+{\bfseries FUNC\+\_\+\+CALL\+\_\+\+RETVAL}
+, {\bfseries IF\+\_\+\+LABEL}
+, {\bfseries IF\+\_\+\+DEFVAR}
+, {\bfseries IF\+\_\+\+LET}
+, \newline
+{\bfseries IF}
+, {\bfseries ELSE}
+, {\bfseries IFELSE\+\_\+\+END}
+, {\bfseries WHILE\+\_\+\+COND\+\_\+\+DEF}
+, \newline
+{\bfseries WHILE\+\_\+\+START}
+, {\bfseries WHILE\+\_\+\+DO}
+, {\bfseries WHILE\+\_\+\+END}
+, {\bfseries READ\+\_\+\+STRING}
+, \newline
+{\bfseries READ\+\_\+\+INT}
+, {\bfseries READ\+\_\+\+DOUBLE}
+, {\bfseries WRITE}
+, {\bfseries INT2\+DOUBLE}
+, \newline
+{\bfseries DOUBLE2\+INT}
+, {\bfseries LENGTH}
+, {\bfseries SUBSTRING}
+, {\bfseries ORD}
+, \newline
+{\bfseries CHR}
+, {\bfseries CONCAT}
+, {\bfseries CONCAT\+\_\+\+DEFVAR}
+, {\bfseries INT2\+FLOATS}
+, \newline
+{\bfseries INT2\+FLOATS\+\_\+2}
+, {\bfseries INT2\+FLOATS\+\_\+2\+\_\+\+DEFVAR}
+, {\bfseries IDIVS}
+, {\bfseries DIVS}
+, \newline
+{\bfseries DIV\+\_\+\+BY\+\_\+\+ZERO}
+, {\bfseries IDIV\+\_\+\+BY\+\_\+\+ZERO}
+, {\bfseries DIV\+\_\+\+ZERO\+\_\+\+DEFVAR}
+, {\bfseries IDIV\+\_\+\+ZERO\+\_\+\+DEFVAR}
+, \newline
+{\bfseries PUSHS\+\_\+\+INT\+\_\+\+CONST}
+, {\bfseries PUSHS\+\_\+\+FLOAT\+\_\+\+CONST}
+, {\bfseries PUSHS\+\_\+\+STRING\+\_\+\+CONST}
+, {\bfseries PUSHS\+\_\+\+NIL}
+, \newline
+{\bfseries PUSHS}
+, {\bfseries EXCLAMATION\+\_\+\+RULE}
+, {\bfseries EXCLAMATION\+\_\+\+RULE\+\_\+\+DEFVAR}
+, {\bfseries ADDS}
+, \newline
+{\bfseries MULS}
+, {\bfseries SUBS}
+, {\bfseries LTS}
+, {\bfseries EQS}
+, \newline
+{\bfseries ORS}
+, {\bfseries GTS}
+, {\bfseries NOTS}
+, {\bfseries LEQ\+\_\+\+RULE}
+, \newline
+{\bfseries LEQ\+\_\+\+RULE\+\_\+\+DEFVAR}
+, {\bfseries GEQ\+\_\+\+RULE}
+, {\bfseries GEQ\+\_\+\+RULE\+\_\+\+DEFVAR}
+, {\bfseries QMS\+\_\+\+RULE}
+, \newline
+{\bfseries QMS\+\_\+\+RULE\+\_\+\+DEFVAR}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{codegen_8h_a3df385a7cbc49eb334fe857e6d11f0ef}{inst\+\_\+list\+\_\+init}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list)
+\begin{DoxyCompactList}\small\item\em Instruction list initialization. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{codegen_8h_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\+\_\+init}} (inst\+\_\+type \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}}, char frame, char \texorpdfstring{$\ast$}{*}name, int cnt, int int\+\_\+value, double float\+\_\+value, char \texorpdfstring{$\ast$}{*}string\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Instruction initialization -\/ sets the relevant informations and the rest to default. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_ac57fdf46ed4c2ba39ec0a6494b06c4eb}{inst\+\_\+list\+\_\+insert\+\_\+last}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list, \mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}new\+\_\+inst)
+\begin{DoxyCompactList}\small\item\em Insert instruction at the end of the list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a3fded802dc4264e6902fcff7553d7c47}{inst\+\_\+list\+\_\+insert\+\_\+before}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list, \mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}new\+\_\+inst)
+\begin{DoxyCompactList}\small\item\em Insert instruction before the active instruction. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a425b111d8f74f0cf02e39bdee6f02801}{inst\+\_\+list\+\_\+delete\+\_\+after}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list)
+\begin{DoxyCompactList}\small\item\em Delete instruction after the active instruction. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a82c2d231a38ee6fb667c4db51b018be0}{inst\+\_\+list\+\_\+dispose}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list)
+\begin{DoxyCompactList}\small\item\em Dispose of the whole instruction list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a2ca30f77cb42279715d1d662f53a1787}{inst\+\_\+list\+\_\+search\+\_\+while}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list, char \texorpdfstring{$\ast$}{*}while\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Search for the outermost while instruction. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_adb7640fdcfebcd983e80184aea9212d4}{inst\+\_\+list\+\_\+search\+\_\+void\+\_\+func\+\_\+call}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list, char \texorpdfstring{$\ast$}{*}func\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Search for the void function calls to remove the return value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a21b00ea707a49cb7ee9de4456eb53818}{codegen\+\_\+generate\+\_\+code\+\_\+please}} (\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}list)
+\begin{DoxyCompactList}\small\item\em Goes through the instruction list and generates the IFJcode23 for each instruction. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a026ddfc72418def845721e1f52065fee}{codegen\+\_\+var\+\_\+def}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\begin{DoxyCompactList}\small\item\em Helping functions for generating the IFJcode23 to separate larger blocks of printing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{codegen_8h_a85f5764db841fbd7c9fa46333b45b74a}{codegen\+\_\+var\+\_\+assign}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_af972f3fbb4c5f525ce892bc93484b1a1}{codegen\+\_\+var\+\_\+assign\+\_\+nil}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a55c87f0c4084f94ae159d60e97edc345}{codegen\+\_\+func\+\_\+def}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ab45716294849d25080d58fa584a4782c}{codegen\+\_\+func\+\_\+def\+\_\+return\+\_\+void}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a542906ef8864e940f734b33b38c55faf}{codegen\+\_\+func\+\_\+def\+\_\+return}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a71dfced6cbbef825a72495e0edbd060d}{codegen\+\_\+func\+\_\+def\+\_\+end}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a13c09aa911880431eeef372aac6c0b4e}{codegen\+\_\+func\+\_\+call\+\_\+start}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_aa11fc14edca6a21de1af86a23f872e51}{codegen\+\_\+add\+\_\+arg}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_aed493fc2b7d5469a515e8ede142d8d04}{codegen\+\_\+if\+\_\+let}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_aaeeb127bbb2fd0a01996490c63abfb61}{codegen\+\_\+if}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ab9f2779e6768ab7766fd7789c9dab86e}{codegen\+\_\+else}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a2113ac324a38d9ac4b4078dd6d48c001}{codegen\+\_\+ifelse\+\_\+end}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a743f7b638234124a6af6b220645ed6ec}{codegen\+\_\+while\+\_\+do}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a3b1b49db66f1bcbc63e288c8014ba6d4}{codegen\+\_\+while\+\_\+end}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a7ed75ba4d717510e002a7365eeb7fbf9}{codegen\+\_\+read\+String}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ac3ee229a0039caa9346f693df78e8cc2}{codegen\+\_\+read\+Int}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a242a0210c3e79808229ef87bfb146eb6}{codegen\+\_\+read\+Double}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a421b526e06b315cd310a1c9a847e4428}{codegen\+\_\+write}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a7697d65b7b4056145d82a9e66a6f0b77}{codegen\+\_\+\+Int2\+Double}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_aa93555093f7de9f44ed48b8278228e05}{codegen\+\_\+\+Double2\+Int}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a5c9be456259a9344493f4b5595ad509e}{codegen\+\_\+length}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a495717ae8402c365cf95d11f422bc193}{codegen\+\_\+substring}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a87a07c04e363d696b4669f513d4bf41a}{codegen\+\_\+ord}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a05fad162e6dc53cf47afae96d6cb0bc0}{codegen\+\_\+chr}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_afda70936cbef9f538c438a9341abbe30}{codegen\+\_\+main}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_aa75b254e76aa4a1dd0b7aa171e7572c0}{codegen\+\_\+concat}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a79ee8e16cc5c0d67a015a837cbb761f0}{codegen\+\_\+int2floats}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ae14d3901996de299a83f01a5260f3fc4}{codegen\+\_\+exclamation\+\_\+rule}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_adaa2221549d6dfa414e5b70829f8d2f0}{codegen\+\_\+leq\+\_\+rule}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ae0e277b379e049e5c043e462e6eae35a}{codegen\+\_\+geq\+\_\+rule}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_ae680df6ad5ec10ed2e6a6366ba8dc08b}{codegen\+\_\+qms\+\_\+rule}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a7ab71b8f94acec18abd6590e7b59e474}{codegen\+\_\+div\+\_\+zero}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\item 
+void \mbox{\hyperlink{codegen_8h_a517b4a36c89d30ca2374adb15e42ffaf}{codegen\+\_\+idiv\+\_\+zero}} (\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}inst)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Generator of IFJcode23 with doubly linked list of instructions. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{codegen_8h_source}{codegen.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{codegen_8h_aa7fb549cf7936f8264053676ad5a5115}\label{codegen_8h_aa7fb549cf7936f8264053676ad5a5115} 
+\index{codegen.h@{codegen.h}!instruction\_type@{instruction\_type}}
+\index{instruction\_type@{instruction\_type}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{instruction\_type}{instruction\_type}}
+{\footnotesize\ttfamily enum instruction\+\_\+type}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8h_source_l00018}{18}} of file \mbox{\hyperlink{codegen_8h_source}{codegen.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00019\ \ \ \ \ MAIN,}
+\DoxyCodeLine{00020\ \ \ \ \ VAR\_DEF,}
+\DoxyCodeLine{00021\ \ \ \ \ VAR\_ASSIGN,}
+\DoxyCodeLine{00022\ \ \ \ \ VAR\_ASSIGN\_NIL,}
+\DoxyCodeLine{00023\ \ \ \ \ IMPLICIT\_NIL,}
+\DoxyCodeLine{00024\ \ \ \ \ FUNC\_DEF,}
+\DoxyCodeLine{00025\ \ \ \ \ FUNC\_DEF\_RETURN,}
+\DoxyCodeLine{00026\ \ \ \ \ FUNC\_DEF\_RETURN\_VOID,}
+\DoxyCodeLine{00027\ \ \ \ \ FUNC\_DEF\_END,}
+\DoxyCodeLine{00028\ \ \ \ \ FUNC\_CALL\_START,}
+\DoxyCodeLine{00029\ \ \ \ \ ADD\_ARG,}
+\DoxyCodeLine{00030\ \ \ \ \ FUNC\_CALL,}
+\DoxyCodeLine{00031\ \ \ \ \ FUNC\_CALL\_RETVAL,}
+\DoxyCodeLine{00032\ \ \ \ \ IF\_LABEL,}
+\DoxyCodeLine{00033\ \ \ \ \ IF\_DEFVAR,}
+\DoxyCodeLine{00034\ \ \ \ \ IF\_LET,}
+\DoxyCodeLine{00035\ \ \ \ \ IF,}
+\DoxyCodeLine{00036\ \ \ \ \ ELSE,}
+\DoxyCodeLine{00037\ \ \ \ \ IFELSE\_END,}
+\DoxyCodeLine{00038\ \ \ \ \ WHILE\_COND\_DEF,}
+\DoxyCodeLine{00039\ \ \ \ \ WHILE\_START,}
+\DoxyCodeLine{00040\ \ \ \ \ WHILE\_DO,}
+\DoxyCodeLine{00041\ \ \ \ \ WHILE\_END,}
+\DoxyCodeLine{00042\ \ \ \ \ READ\_STRING,}
+\DoxyCodeLine{00043\ \ \ \ \ READ\_INT,}
+\DoxyCodeLine{00044\ \ \ \ \ READ\_DOUBLE,}
+\DoxyCodeLine{00045\ \ \ \ \ WRITE,}
+\DoxyCodeLine{00046\ \ \ \ \ INT2DOUBLE,}
+\DoxyCodeLine{00047\ \ \ \ \ DOUBLE2INT,}
+\DoxyCodeLine{00048\ \ \ \ \ LENGTH,}
+\DoxyCodeLine{00049\ \ \ \ \ SUBSTRING,}
+\DoxyCodeLine{00050\ \ \ \ \ ORD,}
+\DoxyCodeLine{00051\ \ \ \ \ CHR,}
+\DoxyCodeLine{00052\ \ \ \ \ CONCAT,}
+\DoxyCodeLine{00053\ \ \ \ \ CONCAT\_DEFVAR,}
+\DoxyCodeLine{00054\ \ \ \ \ INT2FLOATS,}
+\DoxyCodeLine{00055\ \ \ \ \ INT2FLOATS\_2,}
+\DoxyCodeLine{00056\ \ \ \ \ INT2FLOATS\_2\_DEFVAR,}
+\DoxyCodeLine{00057\ \ \ \ \ IDIVS,}
+\DoxyCodeLine{00058\ \ \ \ \ DIVS,}
+\DoxyCodeLine{00059\ \ \ \ \ DIV\_BY\_ZERO,}
+\DoxyCodeLine{00060\ \ \ \ \ IDIV\_BY\_ZERO,}
+\DoxyCodeLine{00061\ \ \ \ \ DIV\_ZERO\_DEFVAR,}
+\DoxyCodeLine{00062\ \ \ \ \ IDIV\_ZERO\_DEFVAR,}
+\DoxyCodeLine{00063\ \ \ \ \ PUSHS\_INT\_CONST,}
+\DoxyCodeLine{00064\ \ \ \ \ PUSHS\_FLOAT\_CONST,}
+\DoxyCodeLine{00065\ \ \ \ \ PUSHS\_STRING\_CONST,}
+\DoxyCodeLine{00066\ \ \ \ \ PUSHS\_NIL,}
+\DoxyCodeLine{00067\ \ \ \ \ PUSHS,}
+\DoxyCodeLine{00068\ \ \ \ \ EXCLAMATION\_RULE,}
+\DoxyCodeLine{00069\ \ \ \ \ EXCLAMATION\_RULE\_DEFVAR,}
+\DoxyCodeLine{00070\ \ \ \ \ ADDS,}
+\DoxyCodeLine{00071\ \ \ \ \ MULS,}
+\DoxyCodeLine{00072\ \ \ \ \ SUBS,}
+\DoxyCodeLine{00073\ \ \ \ \ LTS,}
+\DoxyCodeLine{00074\ \ \ \ \ EQS,}
+\DoxyCodeLine{00075\ \ \ \ \ ORS,}
+\DoxyCodeLine{00076\ \ \ \ \ GTS,}
+\DoxyCodeLine{00077\ \ \ \ \ NOTS,}
+\DoxyCodeLine{00078\ \ \ \ \ LEQ\_RULE,}
+\DoxyCodeLine{00079\ \ \ \ \ LEQ\_RULE\_DEFVAR,}
+\DoxyCodeLine{00080\ \ \ \ \ GEQ\_RULE,}
+\DoxyCodeLine{00081\ \ \ \ \ GEQ\_RULE\_DEFVAR,}
+\DoxyCodeLine{00082\ \ \ \ \ QMS\_RULE,}
+\DoxyCodeLine{00083\ \ \ \ \ QMS\_RULE\_DEFVAR,}
+\DoxyCodeLine{00084\ \}\ inst\_type;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{codegen_8h_aa11fc14edca6a21de1af86a23f872e51}\label{codegen_8h_aa11fc14edca6a21de1af86a23f872e51} 
+\index{codegen.h@{codegen.h}!codegen\_add\_arg@{codegen\_add\_arg}}
+\index{codegen\_add\_arg@{codegen\_add\_arg}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_add\_arg()}{codegen\_add\_arg()}}
+{\footnotesize\ttfamily void codegen\+\_\+add\+\_\+arg (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00399}{399}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00400\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ TF@\$\%d\(\backslash\)n"{}},\ ++add\_arg\_cnt);}
+\DoxyCodeLine{00401\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ TF@\$\%d\(\backslash\)n"{}},\ add\_arg\_cnt);}
+\DoxyCodeLine{00402\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a05fad162e6dc53cf47afae96d6cb0bc0}\label{codegen_8h_a05fad162e6dc53cf47afae96d6cb0bc0} 
+\index{codegen.h@{codegen.h}!codegen\_chr@{codegen\_chr}}
+\index{codegen\_chr@{codegen\_chr}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_chr()}{codegen\_chr()}}
+{\footnotesize\ttfamily void codegen\+\_\+chr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00576}{576}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00577\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_chr\(\backslash\)n"{}});}
+\DoxyCodeLine{00578\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ chr\(\backslash\)n"{}});}
+\DoxyCodeLine{00579\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00580\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00581\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2CHAR\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{00582\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00583\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00584\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_chr\(\backslash\)n"{}});}
+\DoxyCodeLine{00585\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_aa75b254e76aa4a1dd0b7aa171e7572c0}\label{codegen_8h_aa75b254e76aa4a1dd0b7aa171e7572c0} 
+\index{codegen.h@{codegen.h}!codegen\_concat@{codegen\_concat}}
+\index{codegen\_concat@{codegen\_concat}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_concat()}{codegen\_concat()}}
+{\footnotesize\ttfamily void codegen\+\_\+concat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00596}{596}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00597\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00598\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00599\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CONCAT\ \%cF@\$\$s\%d\$\$\ \%cF@\$\$s\%d\$\$\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00600\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00601\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a7ab71b8f94acec18abd6590e7b59e474}\label{codegen_8h_a7ab71b8f94acec18abd6590e7b59e474} 
+\index{codegen.h@{codegen.h}!codegen\_div\_zero@{codegen\_div\_zero}}
+\index{codegen\_div\_zero@{codegen\_div\_zero}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_div\_zero()}{codegen\_div\_zero()}}
+{\footnotesize\ttfamily void codegen\+\_\+div\+\_\+zero (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00671}{671}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00672\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00673\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!SKIP\_DIV\_BY\_ZERO\%d\ \%cF@\%s\%d\ float@0x0p+0\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name,\ inst-\/>cnt);}
+\DoxyCodeLine{00674\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{00675\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!SKIP\_DIV\_BY\_ZERO\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00676\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00677\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_aa93555093f7de9f44ed48b8278228e05}\label{codegen_8h_aa93555093f7de9f44ed48b8278228e05} 
+\index{codegen.h@{codegen.h}!codegen\_Double2Int@{codegen\_Double2Int}}
+\index{codegen\_Double2Int@{codegen\_Double2Int}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_Double2Int()}{codegen\_Double2Int()}}
+{\footnotesize\ttfamily void codegen\+\_\+\+Double2\+Int (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00499}{499}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ }
+\DoxyCodeLine{00500\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{00501\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{00502\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00503\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00504\ \ \ \ \ printf(\textcolor{stringliteral}{"{}FLOAT2INT\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{00505\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00506\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00507\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_Double2Int\(\backslash\)n"{}});}
+\DoxyCodeLine{00508\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ab9f2779e6768ab7766fd7789c9dab86e}\label{codegen_8h_ab9f2779e6768ab7766fd7789c9dab86e} 
+\index{codegen.h@{codegen.h}!codegen\_else@{codegen\_else}}
+\index{codegen\_else@{codegen\_else}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_else()}{codegen\_else()}}
+{\footnotesize\ttfamily void codegen\+\_\+else (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00418}{418}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00419\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00420\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ else\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ae14d3901996de299a83f01a5260f3fc4}\label{codegen_8h_ae14d3901996de299a83f01a5260f3fc4} 
+\index{codegen.h@{codegen.h}!codegen\_exclamation\_rule@{codegen\_exclamation\_rule}}
+\index{codegen\_exclamation\_rule@{codegen\_exclamation\_rule}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_exclamation\_rule()}{codegen\_exclamation\_rule()}}
+{\footnotesize\ttfamily void codegen\+\_\+exclamation\+\_\+rule (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00611}{611}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00612\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00613\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00614\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{00615\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQS\ \$RULE\_EXCL\_CORRECT\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00616\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_EXCL\_ERROR\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00617\ \ \ \ \ printf(\textcolor{stringliteral}{"{}WRITE\ string@Variable\(\backslash\)\(\backslash\)032is\(\backslash\)\(\backslash\)032NULL\(\backslash\)n"{}});}
+\DoxyCodeLine{00618\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{00619\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_EXCL\_CORRECT\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00620\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00621\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a13c09aa911880431eeef372aac6c0b4e}\label{codegen_8h_a13c09aa911880431eeef372aac6c0b4e} 
+\index{codegen.h@{codegen.h}!codegen\_func\_call\_start@{codegen\_func\_call\_start}}
+\index{codegen\_func\_call\_start@{codegen\_func\_call\_start}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_func\_call\_start()}{codegen\_func\_call\_start()}}
+{\footnotesize\ttfamily void codegen\+\_\+func\+\_\+call\+\_\+start (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00394}{394}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00395\ \ \ \ \ add\_arg\_cnt\ =\ 0;}
+\DoxyCodeLine{00396\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00397\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a55c87f0c4084f94ae159d60e97edc345}\label{codegen_8h_a55c87f0c4084f94ae159d60e97edc345} 
+\index{codegen.h@{codegen.h}!codegen\_func\_def@{codegen\_func\_def}}
+\index{codegen\_func\_def@{codegen\_func\_def}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_func\_def()}{codegen\_func\_def()}}
+{\footnotesize\ttfamily void codegen\+\_\+func\+\_\+def (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00361}{361}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00362\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00363\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00364\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00365\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ inst-\/>cnt;\ i++)\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ the\ parameter\ in\ the\ symtable\ based\ on\ its\ param\_order}}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structavl__tree}{AVL\_tree}}*\ param\ =\ \mbox{\hyperlink{symtable_8c_a609e08dcae854c73f2ff4991eab9ebfb}{symtable\_find\_param}}(inst-\/>relevant\_node-\/>symtable,\ i);}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\%s\(\backslash\)n"{}},\ param-\/>key);}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\%s\ LF@\$\%d\(\backslash\)n"{}},\ param-\/>key,\ i);}
+\DoxyCodeLine{00371\ \ \ \ \ \}\ }
+\DoxyCodeLine{00372\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a71dfced6cbbef825a72495e0edbd060d}\label{codegen_8h_a71dfced6cbbef825a72495e0edbd060d} 
+\index{codegen.h@{codegen.h}!codegen\_func\_def\_end@{codegen\_func\_def\_end}}
+\index{codegen\_func\_def\_end@{codegen\_func\_def\_end}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_func\_def\_end()}{codegen\_func\_def\_end()}}
+{\footnotesize\ttfamily void codegen\+\_\+func\+\_\+def\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00386}{386}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00387\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00388\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00389\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00390\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00391\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a542906ef8864e940f734b33b38c55faf}\label{codegen_8h_a542906ef8864e940f734b33b38c55faf} 
+\index{codegen.h@{codegen.h}!codegen\_func\_def\_return@{codegen\_func\_def\_return}}
+\index{codegen\_func\_def\_return@{codegen\_func\_def\_return}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_func\_def\_return()}{codegen\_func\_def\_return()}}
+{\footnotesize\ttfamily void codegen\+\_\+func\+\_\+def\+\_\+return (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00375}{375}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00376\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00377\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00378\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ab45716294849d25080d58fa584a4782c}\label{codegen_8h_ab45716294849d25080d58fa584a4782c} 
+\index{codegen.h@{codegen.h}!codegen\_func\_def\_return\_void@{codegen\_func\_def\_return\_void}}
+\index{codegen\_func\_def\_return\_void@{codegen\_func\_def\_return\_void}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_func\_def\_return\_void()}{codegen\_func\_def\_return\_void()}}
+{\footnotesize\ttfamily void codegen\+\_\+func\+\_\+def\+\_\+return\+\_\+void (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00381}{381}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00382\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00383\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a21b00ea707a49cb7ee9de4456eb53818}\label{codegen_8h_a21b00ea707a49cb7ee9de4456eb53818} 
+\index{codegen.h@{codegen.h}!codegen\_generate\_code\_please@{codegen\_generate\_code\_please}}
+\index{codegen\_generate\_code\_please@{codegen\_generate\_code\_please}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_generate\_code\_please()}{codegen\_generate\_code\_please()}}
+{\footnotesize\ttfamily void codegen\+\_\+generate\+\_\+code\+\_\+please (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list }\end{DoxyParamCaption})}
+
+
+
+Goes through the instruction list and generates the IFJcode23 for each instruction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00135}{135}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ list-\/>first;}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordflow}{while}\ (inst\ !=\ NULL)\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (inst-\/>inst\_type)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MAIN:}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_main(inst);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_DEF:}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{codegen_8c_a026ddfc72418def845721e1f52065fee}{codegen\_var\_def}}(inst);}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_ASSIGN:}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_var\_assign(inst);}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ VAR\_ASSIGN\_NIL:}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_var\_assign\_nil(inst);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IMPLICIT\_NIL:\ \textcolor{comment}{//\ implicit\ nil\ assignment}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ \%cF@\%s\ nil@nil\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF:}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def(inst);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_RETURN:}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_return(inst);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_RETURN\_VOID:}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_return\_void(inst);}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_DEF\_END:}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_def\_end(inst);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL\_START:}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_func\_call\_start(inst);}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ADD\_ARG:}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_add\_arg(inst);}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL:}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}CALL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FUNC\_CALL\_RETVAL:}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ TF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_LABEL:}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_DEFVAR:}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$cond\_\%d\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF\_LET:}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_if\_let(inst);}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IF:}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_if(inst);}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ELSE:}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_else(inst);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IFELSE\_END:}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_ifelse\_end(inst);}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_COND\_DEF:}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$cond\_\%s\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_START:}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_DO:}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_while\_do(inst);}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WHILE\_END:}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_while\_end(inst);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_STRING:}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readString(inst);}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_INT:}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readInt(inst);}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ READ\_DOUBLE:}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_readDouble(inst);}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ WRITE:}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_write(inst);}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2DOUBLE:}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_Int2Double(inst);}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DOUBLE2INT:}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_Double2Int(inst);}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LENGTH:}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_length(inst);}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ SUBSTRING:}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_substring(inst);}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ORD:}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_ord(inst);}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CHR:}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_chr(inst);}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CONCAT:}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_concat(inst);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ CONCAT\_DEFVAR:}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$s\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS:}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOATS\(\backslash\)n"{}});}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS\_2:}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_int2floats(inst);}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ INT2FLOATS\_2\_DEFVAR:}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIV\_ZERO\_DEFVAR:}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@div\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIV\_BY\_ZERO:}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_div\_zero(inst);}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DIVS:}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DIVS\(\backslash\)n"{}});}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIV\_ZERO\_DEFVAR:}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIV\_BY\_ZERO:}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_idiv\_zero(inst);}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ IDIVS:}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}IDIVS\(\backslash\)n"{}});}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_INT\_CONST:}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ int@\%d\(\backslash\)n"{}},\ inst-\/>int\_value);}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_FLOAT\_CONST:}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ float@\%a\(\backslash\)n"{}},\ inst-\/>float\_value);}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_STRING\_CONST:}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ string@\%s\(\backslash\)n"{}},\ inst-\/>string\_value);}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS\_NIL:}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PUSHS:}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EXCLAMATION\_RULE:}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_exclamation\_rule(inst);}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EXCLAMATION\_RULE\_DEFVAR:}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$excl\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ADDS:}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ADDS\(\backslash\)n"{}});}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MULS:}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MULS\(\backslash\)n"{}});}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ SUBS:}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}SUBS\(\backslash\)n"{}});}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LTS:}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}LTS\(\backslash\)n"{}});}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ EQS:}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ORS:}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GTS:}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}GTS\(\backslash\)n"{}});}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ NOTS:}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}NOTS\(\backslash\)n"{}});}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LEQ\_RULE:}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_leq\_rule(inst);}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ LEQ\_RULE\_DEFVAR:}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GEQ\_RULE:}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_geq\_rule(inst);}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ GEQ\_RULE\_DEFVAR:}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ QMS\_RULE:}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ codegen\_qms\_rule(inst);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ QMS\_RULE\_DEFVAR:}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ inst\ =\ inst-\/>next;}
+\DoxyCodeLine{00342\ \ \ \ \ \}}
+\DoxyCodeLine{00343\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ae0e277b379e049e5c043e462e6eae35a}\label{codegen_8h_ae0e277b379e049e5c043e462e6eae35a} 
+\index{codegen.h@{codegen.h}!codegen\_geq\_rule@{codegen\_geq\_rule}}
+\index{codegen\_geq\_rule@{codegen\_geq\_rule}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_geq\_rule()}{codegen\_geq\_rule()}}
+{\footnotesize\ttfamily void codegen\+\_\+geq\+\_\+rule (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00634}{634}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00635\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00636\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{00637\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00638\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00639\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$geq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00640\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{00641\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a517b4a36c89d30ca2374adb15e42ffaf}\label{codegen_8h_a517b4a36c89d30ca2374adb15e42ffaf} 
+\index{codegen.h@{codegen.h}!codegen\_idiv\_zero@{codegen\_idiv\_zero}}
+\index{codegen\_idiv\_zero@{codegen\_idiv\_zero}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_idiv\_zero()}{codegen\_idiv\_zero()}}
+{\footnotesize\ttfamily void codegen\+\_\+idiv\+\_\+zero (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00662}{662}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00663\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00664\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!SKIP\_IDIV\_BY\_ZERO\%d\ \%cF@\%s\%d\ int@0\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name,\ inst-\/>cnt);}
+\DoxyCodeLine{00665\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EXIT\ int@7\(\backslash\)n"{}});}
+\DoxyCodeLine{00666\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!SKIP\_IDIV\_BY\_ZERO\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00667\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@idiv\_zero\_\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00668\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_aaeeb127bbb2fd0a01996490c63abfb61}\label{codegen_8h_aaeeb127bbb2fd0a01996490c63abfb61} 
+\index{codegen.h@{codegen.h}!codegen\_if@{codegen\_if}}
+\index{codegen\_if@{codegen\_if}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_if()}{codegen\_if()}}
+{\footnotesize\ttfamily void codegen\+\_\+if (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00412}{412}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00413\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$cond\_\%d\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00414\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ else\_\%d\ \%cF@\$cond\_\%d\$\ bool@false\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00415\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_aed493fc2b7d5469a515e8ede142d8d04}\label{codegen_8h_aed493fc2b7d5469a515e8ede142d8d04} 
+\index{codegen.h@{codegen.h}!codegen\_if\_let@{codegen\_if\_let}}
+\index{codegen\_if\_let@{codegen\_if\_let}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_if\_let()}{codegen\_if\_let()}}
+{\footnotesize\ttfamily void codegen\+\_\+if\+\_\+let (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00406}{406}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00407\ \ \ \ \ printf(\textcolor{stringliteral}{"{}TYPE\ \%cF@\$cond\_\%d\$\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00408\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ else\_\%d\ \%cF@\$cond\_\%d\$\ string@nil\(\backslash\)n"{}},\ inst-\/>cnt,\ inst-\/>frame,\ inst-\/>cnt);\ }
+\DoxyCodeLine{00409\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a2113ac324a38d9ac4b4078dd6d48c001}\label{codegen_8h_a2113ac324a38d9ac4b4078dd6d48c001} 
+\index{codegen.h@{codegen.h}!codegen\_ifelse\_end@{codegen\_ifelse\_end}}
+\index{codegen\_ifelse\_end@{codegen\_ifelse\_end}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_ifelse\_end()}{codegen\_ifelse\_end()}}
+{\footnotesize\ttfamily void codegen\+\_\+ifelse\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00424}{424}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00425\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_if\_\%d\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00426\ \}\ \ \ }
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a7697d65b7b4056145d82a9e66a6f0b77}\label{codegen_8h_a7697d65b7b4056145d82a9e66a6f0b77} 
+\index{codegen.h@{codegen.h}!codegen\_Int2Double@{codegen\_Int2Double}}
+\index{codegen\_Int2Double@{codegen\_Int2Double}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_Int2Double()}{codegen\_Int2Double()}}
+{\footnotesize\ttfamily void codegen\+\_\+\+Int2\+Double (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00488}{488}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00489\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_Int2Double\(\backslash\)n"{}});\ \ }
+\DoxyCodeLine{00490\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ Int2Double\(\backslash\)n"{}});}
+\DoxyCodeLine{00491\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00492\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00493\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOAT\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{00494\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00495\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00496\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_Int2Double\(\backslash\)n"{}});}
+\DoxyCodeLine{00497\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a79ee8e16cc5c0d67a015a837cbb761f0}\label{codegen_8h_a79ee8e16cc5c0d67a015a837cbb761f0} 
+\index{codegen.h@{codegen.h}!codegen\_int2floats@{codegen\_int2floats}}
+\index{codegen\_int2floats@{codegen\_int2floats}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_int2floats()}{codegen\_int2floats()}}
+{\footnotesize\ttfamily void codegen\+\_\+int2floats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00604}{604}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00605\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00606\ \ \ \ \ printf(\textcolor{stringliteral}{"{}INT2FLOATS\(\backslash\)n"{}});}
+\DoxyCodeLine{00607\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$tmp\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00608\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a5c9be456259a9344493f4b5595ad509e}\label{codegen_8h_a5c9be456259a9344493f4b5595ad509e} 
+\index{codegen.h@{codegen.h}!codegen\_length@{codegen\_length}}
+\index{codegen\_length@{codegen\_length}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_length()}{codegen\_length()}}
+{\footnotesize\ttfamily void codegen\+\_\+length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00510}{510}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00511\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_length\(\backslash\)n"{}});}
+\DoxyCodeLine{00512\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ length\(\backslash\)n"{}});}
+\DoxyCodeLine{00513\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00514\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00515\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRLEN\ LF@\$retval\$\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{00516\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00517\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00518\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_length\(\backslash\)n"{}});}
+\DoxyCodeLine{00519\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_adaa2221549d6dfa414e5b70829f8d2f0}\label{codegen_8h_adaa2221549d6dfa414e5b70829f8d2f0} 
+\index{codegen.h@{codegen.h}!codegen\_leq\_rule@{codegen\_leq\_rule}}
+\index{codegen\_leq\_rule@{codegen\_leq\_rule}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_leq\_rule()}{codegen\_leq\_rule()}}
+{\footnotesize\ttfamily void codegen\+\_\+leq\+\_\+rule (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00624}{624}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00625\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00626\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQS\(\backslash\)n"{}});}
+\DoxyCodeLine{00627\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00628\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00629\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$leq\%d\$\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00630\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ORS\(\backslash\)n"{}});}
+\DoxyCodeLine{00631\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_afda70936cbef9f538c438a9341abbe30}\label{codegen_8h_afda70936cbef9f538c438a9341abbe30} 
+\index{codegen.h@{codegen.h}!codegen\_main@{codegen\_main}}
+\index{codegen\_main@{codegen\_main}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_main()}{codegen\_main()}}
+{\footnotesize\ttfamily void codegen\+\_\+main (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00588}{588}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00589\ \ \ \ \ printf(\textcolor{stringliteral}{"{}.IFJcode23\(\backslash\)n"{}});}
+\DoxyCodeLine{00590\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00591\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00592\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a87a07c04e363d696b4669f513d4bf41a}\label{codegen_8h_a87a07c04e363d696b4669f513d4bf41a} 
+\index{codegen.h@{codegen.h}!codegen\_ord@{codegen\_ord}}
+\index{codegen\_ord@{codegen\_ord}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_ord()}{codegen\_ord()}}
+{\footnotesize\ttfamily void codegen\+\_\+ord (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00560}{560}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00561\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{00562\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ ord\(\backslash\)n"{}});}
+\DoxyCodeLine{00563\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00564\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00565\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!valid\_param\ LF@\$1\ string@\(\backslash\)n"{}});}
+\DoxyCodeLine{00566\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ int@0\(\backslash\)n"{}});}
+\DoxyCodeLine{00567\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!end\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{00568\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!valid\_param\(\backslash\)n"{}});}
+\DoxyCodeLine{00569\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRI2INT\ LF@\$retval\$\ LF@\$1\ int@0\(\backslash\)n"{}});}
+\DoxyCodeLine{00570\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!end\_ord\(\backslash\)n"{}});}
+\DoxyCodeLine{00571\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00572\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00573\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_ord\(\backslash\)n"{}});\ \ }
+\DoxyCodeLine{00574\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ae680df6ad5ec10ed2e6a6366ba8dc08b}\label{codegen_8h_ae680df6ad5ec10ed2e6a6366ba8dc08b} 
+\index{codegen.h@{codegen.h}!codegen\_qms\_rule@{codegen\_qms\_rule}}
+\index{codegen\_qms\_rule@{codegen\_qms\_rule}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_qms\_rule()}{codegen\_qms\_rule()}}
+{\footnotesize\ttfamily void codegen\+\_\+qms\+\_\+rule (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00644}{644}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00645\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00646\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00647\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00648\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{00649\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQS\ \$RULE\_QMS\_NOT\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00651\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_QMS\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00652\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt);}
+\DoxyCodeLine{00653\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ \$END\_RULE\_QMS\%d\$\(\backslash\)n"{}},\ \ inst-\/>cnt);}
+\DoxyCodeLine{00654\ }
+\DoxyCodeLine{00655\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$RULE\_QMS\_NOT\_NILL\%d\$\(\backslash\)n"{}},\ inst-\/>cnt);}
+\DoxyCodeLine{00656\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHS\ \%cF@\$\$rule\_qms\%d\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>cnt\ +\ 1);}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ \$END\_RULE\_QMS\%d\$\(\backslash\)n"{}},\ \ inst-\/>cnt);}
+\DoxyCodeLine{00659\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a242a0210c3e79808229ef87bfb146eb6}\label{codegen_8h_a242a0210c3e79808229ef87bfb146eb6} 
+\index{codegen.h@{codegen.h}!codegen\_readDouble@{codegen\_readDouble}}
+\index{codegen\_readDouble@{codegen\_readDouble}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_readDouble()}{codegen\_readDouble()}}
+{\footnotesize\ttfamily void codegen\+\_\+read\+Double (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00462}{462}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00463\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{00464\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{00465\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00466\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00467\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ float\(\backslash\)n"{}});}
+\DoxyCodeLine{00468\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00469\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00470\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readDouble\(\backslash\)n"{}});}
+\DoxyCodeLine{00471\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ac3ee229a0039caa9346f693df78e8cc2}\label{codegen_8h_ac3ee229a0039caa9346f693df78e8cc2} 
+\index{codegen.h@{codegen.h}!codegen\_readInt@{codegen\_readInt}}
+\index{codegen\_readInt@{codegen\_readInt}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_readInt()}{codegen\_readInt()}}
+{\footnotesize\ttfamily void codegen\+\_\+read\+Int (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00451}{451}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00452\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{00453\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{00454\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00455\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00456\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ int\(\backslash\)n"{}});}
+\DoxyCodeLine{00457\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00458\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00459\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readInt\(\backslash\)n"{}});}
+\DoxyCodeLine{00460\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a7ed75ba4d717510e002a7365eeb7fbf9}\label{codegen_8h_a7ed75ba4d717510e002a7365eeb7fbf9} 
+\index{codegen.h@{codegen.h}!codegen\_readString@{codegen\_readString}}
+\index{codegen\_readString@{codegen\_readString}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_readString()}{codegen\_readString()}}
+{\footnotesize\ttfamily void codegen\+\_\+read\+String (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00440}{440}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00441\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_readString\(\backslash\)n"{}});}
+\DoxyCodeLine{00442\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ readString\(\backslash\)n"{}});}
+\DoxyCodeLine{00443\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00444\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00445\ \ \ \ \ printf(\textcolor{stringliteral}{"{}READ\ LF@\$retval\$\ string\(\backslash\)n"{}});}
+\DoxyCodeLine{00446\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00447\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00448\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_readString\(\backslash\)n"{}});}
+\DoxyCodeLine{00449\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a495717ae8402c365cf95d11f422bc193}\label{codegen_8h_a495717ae8402c365cf95d11f422bc193} 
+\index{codegen.h@{codegen.h}!codegen\_substring@{codegen\_substring}}
+\index{codegen\_substring@{codegen\_substring}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_substring()}{codegen\_substring()}}
+{\footnotesize\ttfamily void codegen\+\_\+substring (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00521}{521}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00522\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!skip\_substring\(\backslash\)n"{}});}
+\DoxyCodeLine{00523\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ substring\(\backslash\)n"{}});}
+\DoxyCodeLine{00524\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00525\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$retval\$\(\backslash\)n"{}});}
+\DoxyCodeLine{00526\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ string@\(\backslash\)n"{}});}
+\DoxyCodeLine{00527\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$tmp1\(\backslash\)n"{}});}
+\DoxyCodeLine{00528\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$check\(\backslash\)n"{}});}
+\DoxyCodeLine{00529\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$check\ bool@false\(\backslash\)n"{}});\ \textcolor{comment}{//\ retval\ is\ nil\ if:}}
+\DoxyCodeLine{00530\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LT\ LF@\$check\ LF@\$2\ int@0\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ <\ 0}}
+\DoxyCodeLine{00531\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00532\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LT\ LF@\$check\ LF@\$3\ int@0\(\backslash\)n"{}});\ \textcolor{comment}{//\ endingBefore\ <\ 0}}
+\DoxyCodeLine{00533\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00534\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$2\ LF@\$3\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ >\ endingBefore}}
+\DoxyCodeLine{00535\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00536\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQ\ LF@\$check\ LF@\$2\ LF@\$3\(\backslash\)n"{}});\ }
+\DoxyCodeLine{00537\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_result\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00538\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ }
+\DoxyCodeLine{00539\ \ \ \ \ printf(\textcolor{stringliteral}{"{}STRLEN\ LF@\$tmp\_strlen\ LF@\$1\(\backslash\)n"{}});}
+\DoxyCodeLine{00540\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$2\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ >\ strlen}}
+\DoxyCodeLine{00541\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00542\ \ \ \ \ printf(\textcolor{stringliteral}{"{}EQ\ LF@\$check\ LF@\$2\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ startingAt\ ==\ strlen\ }}
+\DoxyCodeLine{00543\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00544\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GT\ LF@\$check\ LF@\$3\ LF@\$tmp\_strlen\(\backslash\)n"{}});\ \textcolor{comment}{//\ endingBefore\ >\ strlen}}
+\DoxyCodeLine{00545\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ !!load\_nil\ LF@\$check\ bool@true\(\backslash\)n"{}});}
+\DoxyCodeLine{00546\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!substring\_loop\(\backslash\)n"{}});}
+\DoxyCodeLine{00547\ \ \ \ \ printf(\textcolor{stringliteral}{"{}GETCHAR\ LF@\$tmp1\ LF@\$1\ LF@\$2\(\backslash\)n"{}});}
+\DoxyCodeLine{00548\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CONCAT\ LF@\$retval\$\ LF@\$retval\$\ LF@\$tmp1\(\backslash\)n"{}});}
+\DoxyCodeLine{00549\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ADD\ LF@\$2\ LF@\$2\ int@1\(\backslash\)n"{}});}
+\DoxyCodeLine{00550\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFNEQ\ !!substring\_loop\ LF@\$2\ LF@\$3\(\backslash\)n"{}});}
+\DoxyCodeLine{00551\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ !!load\_result\(\backslash\)n"{}});}
+\DoxyCodeLine{00552\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!load\_nil\(\backslash\)n"{}});\ \textcolor{comment}{//\ load\ nil\ if\ any\ of\ the\ conditions\ above\ is\ true}}
+\DoxyCodeLine{00553\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ LF@\$retval\$\ nil@nil\(\backslash\)n"{}});}
+\DoxyCodeLine{00554\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!load\_result\(\backslash\)n"{}});\ \textcolor{comment}{//\ load\ result,\ if\ startingAt\ ==\ endingBefore,\ it's\ empty\ string}}
+\DoxyCodeLine{00555\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00556\ \ \ \ \ printf(\textcolor{stringliteral}{"{}RETURN\(\backslash\)n"{}});}
+\DoxyCodeLine{00557\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ !!skip\_substring\(\backslash\)n"{}});}
+\DoxyCodeLine{00558\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a85f5764db841fbd7c9fa46333b45b74a}\label{codegen_8h_a85f5764db841fbd7c9fa46333b45b74a} 
+\index{codegen.h@{codegen.h}!codegen\_var\_assign@{codegen\_var\_assign}}
+\index{codegen\_var\_assign@{codegen\_var\_assign}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_var\_assign()}{codegen\_var\_assign()}}
+{\footnotesize\ttfamily void codegen\+\_\+var\+\_\+assign (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00351}{351}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00352\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00353\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_af972f3fbb4c5f525ce892bc93484b1a1}\label{codegen_8h_af972f3fbb4c5f525ce892bc93484b1a1} 
+\index{codegen.h@{codegen.h}!codegen\_var\_assign\_nil@{codegen\_var\_assign\_nil}}
+\index{codegen\_var\_assign\_nil@{codegen\_var\_assign\_nil}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_var\_assign\_nil()}{codegen\_var\_assign\_nil()}}
+{\footnotesize\ttfamily void codegen\+\_\+var\+\_\+assign\+\_\+nil (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00356}{356}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00357\ \ \ \ \ printf(\textcolor{stringliteral}{"{}MOVE\ \%cF@\%s\ nil@nil\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00358\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a026ddfc72418def845721e1f52065fee}\label{codegen_8h_a026ddfc72418def845721e1f52065fee} 
+\index{codegen.h@{codegen.h}!codegen\_var\_def@{codegen\_var\_def}}
+\index{codegen\_var\_def@{codegen\_var\_def}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_var\_def()}{codegen\_var\_def()}}
+{\footnotesize\ttfamily void codegen\+\_\+var\+\_\+def (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Helping functions for generating the IFJcode23 to separate larger blocks of printing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em inst} & Instruction to be generated \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00346}{346}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00347\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ \%cF@\%s\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00348\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a743f7b638234124a6af6b220645ed6ec}\label{codegen_8h_a743f7b638234124a6af6b220645ed6ec} 
+\index{codegen.h@{codegen.h}!codegen\_while\_do@{codegen\_while\_do}}
+\index{codegen\_while\_do@{codegen\_while\_do}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_while\_do()}{codegen\_while\_do()}}
+{\footnotesize\ttfamily void codegen\+\_\+while\+\_\+do (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00429}{429}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00430\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ \%cF@\$cond\_\%s\$\(\backslash\)n"{}},\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00431\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMPIFEQ\ end\_\%s\ \%cF@\$cond\_\%s\$\ bool@false\(\backslash\)n"{}},\ inst-\/>name,\ inst-\/>frame,\ inst-\/>name);}
+\DoxyCodeLine{00432\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a3b1b49db66f1bcbc63e288c8014ba6d4}\label{codegen_8h_a3b1b49db66f1bcbc63e288c8014ba6d4} 
+\index{codegen.h@{codegen.h}!codegen\_while\_end@{codegen\_while\_end}}
+\index{codegen\_while\_end@{codegen\_while\_end}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_while\_end()}{codegen\_while\_end()}}
+{\footnotesize\ttfamily void codegen\+\_\+while\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00434}{434}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00435\ \ \ \ \ printf(\textcolor{stringliteral}{"{}JUMP\ \%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00436\ \ \ \ \ printf(\textcolor{stringliteral}{"{}LABEL\ end\_\%s\(\backslash\)n"{}},\ inst-\/>name);}
+\DoxyCodeLine{00437\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a421b526e06b315cd310a1c9a847e4428}\label{codegen_8h_a421b526e06b315cd310a1c9a847e4428} 
+\index{codegen.h@{codegen.h}!codegen\_write@{codegen\_write}}
+\index{codegen\_write@{codegen\_write}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{codegen\_write()}{codegen\_write()}}
+{\footnotesize\ttfamily void codegen\+\_\+write (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{inst }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00473}{473}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00474\ \ \ \ \ printf(\textcolor{stringliteral}{"{}CREATEFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00475\ \ \ \ \ printf(\textcolor{stringliteral}{"{}PUSHFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00476\ \ \ \ \ \textcolor{comment}{//\ get\ the\ arguments\ from\ the\ stack\ and\ print\ them\ in\ the\ correct\ order}}
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ inst-\/>cnt;\ i++)\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEFVAR\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPS\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{00480\ \ \ \ \ \}}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ inst-\/>cnt;\ i\ >=\ 1;\ i-\/-\/)\ \{}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}WRITE\ LF@\$\%d\(\backslash\)n"{}},\ write\_renamer\ +\ i);}
+\DoxyCodeLine{00483\ \ \ \ \ \}}
+\DoxyCodeLine{00484\ \ \ \ \ write\_renamer\ +=\ inst-\/>cnt;}
+\DoxyCodeLine{00485\ \ \ \ \ printf(\textcolor{stringliteral}{"{}POPFRAME\(\backslash\)n"{}});}
+\DoxyCodeLine{00486\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_aaaeaf377d6f12f6798cd02c6b1c50634}\label{codegen_8h_aaaeaf377d6f12f6798cd02c6b1c50634} 
+\index{codegen.h@{codegen.h}!inst\_init@{inst\_init}}
+\index{inst\_init@{inst\_init}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_init()}{inst\_init()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*} inst\+\_\+init (\begin{DoxyParamCaption}\item[{inst\+\_\+type}]{type,  }\item[{char}]{frame,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{int}]{cnt,  }\item[{int}]{int\+\_\+value,  }\item[{double}]{float\+\_\+value,  }\item[{char \texorpdfstring{$\ast$}{*}}]{string\+\_\+value }\end{DoxyParamCaption})}
+
+
+
+Instruction initialization -\/ sets the relevant informations and the rest to default. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & Type of instruction \\
+\hline
+{\em frame} & G(\+F), L(\+F) \\
+\hline
+{\em name} & Name of variable or function \\
+\hline
+{\em cnt} & Counter for relevant naming \\
+\hline
+{\em int\+\_\+value} & Integer value \\
+\hline
+{\em float\+\_\+value} & Float value \\
+\hline
+{\em string\+\_\+value} & String value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+instruction\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00036}{36}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00043\ \ \ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}*\ new\_inst\ =\ (\mbox{\hyperlink{structs__instruction}{instruction}}*)\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structs__instruction}{instruction}}));}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ new\_inst-\/>relevant\_node\ =\ active;}
+\DoxyCodeLine{00047\ \ \ \ \ new\_inst-\/>inst\_type\ =\ \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}};}
+\DoxyCodeLine{00048\ \ \ \ \ new\_inst-\/>frame\ =\ frame;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (name\ ==\ NULL)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ new\_inst-\/>name\ =\ (\textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\_memory}}(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char})\ *\ 6);}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ strcpy(new\_inst-\/>name,\ \textcolor{stringliteral}{"{}null"{}});}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ new\_inst-\/>name\ =\ name;}
+\DoxyCodeLine{00055\ \ \ \ \ \}}
+\DoxyCodeLine{00056\ \ \ \ \ new\_inst-\/>cnt\ =\ cnt;}
+\DoxyCodeLine{00057\ \ \ \ \ new\_inst-\/>int\_value\ =\ int\_value;}
+\DoxyCodeLine{00058\ \ \ \ \ new\_inst-\/>float\_value\ =\ float\_value;}
+\DoxyCodeLine{00059\ \ \ \ \ new\_inst-\/>string\_value\ =\ string\_value;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{return}\ new\_inst;}
+\DoxyCodeLine{00061\ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a425b111d8f74f0cf02e39bdee6f02801}\label{codegen_8h_a425b111d8f74f0cf02e39bdee6f02801} 
+\index{codegen.h@{codegen.h}!inst\_list\_delete\_after@{inst\_list\_delete\_after}}
+\index{inst\_list\_delete\_after@{inst\_list\_delete\_after}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_delete\_after()}{inst\_list\_delete\_after()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+delete\+\_\+after (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list }\end{DoxyParamCaption})}
+
+
+
+Delete instruction after the active instruction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00089}{89}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ list-\/>active-\/>next;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{comment}{//\ re-\/pointing\ the\ pointers\ across\ the\ deleted\ node}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordflow}{if}\ (inst\ ==\ list-\/>last)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ list-\/>last\ =\ list-\/>active;}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ inst-\/>next-\/>prev\ =\ list-\/>active;}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ list-\/>active-\/>next\ =\ inst-\/>next;}
+\DoxyCodeLine{00099\ \ \ \ \ free(inst);}
+\DoxyCodeLine{00100\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a82c2d231a38ee6fb667c4db51b018be0}\label{codegen_8h_a82c2d231a38ee6fb667c4db51b018be0} 
+\index{codegen.h@{codegen.h}!inst\_list\_dispose@{inst\_list\_dispose}}
+\index{inst\_list\_dispose@{inst\_list\_dispose}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_dispose()}{inst\_list\_dispose()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+dispose (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list }\end{DoxyParamCaption})}
+
+
+
+Dispose of the whole instruction list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00102}{102}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}*\ inst\ =\ list-\/>first;}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{while}\ (list-\/>first\ !=\ NULL)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ list-\/>first\ =\ list-\/>first-\/>next;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ free(inst);}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ inst\ =\ list-\/>first;}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ list-\/>active\ =\ NULL;}
+\DoxyCodeLine{00111\ \ \ \ \ list-\/>first\ =\ NULL;}
+\DoxyCodeLine{00112\ \ \ \ \ list-\/>last\ =\ NULL;}
+\DoxyCodeLine{00113\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a3df385a7cbc49eb334fe857e6d11f0ef}\label{codegen_8h_a3df385a7cbc49eb334fe857e6d11f0ef} 
+\index{codegen.h@{codegen.h}!inst\_list\_init@{inst\_list\_init}}
+\index{inst\_list\_init@{inst\_list\_init}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_init()}{inst\_list\_init()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list }\end{DoxyParamCaption})}
+
+
+
+Instruction list initialization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list to be initialized \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00030}{30}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structs__instruction}{instruction}}\ *inst\ =\ \mbox{\hyperlink{codegen_8c_aaaeaf377d6f12f6798cd02c6b1c50634}{inst\_init}}(MAIN,\ \textcolor{charliteral}{'G'},\ NULL,\ 0,\ 0,\ 0.0,\ NULL);}
+\DoxyCodeLine{00032\ \ \ \ \ list-\/>active\ =\ list-\/>first\ =\ list-\/>last\ =\ inst;}
+\DoxyCodeLine{00033\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a3fded802dc4264e6902fcff7553d7c47}\label{codegen_8h_a3fded802dc4264e6902fcff7553d7c47} 
+\index{codegen.h@{codegen.h}!inst\_list\_insert\_before@{inst\_list\_insert\_before}}
+\index{inst\_list\_insert\_before@{inst\_list\_insert\_before}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_insert\_before()}{inst\_list\_insert\_before()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+insert\+\_\+before (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list,  }\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{new\+\_\+inst }\end{DoxyParamCaption})}
+
+
+
+Insert instruction before the active instruction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+{\em new\+\_\+inst} & Instruction to be inserted \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00076}{76}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00077\ \ \ \ \ new\_inst-\/>next\ =\ list-\/>active;}
+\DoxyCodeLine{00078\ \ \ \ \ new\_inst-\/>prev\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ re-\/setting\ already\ existing\ pointers}}
+\DoxyCodeLine{00081\ \ \ \ \ list-\/>active-\/>prev-\/>next\ =\ new\_inst;}
+\DoxyCodeLine{00082\ \ \ \ \ list-\/>active-\/>prev\ =\ new\_inst;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//\ active\ is\ now\ the\ new\ instruction}}
+\DoxyCodeLine{00085\ \ \ \ \ list-\/>active\ =\ new\_inst;}
+\DoxyCodeLine{00086\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_ac57fdf46ed4c2ba39ec0a6494b06c4eb}\label{codegen_8h_ac57fdf46ed4c2ba39ec0a6494b06c4eb} 
+\index{codegen.h@{codegen.h}!inst\_list\_insert\_last@{inst\_list\_insert\_last}}
+\index{inst\_list\_insert\_last@{inst\_list\_insert\_last}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_insert\_last()}{inst\_list\_insert\_last()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+insert\+\_\+last (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list,  }\item[{\mbox{\hyperlink{structs__instruction}{instruction}} \texorpdfstring{$\ast$}{*}}]{new\+\_\+inst }\end{DoxyParamCaption})}
+
+
+
+Insert instruction at the end of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+{\em new\+\_\+inst} & Instruction to be inserted \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00064}{64}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00065\ \ \ \ \ new\_inst-\/>next\ =\ NULL;}
+\DoxyCodeLine{00066\ \ \ \ \ new\_inst-\/>prev\ =\ list-\/>last;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ re-\/setting\ already\ existing\ pointers}}
+\DoxyCodeLine{00069\ \ \ \ \ list-\/>last-\/>next\ =\ new\_inst;}
+\DoxyCodeLine{00070\ \ \ \ \ list-\/>last\ =\ new\_inst;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ active\ is\ now\ the\ new\ instruction}}
+\DoxyCodeLine{00073\ \ \ \ \ list-\/>active\ =\ new\_inst;}
+\DoxyCodeLine{00074\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_adb7640fdcfebcd983e80184aea9212d4}\label{codegen_8h_adb7640fdcfebcd983e80184aea9212d4} 
+\index{codegen.h@{codegen.h}!inst\_list\_search\_void\_func\_call@{inst\_list\_search\_void\_func\_call}}
+\index{inst\_list\_search\_void\_func\_call@{inst\_list\_search\_void\_func\_call}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_search\_void\_func\_call()}{inst\_list\_search\_void\_func\_call()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+search\+\_\+void\+\_\+func\+\_\+call (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list,  }\item[{char \texorpdfstring{$\ast$}{*}}]{func\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Search for the void function calls to remove the return value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+{\em func\+\_\+name} & Name of the function \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00125}{125}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ move\ list-\/>active\ based\ on\ the\ name\ of\ the\ node\ found\ }}
+\DoxyCodeLine{00127\ \ \ \ \ list-\/>active\ =\ list-\/>last;}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{while}\ (strcmp(list-\/>active-\/>name,\ func\_name)\ !=\ 0\ ||\ list-\/>active-\/>inst\_type\ !=\ FUNC\_CALL\ ||\ list-\/>active-\/>next\ ==\ NULL\ ||\ list-\/>active-\/>next-\/>inst\_type\ !=\ FUNC\_CALL\_RETVAL)\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ list-\/>active\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{comment}{//\ list-\/>active\ is\ now\ void\_function\ call,\ you\ can\ delete\ the\ instruction\ after\ it}}
+\DoxyCodeLine{00132\ \}}
+
+\end{DoxyCode}
+\Hypertarget{codegen_8h_a2ca30f77cb42279715d1d662f53a1787}\label{codegen_8h_a2ca30f77cb42279715d1d662f53a1787} 
+\index{codegen.h@{codegen.h}!inst\_list\_search\_while@{inst\_list\_search\_while}}
+\index{inst\_list\_search\_while@{inst\_list\_search\_while}!codegen.h@{codegen.h}}
+\doxysubsubsection{\texorpdfstring{inst\_list\_search\_while()}{inst\_list\_search\_while()}}
+{\footnotesize\ttfamily void inst\+\_\+list\+\_\+search\+\_\+while (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structinstruction__list}{instruction\+\_\+list}} \texorpdfstring{$\ast$}{*}}]{list,  }\item[{char \texorpdfstring{$\ast$}{*}}]{while\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Search for the outermost while instruction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Instruction list \\
+\hline
+{\em while\+\_\+name} & Name of the while instruction \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{codegen_8c_source_l00116}{116}} of file \mbox{\hyperlink{codegen_8c_source}{codegen.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{//\ move\ list-\/>active\ based\ on\ the\ name\ of\ the\ node}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{while}\ (strcmp(list-\/>active-\/>name,\ while\_name)\ !=\ 0\ ||\ list-\/>active-\/>inst\_type\ !=\ WHILE\_START)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ list-\/>active\ =\ list-\/>active-\/>prev;}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//\ list-\/>active\ is\ now\ outermost\ while\ loop,\ you\ can\ insert\ before\ it}}
+\DoxyCodeLine{00122\ \}}
+
+\end{DoxyCode}

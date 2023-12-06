@@ -1,0 +1,149 @@
+\doxysection{error.\+c File Reference}
+\hypertarget{error_8c}{}\label{error_8c}\index{error.c@{error.c}}
+
+
+Error handling and safe allocation of memory s.  
+
+
+{\ttfamily \#include "{}callee.\+h"{}}\newline
+{\ttfamily \#include "{}cnt\+\_\+stack.\+h"{}}\newline
+{\ttfamily \#include "{}codegen.\+h"{}}\newline
+{\ttfamily \#include "{}error.\+h"{}}\newline
+{\ttfamily \#include "{}expression\+\_\+parser.\+h"{}}\newline
+{\ttfamily \#include "{}forest.\+h"{}}\newline
+{\ttfamily \#include "{}parser.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include "{}scanner.\+h"{}}\newline
+{\ttfamily \#include "{}string\+\_\+vector.\+h"{}}\newline
+{\ttfamily \#include "{}symtable.\+h"{}}\newline
+{\ttfamily \#include "{}token\+\_\+stack.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{error_8c_a08672f1381d39b459aa779748bf40143}{allocate\+\_\+memory}} (size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Function to allocate memory, check for malloc errors and push it onto the stack. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{error_8c_aa65cf3e9fee53947e61bfd4e57956094}{reallocate\+\_\+memory}} (void \texorpdfstring{$\ast$}{*}to\+\_\+be\+\_\+reallocated, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Function to reallocate memory, check for realloc errors and push it onto the stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\+\_\+exit}} (error\+\_\+code\+\_\+t error\+\_\+code, const char \texorpdfstring{$\ast$}{*}module, const char \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Error handler for IFJ23 compiler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Error handling and safe allocation of memory s. 
+
+IFJ23 compiler
+
+\begin{DoxyAuthor}{Author}
+Marek Effenberger $<$xeffen00$>$ 
+
+Adam Valík $<$xvalik05$>$ 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{error_8c_a08672f1381d39b459aa779748bf40143}\label{error_8c_a08672f1381d39b459aa779748bf40143} 
+\index{error.c@{error.c}!allocate\_memory@{allocate\_memory}}
+\index{allocate\_memory@{allocate\_memory}!error.c@{error.c}}
+\doxysubsubsection{\texorpdfstring{allocate\_memory()}{allocate\_memory()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} allocate\+\_\+memory (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to allocate memory, check for malloc errors and push it onto the stack. 
+
+\begin{DoxyNote}{Note}
+example\+: AVL\+\_\+tree \texorpdfstring{$\ast$}{*}tree = (AVL\+\_\+tree \texorpdfstring{$\ast$}{*}) allocate\+\_\+memory(sizeof(\+AVL\+\_\+tree), "{}tree node"{}); 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em size} & Size of the memory to be allocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} Pointer to the allocated memory 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00026}{26}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ malloc(size);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}MALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ allocation\ failed."{}});}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{00032\ \}}
+
+\end{DoxyCode}
+\Hypertarget{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}\label{error_8c_a2f6658959c571cea3d1d03dc785a7e9a} 
+\index{error.c@{error.c}!error\_exit@{error\_exit}}
+\index{error\_exit@{error\_exit}!error.c@{error.c}}
+\doxysubsubsection{\texorpdfstring{error\_exit()}{error\_exit()}}
+{\footnotesize\ttfamily void error\+\_\+exit (\begin{DoxyParamCaption}\item[{error\+\_\+code\+\_\+t}]{error\+\_\+code,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{module,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Error handler for IFJ23 compiler. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+\_\+code} & Error code \\
+\hline
+{\em module} & Module where the error occured \\
+\hline
+{\em message} & Custom formatted error message \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00043}{43}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ }
+\DoxyCodeLine{00044\ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s:\ \%s\(\backslash\)n"{}},\ module,\ message);}
+\DoxyCodeLine{00045\ \ \ \ \ exit(error\_code);}
+\DoxyCodeLine{00046\ \}}
+
+\end{DoxyCode}
+\Hypertarget{error_8c_aa65cf3e9fee53947e61bfd4e57956094}\label{error_8c_aa65cf3e9fee53947e61bfd4e57956094} 
+\index{error.c@{error.c}!reallocate\_memory@{reallocate\_memory}}
+\index{reallocate\_memory@{reallocate\_memory}!error.c@{error.c}}
+\doxysubsubsection{\texorpdfstring{reallocate\_memory()}{reallocate\_memory()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} reallocate\+\_\+memory (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{to\+\_\+be\+\_\+reallocated,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to reallocate memory, check for realloc errors and push it onto the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+\_\+be\+\_\+reallocated} & Pointer to the memory to be reallocated \\
+\hline
+{\em size} & Size of the memory to be reallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} Pointer to the reallocated memory 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{error_8c_source_l00034}{34}} of file \mbox{\hyperlink{error_8c_source}{error.\+c}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}*\ ptr\ =\ realloc(to\_be\_reallocated,\ size);}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptr\ ==\ NULL)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{error_8c_a2f6658959c571cea3d1d03dc785a7e9a}{error\_exit}}(ERROR\_INTERNAL,\ \textcolor{stringliteral}{"{}REALLOC"{}},\ \textcolor{stringliteral}{"{}Memory\ reallocation\ failed."{}});}
+\DoxyCodeLine{00038\ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordflow}{return}\ ptr;}
+\DoxyCodeLine{00040\ \}}
+
+\end{DoxyCode}

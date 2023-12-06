@@ -1,0 +1,31 @@
+\doxysection{queue.\+h}
+\hypertarget{queue_8h_source}{}\label{queue_8h_source}\mbox{\hyperlink{queue_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00013}00013\ \textcolor{preprocessor}{\#ifndef\ IFJ\_QUEUE\_H}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00014}00014\ \textcolor{preprocessor}{\#define\ IFJ\_QUEUE\_H}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{scanner_8h}{scanner.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00019}00019\ \textcolor{comment}{//\ Structure\ for\ queue\ item}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00020}\mbox{\hyperlink{structqueue__item}{00020}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structqueue__item}{queue\_item}}\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00021}00021\ \ \ \ \ \mbox{\hyperlink{structtoken}{token\_t}}\ *\mbox{\hyperlink{structtoken}{token}};}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00022}00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structqueue__item}{queue\_item}}\ *next;}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00023}00023\ \}\ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}};}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00025}00025\ \textcolor{comment}{//\ Structure\ for\ queue}}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00026}\mbox{\hyperlink{structqueue}{00026}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structqueue}{queue}}\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00027}00027\ \ \ \ \ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}}\ *first;}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{structqueue__item}{queue\_item\_t}}\ *last;}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00029}00029\ \}\ \mbox{\hyperlink{structqueue}{queue\_t}};}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00036}00036\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8h_ac8311258aa66913103c643f8375a8508}{init\_queue}}(\mbox{\hyperlink{structqueue}{queue\_t}}\ *\mbox{\hyperlink{structqueue}{queue}});}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00044}00044\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8h_aa6e1412ef35f1b03649f4ca6a24ee084}{queue\_push}}(\mbox{\hyperlink{structqueue}{queue\_t}}\ *\mbox{\hyperlink{structqueue}{queue}},\ \mbox{\hyperlink{structtoken}{token\_t}}\ *\mbox{\hyperlink{structtoken}{token}});}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00051}00051\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8h_a9f4e299d6d659979a35220b9a75d4d48}{queue\_dispose}}(\mbox{\hyperlink{structqueue}{queue\_t}}\ *\mbox{\hyperlink{structqueue}{queue}});}
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{queue_8h_source_l00053}00053\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_QUEUE\_H}}
+
+\end{DoxyCode}

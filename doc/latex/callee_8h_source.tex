@@ -1,0 +1,43 @@
+\doxysection{callee.\+h}
+\hypertarget{callee_8h_source}{}\label{callee_8h_source}\mbox{\hyperlink{callee_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00013}00013\ \textcolor{preprocessor}{\#ifndef\ IFJ\_CALLEE\_H}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00014}00014\ \textcolor{preprocessor}{\#define\ IFJ\_CALLEE\_H}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{symtable_8h}{symtable.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00019}00019\ \textcolor{comment}{//\ Structure\ to\ hold\ information\ about\ a\ function\ call}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00020}\mbox{\hyperlink{structcallee}{00020}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcallee}{callee}}\ \{}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00021}00021\ \ \ \ \ \textcolor{keywordtype}{char}\ *name;\ \textcolor{comment}{//\ name\ of\ the\ function}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00022}00022\ \ \ \ \ data\_type\ return\_type;\ \textcolor{comment}{//\ type\ of\ assignee}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00023}00023\ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_count;\ \textcolor{comment}{//\ number\ of\ arguments}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{char}\ **args\_names;\ \textcolor{comment}{//\ names\ of\ arguments,\ '\_'\ if\ unnamed}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ *args\_initialized;\ \textcolor{comment}{//\ whether\ the\ argument\ is\ initialized}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00026}00026\ \ \ \ \ data\_type\ *args\_types;\ \textcolor{comment}{//\ types\ of\ arguments}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00027}00027\ \}\ \mbox{\hyperlink{structcallee}{callee\_t}};}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00029}00029\ \textcolor{comment}{//\ Structure\ to\ hold\ a\ list\ of\ callees}}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00030}\mbox{\hyperlink{structcallee__list}{00030}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcallee__list}{callee\_list}}\ \{}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00031}00031\ \ \ \ \ \mbox{\hyperlink{structcallee}{callee\_t}}\ *\mbox{\hyperlink{structcallee}{callee}};}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00032}00032\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcallee__list}{callee\_list}}\ *next;}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00033}00033\ \}\ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}};}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00040}00040\ \mbox{\hyperlink{structcallee__list}{callee\_list\_t}}*\ \mbox{\hyperlink{callee_8h_a42ea173e035ad2bf52b5292c7d1d0b0f}{init\_callee\_list}}();}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00048}00048\ \mbox{\hyperlink{structcallee}{callee\_t}}*\ \mbox{\hyperlink{callee_8h_aad919c77267c47f14aa6576f01439c31}{init\_callee}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name);}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00056}00056\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{callee_8h_a06a9522bc7618b9c91a0e58e04449383}{insert\_callee\_into\_list}}(\mbox{\hyperlink{structcallee__list}{callee\_list\_t}}*\ list,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name);}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00064}00064\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{callee_8h_ade85748a2b0cd6a4b0e8a8ea9db307db}{insert\_name\_into\_callee}}(\mbox{\hyperlink{structcallee}{callee\_t}}*\ \mbox{\hyperlink{structcallee}{callee}},\ \textcolor{keywordtype}{char}*\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00072}00072\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{callee_8h_a756684d961b59ca08dd3ab9bdfbe3112}{insert\_type\_into\_callee}}(\mbox{\hyperlink{structcallee}{callee\_t}}*\ \mbox{\hyperlink{structcallee}{callee}},\ data\_type\ \mbox{\hyperlink{parser_8c_ac0e56df4d0aeb6e6ae57932330de7457}{type}});}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00080}00080\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{callee_8h_acb2118dfb237a488e289bfd51232128f}{insert\_bool\_into\_callee}}(\mbox{\hyperlink{structcallee}{callee\_t}}*\ \mbox{\hyperlink{structcallee}{callee}},\ \textcolor{keywordtype}{bool}\ is\_initialized);}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00087}00087\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{callee_8h_a9f1cc3853f1b1b41fb47d35946771cc8}{callee\_list\_dispose}}(\mbox{\hyperlink{structcallee__list}{callee\_list\_t}}\ *first);}
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{callee_8h_source_l00089}00089\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//IFJ\_CALLEE\_H}}
+
+\end{DoxyCode}
