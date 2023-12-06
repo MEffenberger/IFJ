@@ -1230,11 +1230,11 @@ void condition() {
         current_token = get_next_token();
         print_debug(current_token, 1, debug_cnt++);
         
-        convert_optional_data_type(symbol_q, 1); // convert optional type to non-optional
+        convert_optional_data_type(symbol_q, 1, if_let); // convert optional type to non-optional in case of if let
         // IF BODY
         local_body();
 
-        convert_optional_data_type(symbol_q, 2); // convert non-optional type back to optional
+        convert_optional_data_type(symbol_q, 2, if_let); // convert non-optional type back to optional in case of if let
 
         if (current_token->type == TOKEN_RIGHT_BRACKET) {
             // closing bracket of if statement, go back to parent in forest
@@ -1627,8 +1627,8 @@ void vardef_outermost_while(inst_type type, char *nickname, int cnt) {
 
 // mode 1: convert node's data_type from optional to non-optional
 // mode 2: convert node's data_type from non-optional to optional
-void convert_optional_data_type (AVL_tree *node, int mode) {
-    if (node != NULL) {
+void convert_optional_data_type (AVL_tree *node, int mode, bool if_let) {
+    if (node != NULL && if_let) {
         if (mode == 1) {
             switch (node->data->data_type) {
                 case INT_QM:
