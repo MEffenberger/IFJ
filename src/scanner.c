@@ -23,9 +23,6 @@
 #include "token_stack.h"
 #include <ctype.h>
 
-#define ASCII_BEGIN 31 //Beginning of supported ascii characters
-#define DEFAULT_TOKEN_VAL 1000 //Value that compare_keyword returns when no keyword found
-
 keyword_t compare_keyword(vector* v){
     if(vector_str_cmp(v, "Double")){
         return KW_DOUBLE;
