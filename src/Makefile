@@ -3,7 +3,7 @@
  #
  # IFJ23 compiler
  #
- # @brief 
+ # @brief Makefile for IFJ23 compiler
  #
  # @author Adam Valík <xvalik05>
  ##

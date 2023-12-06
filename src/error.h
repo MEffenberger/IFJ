@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief Error handling header file
+ * @brief Error handling and safe allocation of memory
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>

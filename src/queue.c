@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief Error handling header file
+ * @brief Queue implementation for tokens
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
@@ -23,11 +23,13 @@
 #include "symtable.h"
 #include "token_stack.h"
 
+// initialize the queue
 void init_queue(queue_t *queue) {
     queue->first = NULL;
     queue->last = NULL;
 }
 
+// add the token to the end of the queue
 void queue_push(queue_t *queue, token_t *token){
     queue_item_t *new_item = (queue_item_t*)allocate_memory(sizeof(queue_item_t));
 
