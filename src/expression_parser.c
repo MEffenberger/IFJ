@@ -50,7 +50,7 @@ static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 
 };
 
-// funkce se podiva na current token a vyhodi odpovidajici index v precedencni tabulce
+
 int get_index(token_type_t token){
 
     switch(token){
@@ -967,7 +967,6 @@ void call_expr_parser(data_type return_type) {
                 stack_push(&stack, tmp2);
                 break;
 
-            // vsehny easy binarni operace, neni moc co resit, check typu atd. viz check_types
             case RULE_ADD:
                 check_types(tmp1,tmp2, tmp3);
                 if(concat){
