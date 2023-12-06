@@ -4,7 +4,7 @@
  * IFJ compiler 2023
  * 
  * @brief String vector file 
- * @author Samuel Hejnicek <hejni00>
+ * @author Samuel Hejnicek <xhejni00>
  * @date 2023-10-21
  */
 

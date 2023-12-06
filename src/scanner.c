@@ -160,7 +160,7 @@ token_t* get_me_token(){
     int cnt_open = 0; //counter for openings of multiline comments
     int cnt_close = 0; //counter for endings of multiline comments
     int non_null_cnt = 0; //counter of non-null characters when checking hexadecimal value
-    int cnt_array_size = 0; //default size of array of counterd
+    int cnt_array_size = 0; //default size of array of counters
     int cnt_array_alloc_size = 8; //default allocation size of array for counters
     int* cnt_array = NULL; //Pointer to array of counters
     bool is_multiline = false; //Bool value if token is multiline
