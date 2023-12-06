@@ -35,7 +35,8 @@ vector* vector_init(){
 
 bool vector_append(vector* v, char c){
     if(v->size + 1 == v->size_of_alloc){
-        char *new_vec = reallocate_memory(v->array, v->size_of_alloc * 2 * sizeof(char));
+        //Vector has always 2 times bigger capacity than previous one
+        char *new_vec = reallocate_memory(v->array, v->size_of_alloc * 2 * sizeof(char)); 
 
         v->array = new_vec;
         v->size_of_alloc *= 2;
@@ -68,7 +69,8 @@ void vector_dispose(vector* v){
 }
 
 bool vector_str_cmp(vector* v, char* s){
-    return !(strcmp(v->array, s));
+    //!strcmp because strcmp returns 0 if strings equal and 0 is treated like false
+    return !(strcmp(v->array, s)); 
 }
 
 int vector_size(vector* v){
