@@ -861,7 +861,7 @@ void call_expr_parser(data_type return_type) {
                     if(node == NULL){
                         error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable does not exist");
                     }
-                    else if (!node->data->defined) {
+                    else if (!node->data->defined && !(node->data->data_type == INT_QM || node->data->data_type == DOUBLE_QM || node->data->data_type == STRING_QM)) {
                         error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable is not initialized");
                     }
 
