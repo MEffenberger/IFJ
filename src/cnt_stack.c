@@ -3,10 +3,10 @@
  * 
  * IFJ23 compiler
  * 
- * @brief cnt stack implementation
+ * @brief Stack of integers for nested if&else node naming 
  * 
  * @author Adam Valik <xvalik05>
- * 
+ * @author Marek Effenberger <xeffen00>
  */
 
 #include "callee.h"
@@ -30,10 +30,12 @@ void cnt_init(cnt_stack_t* cnt_stack) {
 }
 
 void cnt_push(cnt_stack_t* cnt_stack) {
+    // Double the capacity if the stack is full
     if (cnt_stack->size == cnt_stack->capacity-1) {
         cnt_stack->capacity *= 2;
         cnt_stack->cnt_array = reallocate_memory(cnt_stack->cnt_array, cnt_stack->capacity * sizeof(int*));
     }
+    // Push ifelse_cnt onto the stack
     cnt_stack->cnt_array[cnt_stack->size++] = ifelse_cnt;
 }
 

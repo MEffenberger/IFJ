@@ -3,7 +3,7 @@
  * 
  * IFJ23 compiler
  * 
- * @brief Main function of IFJ23 compiler
+ * @brief Main function
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>

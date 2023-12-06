@@ -214,7 +214,21 @@ void callee_validation(forest_node *global);
  * @param global Global forest node
  */
 void return_logic_validation (forest_node *global);
+
+/**
+ * @brief Validate forest
+ * 
+ * @param func Pointer to the root of the forest
+ */
 void validate_forest(forest_node *func);
+
+/**
+ * @brief Validate forest node
+ * 
+ * @param node Pointer to the node to be validated
+ * @return true Valid
+ * @return false Invalid
+ */
 bool validate_forest_node(forest_node *node);
 
 /**
@@ -232,8 +246,9 @@ void vardef_outermost_while(inst_type type, char *nickname, int cnt);
  * 
  * @param node Symbol, which data type is to be converted
  * @param mode 0 for optional to non-optional, 1 for non-optional to optional
+ * @param if_let Flag informing whether the conversion is in a if let statement
  */
-void convert_optional_data_type (AVL_tree *node, int mode);
+void convert_optional_data_type (AVL_tree *node, int mode, bool if_let);
 
 
 /**
