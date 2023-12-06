@@ -21,11 +21,11 @@
 #include "symtable.h"
 #include "token_stack.h"
 
-#define TABLE_SIZE 16
+#define TABLE_SIZE 16 //Number of lines and columns in precedence table
 
-int variable_counter = 1;
-bool concat = false;
-bool stop_expression = false;
+int variable_counter = 1; //Counter for unique variables needed in codegen
+bool concat = false; //True if concat will apply
+bool stop_expression = false; //True if expression will be reduced and no other new tokens will be accepted
 
 extern FILE* file;
 
@@ -737,7 +737,7 @@ void call_expr_parser(data_type return_type) {
         
         token_t* terminal = stack_top_terminal(&stack);
     
-        //If there is a token that we can not process well start the reduction of current expression and wont look for another result from precedence table
+        //If there is a token that we can not process we will start the reduction of current expression (stop_expression will be true) and wont look for another result from precedence table
         if(!stop_expression){
             stack_index = get_index(terminal->type);
             next_token_index = get_index(current_token->type);
