@@ -1098,7 +1098,7 @@ void call_expr_parser(data_type return_type) {
 
             // totok uz delal Sam solo ale pravdepodobne radky navic kvuli praci se zasobnikem
             case RULE_QMS:
-                if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM){
+                if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM || tmp3->exp_value == NIL){
 
                     if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
