@@ -3,16 +3,11 @@
  *
  * IFJ23 compiler
  *
- * @brief Generator of IFJcode23 with DLL of instructions
+ * @brief Generator of IFJcode23 with doubly linked list of instructions
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
- * @author Samuel Hejnicek <xhejni00>
- * @author Dominik Horut <xhorut01>
  */
-
-
-
 
 
 #include "codegen.h"
@@ -27,8 +22,8 @@
 #include "token_stack.h"
 #include <string.h>
 
-int add_arg_cnt = 0;
-int write_renamer = 0;
+int add_arg_cnt = 0; // for codegen_add_arg for unique naming of arguments
+int write_renamer = 0; // for codegen_write for unique naming of arguments
 extern FILE *file;
 
 
@@ -70,9 +65,11 @@ void inst_list_insert_last(instruction_list *list, instruction *new_inst) {
     new_inst->next = NULL;
     new_inst->prev = list->last;
 
+    // re-setting already existing pointers
     list->last->next = new_inst;
     list->last = new_inst;
 
+    // active is now the new instruction
     list->active = new_inst;
 }
 
@@ -80,15 +77,18 @@ void inst_list_insert_before(instruction_list *list, instruction *new_inst) {
     new_inst->next = list->active;
     new_inst->prev = list->active->prev;
 
+    // re-setting already existing pointers
     list->active->prev->next = new_inst;
     list->active->prev = new_inst;
 
+    // active is now the new instruction
     list->active = new_inst;
 }
 
 
 void inst_list_delete_after(instruction_list *list) {
     instruction *inst = list->active->next;
+    // re-pointing the pointers across the deleted node
     if (inst == list->last) {
         list->last = list->active;
     }
@@ -131,7 +131,7 @@ void inst_list_search_void_func_call(instruction_list *list, char *func_name) {
     // list->active is now void_function call, you can delete the instruction after it
 }
 
-
+// goes through the whole list and prints the instructions based on their type
 void codegen_generate_code_please(instruction_list *list) {
     instruction *inst = list->first;
     while (inst != NULL) {
@@ -148,7 +148,7 @@ void codegen_generate_code_please(instruction_list *list) {
             case VAR_ASSIGN_NIL:
                 codegen_var_assign_nil(inst);
                 break;
-            case IMPLICIT_NIL:
+            case IMPLICIT_NIL: // implicit nil assignment
                 fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
                 break;
             case FUNC_DEF:
@@ -347,44 +347,48 @@ void codegen_var_def(instruction *inst) {
     fprintf(file, "DEFVAR %cF@%s\n", inst->frame, inst->name);
 }
 
+// assign value from the top of the stack to the variable
 void codegen_var_assign(instruction *inst) {
     fprintf(file, "POPS %cF@%s\n", inst->frame, inst->name);
 }
 
+// nil assignment
 void codegen_var_assign_nil(instruction *inst) {
     fprintf(file, "MOVE %cF@%s nil@nil\n", inst->frame, inst->name);
 }
 
-
+// function definition
 void codegen_func_def(instruction *inst) {
     fprintf(file, "JUMP !!skip_%s\n", inst->name);
     fprintf(file, "LABEL %s\n", inst->name);
     fprintf(file, "PUSHFRAME\n");
     fprintf(file, "DEFVAR LF@$retval$\n");
     for (int i = 1; i <= inst->cnt; i++) {
+        // find the parameter in the symtable based on its param_order
         AVL_tree* param = symtable_find_param(inst->relevant_node->symtable, i);
         fprintf(file, "DEFVAR LF@%s\n", param->key);
         fprintf(file, "MOVE LF@%s LF@$%d\n", param->key, i);
     } 
 }
 
+// return value is on the top of the stack
 void codegen_func_def_return(instruction *inst) {
     fprintf(file, "POPS LF@$retval$\n");
     fprintf(file, "JUMP end_%s\n", inst->name);
 }
 
+// void function without return value
 void codegen_func_def_return_void(instruction *inst) {
     fprintf(file, "JUMP end_%s\n", inst->name);
 }
 
+// end of function definition
 void codegen_func_def_end(instruction *inst) {
     fprintf(file, "LABEL end_%s\n", inst->name);
     fprintf(file, "POPFRAME\n");
     fprintf(file, "RETURN\n");
     fprintf(file, "LABEL !!skip_%s\n", inst->name);
 }
-
-
 
 
 void codegen_func_call_start(instruction *inst) {
@@ -398,17 +402,19 @@ void codegen_add_arg(instruction *inst) {
 }
 
 
-
+// if let - do the else statement if the variable is nil
 void codegen_if_let(instruction *inst) {
     fprintf(file, "TYPE %cF@$cond_%d$ %cF@%s\n", inst->frame, inst->cnt, inst->frame, inst->name);
     fprintf(file, "JUMPIFEQ else_%d %cF@$cond_%d$ string@nil\n", inst->cnt, inst->frame, inst->cnt); 
 }
 
+// if - do the else statement if the condition is false
 void codegen_if(instruction *inst) {
     fprintf(file, "POPS %cF@$cond_%d$\n", inst->frame, inst->cnt);
     fprintf(file, "JUMPIFEQ else_%d %cF@$cond_%d$ bool@false\n", inst->cnt, inst->frame, inst->cnt);
 }
 
+// else statement
 void codegen_else(instruction *inst) {
     fprintf(file, "JUMP end_if_%d\n", inst->cnt);
     fprintf(file, "LABEL else_%d\n", inst->cnt);
@@ -419,6 +425,7 @@ void codegen_ifelse_end(instruction *inst) {
     fprintf(file, "LABEL end_if_%d\n", inst->cnt);
 }   
 
+// while - jump to the end of the while loop if the condition is false
 void codegen_while_do(instruction *inst) {
     fprintf(file, "POPS %cF@$cond_%s$\n", inst->frame, inst->name);
     fprintf(file, "JUMPIFEQ end_%s %cF@$cond_%s$ bool@false\n", inst->name, inst->frame, inst->name);
@@ -429,7 +436,7 @@ void codegen_while_end(instruction *inst) {
     fprintf(file, "LABEL end_%s\n", inst->name);
 }
 
-
+// built-in functions
 void codegen_readString(instruction *inst) {
     fprintf(file, "JUMP !!skip_readString\n");
     fprintf(file, "LABEL readString\n");
@@ -466,6 +473,7 @@ void codegen_readDouble(instruction *inst) {
 void codegen_write(instruction *inst) {
     fprintf(file, "CREATEFRAME\n");
     fprintf(file, "PUSHFRAME\n");
+    // get the arguments from the stack and print them in the correct order
     for (int i = 1; i <= inst->cnt; i++) {
         fprintf(file, "DEFVAR LF@$%d\n", write_renamer + i);
         fprintf(file, "POPS LF@$%d\n", write_renamer + i);
@@ -518,22 +526,22 @@ void codegen_substring(instruction *inst) {
     fprintf(file, "MOVE LF@$retval$ string@\n");
     fprintf(file, "DEFVAR LF@$tmp1\n");
     fprintf(file, "DEFVAR LF@$check\n");
-    fprintf(file, "MOVE LF@$check bool@false\n");
-    fprintf(file, "LT LF@$check LF@$2 int@0\n");
+    fprintf(file, "MOVE LF@$check bool@false\n"); // retval is nil if:
+    fprintf(file, "LT LF@$check LF@$2 int@0\n"); // startingAt < 0
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "LT LF@$check LF@$3 int@0\n");
+    fprintf(file, "LT LF@$check LF@$3 int@0\n"); // endingBefore < 0
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "GT LF@$check LF@$2 LF@$3\n");
+    fprintf(file, "GT LF@$check LF@$2 LF@$3\n"); // startingAt > endingBefore
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "EQ LF@$check LF@$2 LF@$3\n");
+    fprintf(file, "EQ LF@$check LF@$2 LF@$3\n"); 
     fprintf(file, "JUMPIFEQ !!load_result LF@$check bool@true\n");
-    fprintf(file, "DEFVAR LF@$tmp_strlen\n");
+    fprintf(file, "DEFVAR LF@$tmp_strlen\n"); 
     fprintf(file, "STRLEN LF@$tmp_strlen LF@$1\n");
-    fprintf(file, "GT LF@$check LF@$2 LF@$tmp_strlen\n");
+    fprintf(file, "GT LF@$check LF@$2 LF@$tmp_strlen\n"); // startingAt > strlen
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "EQ LF@$check LF@$2 LF@$tmp_strlen\n");
+    fprintf(file, "EQ LF@$check LF@$2 LF@$tmp_strlen\n"); // startingAt == strlen 
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
-    fprintf(file, "GT LF@$check LF@$3 LF@$tmp_strlen\n");
+    fprintf(file, "GT LF@$check LF@$3 LF@$tmp_strlen\n"); // endingBefore > strlen
     fprintf(file, "JUMPIFEQ !!load_nil LF@$check bool@true\n");
     fprintf(file, "LABEL !!substring_loop\n");
     fprintf(file, "GETCHAR LF@$tmp1 LF@$1 LF@$2\n");
@@ -541,9 +549,9 @@ void codegen_substring(instruction *inst) {
     fprintf(file, "ADD LF@$2 LF@$2 int@1\n");
     fprintf(file, "JUMPIFNEQ !!substring_loop LF@$2 LF@$3\n");
     fprintf(file, "JUMP !!load_result\n");
-    fprintf(file, "LABEL !!load_nil\n");
+    fprintf(file, "LABEL !!load_nil\n"); // load nil if any of the conditions above is true
     fprintf(file, "MOVE LF@$retval$ nil@nil\n");
-    fprintf(file, "LABEL !!load_result\n");
+    fprintf(file, "LABEL !!load_result\n"); // load result, if startingAt == endingBefore, it's empty string
     fprintf(file, "POPFRAME\n");
     fprintf(file, "RETURN\n");
     fprintf(file, "LABEL !!skip_substring\n");
@@ -576,13 +584,15 @@ void codegen_chr(instruction *inst) {
     fprintf(file, "LABEL !!skip_chr\n");
 }
 
-
+// main function - start of the program
 void codegen_main(instruction *inst) {
     fprintf(file, ".IFJcode23\n");
     fprintf(file, "CREATEFRAME\n");
     fprintf(file, "PUSHFRAME\n");
 }
 
+// vardefs in the following functions are separated in case of while loop:
+// concatenation of two strings,
 void codegen_concat(instruction *inst) {
     fprintf(file, "POPS %cF@$$s%d$$\n", inst->frame, inst->cnt + 1);
     fprintf(file, "POPS %cF@$$s%d$$\n", inst->frame, inst->cnt);
@@ -590,14 +600,14 @@ void codegen_concat(instruction *inst) {
     fprintf(file, "PUSHS %cF@$$s%d$$\n", inst->frame, inst->cnt);
 }
 
-
+// int to float conversion
 void codegen_int2floats(instruction *inst) {
     fprintf(file, "POPS %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "INT2FLOATS\n");
     fprintf(file, "PUSHS %cF@$$tmp%d$$\n", inst->frame, inst->cnt);
 }
 
-
+// exclamation rule
 void codegen_exclamation_rule(instruction *inst) {
     fprintf(file, "POPS %cF@$$excl%d\n", inst->frame, inst->cnt);
     fprintf(file, "PUSHS %cF@$$excl%d\n", inst->frame, inst->cnt);
@@ -605,11 +615,12 @@ void codegen_exclamation_rule(instruction *inst) {
     fprintf(file, "JUMPIFNEQS $RULE_EXCL_CORRECT%d$\n", inst->cnt);
     fprintf(file, "LABEL $RULE_EXCL_ERROR%d$\n", inst->cnt);
     fprintf(file, "WRITE string@Variable\\032is\\032NULL\n");
-    fprintf(file, "EXIT int@7\n"); //doresit cislo chyby
+    fprintf(file, "EXIT int@7\n");
     fprintf(file, "LABEL $RULE_EXCL_CORRECT%d$\n", inst->cnt);
     fprintf(file, "PUSHS %cF@$$excl%d\n", inst->frame, inst->cnt);
 }
 
+// less than equal rule
 void codegen_leq_rule(instruction *inst) {
     fprintf(file, "POPS %cF@$$leq%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "EQS\n");
@@ -619,6 +630,7 @@ void codegen_leq_rule(instruction *inst) {
     fprintf(file, "ORS\n");
 }
 
+// greater than equal rule
 void codegen_geq_rule(instruction *inst) {
     fprintf(file, "POPS %cF@$$geq%d$$\n", inst->frame, inst->cnt);
     fprintf(file, "EQS\n");
@@ -628,7 +640,7 @@ void codegen_geq_rule(instruction *inst) {
     fprintf(file, "ORS\n");
 }
 
-
+// question mark rule
 void codegen_qms_rule(instruction *inst) {
     fprintf(file, "POPS %cF@$$rule_qms%d\n", inst->frame, inst->cnt);
     fprintf(file, "POPS %cF@$$rule_qms%d\n", inst->frame, inst->cnt + 1);
@@ -646,6 +658,7 @@ void codegen_qms_rule(instruction *inst) {
     fprintf(file, "LABEL $END_RULE_QMS%d$\n",  inst->cnt);
 }
 
+// checking division by zero for integers
 void codegen_idiv_zero(instruction *inst) {
     fprintf(file, "POPS %cF@idiv_zero_%d\n", inst->frame, inst->cnt);
     fprintf(file, "JUMPIFNEQ !!SKIP_IDIV_BY_ZERO%d %cF@%s%d int@0\n", inst->cnt, inst->frame, inst->name, inst->cnt);
@@ -654,6 +667,7 @@ void codegen_idiv_zero(instruction *inst) {
     fprintf(file, "PUSHS %cF@idiv_zero_%d\n", inst->frame, inst->cnt);
 }
 
+// checking division by zero for floats
 void codegen_div_zero(instruction *inst) {
     fprintf(file, "POPS %cF@div_zero_%d\n", inst->frame, inst->cnt);
     fprintf(file, "JUMPIFNEQ !!SKIP_DIV_BY_ZERO%d %cF@%s%d float@0x0p+0\n", inst->cnt, inst->frame, inst->name, inst->cnt);
