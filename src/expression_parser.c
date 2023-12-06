@@ -830,7 +830,9 @@ void call_expr_parser(data_type return_type) {
                 rule_params_count++;
             }
 
+            //Pops token_shift
             stack_pop(&stack);
+
             //find the rule to reduce the expression
             expression_rules_t rule = find_reduce_rule(tmp1, tmp2, tmp3, rule_params_count);
             switch (rule)
@@ -841,6 +843,7 @@ void call_expr_parser(data_type return_type) {
 
                 if(tmp1->type == TOKEN_ID){
                     forest_node* forest = forest_search_scope(active, tmp1->value.vector->array);
+                    //Search in AVL tree to find node with specific ID
                     AVL_tree* node = forest_search_symbol(active, tmp1->value.vector->array);
                     if(node == NULL){
                         error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable does not exist");
@@ -848,7 +851,7 @@ void call_expr_parser(data_type return_type) {
                     else if (!node->data->defined && !(node->data->data_type == INT_QM || node->data->data_type == DOUBLE_QM || node->data->data_type == STRING_QM)) {
                         error_exit(ERROR_SEM_UNDEF_VAR, "EXPRESSION PARSER", "Variable is not initialized");
                     }
-
+                    //creating unique nickname for the id, usefull later in codegen
                     char *nickname = renamer(node);
                     
                     data_type variable_type;
@@ -918,6 +921,7 @@ void call_expr_parser(data_type return_type) {
                     if(tmp1->value.keyword != KW_NIL){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operations with keywords");
                     } else {
+                        //Exp. parser support only nil keyword as constant
                         tmp1->type = TOKEN_EXPRESSION;
                         tmp1->exp_type = CONST;
                         tmp1->exp_value = NIL;
@@ -942,6 +946,7 @@ void call_expr_parser(data_type return_type) {
                     inst_list_insert_last(inst_list, inst);
 
                     variable_counter++;
+                    //Nillable value is now converted to nonnillable
                     if(tmp2->exp_value == INT_QM){
                         tmp2->exp_value = INT;
                     } else if(tmp2->exp_value == DOUBLE_QM){
@@ -973,6 +978,7 @@ void call_expr_parser(data_type return_type) {
                 }
 
                 if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    //ID was used in addition, cant be converted later
                     tmp1->was_exp = true;
                 }
 
@@ -985,6 +991,7 @@ void call_expr_parser(data_type return_type) {
                 inst_list_insert_last(inst_list, inst);
 
                 if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    //ID was used in addition, cant be converted later
                     tmp1->was_exp = true;
                 }
 
@@ -997,6 +1004,7 @@ void call_expr_parser(data_type return_type) {
                 inst_list_insert_last(inst_list, inst1);
 
                 if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    //ID was used in addition, cant be converted later
                     tmp1->was_exp = true;
                 }
 
@@ -1006,6 +1014,7 @@ void call_expr_parser(data_type return_type) {
                 check_types(tmp1, tmp2, tmp3);
 
                 if(tmp1->exp_type == ID || tmp3->exp_type == ID){
+                    //ID was used in addition, cant be converted later
                     tmp1->was_exp = true;
                 }
 
@@ -1020,8 +1029,8 @@ void call_expr_parser(data_type return_type) {
                 stack_push(&stack, tmp1);
                 break;
 
-            // v podstate to same jen vice printu, skrz duvod u push_for_leq_geq()
             case RULE_LEQ:
+                //Another codegen push because of more operations (Lower, equal and then OR)
                 push_for_leq_geq(tmp1, tmp3);
                 check_types(tmp1, tmp2, tmp3);
 
@@ -1080,10 +1089,10 @@ void call_expr_parser(data_type return_type) {
                 stack_push(&stack, tmp1);
                 break;
 
-            // totok uz delal Sam solo ale pravdepodobne radky navic kvuli praci se zasobnikem
             case RULE_QMS:
+                //Rule accepts only nillable value on left side or nil itself
                 if(tmp3->exp_value == INT_QM || tmp3->exp_value == DOUBLE_QM || tmp3->exp_value == STRING_QM || tmp3->exp_value == NIL){
-
+                    //Right side has to be the same as left except it is non-nillable
                     if((tmp3->exp_value == INT_QM && tmp1->exp_value != INT) || (tmp3->exp_value == DOUBLE_QM && tmp1->exp_value != DOUBLE) || (tmp3->exp_value == STRING_QM && tmp1->exp_value != STRING)){
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "wrong ID type for right side of ??");
                     }
@@ -1108,7 +1117,7 @@ void call_expr_parser(data_type return_type) {
             }
 
             break;
-        // pripad () proste pokracujeme
+        //same as <, used for parenthesis
         case '=':
             stack_push(&stack, current_token);
             current_token = get_next_token();
@@ -1117,17 +1126,13 @@ void call_expr_parser(data_type return_type) {
         
         default:
 
-            // redukujeme dokud to jde
+            //Result from precedence table is empty, however if exp. parser got id or rpar expression reduction will start and current token will be handed to parser
             if(current_token->type == TOKEN_ID || current_token->type == TOKEN_RPAR){
             table_result = '>';
             next_token_index = 15;
             stop_expression = true;
             break;
             }
-
-            /*for(int i =0; i < stack.size; i++){
-                fprintf(file, "STACK:%d\n", stack.token_array[i]->type);
-            }*/
 
             error_exit(ERROR_SYN, "EXPRESSION PARSER", "syntax error");
         }
