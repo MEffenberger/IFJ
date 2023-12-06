@@ -774,20 +774,16 @@ void call_expr_parser(data_type return_type) {
                 } else if((return_type == INT_QM || return_type == DOUBLE_QM || return_type == STRING_QM) && stack_top(&stack)->exp_value == NIL){
                     type_of_expr = NIL;
                 } else {
+                    //If expression was in return statement it has different error code
                     if (return_expr) {
-                        printf("RETTYPE:%d\n", return_type);
-                        printf("TOP:%d", stack_top(&stack)->exp_value);
                         error_exit(ERROR_SEM_TYPE, "EXPRESSION PARSER", "Wrong data type of the return value");
                     }
                     else {
-                        printf("RETTYPE:%d\n", return_type);
-                        printf("TOP:%d", stack_top(&stack)->exp_value);
                         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong data type result of expression");
                     }
                 }
             }
-            printf("RETTYPE:%d\n", return_type);
-            printf("TOP:%d", stack_top(&stack)->exp_value);
+            //return type was unknown, parser will know type of expression from global variable
             dispose_stack(&stack);
             stop_expression = false;
             break;
@@ -800,8 +796,6 @@ void call_expr_parser(data_type return_type) {
         case '<':
             token_shift(&stack);
             current_token = get_next_token();
-            printf("(EXP)G.N.T.: Current token: %d\n", current_token->type);
-
             break;
 
         //reduction rule
@@ -1124,7 +1118,6 @@ void call_expr_parser(data_type return_type) {
         case '=':
             stack_push(&stack, current_token);
             current_token = get_next_token();
-            printf("(EXP)G.N.T.: Current token: %d\n", current_token->type);
             break;
         
         default:
