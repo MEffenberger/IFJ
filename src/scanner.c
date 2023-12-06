@@ -90,29 +90,37 @@ void destroy_token(token_t* token){
 }
 
 void cut_indent(vector* vector, int indent, int lines){
+    //No lines, no whitespaces will be deleted
     if(lines == 0){
         return;
     }
+    //Calculate length of string
     int len = strlen(vector->array);
     int eol_cnt = 0;
     printf("LINES:%d\n", lines);
     
+    //Deletes whitespaces in first line according to indent
     for(int i = 0; i < indent*2; i++){
         for(int j = 0; j < len; j++){
             vector->array[j] = vector->array[j+2];
         }
         
     }
+    //Finds EOL
     char* result = strstr(vector->array, "\\010");
     if(result == NULL){
         return;
     } else {
         eol_cnt++;
     }
+
     int index = result - vector->array;
+    //Next line will start after EOL
     index = index + 4;
     printf("BUFFER:%s\n", vector->array);
     printf("PRVEK:%c\n", vector->array[index]);
+
+    //If there are more EOLS skip them
     while(vector->array[index+2] == '1' && vector->array[index+3] == '0'){
         index = index + 4;
         eol_cnt++;
@@ -124,7 +132,8 @@ void cut_indent(vector* vector, int indent, int lines){
 
     
     //printf("Index: %d\n", index);
-    
+
+    //Delete whitespaces in other lines too
     while(lines != 1){
         for(int i = 0; i < indent*2; i++){
             for(int j = index; j < len; j++){
@@ -158,15 +167,15 @@ token_t* get_me_token(){
 
     char readchar, next_char; //current read char and next one
     char hex[8] = {0}; //array for storing up to 8 hex characters
-    int hex_counter = 0;
-    int cnt_open = 0;
-    int cnt_close = 0;
-    int non_null_cnt = 0;
-    int cnt_array_size = 0;
-    int cnt_array_alloc_size = 8;
-    int* cnt_array = NULL;
-    bool is_multiline = false;
-    bool only_whitespace = false;
+    int hex_counter = 0; //counter of hex characters
+    int cnt_open = 0; //counter for openings of multiline comments
+    int cnt_close = 0; //counter for endings of multiline comments
+    int non_null_cnt = 0; //counter of non-null characters when checking hexadecimal value
+    int cnt_array_size = 0; //default size of array of counterd
+    int cnt_array_alloc_size = 8; //default allocation size of array for counters
+    int* cnt_array = NULL; //Pointer to array of counters
+    bool is_multiline = false; //Bool value if token is multiline
+    bool only_whitespace = false; //Bool to check if line had only whitespaces used for empty lines in multiline string
 
     while ((readchar = (char) getc(stdin))){
 

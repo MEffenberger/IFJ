@@ -532,7 +532,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
         }
         if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
-            //If one of the operands is nil constant the other one has to be nillable
+            //If one of the operands is nil constant the other one has to be nillable or nil
             if(tmp1->exp_value == NIL){
                 if(tmp3->exp_value == INT_QM){
                     tmp1->exp_value = BOOL;
@@ -541,6 +541,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     tmp1->exp_value = BOOL;
                     return;
                 } else if(tmp3->exp_value == STRING_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else if(tmp3->exp_value == NIL){
                     tmp1->exp_value = BOOL;
                     return;
                 } else {
@@ -554,6 +557,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     tmp1->exp_value = BOOL;
                     return;
                 } else if(tmp1->exp_value == STRING_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else if(tmp1->exp_value == NIL){
                     tmp1->exp_value = BOOL;
                     return;
                 } else {
