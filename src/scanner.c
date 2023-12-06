@@ -23,8 +23,8 @@
 #include "token_stack.h"
 #include <ctype.h>
 
-#define ASCII_BEGIN 31
-#define DEFAULT_TOKEN_VAL 1000
+#define ASCII_BEGIN 31 //Beginning of supported ascii characters
+#define DEFAULT_TOKEN_VAL 1000 //Value that compare_keyword returns when no keyword found
 
 keyword_t compare_keyword(vector* v){
     if(vector_str_cmp(v, "Double")){
@@ -76,6 +76,7 @@ keyword_t compare_keyword(vector* v){
 
 bool check_indent(int* cnt_array, int size){
     for(int i = 0; i < size ; i++){
+        //compares value of all counters with the last one which is for indentation
         if(cnt_array[i] < cnt_array[size]){
             return false;
         }
@@ -148,7 +149,6 @@ void cut_indent(vector* vector, int indent, int lines){
 token_t* get_me_token(){
 
     token_t* token = (token_t*)allocate_memory(sizeof(token_t));
-    char readchar, next_char;
     automat_state_t a_state = S_START;
     vector* buffer = vector_init();
     token->value.vector = NULL;
@@ -156,12 +156,13 @@ token_t* get_me_token(){
     token->value.integer = 0;
     token->value.type_double = 0.0;
     token->value.keyword = DEFAULT_TOKEN_VAL;
-    char hex[8] = {0};
+
+    char readchar, next_char;
+    char hex[8] = {0}; //array for storing up to 8 hex characters
     int hex_counter = 0;
     int cnt_open = 0;
     int cnt_close = 0;
     int non_null_cnt = 0;
-
     int cnt_array_size = 0;
     int cnt_array_alloc_size = 8;
     int* cnt_array = NULL;
@@ -328,9 +329,11 @@ token_t* get_me_token(){
                         return token;
 
                     } else if(readchar == ' '){
+                        //whitespaces are ignored
                         continue;
                         
                     } else if(readchar == '\t'){
+                        //tabs are ignored
                         continue;
                         
                     } else if(readchar == '\n'){
@@ -380,12 +383,14 @@ token_t* get_me_token(){
 
                 } else if(readchar == '?'){
                     keyword_t key = compare_keyword(buffer);
+                    //QM types are only int, double and string
                     if(key < 3){
                         vector_append(buffer, readchar);
                         token->type = TOKEN_KEYWORD_QM;
                         token->value.keyword = key;
                         token->value.vector = buffer;
                         return token;
+                    //It is not QM type so it must be just a keyword
                     } else if (key > 3 && key != DEFAULT_TOKEN_VAL){
                         ungetc(readchar, stdin);
                         a_state = S_QM;
@@ -393,6 +398,7 @@ token_t* get_me_token(){
                         token->value.keyword = key;
                         token->value.vector = buffer;
                         return token;
+                    //no match so it is just id
                     } else  {
                         ungetc(readchar, stdin);
                         a_state = S_QM;
@@ -648,14 +654,14 @@ token_t* get_me_token(){
                 if(isdigit(readchar) || isalpha(readchar)){
 
                     if((readchar >= 'A' && readchar <= 'F') || (readchar >= 'a' && readchar <= 'f') || (readchar >= '0' && readchar <= '9')){
-
+                        
+                        //Too many hex characters
                         if(hex_counter == 8){
                             vector_dispose(buffer);
                             free(token);
                             token = NULL;
                             error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format");
                         }
-
                         hex[hex_counter] = readchar;
                         hex_counter++;
                         a_state = S_FIRST_HEX;
@@ -668,13 +674,15 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "Hex value has to be in hexadecimal format"); 
                     }
                 } else if(readchar == '}'){
-                    //Toto asi do funkce
+
                     non_null_cnt = 0;
                     for(int i = 0; i < strlen(hex); i++){
+                        //finding values in hexadecimal numbers that are not zero
                         if(hex[i] != '0'){
                             non_null_cnt++;
                         }
                     }
+                    //if there are more than 2 characters not null, the number is too big and therefore not valid
                     if(non_null_cnt > 2){
                         vector_dispose(buffer);
                         free(token);
@@ -796,7 +804,7 @@ token_t* get_me_token(){
                 }
 
             case(S_START_MULTILINE):
-                
+                //Realloc the counter array if needed
                 if(cnt_array_size + 1 == cnt_array_alloc_size){
                     int *new_vec = realloc(cnt_array, cnt_array_alloc_size * 2 * sizeof(int));
                     if(!(new_vec)){
@@ -888,16 +896,22 @@ token_t* get_me_token(){
                     vector_append(buffer, readchar);
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
-                        ungetc(next_char, stdin);
-                        //vector_append(buffer, next_char);
-                        a_state = S_START_MULTILINE;
-                        break;
+                        next_char = (char) getc (stdin);
+                        if(next_char == '"'){
+                            free(cnt_array);
+                            vector_dispose(buffer);
+                            free(token);
+                            token = NULL;
+                            error_exit(ERROR_LEX, "SCANNER", "Wrong ending of ML Lexical error");
+                        } else {
+                            ungetc(next_char, stdin);
+                            a_state = S_START_MULTILINE;
+                            break;
+                        }
                     } else {
-                        free(cnt_array);
-                        vector_dispose(buffer);
-                        free(token);
-                        token = NULL;
-                        error_exit(ERROR_LEX, "SCANNER", "2x uvozovky Lexical error");
+                        vector_append(buffer, readchar);
+                        a_state = S_IS_MULTILINE;
+                        break;
                     }
                 } else if(readchar == '\\'){
                     a_state = S_START_ESC_SENTENCE;
