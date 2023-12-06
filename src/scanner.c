@@ -96,8 +96,9 @@ void cut_indent(vector* vector, int indent, int lines){
     }
     //Calculate length of string
     int len = strlen(vector->array);
+
+    //Counter of EOLs
     int eol_cnt = 0;
-    printf("LINES:%d\n", lines);
     
     //Deletes whitespaces in first line according to indent
     for(int i = 0; i < indent*2; i++){
@@ -117,21 +118,12 @@ void cut_indent(vector* vector, int indent, int lines){
     int index = result - vector->array;
     //Next line will start after EOL
     index = index + 4;
-    printf("BUFFER:%s\n", vector->array);
-    printf("PRVEK:%c\n", vector->array[index]);
 
     //If there are more EOLS skip them
     while(vector->array[index+2] == '1' && vector->array[index+3] == '0'){
         index = index + 4;
         eol_cnt++;
     }
-    printf("EOL_cnt:%d\n", eol_cnt);
-    //printf("PRVEKAFTER:%c\n", vector->array[index]);
-    //printf("PRVEKAFTER:%c\n", vector->array[index+1]);
-    //printf("PRVEKAFTER:%c\n", vector->array[index+2]);
-
-    
-    //printf("Index: %d\n", index);
 
     //Delete whitespaces in other lines too
     while(lines != 1){
@@ -140,16 +132,13 @@ void cut_indent(vector* vector, int indent, int lines){
                 vector->array[j] = vector->array[j+2];
             }
         }
-        printf("BUFFERAFTERONE:%s\n", vector->array);  
         char* result = strstr(vector->array, "\\032"); //Je potreba pocitat pocet 010 a potom od te pozice mazat 010
         if(result == NULL){
             break;
         }
         int index = result - vector->array;
-        printf("INDEX:%d\n", index);
         lines--;
     }
-    printf("BUFFERAFTER:%s\n", vector->array);  
 }
 
 token_t* get_me_token(){
