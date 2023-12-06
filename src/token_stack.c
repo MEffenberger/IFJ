@@ -6,7 +6,6 @@
  * @brief Token stack implementation
  *
  * @author Dominik Horut <xhorut01>
- * 
  */
 
 #include "callee.h"

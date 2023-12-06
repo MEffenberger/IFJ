@@ -1,11 +1,11 @@
 /**
  * @file string_vector.c
  * 
- * IFJ compiler 2023
+ * IFJ23 compiler
  * 
  * @brief String vector file 
+ * 
  * @author Samuel Hejnicek <xhejni00>
- * @date 2023-10-21
  */
 
 #include "callee.h"

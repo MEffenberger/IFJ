@@ -4,6 +4,7 @@
  * IFJ compiler 2023
  * 
  * @brief Token stack header file
+ * 
  * @author Dominik Horut <xhorut01>
  */
 
