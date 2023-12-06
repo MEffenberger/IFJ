@@ -37,6 +37,7 @@ pack:
 	@cp *.c *.h Makefile pack
 	@cp ../doc/dokumentace.pdf pack
 	@cp ../rozdeleni pack
+	@cp ../rozsireni pack
 	@(cd pack && zip ../../xeffen00.zip *)
 	@rm -rf pack
 
