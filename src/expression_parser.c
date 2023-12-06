@@ -129,7 +129,6 @@ int get_index(token_type_t token){
 
 }
 
-// pomocna fce pro vytvoreni zarazky v zasobniku
 token_t* token_create(token_type_t token_type){
     token_t* token = (token_t*)allocate_memory(sizeof(token_t));
     token->value.vector = NULL;
@@ -139,11 +138,12 @@ token_t* token_create(token_type_t token_type){
     return token;
 }
 
-// v precedencni tabulce je na miste [i][j] < coz znamena neredukuj ale pridej token na zasobnik a 
-// pred nejblizsi terminal pridej shift token <
+
 void token_shift(token_stack* stack){
     token_t* shift = token_create(TOKEN_SHIFT);
     token_t* top = stack_top(stack);
+
+    //expression is on top, shift is pushed before it
     if(top->type == TOKEN_EXPRESSION){
         stack_pop(stack);
         stack_push(stack, shift);
@@ -156,14 +156,13 @@ void token_shift(token_stack* stack){
 }
 
 
-// v podstate vraci pravidlo redukce podle poctu operandu, vetsinou jsou binarni takze 3(E operator E), 1 (E -> i) a 2 (E -> !E)
 expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* token3, int number_of_tokens){
     switch (number_of_tokens)
     {
     case 1: //E->i
         return RULE_OPERAND;
 
-    case 2:
+    case 2: //E->E!
         if(token1->type == TOKEN_EXCLAM && token2->type == TOKEN_EXPRESSION){
             return RULE_EXCL;
         } else {
@@ -173,10 +172,10 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     case 3:
 
         if(token1->type == TOKEN_RPAR && token3->type == TOKEN_LPAR){
-            return RULE_PAR;
+            return RULE_PAR; //E->(E)
         }
 
-        switch (token2->type)
+        switch (token2->type) //Rule found via operator in token2
         {
         case TOKEN_PLUS:
             return RULE_ADD;
@@ -213,7 +212,7 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
     return NOT_RULE;
 }
 
-
+//Converts nillable types to nonnillable types
 void convert_qm(token_t* tmp1){
     if(tmp1->exp_value == INT_QM){
         tmp1->exp_value = INT;
@@ -226,35 +225,32 @@ void convert_qm(token_t* tmp1){
 
 
 
-// kontrola typu => tri prdele case splitu, pokud je to token id konstanta tak ji lze pretypovat ale pouze z int na double
 void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
 
 
-    // klasicke operace kde se resi jen typy
+    //First case, same for +,-,*
     if(tmp2->type == TOKEN_PLUS || tmp2->type == TOKEN_MINUS || tmp2->type == TOKEN_MULTIPLY){
 
         if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
         error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
         }
-
-        //convert_qm(tmp1);
-        //convert_qm(tmp3);
             
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with booleans");
         }
 
-        // typy jsou stejne
+        //Same token types
         if (tmp1->exp_value == tmp3->exp_value){
 
             if((tmp1->exp_value == INT_QM && tmp3->exp_value == INT_QM) || (tmp1->exp_value == DOUBLE_QM && tmp3->exp_value == DOUBLE_QM) || (tmp1->exp_value == STRING_QM && tmp3->exp_value == STRING_QM)){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
             }
 
-            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == INT && tmp3->exp_type == CONST)){
+            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == ID && tmp3->exp_type == CONST)){
+                //tmp1 is always token to be pushed onto stack, so it is changed to id
                 tmp1->exp_type = ID;
             }
-            // jedine co se stringy lze je +, * - je invalid
+            //Strings are only allowed in concat
             if(tmp1->exp_value == STRING && tmp3->exp_value == STRING && tmp2->type != TOKEN_PLUS){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
 
@@ -271,10 +267,10 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 return;
 
             }
-        // typy nejsou stejne
+        //types are not the same
         } else{
 
-            // pokud je jeden id a druhy konstanta nebo naopak a lze pretypovat (z int na double) az po line 313
+            //if one is id and other constant, it could be converted into double if possible
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
                     if(tmp3->exp_value == DOUBLE || tmp3->exp_value == DOUBLE_QM){
@@ -355,30 +351,28 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
         }
 
-    // tady se resi celociselne a desetinne deleni (div x idiv)
+    //Case for division
     } else if(tmp2->type == TOKEN_DIVIDE){
 
         if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do arithmetic opeation with nils");
         }
-        //convert_qm(tmp1);
-        //convert_qm(tmp3);
 
         if(tmp1->exp_value == BOOL || tmp3->exp_value == BOOL){
             error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not divide bool");
         }
 
-        // typy se rovnaji, neni problem
+        //types are same
         if (tmp1->exp_value == tmp3->exp_value){
 
-            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == INT && tmp3->exp_type == CONST)){
+            if((tmp1->exp_type == CONST && tmp3->exp_type == ID) || (tmp1->exp_type == ID && tmp3->exp_type == CONST)){
                 tmp1->exp_type = ID;
             }
 
             if((tmp1->value.integer == 0 && tmp1->exp_value == INT && tmp1->exp_type == CONST) || (tmp1->value.type_double == 0 && tmp1->exp_value == DOUBLE && tmp1->exp_type == CONST)){
                     error_exit(ERROR_SEM_OTHER, "EXPRESSION PARSER", "Division by zero");
             }
-
+            //String can not be in division
             if((tmp1->exp_value == STRING || tmp1->exp_value == STRING_QM) && (tmp3->exp_value == STRING || tmp3->exp_value == STRING_QM)){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Wrong operator in concatenation");
             }
@@ -387,6 +381,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
             }
 
+            //Tokens are integers, it is gonna be IDIV
             if(tmp1->exp_value == INT){
 
                 // CODEGEN
@@ -397,7 +392,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 inst_list_insert_last(inst_list, inst);
                 
                 variable_counter++;
-
+            //Tokens are floats, it is gonna be div
             } else {
                 
                 // CODEGEN
@@ -412,7 +407,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                 tmp1->exp_value = DOUBLE;
             }
 
-        // typy se nerovnaji to same jako u + - * az po line 412
+        //types are not same in division
         } else {
             if (tmp1->exp_type == CONST){
 
@@ -522,63 +517,56 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
             }
         }
 
-    // relacni operatory
+    //Relational operators
     } else if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ || tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
-        
-
-        if(tmp3->value.keyword == KW_NIL){
-            if(tmp1->exp_value != INT_QM){
-                if(tmp1->exp_value != DOUBLE_QM){
-                    if(tmp1->exp_value != STRING_QM){
-                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare non nill types");
-                    }
-                }
-            }
-            tmp1->exp_value = BOOL;
-            return;
-        } else if(tmp1->value.keyword == KW_NIL){
-            if(tmp3->exp_value != INT_QM){
-                if(tmp3->exp_value != DOUBLE_QM){
-                    if(tmp3->exp_value != STRING_QM){
-                        error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare non nill types");
-                    }
-                }
-            }
-            tmp1->exp_value = BOOL;
-            return;
-        }
 
         if(tmp2->type == TOKEN_LESS || tmp2->type == TOKEN_LESS_EQ || tmp2->type == TOKEN_GREAT || tmp2->type == TOKEN_GREAT_EQ){
+            //Nillable types cannot be in <, >, <=, >=
             if((tmp1->exp_value == INT_QM || tmp3->exp_value == INT_QM || tmp1->exp_value == DOUBLE_QM || tmp3->exp_value == DOUBLE_QM || tmp1->exp_value == STRING_QM || tmp3->exp_value == STRING_QM)){
                 error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do operation with 2 QM types without ! them");
         
             }
+            //Nil constant cannot be in <, >, <=, >=
+            if(tmp1->exp_value == NIL || tmp3->exp_value == NIL){
+                error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not compare with nill constant");
+            }
         }
         if(tmp2->type == TOKEN_EQEQ || tmp2->type == TOKEN_EXCLAMEQ){
+            //If one of the operands is nil constant the other one has to be nillable
             if(tmp1->exp_value == NIL){
-                if(tmp3->exp_value != INT_QM || tmp3->exp_value != DOUBLE_QM || tmp3->exp_value != STRING_QM){ //idk mozna sem budou patrit i klasicke typy
-                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
-                } else {
+                if(tmp3->exp_value == INT_QM){
                     tmp1->exp_value = BOOL;
                     return;
+                } else if(tmp3->exp_value == DOUBLE_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else if(tmp3->exp_value == STRING_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else {
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
                 }
             } else if(tmp3->exp_value == NIL){
-                if(tmp1->exp_value != INT_QM || tmp1->exp_value != DOUBLE_QM || tmp1->exp_value != STRING_QM){
-                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
-                } else {
+                if(tmp1->exp_value == INT_QM){
                     tmp1->exp_value = BOOL;
                     return;
+                } else if(tmp1->exp_value == DOUBLE_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else if(tmp1->exp_value == STRING_QM){
+                    tmp1->exp_value = BOOL;
+                    return;
+                } else {
+                    error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
                 }
             }
         }
-        //convert_qm(tmp1); //mozna ten konvert bude potreba, podpora int a int? ze sedi
-        //convert_qm(tmp3);
 
-        // typy se rovnaji a navratova hodnota bude bool
+        //Types are equal, value of expression is bool
         if(tmp1->exp_value == tmp3->exp_value){
             tmp1->exp_value = BOOL;
         
-        // nerovnaji se => opet pretypovani pokud lze az po konec funkce
+        //Not a match, conversion if possible
         } else {
             if (tmp1->exp_type == CONST){
                 if (tmp3->exp_type == ID){
@@ -658,8 +646,7 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
     
 }
 
-// u <= a >= je problem ze se musi provest zaroven operace (less nebo greater) + equal a vysledek tech dvou se ORuje
-// takze se do zasobniku hodnot v codegenu musi pushovat 2x
+//Additional codegen for <= and >= because first less or greater operation needs to be done, then equal and then OR
 void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
     if (tmp3->exp_type == CONST){
         if (tmp3->exp_value == INT){                                    
@@ -717,7 +704,7 @@ void push_for_leq_geq(token_t* tmp1, token_t* tmp3){
 }
 
 
-// hlavni fce
+//main function
 void call_expr_parser(data_type return_type) {
 
     token_stack stack;

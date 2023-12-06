@@ -72,13 +72,7 @@ void token_shift(token_stack* stack);
  */
 expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* token3, int number_of_tokens);
 
-/**
- * @brief Checks the token types for sematic analysis and also prints IFJ code
- * 
- * @param token1 Pointer to the first token to be checked
- * @param token2 Pointer to the second token to be checked
- * @param token3 Pointer to the third token to be checked
- */
+
 
 /**
  * @brief Converts QM token types to non qm token types
@@ -87,6 +81,14 @@ expression_rules_t find_reduce_rule(token_t* token1, token_t* token2, token_t* t
  */
 void convert_qm(token_t* token1);
 
+
+/**
+ * @brief Checks the tokens for sematic analysis and if possible converts them
+ * 
+ * @param token1 Pointer to the first token to be checked
+ * @param token2 Pointer to the second token to be checked
+ * @param token3 Pointer to the third token to be checked
+ */
 void check_types(token_t* token1, token_t* token2, token_t* token3);
 
 /**
