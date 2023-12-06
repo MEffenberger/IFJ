@@ -560,6 +560,9 @@ void check_types(token_t* tmp1, token_t* tmp2, token_t* tmp3){
                     error_exit(ERROR_SEM_EXPR_TYPE, "EXPRESSION PARSER", "Can not do eq with non QM types");
                 }
             }
+            //Converts nillable types to nonnillable because they can be in expression with == or !=
+            convert_qm(tmp1);
+            convert_qm(tmp3);
         }
 
         //Types are equal, value of expression is bool
