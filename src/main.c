@@ -25,9 +25,6 @@
 #include "token_stack.h"
 
 
-FILE *file;
-
 int main() {
-    file = fopen("code.txt", "w");
     return parser_parse_please();
 }

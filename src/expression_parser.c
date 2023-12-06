@@ -27,7 +27,6 @@ int variable_counter = 1; //Counter for unique variables needed in codegen
 bool concat = false; //True if concat will apply
 bool stop_expression = false; //True if expression will be reduced and no other new tokens will be accepted
 
-extern FILE* file;
 
 static char precedence_table[TABLE_SIZE][TABLE_SIZE] = {
 

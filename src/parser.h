@@ -41,9 +41,6 @@ typedef struct s_builtin_defs {
     bool chr_defined;
 } builtin_defs;
 
-//--------------------------------------------------
-void print_debug(token_t *token, int mode, int cnt);
-//--------------------------------------------------
 
 /**
  * @brief Convert token's keyword to compatible data_type
