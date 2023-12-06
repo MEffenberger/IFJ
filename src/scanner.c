@@ -144,9 +144,11 @@ void cut_indent(vector* vector, int indent, int lines){
 }
 
 token_t* get_me_token(){
-
-    token_t* token = (token_t*)allocate_memory(sizeof(token_t));
+    //Default automata state
     automat_state_t a_state = S_START;
+
+    //Token inicialization
+    token_t* token = (token_t*)allocate_memory(sizeof(token_t));
     vector* buffer = vector_init();
     token->value.vector = NULL;
     token->prev_was_eol = false;
@@ -154,7 +156,7 @@ token_t* get_me_token(){
     token->value.type_double = 0.0;
     token->value.keyword = DEFAULT_TOKEN_VAL;
 
-    char readchar, next_char;
+    char readchar, next_char; //current read char and next one
     char hex[8] = {0}; //array for storing up to 8 hex characters
     int hex_counter = 0;
     int cnt_open = 0;
@@ -846,7 +848,6 @@ token_t* get_me_token(){
                     a_state = S_START_ESC_SENTENCE;
                     break;
                 } else if(readchar == '\n'){
-                    //cnt_array[cnt_array_size] = 999;
                     vector_str_append(buffer, "\\010");
                     next_char = (char) getc (stdin);
                     if(next_char == '"'){
@@ -855,16 +856,13 @@ token_t* get_me_token(){
                         a_state = S_START_MULTILINE;
                         break;
                     } else if(next_char == ' ' && only_whitespace == false){
-                        //vector_str_append(buffer, "\\010");
                         ungetc(next_char, stdin);
                         a_state = S_START_MULTILINE;
-                        //cnt_array_size++;
                         break;
                     } else if(next_char == ' ' && only_whitespace == true){
                         ungetc(next_char, stdin);
                         a_state = S_START_MULTILINE;
                         cnt_array_size++;
-                        //cnt_array_size++;
                         break;
                     } else if(next_char == '\n'){
                         vector_str_append(buffer, "\\010");
@@ -932,10 +930,6 @@ token_t* get_me_token(){
                         error_exit(ERROR_LEX, "SCANNER", "ML Lexical error");
                     } else {
                         ungetc(next_char, stdin);
-                        //printf("CNTARRAY:%d\n", cnt_array[0]);
-                        //printf("CNTARRAY1:%d\n", cnt_array[1]);
-                        //printf("CNTARRAYLAST:%d\n", cnt_array[cnt_array_size]);
-
                         //check if indentation is correct
                         if(check_indent(cnt_array, cnt_array_size)){
                             //Replaces " with string ending
@@ -960,10 +954,7 @@ token_t* get_me_token(){
 
                             a_state = S_START;
                             token->type = TOKEN_ML_STRING;
-                            //whitespace_end_cnt--;
-                            //printf("BUFFER:%s\n", buffer->array);
-                            //printf("WS%d\n", whitespace_end_cnt);
-                            //printf("STRLEN:%ld", strlen(buffer->array));
+                            //cuts indent of ML string with specific number of whitespaces
                             cut_indent(buffer, whitespace_end_cnt, cnt_array_size);
                             token->value.vector = buffer;
                             free(cnt_array);
@@ -980,7 +971,6 @@ token_t* get_me_token(){
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;
                     cnt_array_size++;
-                    //vector_str_append(buffer, "\\010");
                     break;
                 } else {
                     a_state = S_IS_MULTILINE;
@@ -990,14 +980,6 @@ token_t* get_me_token(){
             
             case(S_FAKE_END_MULTILINE):
                 if(readchar == '"'){
-                            /*if(buffer->array[buffer->size-3] != '0'){
-                                free(cnt_array);
-                                vector_dispose(buffer);
-                                free(token);
-                                token = NULL;
-                                error_exit(ERROR_LEX, "SCANNER", "END ML not on single line Lexical error");
-                            }*/
-
 
                             if(check_indent(cnt_array, cnt_array_size)){
                                 buffer->array[buffer->size-1] = '\0';
@@ -1006,7 +988,6 @@ token_t* get_me_token(){
                                 buffer->size--;
                                 a_state = S_START;
                                 token->type = TOKEN_ML_STRING;
-                                //vector_str_append(buffer, "\\010");
                                 token->value.vector = buffer;
                                 free(cnt_array);
                                 is_multiline=false;
@@ -1024,9 +1005,6 @@ token_t* get_me_token(){
                         free(token);
                         token = NULL;
                         error_exit(ERROR_LEX, "SCANNER", "FAKE END ML Lexical error");
-                        //ungetc(readchar, stdin);
-                        //a_state = S_END_MULTILINE;
-                        //break;
 
                 } else if(readchar == '\n'){
                     a_state = S_START_MULTILINE;

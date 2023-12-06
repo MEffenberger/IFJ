@@ -195,6 +195,15 @@ keyword_t compare_keyword(vector* v);
 bool check_indent(int* cnt_array, int size);
 
 /**
+ * @brief Function that cuts whitespaces according to indent
+ * 
+ * @param vector Pointer to vector containing multiline string
+ * @param indent Number of whitespaces
+ * @param lines Number of lines
+ */
+void cut_indent(vector* vector, int indent, int lines);
+
+/**
  * @brief Function to delete token and free all the memory it had allocated
  * 
  * @param token token to be deleted
