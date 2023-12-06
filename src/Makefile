@@ -14,7 +14,7 @@ SRC = $(wildcard *.c)
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
 CC = gcc
-CFLAGS = -std=c11  
+CFLAGS = -std=c11
 
 .PHONY: all clean pack doc
 

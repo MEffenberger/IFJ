@@ -13,7 +13,7 @@
 #define IFJ_SYMTABLE_H
 
 #include <stdbool.h>     
-#include "error.h"   
+#include "error.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
