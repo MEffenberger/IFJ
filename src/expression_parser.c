@@ -725,15 +725,10 @@ void call_expr_parser(data_type return_type) {
     
     while(eval_expr){
         
-        // bereme nejvrchnejsi terminal na zasobniku
+        
         token_t* terminal = stack_top_terminal(&stack);
-
-        //int stack_index = get_index(terminal->type);
-        //int next_token_index = get_index(current_token->type);
-        //table_result = precedence_table[stack_index][next_token_index];
     
-        // pokud jsme uz narazili na token, ktery nelze vyhodnotit pomoci prec. tabulky, pokusime se 
-        // zredukovat dosavdani expression
+        //If there is a token that we can not process well start the reduction of current expression and wont look for another result from precedence table
         if(!stop_expression){
             stack_index = get_index(terminal->type);
             next_token_index = get_index(current_token->type);
@@ -745,7 +740,7 @@ void call_expr_parser(data_type return_type) {
             }
         }
 
-        // podminka kdy ukoncit celkove vyhodnoceni vyrazu = na zasobniku je jen $ a E
+        //Evaluation ends when next token index is 15 which is default for all tokens not supported by precedence table and also when only dollar as a terminal is on the stack
         if(next_token_index == 15 && stack_top_terminal(&stack)->type == TOKEN_DOLLAR){
 
             if(stack.size <= 1){
@@ -755,7 +750,7 @@ void call_expr_parser(data_type return_type) {
             eval_expr = false;
             type_of_expr = stack_top(&stack)->exp_value;
             
-            // Check ze vracime spravny typ
+            //Check return type that parser wants with our return type in expression, conversion between QM and non QM types if needed
             if((return_type != UNKNOWN) && (return_type != stack_top(&stack)->exp_value)){
 
                 if((return_type == DOUBLE || return_type == DOUBLE_QM) && stack_top(&stack)->exp_value == INT && stack_top(&stack)->was_exp == false){
@@ -795,9 +790,10 @@ void call_expr_parser(data_type return_type) {
             break;
         }
 
-        // podle vysledku z precedecni tab. bud shiftujeme nebo aplikujeme redukcni pravidlo
+        //Accoreding to table result we will shift or reduce 
         switch (table_result)
         {
+        //shift rule
         case '<':
             token_shift(&stack);
             current_token = get_next_token();
@@ -805,13 +801,13 @@ void call_expr_parser(data_type return_type) {
 
             break;
 
-        // aplikujeme redukcni pravidlo
+        //reduction rule
         case '>':
 
             rule_params_count = 0;
             token_t* tmp1, *tmp2, *tmp3 = NULL;
 
-            // zjistime pocet operandu 
+            //find out number of operands
             while(stack_top(&stack)->type != TOKEN_SHIFT){
                 if(rule_params_count == 0){
                     tmp1 = stack_top(&stack);
@@ -835,11 +831,12 @@ void call_expr_parser(data_type return_type) {
             }
 
             stack_pop(&stack);
+            //find the rule to reduce the expression
             expression_rules_t rule = find_reduce_rule(tmp1, tmp2, tmp3, rule_params_count);
             switch (rule)
             {
 
-            // E -> i, ziskani vsech informaci o tokenu - typ,...
+            // E -> i
             case RULE_OPERAND:
 
                 if(tmp1->type == TOKEN_ID){
