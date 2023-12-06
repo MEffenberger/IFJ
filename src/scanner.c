@@ -952,7 +952,7 @@ token_t* get_me_token(){
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-                            whitespace_end_cnt++; //+1 for EOL
+                            //whitespace_end_cnt++; //+1 for EOL
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){
@@ -963,7 +963,7 @@ token_t* get_me_token(){
 
                             a_state = S_START;
                             token->type = TOKEN_ML_STRING;
-                            whitespace_end_cnt--;
+                            //whitespace_end_cnt--;
                             //printf("BUFFER:%s\n", buffer->array);
                             //printf("WS%d\n", whitespace_end_cnt);
                             //printf("STRLEN:%ld", strlen(buffer->array));
