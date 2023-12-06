@@ -49,7 +49,7 @@ extern FILE *file;
 
 
 
-//Mainly used for if-let condition to convert the token's type rightfully
+//Conversion between enums of lexer and parser
 data_type convert_dt(token_t* token) {
     if (token->type == TOKEN_KEYWORD) {
         switch (token->value.keyword) {

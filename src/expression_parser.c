@@ -3,7 +3,7 @@
  * 
  * IFJ23 compiler
  * 
- * @brief Expression parser implemetation
+ * @brief Expression parser implementation
  *
  * @author Dominik Horut <xhorut01>
  * @author Samuel Hejnicek <xhejni00>
