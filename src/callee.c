@@ -3,7 +3,7 @@
  *
  * IFJ23 compiler
  *
- * @brief A structure to represent indivnameual function calls and their parameters
+ * @brief A structure to represent individual function calls and their parameters
  *
  * @author Marek Effenberger <xeffen00>
  * @author Adam Valík <xvalik05>
@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+// global counter to assign order to arguments
 int arg_counter = 0;
 
 callee_list_t* init_callee_list() {
