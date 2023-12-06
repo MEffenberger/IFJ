@@ -938,19 +938,25 @@ token_t* get_me_token(){
                         //printf("CNTARRAY:%d\n", cnt_array[0]);
                         //printf("CNTARRAY1:%d\n", cnt_array[1]);
                         //printf("CNTARRAYLAST:%d\n", cnt_array[cnt_array_size]);
+
+                        //check if indentation is correct
                         if(check_indent(cnt_array, cnt_array_size)){
+                            //Replaces " with string ending
                             buffer->array[buffer->size-1] = '\0';
                             buffer->array[buffer->size-2] = '\0';
+
                             buffer->size--;
                             buffer->size--;
-                            int whitespace_end_cnt = 0;
+                            //counts whitespaces in last line
+                            int whitespace_end_cnt = 0; 
                             for(int i = 0; i < cnt_array[cnt_array_size]; i++){
                                 whitespace_end_cnt++;
                             }
-                            whitespace_end_cnt++;
+                            whitespace_end_cnt++; //+1 for EOL
                             for(int i = 0; i < whitespace_end_cnt; i++){
                                 
                                 for(int j = 1; j < 5; j++){
+                                    //removes whitespaces before """ and last EOL
                                     buffer->array[buffer->size-j-i*4] = '\0';
                                 }
                             }
@@ -987,13 +993,13 @@ token_t* get_me_token(){
             
             case(S_FAKE_END_MULTILINE):
                 if(readchar == '"'){
-                            if(buffer->array[buffer->size-3] != '0'){
+                            /*if(buffer->array[buffer->size-3] != '0'){
                                 free(cnt_array);
                                 vector_dispose(buffer);
                                 free(token);
                                 token = NULL;
                                 error_exit(ERROR_LEX, "SCANNER", "END ML not on single line Lexical error");
-                            }
+                            }*/
 
 
                             if(check_indent(cnt_array, cnt_array_size)){
